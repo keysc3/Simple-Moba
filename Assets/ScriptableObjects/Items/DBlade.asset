@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 205f1fef8527806429549e97af62de22, type: 3}
+  m_Name: DBlade
+  m_EditorClassIdentifier: 
+  name: Dorans Blade
+  icon: {fileID: 21300000, guid: a2e384f972f22b640a7d6693f7e33df9, type: 3}
+  magicDamage: 0
+  physicalDamage: 5
+  health: 15
+  mana: 0
+  speed: 0
+  magicResist: 0
+  armor: 0
+  attackSpeed: 0
