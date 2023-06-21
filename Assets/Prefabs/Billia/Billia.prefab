@@ -7,10 +7,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6407682122250772637, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: championUI
+      value: 
+      objectReference: {fileID: 8842905393809374821, guid: dd70f252af0b6444c9852f20d66b5d10, type: 3}
     - target: {fileID: 1921830857179254351, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: m_Name
-      value: Champion
+      value: Billia
       objectReference: {fileID: 0}
+    - target: {fileID: 2879644698382645441, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: <unit>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
     - target: {fileID: 6584509455410724894, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -57,3 +65,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+--- !u!1 &5980474150250256565 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1921830857179254351, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+  m_PrefabInstance: {fileID: 5212177107293001466}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &583340831700525273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5980474150250256565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d71caa91ac3109142a7bba944d5bd34e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

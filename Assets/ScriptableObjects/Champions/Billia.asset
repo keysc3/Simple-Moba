@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15956ea9dc5cf2c4fba0cd0bcdf17122, type: 3}
+  m_Name: Billia
+  m_EditorClassIdentifier: 
+  name: Billia
+  icon: {fileID: 0}
+  baseHealth: 100
+  magicDamage: 4
+  physicalDamage: 3
+  speed: 3.5
+  HP5: 10
+  armor: 0
+  magicResist: 0
+  autoRange: 1
+  autoWindUp: 0.3
+  attackSpeed: 0.67
+  attackProjectileSpeed: 12
+  passive_sprite: {fileID: 0}
+  spell_1_sprite: {fileID: 0}
+  spell_2_sprite: {fileID: 0}
+  spell_3_sprite: {fileID: 0}
+  spell_4_sprite: {fileID: 0}
+  baseMana: 50
+  MP5: 10
+  physicalDamageGrowth: 3
+  healthGrowth: 96
+  manaGrowth: 25
+  HP5Growth: 0.6
+  MP5Growth: 0.8
+  armorGrowth: 4.7
+  magicResistGrowth: 2
+  attackSpeedGrowth: 0
+  spell1BaseDamage:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  spell1BaseCd:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  spell1BaseMana:
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  spell2BaseDamage: []
+  spell2BaseCd: []
+  spell2BaseMana: []
+  spell3BaseDamage: []
+  spell3BaseCd: []
+  spell3BaseMana: []
+  spell4BaseDamage: []
+  spell4BaseCd: []
+  spell4BaseMana: []
+  spell_1_castTime: 0.25
+  spell_2_castTime: 0
+  spell_3_castTime: 0
+  spell_4_castTime: 0
+  spell_1_passiveSpeedDuration: 6.5
+  spell_1_passiveExpireDuration: 1.5
+  spell_1_passiveMaxStacks: 4
+  spell_1_passiveSpeed:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  spell_1_innerRadius: 3
+  spell_1_outerRadius: 5
