@@ -30,19 +30,34 @@ MonoBehaviour:
   spell_2_sprite: {fileID: 0}
   spell_3_sprite: {fileID: 0}
   spell_4_sprite: {fileID: 0}
-  baseMana: 0
-  MP5: 0
-  physicalDamageGrowth: 0
-  healthGrowth: 0
-  manaGrowth: 0
-  HP5Growth: 0
-  MP5Growth: 0
-  armorGrowth: 0
-  magicResistGrowth: 0
+  baseMana: 50
+  MP5: 10
+  physicalDamageGrowth: 3
+  healthGrowth: 96
+  manaGrowth: 25
+  HP5Growth: 0.6
+  MP5Growth: 0.8
+  armorGrowth: 4.7
+  magicResistGrowth: 2
   attackSpeedGrowth: 0
-  spell1BaseDamage: []
-  spell1BaseCd: []
-  spell1BaseMana: []
+  spell1BaseDamage:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  spell1BaseCd:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  spell1BaseMana:
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
   spell2BaseDamage: []
   spell2BaseCd: []
   spell2BaseMana: []
@@ -52,13 +67,18 @@ MonoBehaviour:
   spell4BaseDamage: []
   spell4BaseCd: []
   spell4BaseMana: []
-  spell_1_castTime: 0
+  spell_1_castTime: 0.25
   spell_2_castTime: 0
   spell_3_castTime: 0
   spell_4_castTime: 0
-  spell_1_passiveSpeedDuration: 0
-  spell_1_passiveExpireDuration: 0
-  spell_1_passiveMaxStacks: 0
-  spell_1_passiveSpeed: []
-  spell_1_innerRadius: 0
-  spell_1_outerRadius: 0
+  spell_1_passiveSpeedDuration: 6.5
+  spell_1_passiveExpireDuration: 1.5
+  spell_1_passiveMaxStacks: 4
+  spell_1_passiveSpeed:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  spell_1_innerRadius: 3
+  spell_1_outerRadius: 5
