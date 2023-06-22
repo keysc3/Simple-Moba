@@ -101,14 +101,9 @@ public abstract class ChampionAbilities : MonoBehaviour
     */
     protected Vector3 GetTargetDirection(){
         RaycastHit hitInfo;
-        //Vector3 debugrayend;
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Physics.Raycast(ray, out hitInfo);
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-        cube.transform.position = hitInfo.point;
-        cube.transform.position = new Vector3(cube.transform.position.x, 0.5f, cube.transform.position.z);
-        //Debug.DrawLine(mainCamera.transform.position, hitInfo.point, Color.red, 20f);
+        Debug.DrawLine(mainCamera.transform.position, hitInfo.point, Color.red, 20f);
         Vector3 targetDirection = hitInfo.point;
         mouseOnCast = targetDirection;
         targetDirection.y = myCollider.bounds.center.y;

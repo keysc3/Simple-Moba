@@ -58,9 +58,24 @@ MonoBehaviour:
   - 4
   - 5
   - 6
-  spell2BaseDamage: []
-  spell2BaseCd: []
-  spell2BaseMana: []
+  spell2BaseDamage:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  spell2BaseCd:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  spell2BaseMana:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
   spell3BaseDamage: []
   spell3BaseCd: []
   spell3BaseMana: []
@@ -82,3 +97,8 @@ MonoBehaviour:
   - 1
   spell_1_innerRadius: 3
   spell_1_outerRadius: 5
+  spell_2_maxMagnitude: 6
+  spell_2_dashOffset: 1.8
+  spell_2_innerRadius: 0.87
+  spell_2_outerRadius: 2
+  spell_2_dashTime: 0.759

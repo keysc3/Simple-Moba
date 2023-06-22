@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class BilliaAbilities : ChampionAbilities
 {
-    private int spell_1_passiveStacks;
+    [SerializeField] private int spell_1_passiveStacks;
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
 
     private Billia billia;
+    public GameObject blueBahri;
 
+    public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
+    public DoubleRadiusHitboxHit spellHit;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +33,7 @@ public class BilliaAbilities : ChampionAbilities
             StartCoroutine(Spell_1_Cast());
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]);
+            spell_1_onCd = true;
         }        
     }
 
@@ -36,45 +41,13 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_1_Cast - Casts Billia's first spell.
     */
     private IEnumerator Spell_1_Cast(){
-        bool passiveStack = false;
         while(isCasting)
             yield return null;
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(transform.position, billia.spell_1_outerRadius, enemyMask));
-        foreach(Collider collider in outerHit){
-            // Check if the unit was hit only by the inner portion.
-            if(CheckSpell_1_OnlyInnerHit(collider)){
-                Debug.Log("inner radius hit");
-                //billiaAbilityHit.Spell_1_Hit(collider.gameObject, "inner");
-                // TODO: Add passive dot.
-            }
-            // Unit hit by outer portion.
-            else{
-                Debug.Log("outer radius hit");
-                //billiaAbilityHit.Spell_1_Hit(collider.gameObject, "outer");
-                // TODO: Add passive dot.
-            }
-            passiveStack = true;
-        }
-        // If a unit was hit proc the spells passive.
-        if(passiveStack)
-            Spell_1_PassiveProc();
-    }
-
-    /*
-    *   CheckSpell_1_OnlyInnerHit - Checks if a colliders min and max bounds are both within the inner radius of spell 1.
-    *   @param collider - Collider to check the bounds of.
-    */
-    private bool CheckSpell_1_OnlyInnerHit(Collider collider){
-        // Get the min and max bounds of the collider and set their y to the same as Billia.
-        Vector3 min = collider.bounds.min;
-        Vector3 max = collider.bounds.max;
-        max.y = transform.position.y;
-        min.y = transform.position.y;
-        // Get the distances from Billia and return whether or not both are within spell 1's inner radius.
-        float minMag = (transform.position - min).magnitude;
-        float maxMag = (transform.position - max).magnitude;
-        return minMag <= billia.spell_1_innerRadius && maxMag <= billia.spell_1_innerRadius;
+        StartCoroutine(Spell_Cd_Timer(billia.spell1BaseCd[levelManager.spellLevels["Spell_1"]-1], (myBool => spell_1_onCd = myBool), "Spell_1"));
+        // Set method to call if a hit.
+        spellHit = Spell_1_Hit_Placeholder;
+        // Hitbox starts from center of Billia.
+        DoubleRadiusHitboxCheck(transform.position, billia.spell_1_outerRadius, "Spell_1", spellHit);
     }
 
     /*
@@ -119,10 +92,134 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
-    *   Spell_2 - Champions second ability method.
+    *   Spell_2 - Set up Billia's second spell. She dashed an offset distance towards her target location then deals damage in two radius'.
+    *   The inner radius deals bonus damage.
     */
     public override void Spell_2(){
+        // If the spell is off cd, Billia is not casting, and has enough mana.
+        if(!spell_1_onCd && !isCasting && championStats.currentMana >= billia.spell2BaseMana[levelManager.spellLevels["Spell_2"]-1]){
+            // Get the players mouse position on spell cast for spells target direction.
+            Vector3 targetDirection = GetTargetDirection();
+            // Set the target position to be in the direction of the mouse on cast.
+            Vector3 targetPosition = (targetDirection - transform.position);
+            // Set the spell cast position to max range if casted past that value.
+            if(targetPosition.magnitude > billia.spell_2_maxMagnitude)
+                targetPosition = transform.position + (targetPosition.normalized * billia.spell_2_maxMagnitude);
+            // Set the spell cast position to the dashOffset if target positions magnitude is less than it.
+            else if(targetPosition.magnitude < billia.spell_2_dashOffset)
+                targetPosition = transform.position + (targetPosition.normalized * billia.spell_2_dashOffset);
+            // Set target position to calculated mouse position.
+            else
+                targetPosition = transform.position + targetPosition;
+            // TODO: Handle terrain checking.
+            // TODO: Add spell hitbox on the ground.
+            // Get the direction the final calculated spell cast is in.
+            Vector3 directionToMove = (new Vector3(targetPosition.x, targetDirection.y, targetPosition.z) - transform.position).normalized;
+            // Get the position offset to place Billia from the spell cast position.
+            Vector3 billiaTargetPosition = targetPosition - (directionToMove * billia.spell_2_dashOffset);
+            // Apply the dash.
+            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
+            // Use mana.
+            championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_2"]-1]);
+            spell_2_onCd = true;
+        }
+    }
 
+    /*
+    *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
+    *   @param targetPosition - Vector3 of the position to move Billia to.
+    */
+    private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
+            // Disable pathing.
+            navMeshAgent.ResetPath();
+            navMeshAgent.enabled = false;
+            // Get dash speed since dash duration is a fixed time.
+            float dashSpeed = (targetPosition - transform.position).magnitude/billia.spell_2_dashTime; 
+            float timer = 0.0f;
+            // While still dashing.
+            while(timer < billia.spell_2_dashTime){
+                // Move towards target position.
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            // Apply last tick dash and enable pathing.
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+            navMeshAgent.enabled = true;
+            Spell_2_Cast(spellTargetPosition);
+    }
+
+    /*
+    *   Spell_2_Cast - Casts Billia's second spell.
+    */
+    private void Spell_2_Cast(Vector3 targetPosition){
+        StartCoroutine(Spell_Cd_Timer(billia.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
+        // Set method to use if a hit.
+        spellHit = Spell_2_Hit_Placeholder;
+        // Hitbox starts from center of calculated target position.
+        DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, "Spell_2", spellHit);
+    }
+
+    /*
+    *   DoubleRadiusHitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
+    *   The appropriate spells damage method and radius is used based on the results.
+    *   @param hitboxCenter - Vector3 of the position of the center of the radius' hitbox.
+    *   @param outerRadius - float of the outer radius value to be used.
+    *   @param spell - string of the spell that has been casted.
+    *   @param DoubleRadiusHitboxHit - delegate containing the method to call if a spell hit is found.
+    */
+    private void DoubleRadiusHitboxCheck(Vector3 hitboxCenter, float outerRadius, string spell, DoubleRadiusHitboxHit hitMethod){
+        bool passiveStack = false;
+        LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(hitboxCenter, outerRadius, enemyMask));
+        foreach(Collider collider in outerHit){
+            // Check if the unit was hit by the specified spells inner damage.
+            if(CheckTwoRadiusInnerHit(collider, hitboxCenter, spell)){
+                hitMethod(collider.gameObject, "inner");
+                // TODO: Add passive dot.
+            }
+            // Unit hit by outer portion.
+            else{
+                hitMethod(collider.gameObject, "outer");
+                // TODO: Add passive dot.
+            }
+            passiveStack = true;
+        }
+        // If a unit was hit proc the spells passive.
+        if(passiveStack)
+            Spell_1_PassiveProc();
+    }
+
+    /*
+    *   CheckTwoRadiusInnerHit - Checks if a collider that was within an outer radius is fully in or partially in an inner radius.
+    *   @param collider - Collider to check the bounds of.
+    *   @param hitboxCenter - Vector3 of the center of the inner radius.
+    *   @param spell - String of which spells hitbox is being checked.
+    */
+    private bool CheckTwoRadiusInnerHit(Collider collider, Vector3 hitboxCenter, string spell){
+        // Get the min and max bounds of the collider and set their y to the same as Billia.
+        Vector3 min = collider.bounds.min;
+        Vector3 max = collider.bounds.max;
+        max.y = transform.position.y;
+        min.y = transform.position.y;
+        // Get the distances from inner radius center.
+        float minMag = (hitboxCenter - min).magnitude;
+        float maxMag = (hitboxCenter - max).magnitude;
+        // Spell 1 inner hit needs the entire collider inside the inner radius.
+        if(spell == "Spell_1")
+            return minMag <= billia.spell_1_innerRadius && maxMag <= billia.spell_1_innerRadius;
+        // Spell 2 inner hit needs any part of the collider in the inner radius.
+        else
+            return minMag <= billia.spell_2_innerRadius || maxMag <= billia.spell_2_innerRadius;
+    }
+
+    // TODO: Move to ability hit script.
+    private void Spell_2_Hit_Placeholder(GameObject hit, string radius){
+        Debug.Log("Spell 2 Hit on " + hit.name + " w/ " + radius + " radius.");
+    }
+    // TODO: Move to ability hit script.
+    private void Spell_1_Hit_Placeholder(GameObject hit, string radius){
+        Debug.Log("Spell 1 Hit on " + hit.name + " w/ " + radius + " radius.");
     }
 
     /*
