@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class BilliaAbilities : ChampionAbilities
 {
-    private int spell_1_passiveStacks;
+    [SerializeField] private int spell_1_passiveStacks;
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
 
     private Billia billia;
     public GameObject blueBahri;
 
+    public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
+    public DoubleRadiusHitboxHit spellHit;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +33,7 @@ public class BilliaAbilities : ChampionAbilities
             StartCoroutine(Spell_1_Cast());
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]);
+            spell_1_onCd = true;
         }        
     }
 
@@ -37,30 +41,13 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_1_Cast - Casts Billia's first spell.
     */
     private IEnumerator Spell_1_Cast(){
-        bool passiveStack = false;
         while(isCasting)
             yield return null;
-        // TODO: Animate.
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(transform.position, billia.spell_1_outerRadius, enemyMask));
-        foreach(Collider collider in outerHit){
-            // Check if the unit was hit only by the inner portion.
-            if(CheckTwoRadiusInnerHit(collider, transform.position, "Spell_1")){
-                Debug.Log("Spell 1 inner radius hit");
-                //billiaAbilityHit.Spell_1_Hit(collider.gameObject, "inner");
-                // TODO: Add passive dot.
-            }
-            // Unit hit by outer portion.
-            else{
-                Debug.Log("Spell 1 outer radius hit");
-                //billiaAbilityHit.Spell_1_Hit(collider.gameObject, "outer");
-                // TODO: Add passive dot.
-            }
-            passiveStack = true;
-        }
-        // If a unit was hit proc the spells passive.
-        if(passiveStack)
-            Spell_1_PassiveProc();
+        StartCoroutine(Spell_Cd_Timer(billia.spell1BaseCd[levelManager.spellLevels["Spell_1"]-1], (myBool => spell_1_onCd = myBool), "Spell_1"));
+        // Set method to call if a hit.
+        spellHit = Spell_1_Hit_Placeholder;
+        // Hitbox starts from center of Billia.
+        DoubleRadiusHitboxCheck(transform.position, billia.spell_1_outerRadius, "Spell_1", spellHit);
     }
 
     /*
@@ -134,6 +121,7 @@ public class BilliaAbilities : ChampionAbilities
             StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_2"]-1]);
+            spell_2_onCd = true;
         }
     }
 
@@ -159,24 +147,40 @@ public class BilliaAbilities : ChampionAbilities
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
             navMeshAgent.enabled = true;
             Spell_2_Cast(spellTargetPosition);
-            //TODO: Call method to check targets hit.
     }
 
+    /*
+    *   Spell_2_Cast - Casts Billia's second spell.
+    */
     private void Spell_2_Cast(Vector3 targetPosition){
+        StartCoroutine(Spell_Cd_Timer(billia.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
+        // Set method to use if a hit.
+        spellHit = Spell_2_Hit_Placeholder;
+        // Hitbox starts from center of calculated target position.
+        DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, "Spell_2", spellHit);
+    }
+
+    /*
+    *   DoubleRadiusHitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
+    *   The appropriate spells damage method and radius is used based on the results.
+    *   @param hitboxCenter - Vector3 of the position of the center of the radius' hitbox.
+    *   @param outerRadius - float of the outer radius value to be used.
+    *   @param spell - string of the spell that has been casted.
+    *   @param DoubleRadiusHitboxHit - delegate containing the method to call if a spell hit is found.
+    */
+    private void DoubleRadiusHitboxCheck(Vector3 hitboxCenter, float outerRadius, string spell, DoubleRadiusHitboxHit hitMethod){
         bool passiveStack = false;
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(targetPosition, billia.spell_2_outerRadius, enemyMask));
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(hitboxCenter, outerRadius, enemyMask));
         foreach(Collider collider in outerHit){
-            // Check if the unit was hit only by the inner portion.
-            if(CheckTwoRadiusInnerHit(collider, targetPosition, "Spell_2")){
-                Debug.Log("Spell 2 inner radius hit");
-                //billiaAbilityHit.Spell_2_Hit(collider.gameObject, "inner");
+            // Check if the unit was hit by the specified spells inner damage.
+            if(CheckTwoRadiusInnerHit(collider, hitboxCenter, spell)){
+                hitMethod(collider.gameObject, "inner");
                 // TODO: Add passive dot.
             }
             // Unit hit by outer portion.
             else{
-                Debug.Log("Spell 2 outer radius hit");
-                //billiaAbilityHit.Spell_2_Hit(collider.gameObject, "outer");
+                hitMethod(collider.gameObject, "outer");
                 // TODO: Add passive dot.
             }
             passiveStack = true;
@@ -207,6 +211,15 @@ public class BilliaAbilities : ChampionAbilities
         // Spell 2 inner hit needs any part of the collider in the inner radius.
         else
             return minMag <= billia.spell_2_innerRadius || maxMag <= billia.spell_2_innerRadius;
+    }
+
+    // TODO: Move to ability hit script.
+    private void Spell_2_Hit_Placeholder(GameObject hit, string radius){
+        Debug.Log("Spell 2 Hit on " + hit.name + " w/ " + radius + " radius.");
+    }
+    // TODO: Move to ability hit script.
+    private void Spell_1_Hit_Placeholder(GameObject hit, string radius){
+        Debug.Log("Spell 1 Hit on " + hit.name + " w/ " + radius + " radius.");
     }
 
     /*
