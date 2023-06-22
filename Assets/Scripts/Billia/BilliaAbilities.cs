@@ -9,6 +9,7 @@ public class BilliaAbilities : ChampionAbilities
     private bool spell_1_passiveRunning;
 
     private Billia billia;
+    public GameObject blueBahri;
 
     // Start is called before the first frame update
     void Start()
@@ -44,14 +45,14 @@ public class BilliaAbilities : ChampionAbilities
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(transform.position, billia.spell_1_outerRadius, enemyMask));
         foreach(Collider collider in outerHit){
             // Check if the unit was hit only by the inner portion.
-            if(CheckSpell_1_OnlyInnerHit(collider)){
-                Debug.Log("inner radius hit");
+            if(CheckTwoRadiusInnerHit(collider, transform.position, "Spell_1")){
+                Debug.Log("Spell 1 inner radius hit");
                 //billiaAbilityHit.Spell_1_Hit(collider.gameObject, "inner");
                 // TODO: Add passive dot.
             }
             // Unit hit by outer portion.
             else{
-                Debug.Log("outer radius hit");
+                Debug.Log("Spell 1 outer radius hit");
                 //billiaAbilityHit.Spell_1_Hit(collider.gameObject, "outer");
                 // TODO: Add passive dot.
             }
@@ -60,22 +61,6 @@ public class BilliaAbilities : ChampionAbilities
         // If a unit was hit proc the spells passive.
         if(passiveStack)
             Spell_1_PassiveProc();
-    }
-
-    /*
-    *   CheckSpell_1_OnlyInnerHit - Checks if a colliders min and max bounds are both within the inner radius of spell 1.
-    *   @param collider - Collider to check the bounds of.
-    */
-    private bool CheckSpell_1_OnlyInnerHit(Collider collider){
-        // Get the min and max bounds of the collider and set their y to the same as Billia.
-        Vector3 min = collider.bounds.min;
-        Vector3 max = collider.bounds.max;
-        max.y = transform.position.y;
-        min.y = transform.position.y;
-        // Get the distances from Billia and return whether or not both are within spell 1's inner radius.
-        float minMag = (transform.position - min).magnitude;
-        float maxMag = (transform.position - max).magnitude;
-        return minMag <= billia.spell_1_innerRadius && maxMag <= billia.spell_1_innerRadius;
     }
 
     /*
@@ -146,7 +131,7 @@ public class BilliaAbilities : ChampionAbilities
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * billia.spell_2_dashOffset);
             // Apply the dash.
-            StartCoroutine(Spell_2_Dash(billiaTargetPosition));
+            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_2"]-1]);
         }
@@ -156,7 +141,7 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
     *   @param targetPosition - Vector3 of the position to move Billia to.
     */
-    private IEnumerator Spell_2_Dash(Vector3 targetPosition){
+    private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
             // Disable pathing.
             navMeshAgent.ResetPath();
             navMeshAgent.enabled = false;
@@ -173,7 +158,55 @@ public class BilliaAbilities : ChampionAbilities
             // Apply last tick dash and enable pathing.
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
             navMeshAgent.enabled = true;
+            Spell_2_Cast(spellTargetPosition);
             //TODO: Call method to check targets hit.
+    }
+
+    private void Spell_2_Cast(Vector3 targetPosition){
+        bool passiveStack = false;
+        LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(targetPosition, billia.spell_2_outerRadius, enemyMask));
+        foreach(Collider collider in outerHit){
+            // Check if the unit was hit only by the inner portion.
+            if(CheckTwoRadiusInnerHit(collider, targetPosition, "Spell_2")){
+                Debug.Log("Spell 2 inner radius hit");
+                //billiaAbilityHit.Spell_2_Hit(collider.gameObject, "inner");
+                // TODO: Add passive dot.
+            }
+            // Unit hit by outer portion.
+            else{
+                Debug.Log("Spell 2 outer radius hit");
+                //billiaAbilityHit.Spell_2_Hit(collider.gameObject, "outer");
+                // TODO: Add passive dot.
+            }
+            passiveStack = true;
+        }
+        // If a unit was hit proc the spells passive.
+        if(passiveStack)
+            Spell_1_PassiveProc();
+    }
+
+    /*
+    *   CheckTwoRadiusInnerHit - Checks if a collider that was within an outer radius is fully in or partially in an inner radius.
+    *   @param collider - Collider to check the bounds of.
+    *   @param hitboxCenter - Vector3 of the center of the inner radius.
+    *   @param spell - String of which spells hitbox is being checked.
+    */
+    private bool CheckTwoRadiusInnerHit(Collider collider, Vector3 hitboxCenter, string spell){
+        // Get the min and max bounds of the collider and set their y to the same as Billia.
+        Vector3 min = collider.bounds.min;
+        Vector3 max = collider.bounds.max;
+        max.y = transform.position.y;
+        min.y = transform.position.y;
+        // Get the distances from inner radius center.
+        float minMag = (hitboxCenter - min).magnitude;
+        float maxMag = (hitboxCenter - max).magnitude;
+        // Spell 1 inner hit needs the entire collider inside the inner radius.
+        if(spell == "Spell_1")
+            return minMag <= billia.spell_1_innerRadius && maxMag <= billia.spell_1_innerRadius;
+        // Spell 2 inner hit needs any part of the collider in the inner radius.
+        else
+            return minMag <= billia.spell_2_innerRadius || maxMag <= billia.spell_2_innerRadius;
     }
 
     /*

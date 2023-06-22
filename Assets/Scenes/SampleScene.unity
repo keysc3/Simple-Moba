@@ -824,6 +824,10 @@ PrefabInstance:
       propertyPath: bahri
       value: 
       objectReference: {fileID: 1732516671}
+    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+      propertyPath: blueBahri
+      value: 
+      objectReference: {fileID: 1732516671}
     - target: {fileID: 1384222467734263524, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_RootOrder
       value: 0
