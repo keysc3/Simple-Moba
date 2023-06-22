@@ -15,6 +15,11 @@ public class Billia : Champion
     #endregion
 
     #region "Spell_2"
+    public float spell_2_maxMagnitude;
+    public float spell_2_dashOffset;
+    public float spell_2_innerRadius;
+    public float spell_2_outerRadius;
+    public float spell_2_dashTime;
     #endregion
 
     #region "Spell_3"

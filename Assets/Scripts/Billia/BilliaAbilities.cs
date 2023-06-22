@@ -39,6 +39,7 @@ public class BilliaAbilities : ChampionAbilities
         bool passiveStack = false;
         while(isCasting)
             yield return null;
+        // TODO: Animate.
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(transform.position, billia.spell_1_outerRadius, enemyMask));
         foreach(Collider collider in outerHit){
@@ -119,10 +120,60 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
-    *   Spell_2 - Champions second ability method.
+    *   Spell_2 - Set up Billia's second spell. She dashed an offset distance towards her target location then deals damage in two radius'.
+    *   The inner radius deals bonus damage.
     */
     public override void Spell_2(){
+        // If the spell is off cd, Billia is not casting, and has enough mana.
+        if(!spell_1_onCd && !isCasting && championStats.currentMana >= billia.spell2BaseMana[levelManager.spellLevels["Spell_2"]-1]){
+            // Get the players mouse position on spell cast for spells target direction.
+            Vector3 targetDirection = GetTargetDirection();
+            // Set the target position to be in the direction of the mouse on cast.
+            Vector3 targetPosition = (targetDirection - transform.position);
+            // Set the spell cast position to max range if casted past that value.
+            if(targetPosition.magnitude > billia.spell_2_maxMagnitude)
+                targetPosition = transform.position + (targetPosition.normalized * billia.spell_2_maxMagnitude);
+            // Set the spell cast position to the dashOffset if target positions magnitude is less than it.
+            else if(targetPosition.magnitude < billia.spell_2_dashOffset)
+                targetPosition = transform.position + (targetPosition.normalized * billia.spell_2_dashOffset);
+            // Set target position to calculated mouse position.
+            else
+                targetPosition = transform.position + targetPosition;
+            // TODO: Handle terrain checking.
+            // TODO: Add spell hitbox on the ground.
+            // Get the direction the final calculated spell cast is in.
+            Vector3 directionToMove = (new Vector3(targetPosition.x, targetDirection.y, targetPosition.z) - transform.position).normalized;
+            // Get the position offset to place Billia from the spell cast position.
+            Vector3 billiaTargetPosition = targetPosition - (directionToMove * billia.spell_2_dashOffset);
+            // Apply the dash.
+            StartCoroutine(Spell_2_Dash(billiaTargetPosition));
+            // Use mana.
+            championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_2"]-1]);
+        }
+    }
 
+    /*
+    *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
+    *   @param targetPosition - Vector3 of the position to move Billia to.
+    */
+    private IEnumerator Spell_2_Dash(Vector3 targetPosition){
+            // Disable pathing.
+            navMeshAgent.ResetPath();
+            navMeshAgent.enabled = false;
+            // Get dash speed since dash duration is a fixed time.
+            float dashSpeed = (targetPosition - transform.position).magnitude/billia.spell_2_dashTime; 
+            float timer = 0.0f;
+            // While still dashing.
+            while(timer < billia.spell_2_dashTime){
+                // Move towards target position.
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            // Apply last tick dash and enable pathing.
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+            navMeshAgent.enabled = true;
+            //TODO: Call method to check targets hit.
     }
 
     /*
