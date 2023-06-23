@@ -54,67 +54,9 @@ public class BilliaAbilities : ChampionAbilities
         // Set method to call if a hit.
         spellHit = Spell_1_Hit_Placeholder;
         // Hitbox starts from center of Billia.
-        Spell_1_HitCheck();
+        DoubleRadiusHitboxCheck(transform.position, billia.spell_1_outerRadius, billia.spell_1_innerRadius, "Spell_1", spellHit);
         // Animate the ending of the spell.
         StartCoroutine(Spell_1_Animation(spell1VisualHitbox, spell1Visual_finalAlpha, spell1Visual_initialAlpha));
-    }
-
-    private void Spell_1_HitCheck(){
-        bool passiveStack = false;
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(transform.position, billia.spell_1_outerRadius, enemyMask));
-        foreach(Collider collider in outerHit){
-            Vector3 hitCenter = collider.bounds.center;
-            float distToHitCenter = (hitCenter - transform.position).magnitude;
-            // Check if the unit was hit by the specified spells inner damage.
-            if(distToHitCenter < billia.spell_1_innerRadius){
-                Debug.Log("inner1");
-                //hitMethod(collider.gameObject, "inner");
-                // TODO: Add passive dot.
-            }
-            // Unit hit by outer portion.
-            else{
-                Debug.Log("outer1");
-                //hitMethod(collider.gameObject, "outer");
-                // TODO: Add passive dot.
-            }
-            passiveStack = true;
-        }
-        // If a unit was hit proc the spells passive.
-        if(passiveStack)
-            Spell_1_PassiveProc();
-    }
-
-    private void Spell_2_HitCheck(Vector3 targetPosition){
-        bool passiveStack = false;
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(targetPosition, billia.spell_2_outerRadius, enemyMask));
-        foreach(Collider collider in outerHit){
-            Vector3 hitCenter = collider.bounds.center;
-            float distToHitCenter = (hitCenter - targetPosition).magnitude;
-            if(distToHitCenter < billia.spell_2_outerRadius){
-                Vector3 closestPoint = collider.ClosestPoint(targetPosition);
-                closestPoint.y = collider.bounds.center.y;
-                float distToInner = (closestPoint - targetPosition).magnitude;
-                // Check if the unit was hit by the specified spells inner damage.
-                if(distToInner < billia.spell_2_innerRadius){
-                    Spell_2_Hit_Placeholder(collider.gameObject, "inner");
-                    //hitMethod(collider.gameObject, "inner");
-                    // TODO: Add passive dot.
-                }
-                // Unit hit by outer portion.
-                else{
-                    Debug.Log("outer2");
-                    Spell_2_Hit_Placeholder(collider.gameObject, "outer");
-                    //hitMethod(collider.gameObject, "outer");
-                    // TODO: Add passive dot.
-                }
-                passiveStack = true;
-            }
-        }
-        // If a unit was hit proc the spells passive.
-        if(passiveStack)
-            Spell_1_PassiveProc();
     }
 
     /*
@@ -283,8 +225,7 @@ public class BilliaAbilities : ChampionAbilities
         // Set method to use if a hit.
         spellHit = Spell_2_Hit_Placeholder;
         // Hitbox starts from center of calculated target position.
-        Spell_2_HitCheck(targetPosition);
-        //DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, "Spell_2", spellHit);
+        DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, billia.spell_2_innerRadius, "Spell_2", spellHit);
         Destroy(GameObject.Find("/BilliaSpell_2"));
     }
 
@@ -293,54 +234,43 @@ public class BilliaAbilities : ChampionAbilities
     *   The appropriate spells damage method and radius is used based on the results.
     *   @param hitboxCenter - Vector3 of the position of the center of the radius' hitbox.
     *   @param outerRadius - float of the outer radius value to be used.
+    *   @param innerRadius - float of the inner radius value to be used.
     *   @param spell - string of the spell that has been casted.
     *   @param DoubleRadiusHitboxHit - delegate containing the method to call if a spell hit is found.
     */
-    private void DoubleRadiusHitboxCheck(Vector3 hitboxCenter, float outerRadius, string spell, DoubleRadiusHitboxHit hitMethod){
+    private void DoubleRadiusHitboxCheck(Vector3 hitboxCenter, float outerRadius, float innerRadius, string spell, DoubleRadiusHitboxHit hitMethod){
         bool passiveStack = false;
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(hitboxCenter, outerRadius, enemyMask));
         foreach(Collider collider in outerHit){
-            // Check if the unit was hit by the specified spells inner damage.
-            if(CheckTwoRadiusInnerHit(collider, hitboxCenter, spell)){
-                hitMethod(collider.gameObject, "inner");
-                // TODO: Add passive dot.
+            // Check if the center of the hit collider is within the spell hitbox.
+            Vector3 colliderHitCenter = collider.bounds.center;
+            float distToHitboxCenter = (colliderHitCenter - hitboxCenter).magnitude;
+            if(distToHitboxCenter < outerRadius){
+                // If the casted spell is spell 2 then use edge range for hitbox check.
+                if(spell == "Spell_2"){
+                    Vector3 closestPoint = collider.ClosestPoint(hitboxCenter);
+                    closestPoint.y = collider.bounds.center.y;
+                    distToHitboxCenter = (closestPoint - hitboxCenter).magnitude;
+                }
+                // Check if the unit was hit by the specified spells inner damage.
+                if(distToHitboxCenter < innerRadius){
+                    hitMethod(collider.gameObject, "inner");
+                    // TODO: Add passive dot.
+                }
+                // Unit hit by outer portion.
+                else{
+                    hitMethod(collider.gameObject, "outer");
+                    // TODO: Add passive dot.
+                }
+                passiveStack = true;
             }
-            // Unit hit by outer portion.
-            else{
-                hitMethod(collider.gameObject, "outer");
-                // TODO: Add passive dot.
-            }
-            passiveStack = true;
         }
         // If a unit was hit proc the spells passive.
         if(passiveStack)
             Spell_1_PassiveProc();
     }
-
-    /*
-    *   CheckTwoRadiusInnerHit - Checks if a collider that was within an outer radius is fully in or partially in an inner radius.
-    *   @param collider - Collider to check the bounds of.
-    *   @param hitboxCenter - Vector3 of the center of the inner radius.
-    *   @param spell - String of which spells hitbox is being checked.
-    */
-    private bool CheckTwoRadiusInnerHit(Collider collider, Vector3 hitboxCenter, string spell){
-        // Get the min and max bounds of the collider and set their y to the same as Billia.
-        Vector3 min = collider.bounds.min;
-        Vector3 max = collider.bounds.max;
-        max.y = transform.position.y;
-        min.y = transform.position.y;
-        // Get the distances from inner radius center.
-        float minMag = (hitboxCenter - min).magnitude;
-        float maxMag = (hitboxCenter - max).magnitude;
-        // Spell 1 inner hit needs the entire collider inside the inner radius.
-        if(spell == "Spell_1")
-            return minMag <= billia.spell_1_innerRadius && maxMag <= billia.spell_1_innerRadius;
-        // Spell 2 inner hit needs any part of the collider in the inner radius.
-        else
-            return minMag <= billia.spell_2_innerRadius || maxMag <= billia.spell_2_innerRadius;
-    }
-
+    
     // TODO: Move to ability hit script.
     private void Spell_2_Hit_Placeholder(GameObject hit, string radius){
         Debug.Log("Spell 2 Hit on " + hit.name + " w/ " + radius + " radius.");
