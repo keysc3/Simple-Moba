@@ -11,7 +11,9 @@ public class BilliaAbilities : ChampionAbilities
 
     private Billia billia;
 
+    public GameObject spell1Visual;
     public GameObject spell2Visual;
+
     public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
     public DoubleRadiusHitboxHit spellHit;
     // Start is called before the first frame update
@@ -30,6 +32,7 @@ public class BilliaAbilities : ChampionAbilities
         if(!spell_1_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]){
             // Start cast time then cast the spell.
             StartCoroutine(CastTime(billia.spell_1_castTime));
+            Spell_1_Visual();
             StartCoroutine(Spell_1_Cast());
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]);
@@ -92,6 +95,18 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
+    *   Spell_1_Visual - Visual hitbox indicator for Billia's first spell.
+    */
+    private void Spell_1_Visual(){
+        // Create the spells visual hitbox and set necessary values.
+        GameObject spell1VisualHitbox = (GameObject)Instantiate(spell1Visual, transform.position, Quaternion.identity);
+        spell1VisualHitbox.name = "BilliaSpell_1";
+        float yScale = spell1VisualHitbox.transform.GetChild(0).localScale.y;
+        spell1VisualHitbox.transform.GetChild(0).localScale = new Vector3(billia.spell_1_innerRadius * 2f, yScale, billia.spell_1_innerRadius * 2f);
+        spell1VisualHitbox.transform.GetChild(1).localScale = new Vector3(billia.spell_1_outerRadius * 2f, yScale, billia.spell_1_outerRadius * 2f);
+    }
+
+    /*
     *   Spell_2 - Set up Billia's second spell. She dashed an offset distance towards her target location then deals damage in two radius'.
     *   The inner radius deals bonus damage.
     */
@@ -126,6 +141,7 @@ public class BilliaAbilities : ChampionAbilities
             spell_2_onCd = true;
         }
     }
+
     private void Spell_2_Visual(Vector3 targetPosition){
         // Create the spells visual hitbox
         GameObject spell2VisualHitbox = (GameObject)Instantiate(spell2Visual, targetPosition, Quaternion.identity);

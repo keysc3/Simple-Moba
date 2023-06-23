@@ -99,6 +99,6 @@ MonoBehaviour:
   spell_1_outerRadius: 5
   spell_2_maxMagnitude: 6
   spell_2_dashOffset: 1.8
-  spell_2_innerRadius: 0.87
-  spell_2_outerRadius: 2
+  spell_2_innerRadius: 0.6
+  spell_2_outerRadius: 2.5
   spell_2_dashTime: 0.759
