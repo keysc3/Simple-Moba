@@ -135,7 +135,6 @@ public abstract class ChampionAbilities : MonoBehaviour
     */
     protected IEnumerator Spell_Cd_Timer(float spell_cd, Action<bool> myResult, string spell){
         spell_cd = CalculateCooldown(spell_cd, championStats.haste.GetValue());
-        Debug.Log(spell_cd);
         float spell_timer = 0.0f;
         //Debug.Log(spell_timer);
         while(spell_timer <= spell_cd){
