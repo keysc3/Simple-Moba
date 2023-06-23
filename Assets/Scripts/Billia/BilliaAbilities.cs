@@ -137,6 +137,7 @@ public class BilliaAbilities : ChampionAbilities
         // Create the spells visual hitbox and set necessary values.
         GameObject spell1VisualHitbox = (GameObject)Instantiate(spell1Visual, transform.position, Quaternion.identity);
         spell1VisualHitbox.name = "BilliaSpell_1";
+        spell1VisualHitbox.transform.SetParent(transform);
         float yScale = spell1VisualHitbox.transform.GetChild(0).localScale.y;
         spell1VisualHitbox.transform.GetChild(0).localScale = new Vector3(billia.spell_1_innerRadius * 2f, yScale, billia.spell_1_innerRadius * 2f);
         spell1VisualHitbox.transform.GetChild(1).localScale = new Vector3(billia.spell_1_outerRadius * 2f, yScale, billia.spell_1_outerRadius * 2f);
