@@ -33,7 +33,7 @@ public class BilliaAbilities : ChampionAbilities
         // If the spell is off cd, Billia is not casting, and has enough mana.
         if(!spell_1_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]){
             // Start cast time then cast the spell.
-            StartCoroutine(CastTime(billia.spell_1_castTime));
+            StartCoroutine(CastTime(billia.spell_1_castTime, true));
             StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]);

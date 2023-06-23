@@ -113,14 +113,17 @@ public abstract class ChampionAbilities : MonoBehaviour
     /*
     *   CastTime - Stops the champion for the duration of the spells cast.
     *   @param castTime - float for the duration to stop the champion for casting.
+    *   @param canMove - bool for whether or not the unit can move while casting.
     */
-    protected IEnumerator CastTime(float castTime){
+    protected IEnumerator CastTime(float castTime, bool canMove){
         float timer = 0.0f;
         isCasting = true;
         // While still casting spell stop the player.
         while(timer <= castTime){
-            if(!navMeshAgent.isStopped)
-                navMeshAgent.isStopped = true;
+            if(!canMove){
+                if(!navMeshAgent.isStopped)
+                    navMeshAgent.isStopped = true;
+            }
             timer += Time.deltaTime;
             yield return null;
         }
