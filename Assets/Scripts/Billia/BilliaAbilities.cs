@@ -54,9 +54,35 @@ public class BilliaAbilities : ChampionAbilities
         // Set method to call if a hit.
         spellHit = Spell_1_Hit_Placeholder;
         // Hitbox starts from center of Billia.
-        DoubleRadiusHitboxCheck(transform.position, billia.spell_1_outerRadius, "Spell_1", spellHit);
+        Spell_1_HitCheck();
         // Animate the ending of the spell.
         StartCoroutine(Spell_1_Animation(spell1VisualHitbox, spell1Visual_finalAlpha, spell1Visual_initialAlpha));
+    }
+
+    private void Spell_1_HitCheck(){
+        bool passiveStack = false;
+        LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(transform.position, billia.spell_1_outerRadius, enemyMask));
+        foreach(Collider collider in outerHit){
+            Vector3 hitCenter = collider.bounds.center;
+            float distToHitCenter = (hitCenter - transform.position).magnitude;
+            // Check if the unit was hit by the specified spells inner damage.
+            if(distToHitCenter < billia.spell_1_innerRadius){
+                Debug.Log("inner1");
+                //hitMethod(collider.gameObject, "inner");
+                // TODO: Add passive dot.
+            }
+            // Unit hit by outer portion.
+            else{
+                Debug.Log("outer1");
+                //hitMethod(collider.gameObject, "outer");
+                // TODO: Add passive dot.
+            }
+            passiveStack = true;
+        }
+        // If a unit was hit proc the spells passive.
+        if(passiveStack)
+            Spell_1_PassiveProc();
     }
 
     /*
