@@ -12,6 +12,8 @@ public class BilliaAbilities : ChampionAbilities
     private Billia billia;
 
     public GameObject spell1Visual;
+    public float spell1Visual_initialAlpha = 60.0f;
+    public float spell1Visual_finalAlpha = 160.0f;
     public GameObject spell2Visual;
 
     public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
@@ -32,8 +34,7 @@ public class BilliaAbilities : ChampionAbilities
         if(!spell_1_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]){
             // Start cast time then cast the spell.
             StartCoroutine(CastTime(billia.spell_1_castTime));
-            Spell_1_Visual();
-            StartCoroutine(Spell_1_Cast());
+            StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]);
             spell_1_onCd = true;
@@ -43,14 +44,48 @@ public class BilliaAbilities : ChampionAbilities
     /*
     *   Spell_1_Cast - Casts Billia's first spell.
     */
-    private IEnumerator Spell_1_Cast(){
-        while(isCasting)
+    private IEnumerator Spell_1_Cast(GameObject spell1VisualHitbox){
+        // Animate the beginning of the spell.
+        StartCoroutine(Spell_1_Animation(spell1VisualHitbox, spell1Visual_initialAlpha, spell1Visual_finalAlpha));
+        while(isCasting){
             yield return null;
+        }
         StartCoroutine(Spell_Cd_Timer(billia.spell1BaseCd[levelManager.spellLevels["Spell_1"]-1], (myBool => spell_1_onCd = myBool), "Spell_1"));
         // Set method to call if a hit.
         spellHit = Spell_1_Hit_Placeholder;
         // Hitbox starts from center of Billia.
         DoubleRadiusHitboxCheck(transform.position, billia.spell_1_outerRadius, "Spell_1", spellHit);
+        // Animate the ending of the spell.
+        StartCoroutine(Spell_1_Animation(spell1VisualHitbox, spell1Visual_finalAlpha, spell1Visual_initialAlpha));
+    }
+
+    /*
+    *   Spell_1_Animation - Animates the wind up or wind down of Billia's first spell.
+    *   @param spell1VisualHitBox - GameObject of the hitbox visual.
+    *   @param initialAlpha - float of the starting alpha.
+    *   @param finalAlpha - float of the final alpha to reach.
+    */
+    private IEnumerator Spell_1_Animation(GameObject spell1VisualHitbox, float initialAlpha, float finalAlpha){
+        // Get the outer radius's renderer and color.
+        Renderer outerRenderer = spell1VisualHitbox.transform.GetChild(1).gameObject.GetComponent<Renderer>();
+        Color newColor = outerRenderer.material.color;
+        // Set up.
+        float startTime = Time.time;
+        float timer = 0.0f;
+        // Animation time is spell cast time.
+        while(timer < billia.spell_1_castTime){
+            // Animate the spell cast.
+            float step = (Time.time - startTime)/billia.spell_1_castTime;
+            newColor.a = Mathf.Lerp(initialAlpha, finalAlpha, step)/255f;
+            outerRenderer.material.color = newColor;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        // Last tick.
+        newColor.a = finalAlpha/255f;
+        // Destroy the hitbox visual is this was the ending animation.
+        if(finalAlpha < initialAlpha)
+            Destroy(spell1VisualHitbox);
     }
 
     /*
@@ -96,14 +131,16 @@ public class BilliaAbilities : ChampionAbilities
 
     /*
     *   Spell_1_Visual - Visual hitbox indicator for Billia's first spell.
+    *   @return GameObject - Created visual hitbox GameObject.
     */
-    private void Spell_1_Visual(){
+    private GameObject Spell_1_Visual(){
         // Create the spells visual hitbox and set necessary values.
         GameObject spell1VisualHitbox = (GameObject)Instantiate(spell1Visual, transform.position, Quaternion.identity);
         spell1VisualHitbox.name = "BilliaSpell_1";
         float yScale = spell1VisualHitbox.transform.GetChild(0).localScale.y;
         spell1VisualHitbox.transform.GetChild(0).localScale = new Vector3(billia.spell_1_innerRadius * 2f, yScale, billia.spell_1_innerRadius * 2f);
         spell1VisualHitbox.transform.GetChild(1).localScale = new Vector3(billia.spell_1_outerRadius * 2f, yScale, billia.spell_1_outerRadius * 2f);
+        return spell1VisualHitbox;
     }
 
     /*
