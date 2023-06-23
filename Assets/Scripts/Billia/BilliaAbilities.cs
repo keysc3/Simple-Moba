@@ -142,8 +142,11 @@ public class BilliaAbilities : ChampionAbilities
         }
     }
 
+    /*
+    *   Spell_2_Visual - Visual hitbox indicator for Billia's second spell.
+    */
     private void Spell_2_Visual(Vector3 targetPosition){
-        // Create the spells visual hitbox
+        // Create the spells visual hitbox and set necessary values.
         GameObject spell2VisualHitbox = (GameObject)Instantiate(spell2Visual, targetPosition, Quaternion.identity);
         spell2VisualHitbox.name = "BilliaSpell_2";
         spell2VisualHitbox.transform.position = new Vector3(spell2VisualHitbox.transform.position.x, 0.5f, spell2VisualHitbox.transform.position.z);
