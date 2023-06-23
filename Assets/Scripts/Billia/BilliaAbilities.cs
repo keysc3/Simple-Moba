@@ -85,6 +85,38 @@ public class BilliaAbilities : ChampionAbilities
             Spell_1_PassiveProc();
     }
 
+    private void Spell_2_HitCheck(Vector3 targetPosition){
+        bool passiveStack = false;
+        LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(targetPosition, billia.spell_2_outerRadius, enemyMask));
+        foreach(Collider collider in outerHit){
+            Vector3 hitCenter = collider.bounds.center;
+            float distToHitCenter = (hitCenter - targetPosition).magnitude;
+            if(distToHitCenter < billia.spell_2_outerRadius){
+                Vector3 closestPoint = collider.ClosestPoint(targetPosition);
+                closestPoint.y = collider.bounds.center.y;
+                float distToInner = (closestPoint - targetPosition).magnitude;
+                // Check if the unit was hit by the specified spells inner damage.
+                if(distToInner < billia.spell_2_innerRadius){
+                    Spell_2_Hit_Placeholder(collider.gameObject, "inner");
+                    //hitMethod(collider.gameObject, "inner");
+                    // TODO: Add passive dot.
+                }
+                // Unit hit by outer portion.
+                else{
+                    Debug.Log("outer2");
+                    Spell_2_Hit_Placeholder(collider.gameObject, "outer");
+                    //hitMethod(collider.gameObject, "outer");
+                    // TODO: Add passive dot.
+                }
+                passiveStack = true;
+            }
+        }
+        // If a unit was hit proc the spells passive.
+        if(passiveStack)
+            Spell_1_PassiveProc();
+    }
+
     /*
     *   Spell_1_Animation - Animates the wind up or wind down of Billia's first spell.
     *   @param spell1VisualHitBox - GameObject of the hitbox visual.
@@ -251,7 +283,8 @@ public class BilliaAbilities : ChampionAbilities
         // Set method to use if a hit.
         spellHit = Spell_2_Hit_Placeholder;
         // Hitbox starts from center of calculated target position.
-        DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, "Spell_2", spellHit);
+        Spell_2_HitCheck(targetPosition);
+        //DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, "Spell_2", spellHit);
         Destroy(GameObject.Find("/BilliaSpell_2"));
     }
 
