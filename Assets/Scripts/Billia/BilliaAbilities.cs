@@ -10,8 +10,8 @@ public class BilliaAbilities : ChampionAbilities
     private bool spell_1_passiveRunning;
 
     private Billia billia;
-    public GameObject blueBahri;
 
+    public GameObject spell2Visual;
     public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
     public DoubleRadiusHitboxHit spellHit;
     // Start is called before the first frame update
@@ -117,12 +117,23 @@ public class BilliaAbilities : ChampionAbilities
             Vector3 directionToMove = (new Vector3(targetPosition.x, targetDirection.y, targetPosition.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * billia.spell_2_dashOffset);
+            // Show the spells hitbox.
+            Spell_2_Visual(targetPosition);
             // Apply the dash.
             StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_2"]-1]);
             spell_2_onCd = true;
         }
+    }
+    private void Spell_2_Visual(Vector3 targetPosition){
+        // Create the spells visual hitbox
+        GameObject spell2VisualHitbox = (GameObject)Instantiate(spell2Visual, targetPosition, Quaternion.identity);
+        spell2VisualHitbox.name = "BilliaSpell_2";
+        spell2VisualHitbox.transform.position = new Vector3(spell2VisualHitbox.transform.position.x, 0.5f, spell2VisualHitbox.transform.position.z);
+        float yScale = spell2VisualHitbox.transform.GetChild(0).localScale.y;
+        spell2VisualHitbox.transform.GetChild(0).localScale = new Vector3(billia.spell_2_innerRadius * 2f, yScale, billia.spell_2_innerRadius * 2f);
+        spell2VisualHitbox.transform.GetChild(1).localScale = new Vector3(billia.spell_2_outerRadius * 2f, yScale, billia.spell_2_outerRadius * 2f);
     }
 
     /*
@@ -158,6 +169,7 @@ public class BilliaAbilities : ChampionAbilities
         spellHit = Spell_2_Hit_Placeholder;
         // Hitbox starts from center of calculated target position.
         DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, "Spell_2", spellHit);
+        Destroy(GameObject.Find("/BilliaSpell_2"));
     }
 
     /*
