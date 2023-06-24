@@ -307,6 +307,7 @@ public class BilliaAbilities : ChampionAbilities
     private IEnumerator Spell_3_Cast(Vector3 targetPosition){
         while(isCasting)
             yield return null;
+        StartCoroutine(Spell_Cd_Timer(billia.spell3BaseCd[levelManager.spellLevels["Spell_3"]-1], (myBool => spell_3_onCd = myBool), "Spell_3"));
         StartCoroutine(Spell_3_Lob(targetPosition));
     }
 
@@ -325,6 +326,14 @@ public class BilliaAbilities : ChampionAbilities
         Vector3 targetDirection =  (targetPosition - transform.position).normalized;
         spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
         spell_3_seed.transform.LookAt(spell_3_seed.transform.position + targetDirection);
+        LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
+        List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(spell_3_seed.transform.position, 
+        spell_3_seed.GetComponent<SphereCollider>().radius * billia.spell_3_lobLandHitbox, ~groundMask));
+        if(lobHit.Count > 0){
+            Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
+            Destroy(spell_3_seed);
+            // TODO: Handle hit.
+        }
         while(spell_3_seed){
             float step = billia.spell_3_seedSpeed * Time.deltaTime;
             spell_3_seed.transform.position = Vector3.MoveTowards(spell_3_seed.transform.position, spell_3_seed.transform.position + targetDirection, step);
