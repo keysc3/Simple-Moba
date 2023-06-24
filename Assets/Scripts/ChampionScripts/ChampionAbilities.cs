@@ -102,7 +102,8 @@ public abstract class ChampionAbilities : MonoBehaviour
     protected Vector3 GetTargetDirection(){
         RaycastHit hitInfo;
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Physics.Raycast(ray, out hitInfo);
+        LayerMask groundMask = LayerMask.GetMask("Ground");
+        Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Debug.DrawLine(mainCamera.transform.position, hitInfo.point, Color.red, 20f);
         Vector3 targetDirection = hitInfo.point;
         mouseOnCast = targetDirection;
