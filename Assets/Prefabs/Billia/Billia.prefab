@@ -82,3 +82,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d71caa91ac3109142a7bba944d5bd34e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seed: {fileID: 484404483246906668, guid: 6d6aa9d30c9ce1f48bd8c378c46a28ce, type: 3}
+  spell_1_passiveStacks: 0
+  spell1Visual: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}
+  spell1Visual_initialAlpha: 60
+  spell1Visual_finalAlpha: 160
+  spell2Visual: {fileID: 2809299097425876486, guid: d0a19b033a1664247bf7d4d5591b1784, type: 3}

@@ -76,15 +76,30 @@ MonoBehaviour:
   - 3
   - 4
   - 5
-  spell3BaseDamage: []
-  spell3BaseCd: []
-  spell3BaseMana: []
+  spell3BaseDamage:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  spell3BaseCd:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  spell3BaseMana:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
   spell4BaseDamage: []
   spell4BaseCd: []
   spell4BaseMana: []
   spell_1_castTime: 0.25
   spell_2_castTime: 0
-  spell_3_castTime: 0
+  spell_3_castTime: 0.4
   spell_4_castTime: 0
   spell_1_passiveSpeedDuration: 6.5
   spell_1_passiveExpireDuration: 1.5
@@ -99,6 +114,11 @@ MonoBehaviour:
   spell_1_outerRadius: 5
   spell_2_maxMagnitude: 6
   spell_2_dashOffset: 1.8
-  spell_2_innerRadius: 0.87
-  spell_2_outerRadius: 2
+  spell_2_innerRadius: 0.6
+  spell_2_outerRadius: 2.5
   spell_2_dashTime: 0.759
+  spell_3_maxLobMagnitude: 2
+  spell_3_lobTime: 0.5
+  spell_3_seedSpeed: 5
+  spell_3_seedRotation: 270
+  spell_3_lobLandHitbox: 1.2

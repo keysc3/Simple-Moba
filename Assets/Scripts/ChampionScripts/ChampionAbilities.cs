@@ -102,7 +102,8 @@ public abstract class ChampionAbilities : MonoBehaviour
     protected Vector3 GetTargetDirection(){
         RaycastHit hitInfo;
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Physics.Raycast(ray, out hitInfo);
+        LayerMask groundMask = LayerMask.GetMask("Ground");
+        Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Debug.DrawLine(mainCamera.transform.position, hitInfo.point, Color.red, 20f);
         Vector3 targetDirection = hitInfo.point;
         mouseOnCast = targetDirection;
@@ -113,14 +114,17 @@ public abstract class ChampionAbilities : MonoBehaviour
     /*
     *   CastTime - Stops the champion for the duration of the spells cast.
     *   @param castTime - float for the duration to stop the champion for casting.
+    *   @param canMove - bool for whether or not the unit can move while casting.
     */
-    protected IEnumerator CastTime(float castTime){
+    protected IEnumerator CastTime(float castTime, bool canMove){
         float timer = 0.0f;
         isCasting = true;
         // While still casting spell stop the player.
         while(timer <= castTime){
-            if(!navMeshAgent.isStopped)
-                navMeshAgent.isStopped = true;
+            if(!canMove){
+                if(!navMeshAgent.isStopped)
+                    navMeshAgent.isStopped = true;
+            }
             timer += Time.deltaTime;
             yield return null;
         }
@@ -135,7 +139,6 @@ public abstract class ChampionAbilities : MonoBehaviour
     */
     protected IEnumerator Spell_Cd_Timer(float spell_cd, Action<bool> myResult, string spell){
         spell_cd = CalculateCooldown(spell_cd, championStats.haste.GetValue());
-        Debug.Log(spell_cd);
         float spell_timer = 0.0f;
         //Debug.Log(spell_timer);
         while(spell_timer <= spell_cd){

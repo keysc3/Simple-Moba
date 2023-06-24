@@ -83,7 +83,7 @@ public class BahriAbilities : ChampionAbilities
             Vector3 targetPosition = (targetDirection - transform.position).normalized;
             targetPosition = transform.position + (targetPosition * bahri.spell_1_magnitude);
             // Start coroutines to handle the spells cast time and animation.
-            StartCoroutine(CastTime(bahri.spell_1_castTime));
+            StartCoroutine(CastTime(bahri.spell_1_castTime, false));
             StartCoroutine(Spell_1_Move(targetPosition));
             // Use mana and set spell on cooldown to true.
             championStats.UseMana(bahri.spell1BaseMana[levelManager.spellLevels["Spell_1"]-1]);
@@ -295,7 +295,7 @@ public class BahriAbilities : ChampionAbilities
             Vector3 targetPosition = (targetDirection - transform.position).normalized;
             targetPosition = transform.position + (targetPosition * bahri.spell_3_magnitude);
             // Start coroutines to handle the spells cast time and animation.
-            StartCoroutine(CastTime(bahri.spell_3_castTime));
+            StartCoroutine(CastTime(bahri.spell_3_castTime, false));
             StartCoroutine(Spell_3_Move(targetPosition));
             // Use mana and set the spell to be on cooldown.
             championStats.UseMana(bahri.spell3BaseMana[levelManager.spellLevels["Spell_3"]-1]);
