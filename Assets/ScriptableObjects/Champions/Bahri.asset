@@ -110,7 +110,7 @@ MonoBehaviour:
   spell_2_castTime: 0
   spell_3_castTime: 0.25
   spell_4_castTime: 0
-  spell_1_magnitude: 0
+  spell_1_magnitude: 8
   spell_1_speed: 10
   spell_1_minSpeed: 0.4
   spell_1_maxSpeed: 16
