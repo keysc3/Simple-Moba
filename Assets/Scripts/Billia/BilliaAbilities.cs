@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class BilliaAbilities : ChampionAbilities
 {
+    [SerializeField] private GameObject seed;
     [SerializeField] private int spell_1_passiveStacks;
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
@@ -284,6 +285,29 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_3 - Champions third ability method.
     */
     public override void Spell_3(){
+        if(!spell_3_onCd && !isCasting && championStats.currentMana >= billia.spell3BaseMana[levelManager.spellLevels["Spell_3"]-1]){
+            // Start cast time then cast the spell.
+            StartCoroutine(CastTime(billia.spell_3_castTime, false));
+            // Get the players mouse position on spell cast for spells target direction.
+            Vector3 targetDirection = GetTargetDirection();
+            // Set the target position to be in the direction of the mouse on cast.
+            Vector3 targetPosition = (targetDirection - transform.position);
+            // Set target to lob seed to to max lob distance if casted at a greater distance.
+            if(targetPosition.magnitude > billia.spell_3_maxLobMagnitude)
+                targetPosition = transform.position + (targetPosition.normalized * billia.spell_3_maxLobMagnitude);
+            else
+                targetPosition = transform.position + (targetDirection - transform.position);
+            StartCoroutine(Spell_3_Cast(targetPosition));
+            // Use mana.
+            championStats.UseMana(billia.spell3BaseMana[levelManager.spellLevels["Spell_3"]-1]);
+            spell_3_onCd = true;
+        }
+    }
+
+    private IEnumerator Spell_3_Cast(Vector3 targetPosition){
+        while(isCasting)
+            yield return null;
+        // TODO: Add lob animation to target position.
 
     }
 

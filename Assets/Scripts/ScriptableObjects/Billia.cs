@@ -23,6 +23,8 @@ public class Billia : Champion
     #endregion
 
     #region "Spell_3"
+    public float spell_3_maxLobMagnitude;
+    public float spell_3_lobTime;
     #endregion
 
     #region "Spell_4"
