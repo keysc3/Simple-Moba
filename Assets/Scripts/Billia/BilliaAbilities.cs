@@ -282,7 +282,8 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
-    *   Spell_3 - Champions third ability method.
+    *   Spell_3 - Champions third ability method. Lobs a seed at a target location. If no initial terrain or unit collision the seed rolls 
+    *   until one occurs. Explodes on collision and applies its damage to units within a cone forward of the collision.
     */
     public override void Spell_3(){
         if(!spell_3_onCd && !isCasting && championStats.currentMana >= billia.spell3BaseMana[levelManager.spellLevels["Spell_3"]-1]){
@@ -304,13 +305,22 @@ public class BilliaAbilities : ChampionAbilities
         }
     }
 
+    /*
+    *   Spell_3_Cast - Casts Billia's third ability after the cast time.
+    *   @param targetPosition - Vector3 of where the seed is to be lobbed.
+    */
     private IEnumerator Spell_3_Cast(Vector3 targetPosition){
+        // Wait for cast time.
         while(isCasting)
             yield return null;
         StartCoroutine(Spell_Cd_Timer(billia.spell3BaseCd[levelManager.spellLevels["Spell_3"]-1], (myBool => spell_3_onCd = myBool), "Spell_3"));
         StartCoroutine(Spell_3_Lob(targetPosition));
     }
 
+    /*
+    *   Spell_3_Lob - Lobs the seed at the target location over a set time.
+    *   @param targetPosition - Vector3 of the target position for the seed to land.
+    */
     private IEnumerator Spell_3_Lob(Vector3 targetPosition){
         float timer = 0.0f;
         while (timer < billia.spell_3_lobTime){
@@ -318,26 +328,42 @@ public class BilliaAbilities : ChampionAbilities
             timer += Time.deltaTime;
             yield return null;
         }
+        // Roll after landing.
         StartCoroutine(Spell_3_Move(targetPosition));
     }
 
+    /*
+    *   Spell_3_Move - Instantiates the seed and checks for collision on lob landing. If no landing collision the seed rolls in the 
+    *   target forward direction until a collision.
+    *   @param targetPosition - Vector3 of the lobbed seeds landing position.
+    */
+
     private IEnumerator Spell_3_Move(Vector3 targetPosition){
+        // Instantiate seed and setup rolling collision trigger variables.
+        // TODO: Instantiate and initial hit check in lob method once animation is made.
         GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
         spell_3_seed.GetComponent<BilliaSpell3Trigger>().billiaAbilities = this;
+        // Direction to roll.
         Vector3 targetDirection =  (targetPosition - transform.position).normalized;
         spell_3_seed.GetComponent<BilliaSpell3Trigger>().forwardDirection = targetDirection;
+        // Set inital seed position.
         spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
+        // Look at roll direction.
         spell_3_seed.transform.LookAt(spell_3_seed.transform.position + targetDirection);
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
+        // Check for lob landing hits.
         List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(spell_3_seed.transform.position, 
         spell_3_seed.GetComponent<SphereCollider>().radius * billia.spell_3_lobLandHitbox, ~groundMask));
+        // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
             Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
+            // TODO: Handle collision hit.
             Spell_3_ConeHitbox(spell_3_seed, targetDirection);
             Destroy(spell_3_seed);
-            // TODO: Handle hit.
         }
+        // While seed hasn't been destroyed, no collision.
         while(spell_3_seed){
+            // Move the seed in the target direction and rotate it to animate rolling.
             float step = billia.spell_3_seedSpeed * Time.deltaTime;
             spell_3_seed.transform.position = Vector3.MoveTowards(spell_3_seed.transform.position, spell_3_seed.transform.position + targetDirection, step);
             spell_3_seed.transform.RotateAround(spell_3_seed.transform.position, spell_3_seed.transform.right, billia.spell_3_seedRotation * Time.deltaTime);
@@ -345,17 +371,23 @@ public class BilliaAbilities : ChampionAbilities
         }
     }
 
+    /*
+    *   Spell_3_ConeHitBox - Checks the seeds post collision cone hitbox for any units to apply the damage to.
+    *   @param spell_3_seed - GameObject of the seed.
+    *   @param forwardDirection - Vector3 of the roll direction.
+    */
+
     public void Spell_3_ConeHitbox(GameObject spell_3_seed, Vector3 forwardDirection){
+        // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            Transform hit = collider.transform;
-            Vector3 directionToHit = (hit.position - spell_3_seed.transform.position).normalized;
+            // Get the direction to the hit collider.
+            Vector3 directionToHit = (collider.transform.position - spell_3_seed.transform.position).normalized;
+            // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
             if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
-                Debug.Log("Hit pos: " + hit.position + " Seed pos: " + spell_3_seed.transform.position);
-                Debug.Log("Forward: " + forwardDirection + " DirToHit: " + directionToHit);
-                Debug.Log("Angle: " + Vector3.Angle(forwardDirection, directionToHit));
-                Debug.Log("Cone hit: " + hit.name);
+                Debug.Log("Cone hit: " + collider.transform.name);
+                // TODO: Apply damage.
             }
         }
     }
