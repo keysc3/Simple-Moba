@@ -118,4 +118,6 @@ MonoBehaviour:
   spell_2_outerRadius: 2.5
   spell_2_dashTime: 0.759
   spell_3_maxLobMagnitude: 2
-  spell_3_lobTime: 2
+  spell_3_lobTime: 0.5
+  spell_3_seedSpeed: 5
+  spell_3_seedRotation: 270

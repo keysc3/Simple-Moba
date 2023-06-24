@@ -307,8 +307,30 @@ public class BilliaAbilities : ChampionAbilities
     private IEnumerator Spell_3_Cast(Vector3 targetPosition){
         while(isCasting)
             yield return null;
-        // TODO: Add lob animation to target position.
+        StartCoroutine(Spell_3_Lob(targetPosition));
+    }
 
+    private IEnumerator Spell_3_Lob(Vector3 targetPosition){
+        float timer = 0.0f;
+        while (timer < billia.spell_3_lobTime){
+            // TODO: Add lob animation to target position.
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        StartCoroutine(Spell_3_Move(targetPosition));
+    }
+
+    private IEnumerator Spell_3_Move(Vector3 targetPosition){
+        GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
+        Vector3 targetDirection =  (targetPosition - transform.position).normalized;
+        spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
+        spell_3_seed.transform.LookAt(spell_3_seed.transform.position + targetDirection);
+        while(spell_3_seed){
+            float step = billia.spell_3_seedSpeed * Time.deltaTime;
+            spell_3_seed.transform.position = Vector3.MoveTowards(spell_3_seed.transform.position, spell_3_seed.transform.position + targetDirection, step);
+            spell_3_seed.transform.RotateAround(spell_3_seed.transform.position, spell_3_seed.transform.right, billia.spell_3_seedRotation * Time.deltaTime);
+            yield return null;
+        }
     }
 
     /*

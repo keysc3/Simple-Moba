@@ -25,6 +25,8 @@ public class Billia : Champion
     #region "Spell_3"
     public float spell_3_maxLobMagnitude;
     public float spell_3_lobTime;
+    public float spell_3_seedSpeed;
+    public float spell_3_seedRotation;
     #endregion
 
     #region "Spell_4"
