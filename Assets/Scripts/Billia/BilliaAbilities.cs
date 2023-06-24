@@ -382,12 +382,14 @@ public class BilliaAbilities : ChampionAbilities
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            // Get the direction to the hit collider.
-            Vector3 directionToHit = (collider.transform.position - spell_3_seed.transform.position).normalized;
-            // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
-            if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
-                Debug.Log("Cone hit: " + collider.transform.name);
-                // TODO: Apply damage.
+            if(collider.tag == "Enemy"){
+                // Get the direction to the hit collider.
+                Vector3 directionToHit = (collider.transform.position - spell_3_seed.transform.position).normalized;
+                // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
+                if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
+                    Debug.Log("Cone hit: " + collider.transform.name);
+                    // TODO: Apply damage.
+                }
             }
         }
     }
