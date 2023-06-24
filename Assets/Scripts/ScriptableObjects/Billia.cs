@@ -28,6 +28,8 @@ public class Billia : Champion
     public float spell_3_seedSpeed;
     public float spell_3_seedRotation;
     public float spell_3_lobLandHitbox;
+    public float spell_3_seedConeAngle;
+    public float spell_3_seedConeRadius;
     #endregion
 
     #region "Spell_4"

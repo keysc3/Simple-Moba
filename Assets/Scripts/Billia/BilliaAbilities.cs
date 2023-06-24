@@ -323,7 +323,9 @@ public class BilliaAbilities : ChampionAbilities
 
     private IEnumerator Spell_3_Move(Vector3 targetPosition){
         GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
+        spell_3_seed.GetComponent<BilliaSpell3Trigger>().billiaAbilities = this;
         Vector3 targetDirection =  (targetPosition - transform.position).normalized;
+        spell_3_seed.GetComponent<BilliaSpell3Trigger>().forwardDirection = targetDirection;
         spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
         spell_3_seed.transform.LookAt(spell_3_seed.transform.position + targetDirection);
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
@@ -331,6 +333,7 @@ public class BilliaAbilities : ChampionAbilities
         spell_3_seed.GetComponent<SphereCollider>().radius * billia.spell_3_lobLandHitbox, ~groundMask));
         if(lobHit.Count > 0){
             Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
+            Spell_3_ConeHitbox(spell_3_seed, targetDirection);
             Destroy(spell_3_seed);
             // TODO: Handle hit.
         }
@@ -339,6 +342,21 @@ public class BilliaAbilities : ChampionAbilities
             spell_3_seed.transform.position = Vector3.MoveTowards(spell_3_seed.transform.position, spell_3_seed.transform.position + targetDirection, step);
             spell_3_seed.transform.RotateAround(spell_3_seed.transform.position, spell_3_seed.transform.right, billia.spell_3_seedRotation * Time.deltaTime);
             yield return null;
+        }
+    }
+
+    public void Spell_3_ConeHitbox(GameObject spell_3_seed, Vector3 forwardDirection){
+        LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
+        Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
+        foreach (Collider collider in seedConeHits){
+            Transform hit = collider.transform;
+            Vector3 directionToHit = (hit.position - spell_3_seed.transform.position).normalized;
+            if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
+                Debug.Log("Hit pos: " + hit.position + " Seed pos: " + spell_3_seed.transform.position);
+                Debug.Log("Forward: " + forwardDirection + " DirToHit: " + directionToHit);
+                Debug.Log("Angle: " + Vector3.Angle(forwardDirection, directionToHit));
+                Debug.Log("Cone hit: " + hit.name);
+            }
         }
     }
 
