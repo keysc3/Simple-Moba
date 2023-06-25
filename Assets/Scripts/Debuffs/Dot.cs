@@ -28,6 +28,7 @@ public class Dot : Effect
     *   StartEffect - Start the dot effect.
     */
     public override void StartEffect(){
+        // Get damage to deal on each tick.
         damagePerTick = totalDamage/(effectDuration/((ScriptableDot) effectType).tickRate);
         nextTick = Time.time;
         totalDealt = 0f;
@@ -45,8 +46,10 @@ public class Dot : Effect
     *   EffectTick - Dot effect tick.
     */
     public override void EffectTick(float delta){
+        // If next dot tick is to be applied.
         if(nextTick <= Time.time){
             totalDealt += damagePerTick;
+            // Apply the dot and calculate next tick time.
             effectedUnitStats.TakeDamage(damagePerTick, ((ScriptableDot) effectType).damageType, effected);
             nextTick = Time.time + ((ScriptableDot) effectType).tickRate;
         }
