@@ -11,7 +11,7 @@ using UnityEngine;
 public class ScriptableCharm : ScriptableObject
 {
     [SerializeField] private List<float> duration = new List<float>();
-    [SerializeField] private float slowPercent;
+    [field: SerializeField] public float slowPercent { get; private set; }
 
     /*
     *   InitializeEffect - Initializes a new charm effect with the objects duration and slow percent.
@@ -20,6 +20,6 @@ public class ScriptableCharm : ScriptableObject
     *   @param unitEffected - GameObject of the unit effected by the charm.
     */
     public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
-        return new Charm(this, duration[spellLevel], slowPercent, unitCasted, unitEffected);
+        return new Charm(this, duration[spellLevel], unitCasted, unitEffected);
     }
 }
