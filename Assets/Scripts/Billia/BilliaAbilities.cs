@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class BilliaAbilities : ChampionAbilities
 {
+    [SerializeField] private ScriptableDot passiveDot;
     [SerializeField] private GameObject seed;
     [SerializeField] private int spell_1_passiveStacks;
     private float spell_1_lastStackTime;
@@ -257,6 +258,7 @@ public class BilliaAbilities : ChampionAbilities
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < innerRadius){
                     hitMethod(collider.gameObject, "inner");
+                    collider.gameObject.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(20f, gameObject, collider.gameObject));
                     // TODO: Add passive dot.
                 }
                 // Unit hit by outer portion.

@@ -18,7 +18,7 @@ public abstract class Effect
     protected Collider effectedCollider;
 
     private float effectTimer = 0f;
-    private float effectDuration;
+    protected float effectDuration;
     //private bool isActivated;
 
     /*
