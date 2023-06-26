@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53fb6c84e7a4c364e80ae65bd49c4581, type: 3}
   m_Name: BilliaDot
   m_EditorClassIdentifier: 
-  duration: 3
+  <duration>k__BackingField: 3
   <damageType>k__BackingField: magic
   <tickRate>k__BackingField: 0.5
