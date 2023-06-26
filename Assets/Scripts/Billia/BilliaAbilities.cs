@@ -27,6 +27,26 @@ public class BilliaAbilities : ChampionAbilities
        spell_1_passiveStacks = 0;
     }
 
+    public void Passive(GameObject enemy){
+        if(enemy.GetComponent<UnitStats>())
+        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(100f, gameObject, enemy));
+        StartCoroutine(PassiveHeal(enemy));
+    }
+
+    private IEnumerator PassiveHeal(GameObject enemy){
+        StatusEffectManager statusEffectManager = enemy.GetComponent<StatusEffectManager>();
+        UnitStats unitStats = enemy.GetComponent<UnitStats>();
+        while(statusEffectManager.CheckForEffect(passiveDot, gameObject)){
+            if(unitStats.unit is Champion){
+                Debug.Log("Billia passive found on: " + enemy.name);
+                float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration;
+                championStats.SetHealth(championStats.currentHealth + healAmount);
+                Debug.Log("Billia healed " + healAmount + " health from passive tick.");
+            }
+            yield return new WaitForSeconds(passiveDot.tickRate);
+        }
+    }
+
     /*
     *   Spell_1 - Sets up Billia's first spell. She swirls her weapon in a radius around her. Players hit by the outer portion take bonus damage.
     *   Passive: Gain a stacking speed bonus whenever a unit is hit with any spell, up to 4 stacks.
@@ -258,7 +278,8 @@ public class BilliaAbilities : ChampionAbilities
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < innerRadius){
                     hitMethod(collider.gameObject, "inner");
-                    collider.gameObject.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(20f, gameObject, collider.gameObject));
+                    Passive(collider.gameObject);
+                    //collider.gameObject.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(20f, gameObject, collider.gameObject));
                     // TODO: Add passive dot.
                 }
                 // Unit hit by outer portion.
