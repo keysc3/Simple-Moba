@@ -398,8 +398,7 @@ public class BilliaAbilities : ChampionAbilities
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
             Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
-            // TODO: Handle collision hit.
-            Spell_3_ConeHitbox(spell_3_seed, targetDirection);
+            Spell_3_ConeHitbox(spell_3_seed, lobHit[0].gameObject, targetDirection);
             Destroy(spell_3_seed);
         }
         // While seed hasn't been destroyed, no collision.
@@ -418,12 +417,12 @@ public class BilliaAbilities : ChampionAbilities
     *   @param forwardDirection - Vector3 of the roll direction.
     */
 
-    public void Spell_3_ConeHitbox(GameObject spell_3_seed, Vector3 forwardDirection){
+    public void Spell_3_ConeHitbox(GameObject spell_3_seed, GameObject initialHit, Vector3 forwardDirection){
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            if(collider.tag == "Enemy"){
+            if(collider.tag == "Enemy" && collider.gameObject != initialHit){
                 // Get the direction to the hit collider.
                 Vector3 directionToHit = (collider.transform.position - spell_3_seed.transform.position).normalized;
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
