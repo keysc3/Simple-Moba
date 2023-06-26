@@ -59,7 +59,6 @@ public abstract class Effect
         }
         else{
             Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
-            EndEffect(); 
             isFinished = true;
         }
     }
