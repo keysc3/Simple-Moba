@@ -205,6 +205,8 @@ public class BilliaAbilities : ChampionAbilities
             // Set target position to calculated mouse position.
             else
                 targetPosition = transform.position + targetPosition;
+
+            Vector3 initialTarget = targetPosition;
             // Initalize variables 
             NavMeshHit meshHit;
             int walkableMask = 1 << UnityEngine.AI.NavMesh.GetAreaFromName("Walkable");
@@ -215,8 +217,8 @@ public class BilliaAbilities : ChampionAbilities
                 targetPosition = meshHit.position;
                 targetPosition.y = temp.y;
             }
-            // Get the direction the final calculated spell cast is in.
-            Vector3 directionToMove = (new Vector3(targetPosition.x, targetDirection.y, targetPosition.z) - transform.position).normalized;
+            // Get the direction to move Billia in using initial target.
+            Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * billia.spell_2_dashOffset);
             // Show the spells hitbox.
