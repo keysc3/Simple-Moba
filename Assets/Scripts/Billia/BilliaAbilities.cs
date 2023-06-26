@@ -53,6 +53,14 @@ public class BilliaAbilities : ChampionAbilities
                 championStats.SetHealth(championStats.currentHealth + healAmount);
                 Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
             }
+            else if(unitStats.unit is Monster){
+                if(((Monster) unitStats.unit).size == "large"){
+                    Debug.Log("Billia passive found on: " + enemy.name);
+                    float healAmount = (39f + ((15f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration;
+                    championStats.SetHealth(championStats.currentHealth + healAmount);
+                    Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+                }
+            }
             yield return new WaitForSeconds(passiveDot.tickRate);
         }
     }
