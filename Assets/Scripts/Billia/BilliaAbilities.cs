@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [System.Serializable]
 public class BilliaAbilities : ChampionAbilities
@@ -204,8 +205,16 @@ public class BilliaAbilities : ChampionAbilities
             // Set target position to calculated mouse position.
             else
                 targetPosition = transform.position + targetPosition;
-            // TODO: Handle terrain checking.
-            // TODO: Add spell hitbox on the ground.
+            // Initalize variables 
+            NavMeshHit meshHit;
+            int walkableMask = 1 << UnityEngine.AI.NavMesh.GetAreaFromName("Walkable");
+            // Check if there is terrain between the target location and billia.
+            if(NavMesh.Raycast(transform.position, targetPosition, out meshHit, walkableMask)){
+                // Use the value returned in meshHit to set a new target position.
+                Vector3 temp = targetPosition;
+                targetPosition = meshHit.position;
+                targetPosition.y = temp.y;
+            }
             // Get the direction the final calculated spell cast is in.
             Vector3 directionToMove = (new Vector3(targetPosition.x, targetDirection.y, targetPosition.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
