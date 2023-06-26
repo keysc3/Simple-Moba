@@ -27,21 +27,31 @@ public class BilliaAbilities : ChampionAbilities
        spell_1_passiveStacks = 0;
     }
 
+    /*
+    *   Passive - Passive implementation for Billia. Applies a dot to enemies hit by any of Billia's abilities and heals Billia over the duration.
+    *   @param enemy - GameObject of the unit to apply the passive to.
+    */
     public void Passive(GameObject enemy){
-        if(enemy.GetComponent<UnitStats>())
+        // TODO: Handle resetting dot timer on new ability hit.
         enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(100f, gameObject, enemy));
         StartCoroutine(PassiveHeal(enemy));
     }
 
+    /*
+    *   PassiveHeal - Heals Billia while the unit has her passive applied to them.
+    *   @param enemy - GameObject the dot is applied to and the passive healing is coming from.
+    */
     private IEnumerator PassiveHeal(GameObject enemy){
+        // Check to make sure the dot is still on the unit.
         StatusEffectManager statusEffectManager = enemy.GetComponent<StatusEffectManager>();
         UnitStats unitStats = enemy.GetComponent<UnitStats>();
         while(statusEffectManager.CheckForEffect(passiveDot, gameObject)){
+            // Heal the champion amount if unit is a champion.
             if(unitStats.unit is Champion){
                 Debug.Log("Billia passive found on: " + enemy.name);
                 float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration;
                 championStats.SetHealth(championStats.currentHealth + healAmount);
-                Debug.Log("Billia healed " + healAmount + " health from passive tick.");
+                Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
             }
             yield return new WaitForSeconds(passiveDot.tickRate);
         }
