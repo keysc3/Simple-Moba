@@ -11,9 +11,7 @@ using UnityEngine.AI;
 public class Charm : Effect
 {
     private float effectedSpeed;
-    private float slowAmount;
     private Vector3 currentTarget;
-    //private ScriptableCharm charm;
     private NavMeshAgent effectedNavMeshAgent;
     private UnitStats effectedUnitStats;
     
@@ -24,13 +22,10 @@ public class Charm : Effect
     *   @param unitCasted - GameObject of the unit that casted the charm.
     *   @param - unitEffected - GameObject of the unit that the charm is affecting.
     */
-    public Charm(ScriptableCharm charmEffect, float duration, float slowPercent, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
-        slowAmount = slowPercent;
-        //effectName = charmEffect.name;
+    public Charm(ScriptableCharm charmEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
         effectedUnitStats = effected.GetComponent<UnitStats>();
         effectedSpeed = effectedUnitStats.speed.GetValue();
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
-        //charm = charmEffect;
     }
 
     /*
@@ -68,7 +63,7 @@ public class Charm : Effect
         base.EffectTick(delta);
         Debug.Log(effected);
         //effected.GetComponent<NavMeshAgent>().ResetPath();
-        effectedNavMeshAgent.speed = effectedSpeed * slowAmount;
+        effectedNavMeshAgent.speed = effectedSpeed * ((ScriptableCharm) effectType).slowPercent;
         effectedNavMeshAgent.destination = casted.transform.position;
         Vector3 nextTarget;
         if(effectedNavMeshAgent.hasPath){

@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class BilliaAbilities : ChampionAbilities
 {
+    [SerializeField] private ScriptableDot passiveDot;
     [SerializeField] private GameObject seed;
     [SerializeField] private int spell_1_passiveStacks;
     private float spell_1_lastStackTime;
@@ -24,6 +25,36 @@ public class BilliaAbilities : ChampionAbilities
     {
        billia = (Billia) championStats.unit;
        spell_1_passiveStacks = 0;
+    }
+
+    /*
+    *   Passive - Passive implementation for Billia. Applies a dot to enemies hit by any of Billia's abilities and heals Billia over the duration.
+    *   @param enemy - GameObject of the unit to apply the passive to.
+    */
+    public void Passive(GameObject enemy){
+        // TODO: Handle resetting dot timer on new ability hit.
+        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(100f, gameObject, enemy));
+        StartCoroutine(PassiveHeal(enemy));
+    }
+
+    /*
+    *   PassiveHeal - Heals Billia while the unit has her passive applied to them.
+    *   @param enemy - GameObject the dot is applied to and the passive healing is coming from.
+    */
+    private IEnumerator PassiveHeal(GameObject enemy){
+        // Check to make sure the dot is still on the unit.
+        StatusEffectManager statusEffectManager = enemy.GetComponent<StatusEffectManager>();
+        UnitStats unitStats = enemy.GetComponent<UnitStats>();
+        while(statusEffectManager.CheckForEffect(passiveDot, gameObject)){
+            // Heal the champion amount if unit is a champion.
+            if(unitStats.unit is Champion){
+                Debug.Log("Billia passive found on: " + enemy.name);
+                float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration;
+                championStats.SetHealth(championStats.currentHealth + healAmount);
+                Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+            }
+            yield return new WaitForSeconds(passiveDot.tickRate);
+        }
     }
 
     /*
@@ -257,6 +288,8 @@ public class BilliaAbilities : ChampionAbilities
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < innerRadius){
                     hitMethod(collider.gameObject, "inner");
+                    Passive(collider.gameObject);
+                    //collider.gameObject.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(20f, gameObject, collider.gameObject));
                     // TODO: Add passive dot.
                 }
                 // Unit hit by outer portion.
@@ -382,12 +415,14 @@ public class BilliaAbilities : ChampionAbilities
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            // Get the direction to the hit collider.
-            Vector3 directionToHit = (collider.transform.position - spell_3_seed.transform.position).normalized;
-            // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
-            if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
-                Debug.Log("Cone hit: " + collider.transform.name);
-                // TODO: Apply damage.
+            if(collider.tag == "Enemy"){
+                // Get the direction to the hit collider.
+                Vector3 directionToHit = (collider.transform.position - spell_3_seed.transform.position).normalized;
+                // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
+                if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
+                    Debug.Log("Cone hit: " + collider.transform.name);
+                    // TODO: Apply damage.
+                }
             }
         }
     }

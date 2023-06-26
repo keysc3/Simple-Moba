@@ -9,13 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55445560defb6cc4c8abaec522837868, type: 3}
-  m_Name: BahriCharm
+  m_Script: {fileID: 11500000, guid: 53fb6c84e7a4c364e80ae65bd49c4581, type: 3}
+  m_Name: BilliaDot
   m_EditorClassIdentifier: 
-  duration:
-  - 1.2
-  - 1.4
-  - 1.6
-  - 1.8
-  - 5
-  <slowPercent>k__BackingField: 0.65
+  <duration>k__BackingField: 3
+  <damageType>k__BackingField: magic
+  <tickRate>k__BackingField: 0.5

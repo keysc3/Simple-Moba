@@ -13,18 +13,26 @@ public class StatusEffectManager : MonoBehaviour
 {
 
     public List<Effect> statusEffects { get; private set; } = new List<Effect>();
+    private UnitStats unitStats;
     //public List<string> effectNames { get; private set; } = new List<string>();
+
+    private void Awake(){
+        unitStats = gameObject.GetComponent<UnitStats>();
+    }
 
     // Update is called once per frame
     private void Update()
     {
         if(statusEffects.Count > 0){
-            for(int i = statusEffects.Count - 1; i >=0; i--){
+            for(int i = statusEffects.Count - 1; i >= 0; i--){
                 statusEffects[i].EffectTick(Time.deltaTime);
-                if(statusEffects[i].isFinished){
-                    statusEffects[i].EndEffect();
-                    statusEffects.RemoveAt(i);
-                    //effectNames.RemoveAt(i);
+                // Avoid any indexing errors if unit dies from the effect tick.
+                if(!unitStats.isDead){
+                    if(statusEffects[i].isFinished){
+                        statusEffects[i].EndEffect();
+                        statusEffects.RemoveAt(i);
+                        //effectNames.RemoveAt(i);
+                    }
                 }
             }
         }
