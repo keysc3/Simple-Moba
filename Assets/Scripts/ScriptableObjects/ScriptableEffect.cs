@@ -10,7 +10,6 @@ using UnityEngine;
 public abstract class ScriptableEffect : ScriptableObject
 {
     public bool isEffectStackable;
-
-    public abstract Effect InitializeEffect(float duration, GameObject unitCasted, GameObject unitEffected, float speedMultiplier);
+    public int ccValue;
 
 }

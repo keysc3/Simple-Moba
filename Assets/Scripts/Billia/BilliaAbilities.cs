@@ -449,7 +449,30 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_4 - Champions fourth ability method.
     */
     public override void Spell_4(){
+        if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
+            // Start cast time then cast the spell.
+            StartCoroutine(CastTime(billia.spell_4_castTime, true));
+            StartCoroutine(Spell_4_Cast());
+            // Use mana.
+            championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]);
+            spell_4_onCd = true;
+        }
+    }
 
+    private IEnumerator Spell_4_Cast(){
+        while(isCasting)
+            yield return null;
+        StartCoroutine(Spell_4_Projectile());
+    }
+
+    private IEnumerator Spell_4_Projectile(){
+        float travelTime = billia.spell_4_travelTime;
+        float startTime = Time.time;
+        while(Time.time - startTime < travelTime){
+            // Move projectile towards unit.
+            yield return null;
+        }
+        // Apply drowsy debuff.
     }
 
     /*
