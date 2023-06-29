@@ -17,8 +17,9 @@ public abstract class Effect
     protected GameObject effected;
     protected Collider effectedCollider;
 
-    private float effectTimer = 0f;
+    public float effectTimer { get; private set; } = 0f;
     protected float effectDuration;
+    public bool isActivated { get; private set; } = false;
     //private bool isActivated;
 
     /*
@@ -49,10 +50,12 @@ public abstract class Effect
     public abstract void EndEffect();
 
     /*
-    *   EffetTick - Handles the effects duration.
+    *   TimerTick - Handles the effects duration.
     *   @param delta - float of the time passed since the last tick.
     */
-    public virtual void EffectTick(float delta){
+    public virtual void TimerTick(float delta){
+        if(isActivated)
+            EffectTick();
         Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
         if(effectTimer <= effectDuration){
             effectTimer += delta;
@@ -61,6 +64,15 @@ public abstract class Effect
             Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
             isFinished = true;
         }
+        if(isActivated)
+            EffectTick();
+    }
+
+    /*
+    *   EffectTick - Applies a tick of the effect. Used for effects that need to override.
+    */
+    public virtual void EffectTick(){
+        // Place holder.
     }
 
     /*
@@ -71,5 +83,19 @@ public abstract class Effect
         effectTimer = 0f;
         isFinished = false;
         casted = source;
+    }
+
+    /*
+    *   SetIsActivated - Sets the effect to start or stop.
+    *   @param isActivated - bool of whether to activate or deactivate the effect.
+    */
+    public void SetIsActivated(bool isActivated){
+        if(this.isActivated != isActivated){
+            this.isActivated = isActivated;
+            if(isActivated == false)
+                EndEffect();
+            else
+                StartEffect();
+        }
     }
 }

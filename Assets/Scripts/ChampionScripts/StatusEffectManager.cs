@@ -13,6 +13,8 @@ public class StatusEffectManager : MonoBehaviour
 
     public List<Effect> statusEffects { get; private set; } = new List<Effect>();
     private UnitStats unitStats;
+    private int highestActiveCCValue = 0;
+    private Effect mostImpairing;
     //public List<string> effectNames { get; private set; } = new List<string>();
 
     private void Awake(){
@@ -22,34 +24,67 @@ public class StatusEffectManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(statusEffects.Count > 0){
+       UpdateEffects();
+    }
+
+
+    /*
+    *   UpdateEffects - Ticks the effects.
+    */
+    private void UpdateEffects(){
+        // If there is an effect.
+         if(statusEffects.Count > 0){
+            // Increment every effects timer.
             for(int i = statusEffects.Count - 1; i >= 0; i--){
-                statusEffects[i].EffectTick(Time.deltaTime);
+                statusEffects[i].TimerTick(Time.deltaTime);
                 // Avoid any indexing errors if unit dies from the effect tick.
                 if(!unitStats.isDead){
                     if(statusEffects[i].isFinished){
                         statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
-                        //effectNames.RemoveAt(i);
+                        // If there are still running effects, activate the most impairing.
+                        if(statusEffects.Count > 0){
+                            SetMostImpairing(GetMostImpairing());
+                        }
+                        else
+                            highestActiveCCValue = 0;
                     }
                 }
+                else
+                    highestActiveCCValue = 0;
             }
         }
     }
 
-    //TODO: Apply most impairing cc effect, the others have their duration tick but not their effects.
+    /*
+    *   AddEffect - Adds an effect to the status managers effect list.
+    */
     public void AddEffect(Effect effect){
+        // If there is an existing effect, only the new one if it is more impairing than the current most.
         if(statusEffects.Count > 0){
-            for(int i = 0; i < statusEffects.Count; i++){
-                // Reset effect variables if the same effect hit them and it is not stackable.
-                if(statusEffects[i].effectType.name == effect.effectType.name && !effect.effectType.isStackable){
-                    statusEffects[i].OverrideEffect(effect.casted);
-                    return;
+            if(effect.effectType.ccValue > highestActiveCCValue){
+                // Only deactivate non-zero cc values.
+                if(highestActiveCCValue > 0)
+                    mostImpairing.SetIsActivated(false);
+                SetMostImpairing(effect);
+            }
+            else{
+                for(int i = 0; i < statusEffects.Count; i++){
+                    // Reset effect variables if the same effect hit them and it is not stackable.
+                    if(statusEffects[i].effectType.name == effect.effectType.name && !effect.effectType.isStackable){
+                        statusEffects[i].OverrideEffect(effect.casted);
+                        return;
+                    }
                 }
             }
         }
+        else{
+            SetMostImpairing(effect);
+        }
         statusEffects.Add(effect);
-        effect.StartEffect();
+        // CC Values of zero are always active.
+        if(effect.effectType.ccValue == 0)
+            effect.SetIsActivated(true);
     }
 
     /*
@@ -57,14 +92,55 @@ public class StatusEffectManager : MonoBehaviour
     */
     public void ResetEffects(){
         statusEffects.Clear();
-        //effectNames.Clear();
     }
 
+    /*
+    *   CheckForEffect - Checks for the given effect in the status managers effect list.
+    *   @param checkFor - ScriptableObject of the effect to check for.
+    *   @param source - GameObject of the source of the effect.
+    *   @return bool - bool of whether or not the effect exists on this GameObject.
+    */
     public bool CheckForEffect(ScriptableObject checkFor, GameObject source){
         foreach(Effect effect in statusEffects){
             if(effect.casted == source && effect.effectType == checkFor)
                 return true;
         }
         return false;
+    }
+
+    /*
+    *   GetMostImpairing - Gets the most impairing effect in the status manager effects list. Highest cc value = most impairing.
+    *   @return Effect - Effect of the most impairing effect in the list.
+    */
+    public Effect GetMostImpairing(){
+        int index = 0;
+        int highestCC = 0;
+        // Check for highest CC value effect.
+        for(int i = 0; i < statusEffects.Count; i++){
+            // Don't check values of 0.
+            if(statusEffects[i].effectType.ccValue != 0){
+                if(statusEffects[i].effectType.ccValue > highestCC){
+                    index = i;
+                    highestCC = statusEffects[i].effectType.ccValue;
+                }
+                // Prioritize oldest effect.
+                else if(statusEffects[i].effectType.ccValue == highestCC){
+                    if(statusEffects[i].effectTimer > statusEffects[index].effectTimer){
+                        index = i;
+                    }
+                }
+            }
+        }
+        return statusEffects[index];
+    }
+
+    /*
+    *   SetMostImpairing - Activates and sets the tracking variables for the most impairing status effect in the list.
+    *   @param effect - Effect of the status effect to activate and set.
+    */
+    public void SetMostImpairing(Effect effect){
+        effect.SetIsActivated(true);
+        mostImpairing = effect;
+        highestActiveCCValue = effect.effectType.ccValue;
     }
 }

@@ -43,17 +43,14 @@ public class Dot : Effect
     }
 
     /*
-    *   EffectTick - Dot effect tick.
+    *   EffectTick - Tick for the dots effect.
     */
-    public override void EffectTick(float delta){
-        // If next dot tick is to be applied.
+    public override void EffectTick(){
         if(nextTick <= Time.time){
             totalDealt += damagePerTick;
             // Apply the dot and calculate next tick time.
             effectedUnitStats.TakeDamage(damagePerTick, ((ScriptableDot) effectType).damageType, casted);
             nextTick = Time.time + ((ScriptableDot) effectType).tickRate;
         }
-        base.EffectTick(delta);
     }
-
 }

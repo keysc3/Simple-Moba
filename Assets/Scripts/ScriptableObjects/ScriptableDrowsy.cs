@@ -16,6 +16,7 @@ public class ScriptableDrowsy : ScriptableEffect
     *   @param unitEffected - GameObject of the unit effected by the charm.
     */
     public Effect InitializeEffect(ScriptableSleep sleep, int spellLevel, GameObject unitCasted, GameObject unitEffected){
+        ccValue = 0;
         this.sleep = sleep;
         this.spellLevel = spellLevel;
         return new Drowsy(this, slowPercent, duration, unitCasted, unitEffected);
