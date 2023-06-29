@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Effects/Dot")]
-public class ScriptableDot : ScriptableObject
+public class ScriptableDot : ScriptableEffect
 {
     [field: SerializeField] public float duration { get; private set; }
     [field: SerializeField] public string damageType { get; private set; }

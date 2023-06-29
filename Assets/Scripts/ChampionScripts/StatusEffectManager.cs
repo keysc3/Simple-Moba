@@ -41,7 +41,8 @@ public class StatusEffectManager : MonoBehaviour
     public void AddEffect(Effect effect){
         if(statusEffects.Count > 0){
             for(int i = 0; i < statusEffects.Count; i++){
-                if(statusEffects[i].effectType.name == effect.effectType.name){
+                // Reset effect variables if the same effect hit them and it is not stackable.
+                if(statusEffects[i].effectType.name == effect.effectType.name && !effect.effectType.isStackable){
                     statusEffects[i].OverrideEffect(effect.casted);
                     return;
                 }

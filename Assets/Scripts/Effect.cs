@@ -11,7 +11,7 @@ public abstract class Effect
 {
     //[field: SerializeField] public string effectName { get; private set; }
     public bool isFinished { get; private set; }
-    public ScriptableObject effectType { get; private set; }
+    public ScriptableEffect effectType { get; private set; }
     public GameObject casted { get; private set; } 
     
     protected GameObject effected;
@@ -28,7 +28,7 @@ public abstract class Effect
     *   @param unitCasted - GamObject of the unit that caused the effect.
     *   @param unitEffected - GameObject of the unit that is being affected by the effect.
     */
-    public Effect(ScriptableObject effect, float duration, GameObject unitCasted, GameObject unitEffected){
+    public Effect(ScriptableEffect effect, float duration, GameObject unitCasted, GameObject unitEffected){
         casted =  unitCasted;
         effected = unitEffected;
         effectDuration = duration;

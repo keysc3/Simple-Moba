@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Effects/Drowsy")]
-public class ScriptableDrowsy : ScriptableObject
+public class ScriptableDrowsy : ScriptableEffect
 {
     public ScriptableSleep sleep { get; private set; }
     public int spellLevel { get; private set; }

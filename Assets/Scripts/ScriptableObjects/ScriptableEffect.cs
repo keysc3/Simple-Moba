@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public abstract class ScriptableEffect : ScriptableObject
 {
-    public bool isEffectStackable;
+    public bool isStackable = false;
     public int ccValue;
 
 }

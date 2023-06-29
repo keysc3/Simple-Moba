@@ -8,7 +8,7 @@ using UnityEngine;
 * @author: Colin Keys
 */
 [CreateAssetMenu(menuName = "Effects/Charm")]
-public class ScriptableCharm : ScriptableObject
+public class ScriptableCharm : ScriptableEffect
 {
     [SerializeField] private List<float> duration = new List<float>();
     [field: SerializeField] public float slowPercent { get; private set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Effects/Sleep")]
-public class ScriptableSleep : ScriptableObject
+public class ScriptableSleep : ScriptableEffect
 {
     [SerializeField] private List<float> duration = new List<float>();
 
