@@ -62,4 +62,14 @@ public abstract class Effect
             isFinished = true;
         }
     }
+
+    /*
+    *   OverrideEffect - Resets the effects timer to 0 and sets the new source.
+    *   @param source - GameObject of the caster.
+    */
+    public virtual void OverrideEffect(GameObject source){
+        effectTimer = 0f;
+        isFinished = false;
+        casted = source;
+    }
 }

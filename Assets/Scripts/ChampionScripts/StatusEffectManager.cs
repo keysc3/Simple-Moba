@@ -8,7 +8,6 @@ using UnityEngine;
 * @author: Colin Keys
 */
 
-//TODO: Only one cc effect active at once, the most impairing one.
 public class StatusEffectManager : MonoBehaviour
 {
 
@@ -42,15 +41,13 @@ public class StatusEffectManager : MonoBehaviour
     public void AddEffect(Effect effect){
         if(statusEffects.Count > 0){
             for(int i = 0; i < statusEffects.Count; i++){
-                if(statusEffects[i].effectType == effect.effectType){
-                    Debug.Log(statusEffects[i].effectType);
-                    Debug.Log("Has effect already");
+                if(statusEffects[i].effectType.name == effect.effectType.name){
+                    statusEffects[i].OverrideEffect(effect.casted);
                     return;
                 }
             }
         }
         statusEffects.Add(effect);
-        //effectNames.Add(effect.effectName);
         effect.StartEffect();
     }
 
