@@ -14,5 +14,6 @@ public class Monster : Unit
     public float patienceRange;
     public bool isParent;
     public float respawnTime;
+    public string size;
 
 }

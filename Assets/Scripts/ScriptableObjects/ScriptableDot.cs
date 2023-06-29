@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Effects/Dot")]
-public class ScriptableDot : ScriptableObject
+public class ScriptableDot : ScriptableEffect
 {
     [field: SerializeField] public float duration { get; private set; }
     [field: SerializeField] public string damageType { get; private set; }
@@ -16,6 +16,7 @@ public class ScriptableDot : ScriptableObject
     *   @param unitEffected - GameObject of the unit effected by the charm.
     */
     public Effect InitializeEffect(float totalDamage, GameObject unitCasted, GameObject unitEffected){
+        ccValue = 0;
         return new Dot(this, totalDamage, duration, unitCasted, unitEffected);
     }
 }

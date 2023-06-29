@@ -33,5 +33,6 @@ public class Billia : Champion
     #endregion
 
     #region "Spell_4"
+    public float spell_4_travelTime;
     #endregion
 }

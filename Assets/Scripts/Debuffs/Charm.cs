@@ -57,22 +57,24 @@ public class Charm : Effect
     }
 
     /*
-    *   EffectTick - Start the charm effect.
+    *   EffectTick - Tick for the charms effect.
     */
-    public override void EffectTick(float delta){
-        base.EffectTick(delta);
+    public override void EffectTick(){
         Debug.Log(effected);
         //effected.GetComponent<NavMeshAgent>().ResetPath();
+        // Reduce speed and set destination.
         effectedNavMeshAgent.speed = effectedSpeed * ((ScriptableCharm) effectType).slowPercent;
         effectedNavMeshAgent.destination = casted.transform.position;
         Vector3 nextTarget;
+        // If a path is set.
         if(effectedNavMeshAgent.hasPath){
             nextTarget = effectedNavMeshAgent.steeringTarget;
+            // If a new target location exists set the target and look at the target location.
             if(currentTarget != nextTarget){
                 nextTarget.y = effectedCollider.bounds.center.y;
                 effected.transform.LookAt(nextTarget);
                 currentTarget = nextTarget;
             }
-        }  
+        } 
     }
 }

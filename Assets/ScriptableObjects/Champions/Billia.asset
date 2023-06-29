@@ -122,3 +122,5 @@ MonoBehaviour:
   spell_3_seedSpeed: 5
   spell_3_seedRotation: 270
   spell_3_lobLandHitbox: 1.2
+  spell_3_seedConeAngle: 90
+  spell_3_seedConeRadius: 3

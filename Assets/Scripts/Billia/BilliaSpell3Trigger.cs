@@ -20,7 +20,7 @@ public class BilliaSpell3Trigger : MonoBehaviour
             Debug.Log("Hit on roll: " + other.gameObject.name);
             // TODO: Handle collision hit.
             // Check for hits in a cone in the roll direction.
-            billiaAbilities.Spell_3_ConeHitbox(gameObject, forwardDirection);
+            billiaAbilities.Spell_3_ConeHitbox(gameObject, other.gameObject, forwardDirection);
             Destroy(gameObject);
         }
     }

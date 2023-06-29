@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [System.Serializable]
 public class BilliaAbilities : ChampionAbilities
@@ -52,6 +53,14 @@ public class BilliaAbilities : ChampionAbilities
                 float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration;
                 championStats.SetHealth(championStats.currentHealth + healAmount);
                 Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+            }
+            else if(unitStats.unit is Monster){
+                if(((Monster) unitStats.unit).size == "large"){
+                    Debug.Log("Billia passive found on: " + enemy.name);
+                    float healAmount = (39f + ((15f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration;
+                    championStats.SetHealth(championStats.currentHealth + healAmount);
+                    Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+                }
             }
             yield return new WaitForSeconds(passiveDot.tickRate);
         }
@@ -196,10 +205,20 @@ public class BilliaAbilities : ChampionAbilities
             // Set target position to calculated mouse position.
             else
                 targetPosition = transform.position + targetPosition;
-            // TODO: Handle terrain checking.
-            // TODO: Add spell hitbox on the ground.
-            // Get the direction the final calculated spell cast is in.
-            Vector3 directionToMove = (new Vector3(targetPosition.x, targetDirection.y, targetPosition.z) - transform.position).normalized;
+
+            Vector3 initialTarget = targetPosition;
+            // Initalize variables 
+            NavMeshHit meshHit;
+            int walkableMask = 1 << UnityEngine.AI.NavMesh.GetAreaFromName("Walkable");
+            // Check if there is terrain between the target location and billia.
+            if(NavMesh.Raycast(transform.position, targetPosition, out meshHit, walkableMask)){
+                // Use the value returned in meshHit to set a new target position.
+                Vector3 temp = targetPosition;
+                targetPosition = meshHit.position;
+                targetPosition.y = temp.y;
+            }
+            // Get the direction to move Billia in using initial target.
+            Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * billia.spell_2_dashOffset);
             // Show the spells hitbox.
@@ -390,8 +409,7 @@ public class BilliaAbilities : ChampionAbilities
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
             Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
-            // TODO: Handle collision hit.
-            Spell_3_ConeHitbox(spell_3_seed, targetDirection);
+            Spell_3_ConeHitbox(spell_3_seed, lobHit[0].gameObject, targetDirection);
             Destroy(spell_3_seed);
         }
         // While seed hasn't been destroyed, no collision.
@@ -410,12 +428,12 @@ public class BilliaAbilities : ChampionAbilities
     *   @param forwardDirection - Vector3 of the roll direction.
     */
 
-    public void Spell_3_ConeHitbox(GameObject spell_3_seed, Vector3 forwardDirection){
+    public void Spell_3_ConeHitbox(GameObject spell_3_seed, GameObject initialHit, Vector3 forwardDirection){
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            if(collider.tag == "Enemy"){
+            if(collider.tag == "Enemy" && collider.gameObject != initialHit){
                 // Get the direction to the hit collider.
                 Vector3 directionToHit = (collider.transform.position - spell_3_seed.transform.position).normalized;
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
@@ -431,7 +449,30 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_4 - Champions fourth ability method.
     */
     public override void Spell_4(){
+        if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
+            // Start cast time then cast the spell.
+            StartCoroutine(CastTime(billia.spell_4_castTime, true));
+            StartCoroutine(Spell_4_Cast());
+            // Use mana.
+            championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]);
+            spell_4_onCd = true;
+        }
+    }
 
+    private IEnumerator Spell_4_Cast(){
+        while(isCasting)
+            yield return null;
+        StartCoroutine(Spell_4_Projectile());
+    }
+
+    private IEnumerator Spell_4_Projectile(){
+        float travelTime = billia.spell_4_travelTime;
+        float startTime = Time.time;
+        while(Time.time - startTime < travelTime){
+            // Move projectile towards unit.
+            yield return null;
+        }
+        // Apply drowsy debuff.
     }
 
     /*
