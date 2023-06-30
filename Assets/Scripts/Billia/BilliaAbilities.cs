@@ -13,6 +13,7 @@ public class BilliaAbilities : ChampionAbilities
     [SerializeField] private ScriptableSleep sleep;
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
+    private bool canUseSpell_4 = false;
     [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
 
     private Billia billia;
@@ -29,6 +30,13 @@ public class BilliaAbilities : ChampionAbilities
     {
        billia = (Billia) championStats.unit;
        spell_1_passiveStacks = 0;
+    }
+
+    void Update()
+    {
+        if(levelManager.spellLevels["Spell_4"] > 0){
+            canUseSpell_4 = CanUseSpell_4();
+        }
     }
 
     /*
@@ -455,13 +463,15 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_4 - Champions fourth ability method.
     */
     public override void Spell_4(){
-        if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
-            // Start cast time then cast the spell.
-            StartCoroutine(CastTime(billia.spell_4_castTime, true));
-            StartCoroutine(Spell_4_Cast());
-            // Use mana.
-            championStats.UseMana(billia.spell4BaseMana[levelManager.spellLevels["Spell_4"]-1]);
-            spell_4_onCd = true;
+        if(canUseSpell_4){
+            if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
+                // Start cast time then cast the spell.
+                StartCoroutine(CastTime(billia.spell_4_castTime, true));
+                StartCoroutine(Spell_4_Cast());
+                // Use mana.
+                championStats.UseMana(billia.spell4BaseMana[levelManager.spellLevels["Spell_4"]-1]);
+                spell_4_onCd = true;
+            }
         }
     }
 
@@ -486,11 +496,21 @@ public class BilliaAbilities : ChampionAbilities
     private void Spell_4_Drowsy(){
         foreach(GameObject enemy in passiveApplied){
             if(enemy.GetComponent<UnitStats>().unit is Champion){
-                enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"]-1, gameObject, enemy));
+                enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"], gameObject, enemy));
                 Debug.Log("Drowsy on: " + enemy.name);
             }
         }
     }
+
+    private bool CanUseSpell_4(){
+        foreach(GameObject enemy in passiveApplied){
+            if(enemy.GetComponent<UnitStats>().unit is Champion){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /*
     *   Attack - Champions auto attack method.
     *   @param targetedEnemy - GameObject of the enemy to attack.

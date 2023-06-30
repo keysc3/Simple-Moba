@@ -15,6 +15,6 @@ public class ScriptableSleep : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
         ccValue = 2;
-        return new Sleep(this, duration[spellLevel], unitCasted, unitEffected);
+        return new Sleep(this, duration[spellLevel-1], unitCasted, unitEffected);
     }
 }
