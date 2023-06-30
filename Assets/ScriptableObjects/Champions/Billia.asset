@@ -94,9 +94,18 @@ MonoBehaviour:
   - 1
   - 1
   - 1
-  spell4BaseDamage: []
-  spell4BaseCd: []
-  spell4BaseMana: []
+  spell4BaseDamage:
+  - 0
+  - 0
+  - 0
+  spell4BaseCd:
+  - 1
+  - 1
+  - 1
+  spell4BaseMana:
+  - 5
+  - 5
+  - 5
   spell_1_castTime: 0.25
   spell_2_castTime: 0
   spell_3_castTime: 0.4
@@ -124,3 +133,4 @@ MonoBehaviour:
   spell_3_lobLandHitbox: 1.2
   spell_3_seedConeAngle: 90
   spell_3_seedConeRadius: 3
+  spell_4_travelTime: 0.3

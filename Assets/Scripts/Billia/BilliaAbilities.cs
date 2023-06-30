@@ -9,8 +9,11 @@ public class BilliaAbilities : ChampionAbilities
     [SerializeField] private ScriptableDot passiveDot;
     [SerializeField] private GameObject seed;
     [SerializeField] private int spell_1_passiveStacks;
+    [SerializeField] private ScriptableDrowsy drowsy;
+    [SerializeField] private ScriptableSleep sleep;
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
+    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
 
     private Billia billia;
 
@@ -33,9 +36,11 @@ public class BilliaAbilities : ChampionAbilities
     *   @param enemy - GameObject of the unit to apply the passive to.
     */
     public void Passive(GameObject enemy){
-        // TODO: Handle resetting dot timer on new ability hit.
-        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(100f, gameObject, enemy));
-        StartCoroutine(PassiveHeal(enemy));
+        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(30f, gameObject, enemy));
+        if(!passiveApplied.Contains(enemy)){
+            passiveApplied.Add(enemy);
+            StartCoroutine(PassiveHeal(enemy));
+        }
     }
 
     /*
@@ -64,6 +69,7 @@ public class BilliaAbilities : ChampionAbilities
             }
             yield return new WaitForSeconds(passiveDot.tickRate);
         }
+        passiveApplied.Remove(enemy);
     }
 
     /*
@@ -454,7 +460,7 @@ public class BilliaAbilities : ChampionAbilities
             StartCoroutine(CastTime(billia.spell_4_castTime, true));
             StartCoroutine(Spell_4_Cast());
             // Use mana.
-            championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]);
+            championStats.UseMana(billia.spell4BaseMana[levelManager.spellLevels["Spell_4"]-1]);
             spell_4_onCd = true;
         }
     }
@@ -462,6 +468,7 @@ public class BilliaAbilities : ChampionAbilities
     private IEnumerator Spell_4_Cast(){
         while(isCasting)
             yield return null;
+        StartCoroutine(Spell_Cd_Timer(billia.spell4BaseCd[levelManager.spellLevels["Spell_4"]-1], (myBool => spell_4_onCd = myBool), "Spell_4"));
         StartCoroutine(Spell_4_Projectile());
     }
 
@@ -473,8 +480,17 @@ public class BilliaAbilities : ChampionAbilities
             yield return null;
         }
         // Apply drowsy debuff.
+        Spell_4_Drowsy();
     }
 
+    private void Spell_4_Drowsy(){
+        foreach(GameObject enemy in passiveApplied){
+            if(enemy.GetComponent<UnitStats>().unit is Champion){
+                enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"]-1, gameObject, enemy));
+                Debug.Log("Drowsy on: " + enemy.name);
+            }
+        }
+    }
     /*
     *   Attack - Champions auto attack method.
     *   @param targetedEnemy - GameObject of the enemy to attack.

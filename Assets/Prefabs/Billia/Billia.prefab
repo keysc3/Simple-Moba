@@ -85,6 +85,9 @@ MonoBehaviour:
   passiveDot: {fileID: 11400000, guid: 7c48892f3f1b12a499890c1d8bbf1305, type: 2}
   seed: {fileID: 484404483246906668, guid: 6d6aa9d30c9ce1f48bd8c378c46a28ce, type: 3}
   spell_1_passiveStacks: 0
+  drowsy: {fileID: 11400000, guid: 6015dfa17d3526c43ac79f45d1cb2ff8, type: 2}
+  sleep: {fileID: 11400000, guid: cd143d3d6b7ea2f4a9cc87675b7e8f21, type: 2}
+  passiveApplied: []
   spell1Visual: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}
   spell1Visual_initialAlpha: 60
   spell1Visual_finalAlpha: 160
