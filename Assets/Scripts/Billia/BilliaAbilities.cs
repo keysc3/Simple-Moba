@@ -463,6 +463,7 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_4 - Champions fourth ability method.
     */
     public override void Spell_4(){
+        // Only allow cast if a champion has passive on them.
         if(canUseSpell_4){
             if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
                 // Start cast time then cast the spell.
@@ -475,6 +476,9 @@ public class BilliaAbilities : ChampionAbilities
         }
     }
 
+    /*
+    *   Spell_4_Cast - Casts and starts the cd timer for spell 4. Would have to be refactored to implement projectile destruction/blocking.
+    */
     private IEnumerator Spell_4_Cast(){
         while(isCasting)
             yield return null;
@@ -482,26 +486,34 @@ public class BilliaAbilities : ChampionAbilities
         StartCoroutine(Spell_4_Projectile());
     }
 
+    /*
+    *   Spell_4_Projectile - Handle the travel time of spell 4.
+    */
     private IEnumerator Spell_4_Projectile(){
         float travelTime = billia.spell_4_travelTime;
         float startTime = Time.time;
         while(Time.time - startTime < travelTime){
-            // Move projectile towards unit.
+            // Move projectile.
             yield return null;
         }
         // Apply drowsy debuff.
         Spell_4_Drowsy();
     }
 
+    /*
+    *   Spell_4_Drowsy - Applies the drowsy debuff from spell 4 to any champions applied with the passive dot.
+    */
     private void Spell_4_Drowsy(){
         foreach(GameObject enemy in passiveApplied){
             if(enemy.GetComponent<UnitStats>().unit is Champion){
                 enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"], gameObject, enemy));
-                Debug.Log("Drowsy on: " + enemy.name);
             }
         }
     }
 
+    /*
+    *   CanUseSpell_4 - Checks if any champion has Billia's passive on them, which allows the use of spell 4.
+    */
     private bool CanUseSpell_4(){
         foreach(GameObject enemy in passiveApplied){
             if(enemy.GetComponent<UnitStats>().unit is Champion){
