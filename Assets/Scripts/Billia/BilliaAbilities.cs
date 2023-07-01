@@ -428,9 +428,11 @@ public class BilliaAbilities : ChampionAbilities
         spell_3_seed.GetComponent<SphereCollider>().radius * billia.spell_3_lobLandHitbox, ~groundMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
-            Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
-            Spell_3_ConeHitbox(spell_3_seed, lobHit[0].gameObject, targetDirection);
-            Destroy(spell_3_seed);
+            if(lobHit[0].gameObject != gameObject){
+                Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
+                Spell_3_ConeHitbox(spell_3_seed, lobHit[0].gameObject, targetDirection);
+                Destroy(spell_3_seed);
+            }
         }
         // While seed hasn't been destroyed, no collision.
         while(spell_3_seed){
