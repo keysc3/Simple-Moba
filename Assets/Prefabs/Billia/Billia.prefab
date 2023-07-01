@@ -86,9 +86,21 @@ MonoBehaviour:
   seed: {fileID: 484404483246906668, guid: 6d6aa9d30c9ce1f48bd8c378c46a28ce, type: 3}
   spell_1_passiveStacks: 0
   drowsy: {fileID: 11400000, guid: 6015dfa17d3526c43ac79f45d1cb2ff8, type: 2}
-  sleep: {fileID: 11400000, guid: cd143d3d6b7ea2f4a9cc87675b7e8f21, type: 2}
+  <sleep>k__BackingField: {fileID: 11400000, guid: cd143d3d6b7ea2f4a9cc87675b7e8f21, type: 2}
   passiveApplied: []
   spell1Visual: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}
   spell1Visual_initialAlpha: 60
   spell1Visual_finalAlpha: 160
   spell2Visual: {fileID: 2809299097425876486, guid: d0a19b033a1664247bf7d4d5591b1784, type: 3}
+--- !u!114 &993157157543562803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5980474150250256565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496cbf31ef88e540ab5a099808fb58a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

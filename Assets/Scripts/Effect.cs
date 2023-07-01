@@ -64,8 +64,6 @@ public abstract class Effect
             Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
             isFinished = true;
         }
-        if(isActivated)
-            EffectTick();
     }
 
     /*
@@ -97,5 +95,9 @@ public abstract class Effect
             else
                 StartEffect();
         }
+    }
+
+    public void SetIsFinished(bool isFinished){
+        this.isFinished = isFinished;
     }
 }

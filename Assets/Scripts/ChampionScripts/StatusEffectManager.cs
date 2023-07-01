@@ -145,4 +145,13 @@ public class StatusEffectManager : MonoBehaviour
         mostImpairing = effect;
         highestActiveCCValue = effect.effectType.ccValue;
     }
+
+    public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
+        foreach(Effect effect in statusEffects){
+            if(effectType == effect.effectType && casted == effect.casted){
+                effect.SetIsFinished(true);
+                return;
+            }
+        }
+    }
 }

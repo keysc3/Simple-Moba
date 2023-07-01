@@ -26,6 +26,8 @@ public class UnitStats : MonoBehaviour
     [field: SerializeField] public Stat attackProjectileSpeed { get; private set; }
     [field: SerializeField] public Unit unit { get; private set; }
 
+    public delegate void BonusDamage(GameObject toDamage); 
+    public BonusDamage bonusDamage;
 
     protected virtual void Awake(){
         // Set player base player values
@@ -94,6 +96,9 @@ public class UnitStats : MonoBehaviour
                     }
                     GetComponent<ScoreManager>()?.Death();
                 }
+            }
+            else{
+                bonusDamage?.Invoke(gameObject);
             }
         }
     }

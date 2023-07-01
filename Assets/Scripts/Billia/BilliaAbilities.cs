@@ -10,13 +10,14 @@ public class BilliaAbilities : ChampionAbilities
     [SerializeField] private GameObject seed;
     [SerializeField] private int spell_1_passiveStacks;
     [SerializeField] private ScriptableDrowsy drowsy;
-    [SerializeField] private ScriptableSleep sleep;
+    [field: SerializeField] public ScriptableSleep sleep { get; private set; }
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
     private bool canUseSpell_4 = false;
     [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
 
     private Billia billia;
+    private BilliaAbilityHit billiaAbilityHit;
 
     public GameObject spell1Visual;
     public float spell1Visual_initialAlpha = 60.0f;
@@ -25,6 +26,12 @@ public class BilliaAbilities : ChampionAbilities
 
     public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
     public DoubleRadiusHitboxHit spellHit;
+
+    protected override void Awake(){
+        base.Awake();
+        billiaAbilityHit = GetComponent<BilliaAbilityHit>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -441,7 +448,8 @@ public class BilliaAbilities : ChampionAbilities
     */
 
     public void Spell_3_ConeHitbox(GameObject spell_3_seed, GameObject initialHit, Vector3 forwardDirection){
-        Passive(initialHit);
+        if(initialHit.tag == "Enemy")
+            Passive(initialHit);
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
@@ -507,6 +515,7 @@ public class BilliaAbilities : ChampionAbilities
         foreach(GameObject enemy in passiveApplied){
             if(enemy.GetComponent<UnitStats>().unit is Champion){
                 enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"], gameObject, enemy));
+                enemy.GetComponent<UnitStats>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
             }
         }
     }
