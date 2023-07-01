@@ -115,7 +115,7 @@ public class BilliaAbilities : ChampionAbilities
         }
         StartCoroutine(Spell_Cd_Timer(billia.spell1BaseCd[levelManager.spellLevels["Spell_1"]-1], (myBool => spell_1_onCd = myBool), "Spell_1"));
         // Set method to call if a hit.
-        spellHit = Spell_1_Hit_Placeholder;
+        spellHit = billiaAbilityHit.Spell_1_Hit;
         // Hitbox starts from center of Billia.
         DoubleRadiusHitboxCheck(transform.position, billia.spell_1_outerRadius, billia.spell_1_innerRadius, "Spell_1", spellHit);
         // Animate the ending of the spell.
@@ -296,7 +296,7 @@ public class BilliaAbilities : ChampionAbilities
     private void Spell_2_Cast(Vector3 targetPosition){
         StartCoroutine(Spell_Cd_Timer(billia.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
         // Set method to use if a hit.
-        spellHit = Spell_2_Hit_Placeholder;
+        spellHit = billiaAbilityHit.Spell_2_Hit;
         // Hitbox starts from center of calculated target position.
         DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, billia.spell_2_innerRadius, "Spell_2", spellHit);
         Destroy(GameObject.Find("/BilliaSpell_2"));
@@ -334,23 +334,12 @@ public class BilliaAbilities : ChampionAbilities
                 else{
                     hitMethod(collider.gameObject, "outer");
                 }
-                Passive(collider.gameObject);
                 passiveStack = true;
             }
         }
         // If a unit was hit proc the spells passive.
         if(passiveStack)
             Spell_1_PassiveProc();
-    }
-    
-    // TODO: Move to ability hit script.
-    private void Spell_2_Hit_Placeholder(GameObject hit, string radius){
-        Debug.Log("Spell 2 Hit on " + hit.name + " w/ " + radius + " radius.");
-    }
-
-    // TODO: Move to ability hit script.
-    private void Spell_1_Hit_Placeholder(GameObject hit, string radius){
-        Debug.Log("Spell 1 Hit on " + hit.name + " w/ " + radius + " radius.");
     }
 
     /*
