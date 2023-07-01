@@ -5,6 +5,8 @@ using UnityEngine;
 //TODO: Use damage values in scriptiable billia.
 public class BilliaAbilityHit : MonoBehaviour
 {
+    [field: SerializeField] public ScriptableSlow slowEffect { get; private set; }
+
     private ChampionStats championStats;
     private BilliaAbilities billiaAbilities;
     private Billia billia;
@@ -31,6 +33,7 @@ public class BilliaAbilityHit : MonoBehaviour
     public void Spell_3_Hit(GameObject enemy){
         billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
+        enemy.GetComponent<StatusEffectManager>().AddEffect(slowEffect.InitializeEffect(gameObject, enemy));
         enemy.GetComponent<UnitStats>().TakeDamage(billia.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);   
     }
 

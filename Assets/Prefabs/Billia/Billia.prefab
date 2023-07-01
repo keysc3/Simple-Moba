@@ -104,3 +104,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b496cbf31ef88e540ab5a099808fb58a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <slowEffect>k__BackingField: {fileID: 11400000, guid: 1033d164f757ea5489657bdefbbf368e, type: 2}
