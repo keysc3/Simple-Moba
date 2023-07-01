@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Use damage values in scriptiable billia.
 public class BilliaAbilityHit : MonoBehaviour
 {
     private ChampionStats championStats;
@@ -27,13 +28,23 @@ public class BilliaAbilityHit : MonoBehaviour
     {
         
     }
+    public void Spell_3_Hit(GameObject enemy){
+        billiaAbilities.Passive(enemy);
+        float magicDamage = championStats.magicDamage.GetValue();
+        enemy.GetComponent<UnitStats>().TakeDamage(billia.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);   
+    }
 
-    public void Spell_4_SleepProc(GameObject enemy){
+    public void Spell_4_SleepProc(GameObject enemy, bool isDot){
         // TODO: Calculate damage value.
-        if(enemy.GetComponent<StatusEffectManager>().CheckForEffect(billiaAbilities.sleep, gameObject)){
-            enemy.GetComponent<StatusEffectManager>().RemoveEffect(billiaAbilities.sleep, gameObject);
-            enemy.GetComponent<UnitStats>().bonusDamage -= Spell_4_SleepProc;
-            enemy.GetComponent<UnitStats>().TakeDamage(20f, "magic", gameObject);
+        if(!isDot){
+            if(enemy.GetComponent<StatusEffectManager>().CheckForEffect(billiaAbilities.sleep, gameObject)){
+                enemy.GetComponent<StatusEffectManager>().RemoveEffect(billiaAbilities.sleep, gameObject);
+                enemy.GetComponent<UnitStats>().bonusDamage -= Spell_4_SleepProc;
+                enemy.GetComponent<UnitStats>().TakeDamage(20f, "magic", gameObject, false);
+            }
+            else{
+                enemy.GetComponent<UnitStats>().bonusDamage -= Spell_4_SleepProc;
+            }
         }
     }
 

@@ -26,7 +26,7 @@ public class UnitStats : MonoBehaviour
     [field: SerializeField] public Stat attackProjectileSpeed { get; private set; }
     [field: SerializeField] public Unit unit { get; private set; }
 
-    public delegate void BonusDamage(GameObject toDamage); 
+    public delegate void BonusDamage(GameObject toDamage, bool isDot); 
     public BonusDamage bonusDamage;
 
     protected virtual void Awake(){
@@ -73,7 +73,7 @@ public class UnitStats : MonoBehaviour
     *   @param damageType - string of the type of damage that is being inflicted.
     *   @param from - GameObject of the damage source.
     */
-    public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from){
+    public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
         float finalDamage = incomingDamage;
         // If still alive then apply damage mitigation.
         if(currentHealth > 0f){
@@ -98,7 +98,7 @@ public class UnitStats : MonoBehaviour
                 }
             }
             else{
-                bonusDamage?.Invoke(gameObject);
+                bonusDamage?.Invoke(gameObject, isDot);
             }
         }
     }

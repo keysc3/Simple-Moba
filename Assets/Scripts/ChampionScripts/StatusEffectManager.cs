@@ -146,10 +146,16 @@ public class StatusEffectManager : MonoBehaviour
         highestActiveCCValue = effect.effectType.ccValue;
     }
 
+
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
-        foreach(Effect effect in statusEffects){
-            if(effectType == effect.effectType && casted == effect.casted){
-                effect.SetIsFinished(true);
+        for(int i = 0; i < statusEffects.Count; i++){
+            if(effectType == statusEffects[i].effectType && casted == statusEffects[i].casted){
+                statusEffects[i].SetIsActivated(false);
+                statusEffects[i].EndEffect();
+                statusEffects.RemoveAt(i);
+                effectNames.RemoveAt(i);
+                SetMostImpairing(GetMostImpairing());
+                //effect.SetIsFinished(true);
                 return;
             }
         }

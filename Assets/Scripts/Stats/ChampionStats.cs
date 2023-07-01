@@ -56,8 +56,8 @@ public class ChampionStats : UnitStats
         currentMana = maxMana.GetValue();
     }
 
-    public override void TakeDamage(float incomingDamage, string damageType, GameObject from){
-        base.TakeDamage(incomingDamage, damageType, from);
+    public override void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
+        base.TakeDamage(incomingDamage, damageType, from, isDot);
         GetComponent<DamageTracker>().DamageTaken(from, incomingDamage, damageType);
         GetComponent<UIManager>().UpdateHealthBar();
     }
