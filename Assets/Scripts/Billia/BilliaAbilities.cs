@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-//TODO: Use damage values in scriptiable billia.
 [System.Serializable]
 public class BilliaAbilities : ChampionAbilities
 {
@@ -16,6 +15,7 @@ public class BilliaAbilities : ChampionAbilities
     private bool spell_1_passiveRunning;
     private bool canUseSpell_4 = false;
     [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
+    private List<float> spell_1_passiveTracker = new List<float>();
 
     private Billia billia;
     private BilliaAbilityHit billiaAbilityHit;
@@ -158,7 +158,10 @@ public class BilliaAbilities : ChampionAbilities
         spell_1_lastStackTime = Time.time;
         if(spell_1_passiveStacks < billia.spell_1_passiveMaxStacks){
             spell_1_passiveStacks += 1;
-            //TODO: Grant speed boost.
+            float bonusPercent = billia.spell_1_passiveSpeed[levelManager.spellLevels["Spell_1"]-1];
+            float amountIncrease = championStats.speed.GetValue() * bonusPercent;
+            navMeshAgent.speed = navMeshAgent.speed + amountIncrease;
+            spell_1_passiveTracker.Add(amountIncrease);
             // If the passive has started dropping stacks or has none, start running it again.
             if(!spell_1_passiveRunning){
                 StartCoroutine(Spell_1_PassiveRunning());
@@ -186,7 +189,8 @@ public class BilliaAbilities : ChampionAbilities
     private IEnumerator Spell_1_PassiveDropping(){
         // While spell 1 passive has stopped running drop a stack every iteration.
         while(!spell_1_passiveRunning && spell_1_passiveStacks > 0){
-            //TODO: Take away speed boost.
+            navMeshAgent.speed = navMeshAgent.speed - spell_1_passiveTracker[spell_1_passiveStacks - 1];
+            spell_1_passiveTracker.RemoveAt(spell_1_passiveTracker.Count - 1);
             spell_1_passiveStacks -= 1;
             yield return new WaitForSeconds(billia.spell_1_passiveExpireDuration);
         }
@@ -529,7 +533,7 @@ public class BilliaAbilities : ChampionAbilities
     *   @param targetedEnemy - GameObject of the enemy to attack.
     */
     public override void Attack(GameObject targetedEnemy){
-
+        // TODO: Melee auto attack method.
     }
 
     /*
