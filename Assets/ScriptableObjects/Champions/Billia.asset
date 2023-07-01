@@ -22,9 +22,9 @@ MonoBehaviour:
   armor: 0
   magicResist: 0
   autoRange: 1
-  autoWindUp: 0.3
-  attackSpeed: 0.67
-  attackProjectileSpeed: 12
+  autoWindUp: 0.14
+  attackSpeed: 0.63
+  attackProjectileSpeed: 1
   passive_sprite: {fileID: 0}
   spell_1_sprite: {fileID: 0}
   spell_2_sprite: {fileID: 0}
@@ -32,14 +32,14 @@ MonoBehaviour:
   spell_4_sprite: {fileID: 0}
   baseMana: 50
   MP5: 10
-  physicalDamageGrowth: 3
-  healthGrowth: 96
-  manaGrowth: 25
-  HP5Growth: 0.6
-  MP5Growth: 0.8
-  armorGrowth: 4.7
-  magicResistGrowth: 2
-  attackSpeedGrowth: 0
+  physicalDamageGrowth: 3.1
+  healthGrowth: 105
+  manaGrowth: 50
+  HP5Growth: 0.55
+  MP5Growth: 0.95
+  armorGrowth: 5.2
+  magicResistGrowth: 1.55
+  attackSpeedGrowth: 2.7
   spell1BaseDamage:
   - 1
   - 2
@@ -47,10 +47,10 @@ MonoBehaviour:
   - 4
   - 5
   spell1BaseCd:
-  - 1
-  - 1
-  - 1
-  - 1
+  - 5
+  - 4
+  - 3
+  - 2
   - 1
   spell1BaseMana:
   - 2
@@ -65,10 +65,10 @@ MonoBehaviour:
   - 4
   - 5
   spell2BaseCd:
-  - 1
-  - 1
-  - 1
-  - 1
+  - 5
+  - 4
+  - 3
+  - 2
   - 1
   spell2BaseMana:
   - 1
@@ -78,34 +78,34 @@ MonoBehaviour:
   - 5
   spell3BaseDamage:
   - 1
-  - 1
-  - 1
-  - 1
-  - 1
+  - 2
+  - 3
+  - 4
+  - 5
   spell3BaseCd:
-  - 1
-  - 1
-  - 1
-  - 1
+  - 5
+  - 4
+  - 3
+  - 2
   - 1
   spell3BaseMana:
   - 1
-  - 1
-  - 1
-  - 1
-  - 1
+  - 2
+  - 3
+  - 4
+  - 5
   spell4BaseDamage:
-  - 0
-  - 0
-  - 0
+  - 1
+  - 2
+  - 3
   spell4BaseCd:
-  - 1
-  - 1
+  - 3
+  - 2
   - 1
   spell4BaseMana:
-  - 5
-  - 5
-  - 5
+  - 1
+  - 2
+  - 3
   spell_1_castTime: 0.25
   spell_2_castTime: 0
   spell_3_castTime: 0.4
@@ -115,10 +115,10 @@ MonoBehaviour:
   spell_1_passiveMaxStacks: 4
   spell_1_passiveSpeed:
   - 1
-  - 1
-  - 1
-  - 1
-  - 1
+  - 1.1
+  - 1.2
+  - 1.3
+  - 1.4
   spell_1_innerRadius: 3
   spell_1_outerRadius: 5
   spell_2_maxMagnitude: 6
