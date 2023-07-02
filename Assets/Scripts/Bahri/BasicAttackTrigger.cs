@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Detects when Bahri's auto attack collides with its target.
+* Purpose: Detects when a basic attack collides with its target.
 *
 * @author: Colin Keys
 */
-public class AutoAttackTrigger : MonoBehaviour
+public class BasicAttackTrigger : MonoBehaviour
 {
     public GameObject target = null;
-    public BahriAbilityHit bahriAbilityHit;
+    public BasicAttack basicAttack;
 
     // Update is called once per frame
     private void Update()
@@ -27,7 +27,7 @@ public class AutoAttackTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         // If the attack has hit its target call the attack function.
         if(other.gameObject == target){
-            bahriAbilityHit.AutoAttack(other.gameObject);
+            basicAttack.AttackHit(other.gameObject);
             Destroy(gameObject);
         }
     }

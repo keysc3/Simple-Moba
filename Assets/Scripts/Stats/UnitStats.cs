@@ -24,8 +24,11 @@ public class UnitStats : MonoBehaviour
     [field: SerializeField] public Stat autoWindUp { get; private set; }
     [field: SerializeField] public Stat attackSpeed { get; private set; }
     [field: SerializeField] public Stat attackProjectileSpeed { get; private set; }
+    [field: SerializeField] public Stat bonusAttackSpeed { get; private set; }
     [field: SerializeField] public Unit unit { get; private set; }
 
+    public delegate void BonusDamage(GameObject toDamage, bool isDot); 
+    public BonusDamage bonusDamage;
 
     protected virtual void Awake(){
         // Set player base player values
@@ -40,6 +43,7 @@ public class UnitStats : MonoBehaviour
         autoWindUp = new Stat(unit.autoWindUp);
         attackSpeed = new Stat(unit.attackSpeed);
         attackProjectileSpeed = new Stat(unit.attackProjectileSpeed);
+        bonusAttackSpeed = new Stat(0f);
         isDead = false;
         currentHealth = maxHealth.GetValue();
     }
@@ -71,7 +75,7 @@ public class UnitStats : MonoBehaviour
     *   @param damageType - string of the type of damage that is being inflicted.
     *   @param from - GameObject of the damage source.
     */
-    public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from){
+    public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
         float finalDamage = incomingDamage;
         // If still alive then apply damage mitigation.
         if(currentHealth > 0f){
@@ -95,6 +99,9 @@ public class UnitStats : MonoBehaviour
                     GetComponent<ScoreManager>()?.Death();
                 }
             }
+            else{
+                bonusDamage?.Invoke(gameObject, isDot);
+            }
         }
     }
 
@@ -114,4 +121,12 @@ public class UnitStats : MonoBehaviour
         return incomingDamage;
     }
     
+    public void UpdateAttackSpeed(){
+        float finalAS = ((Champion) unit).attackSpeed * (1 + (bonusAttackSpeed.GetValue()/100));
+        if(finalAS > 2.5f)
+            finalAS = 2.5f;
+        attackSpeed.SetBaseValue(finalAS);
+        //return finalAS;
+    }
+
 }

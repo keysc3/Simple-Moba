@@ -21,6 +21,7 @@ MonoBehaviour:
   HP5: 10
   armor: 0
   magicResist: 0
+  rangeType: ranged
   autoRange: 6
   autoWindUp: 0.3
   attackSpeed: 0.67

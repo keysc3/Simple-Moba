@@ -60,12 +60,6 @@ public abstract class ChampionAbilities : MonoBehaviour
     public abstract void Spell_4();
 
     /*
-    *   Attack - Champions auto attack method.
-    *   @param targetedEnemy - GameObject of the enemy to attack.
-    */
-    public abstract void Attack(GameObject targetedEnemy);
-
-    /*
     *   OnDeathCleanUp - Method for any necessary spell cleanup on death.
     */
     public abstract void OnDeathCleanUp();

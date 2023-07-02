@@ -15,7 +15,7 @@ public class StatusEffectManager : MonoBehaviour
     private UnitStats unitStats;
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
-    //public List<string> effectNames { get; private set; } = new List<string>();
+    public List<string> effectNames = new List<string>();
 
     private void Awake(){
         unitStats = gameObject.GetComponent<UnitStats>();
@@ -42,6 +42,7 @@ public class StatusEffectManager : MonoBehaviour
                     if(statusEffects[i].isFinished){
                         statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
+                        effectNames.RemoveAt(i);
                         // If there are still running effects, activate the most impairing.
                         if(statusEffects.Count > 0){
                             SetMostImpairing(GetMostImpairing());
@@ -82,6 +83,7 @@ public class StatusEffectManager : MonoBehaviour
             SetMostImpairing(effect);
         }
         statusEffects.Add(effect);
+        effectNames.Add(effect.effectType.name);
         // CC Values of zero are always active.
         if(effect.effectType.ccValue == 0)
             effect.SetIsActivated(true);
@@ -142,5 +144,20 @@ public class StatusEffectManager : MonoBehaviour
         effect.SetIsActivated(true);
         mostImpairing = effect;
         highestActiveCCValue = effect.effectType.ccValue;
+    }
+
+
+    public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
+        for(int i = 0; i < statusEffects.Count; i++){
+            if(effectType == statusEffects[i].effectType && casted == statusEffects[i].casted){
+                statusEffects[i].SetIsActivated(false);
+                statusEffects[i].EndEffect();
+                statusEffects.RemoveAt(i);
+                effectNames.RemoveAt(i);
+                SetMostImpairing(GetMostImpairing());
+                //effect.SetIsFinished(true);
+                return;
+            }
+        }
     }
 }

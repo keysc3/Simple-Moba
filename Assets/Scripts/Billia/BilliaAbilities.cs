@@ -9,10 +9,16 @@ public class BilliaAbilities : ChampionAbilities
     [SerializeField] private ScriptableDot passiveDot;
     [SerializeField] private GameObject seed;
     [SerializeField] private int spell_1_passiveStacks;
+    [SerializeField] private ScriptableDrowsy drowsy;
+    [field: SerializeField] public ScriptableSleep sleep { get; private set; }
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
+    private bool canUseSpell_4 = false;
+    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
+    private List<float> spell_1_passiveTracker = new List<float>();
 
     private Billia billia;
+    private BilliaAbilityHit billiaAbilityHit;
 
     public GameObject spell1Visual;
     public float spell1Visual_initialAlpha = 60.0f;
@@ -21,6 +27,12 @@ public class BilliaAbilities : ChampionAbilities
 
     public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
     public DoubleRadiusHitboxHit spellHit;
+
+    protected override void Awake(){
+        base.Awake();
+        billiaAbilityHit = GetComponent<BilliaAbilityHit>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,14 +40,23 @@ public class BilliaAbilities : ChampionAbilities
        spell_1_passiveStacks = 0;
     }
 
+    void Update()
+    {
+        if(levelManager.spellLevels["Spell_4"] > 0){
+            canUseSpell_4 = CanUseSpell_4();
+        }
+    }
+
     /*
     *   Passive - Passive implementation for Billia. Applies a dot to enemies hit by any of Billia's abilities and heals Billia over the duration.
     *   @param enemy - GameObject of the unit to apply the passive to.
     */
     public void Passive(GameObject enemy){
-        // TODO: Handle resetting dot timer on new ability hit.
-        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(100f, gameObject, enemy));
-        StartCoroutine(PassiveHeal(enemy));
+        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(30f, gameObject, enemy));
+        if(!passiveApplied.Contains(enemy)){
+            passiveApplied.Add(enemy);
+            StartCoroutine(PassiveHeal(enemy));
+        }
     }
 
     /*
@@ -64,6 +85,7 @@ public class BilliaAbilities : ChampionAbilities
             }
             yield return new WaitForSeconds(passiveDot.tickRate);
         }
+        passiveApplied.Remove(enemy);
     }
 
     /*
@@ -93,7 +115,7 @@ public class BilliaAbilities : ChampionAbilities
         }
         StartCoroutine(Spell_Cd_Timer(billia.spell1BaseCd[levelManager.spellLevels["Spell_1"]-1], (myBool => spell_1_onCd = myBool), "Spell_1"));
         // Set method to call if a hit.
-        spellHit = Spell_1_Hit_Placeholder;
+        spellHit = billiaAbilityHit.Spell_1_Hit;
         // Hitbox starts from center of Billia.
         DoubleRadiusHitboxCheck(transform.position, billia.spell_1_outerRadius, billia.spell_1_innerRadius, "Spell_1", spellHit);
         // Animate the ending of the spell.
@@ -136,7 +158,10 @@ public class BilliaAbilities : ChampionAbilities
         spell_1_lastStackTime = Time.time;
         if(spell_1_passiveStacks < billia.spell_1_passiveMaxStacks){
             spell_1_passiveStacks += 1;
-            //TODO: Grant speed boost.
+            float bonusPercent = billia.spell_1_passiveSpeed[levelManager.spellLevels["Spell_1"]-1];
+            float amountIncrease = championStats.speed.GetValue() * bonusPercent;
+            navMeshAgent.speed = navMeshAgent.speed + amountIncrease;
+            spell_1_passiveTracker.Add(amountIncrease);
             // If the passive has started dropping stacks or has none, start running it again.
             if(!spell_1_passiveRunning){
                 StartCoroutine(Spell_1_PassiveRunning());
@@ -164,7 +189,8 @@ public class BilliaAbilities : ChampionAbilities
     private IEnumerator Spell_1_PassiveDropping(){
         // While spell 1 passive has stopped running drop a stack every iteration.
         while(!spell_1_passiveRunning && spell_1_passiveStacks > 0){
-            //TODO: Take away speed boost.
+            navMeshAgent.speed = navMeshAgent.speed - spell_1_passiveTracker[spell_1_passiveStacks - 1];
+            spell_1_passiveTracker.RemoveAt(spell_1_passiveTracker.Count - 1);
             spell_1_passiveStacks -= 1;
             yield return new WaitForSeconds(billia.spell_1_passiveExpireDuration);
         }
@@ -274,7 +300,7 @@ public class BilliaAbilities : ChampionAbilities
     private void Spell_2_Cast(Vector3 targetPosition){
         StartCoroutine(Spell_Cd_Timer(billia.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
         // Set method to use if a hit.
-        spellHit = Spell_2_Hit_Placeholder;
+        spellHit = billiaAbilityHit.Spell_2_Hit;
         // Hitbox starts from center of calculated target position.
         DoubleRadiusHitboxCheck(targetPosition, billia.spell_2_outerRadius, billia.spell_2_innerRadius, "Spell_2", spellHit);
         Destroy(GameObject.Find("/BilliaSpell_2"));
@@ -307,14 +333,10 @@ public class BilliaAbilities : ChampionAbilities
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < innerRadius){
                     hitMethod(collider.gameObject, "inner");
-                    Passive(collider.gameObject);
-                    //collider.gameObject.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(20f, gameObject, collider.gameObject));
-                    // TODO: Add passive dot.
                 }
                 // Unit hit by outer portion.
                 else{
                     hitMethod(collider.gameObject, "outer");
-                    // TODO: Add passive dot.
                 }
                 passiveStack = true;
             }
@@ -322,15 +344,6 @@ public class BilliaAbilities : ChampionAbilities
         // If a unit was hit proc the spells passive.
         if(passiveStack)
             Spell_1_PassiveProc();
-    }
-    
-    // TODO: Move to ability hit script.
-    private void Spell_2_Hit_Placeholder(GameObject hit, string radius){
-        Debug.Log("Spell 2 Hit on " + hit.name + " w/ " + radius + " radius.");
-    }
-    // TODO: Move to ability hit script.
-    private void Spell_1_Hit_Placeholder(GameObject hit, string radius){
-        Debug.Log("Spell 1 Hit on " + hit.name + " w/ " + radius + " radius.");
     }
 
     /*
@@ -408,9 +421,11 @@ public class BilliaAbilities : ChampionAbilities
         spell_3_seed.GetComponent<SphereCollider>().radius * billia.spell_3_lobLandHitbox, ~groundMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
-            Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
-            Spell_3_ConeHitbox(spell_3_seed, lobHit[0].gameObject, targetDirection);
-            Destroy(spell_3_seed);
+            if(lobHit[0].gameObject != gameObject){
+                Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
+                Spell_3_ConeHitbox(spell_3_seed, lobHit[0].gameObject, targetDirection);
+                Destroy(spell_3_seed);
+            }
         }
         // While seed hasn't been destroyed, no collision.
         while(spell_3_seed){
@@ -429,6 +444,9 @@ public class BilliaAbilities : ChampionAbilities
     */
 
     public void Spell_3_ConeHitbox(GameObject spell_3_seed, GameObject initialHit, Vector3 forwardDirection){
+        if(initialHit.tag == "Enemy"){
+            billiaAbilityHit.Spell_3_Hit(initialHit);
+        }
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(spell_3_seed.transform.position, billia.spell_3_seedConeRadius, ~groundMask);
@@ -439,7 +457,7 @@ public class BilliaAbilities : ChampionAbilities
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
                 if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
                     Debug.Log("Cone hit: " + collider.transform.name);
-                    // TODO: Apply damage.
+                    billiaAbilityHit.Spell_3_Hit(collider.gameObject);
                 }
             }
         }
@@ -449,39 +467,74 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_4 - Champions fourth ability method.
     */
     public override void Spell_4(){
-        if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
-            // Start cast time then cast the spell.
-            StartCoroutine(CastTime(billia.spell_4_castTime, true));
-            StartCoroutine(Spell_4_Cast());
-            // Use mana.
-            championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]);
-            spell_4_onCd = true;
+        // Only allow cast if a champion has passive on them.
+        if(canUseSpell_4){
+            if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
+                // Start cast time then cast the spell.
+                StartCoroutine(CastTime(billia.spell_4_castTime, true));
+                StartCoroutine(Spell_4_Cast());
+                // Use mana.
+                championStats.UseMana(billia.spell4BaseMana[levelManager.spellLevels["Spell_4"]-1]);
+                spell_4_onCd = true;
+            }
         }
     }
 
+    /*
+    *   Spell_4_Cast - Casts and starts the cd timer for spell 4. Would have to be refactored to implement projectile destruction/blocking.
+    */
     private IEnumerator Spell_4_Cast(){
         while(isCasting)
             yield return null;
+        StartCoroutine(Spell_Cd_Timer(billia.spell4BaseCd[levelManager.spellLevels["Spell_4"]-1], (myBool => spell_4_onCd = myBool), "Spell_4"));
         StartCoroutine(Spell_4_Projectile());
     }
 
+    /*
+    *   Spell_4_Projectile - Handle the travel time of spell 4.
+    */
     private IEnumerator Spell_4_Projectile(){
         float travelTime = billia.spell_4_travelTime;
         float startTime = Time.time;
         while(Time.time - startTime < travelTime){
-            // Move projectile towards unit.
+            // Move projectile.
             yield return null;
         }
         // Apply drowsy debuff.
+        Spell_4_Drowsy();
+    }
+
+    /*
+    *   Spell_4_Drowsy - Applies the drowsy debuff from spell 4 to any champions applied with the passive dot.
+    */
+    private void Spell_4_Drowsy(){
+        foreach(GameObject enemy in passiveApplied){
+            if(enemy.GetComponent<UnitStats>().unit is Champion){
+                enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"], gameObject, enemy));
+                enemy.GetComponent<UnitStats>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+            }
+        }
+    }
+
+    /*
+    *   CanUseSpell_4 - Checks if any champion has Billia's passive on them, which allows the use of spell 4.
+    */
+    private bool CanUseSpell_4(){
+        foreach(GameObject enemy in passiveApplied){
+            if(enemy.GetComponent<UnitStats>().unit is Champion){
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
     *   Attack - Champions auto attack method.
     *   @param targetedEnemy - GameObject of the enemy to attack.
     */
-    public override void Attack(GameObject targetedEnemy){
-
-    }
+    /*public override void Attack(GameObject targetedEnemy){
+        // TODO: Melee auto attack method.
+    }*/
 
     /*
     *   OnDeathCleanUp - Method for any necessary spell cleanup on death.

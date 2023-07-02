@@ -440,7 +440,7 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.M)){
             if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
-                gameObject.GetComponent<ChampionStats>().TakeDamage(10, "magic", gameObject);
+                gameObject.GetComponent<ChampionStats>().TakeDamage(10, "magic", gameObject, false);
         }
         // Activate mana and health regen UI if the player is not full mana or full health.
         if(championStats.currentMana < championStats.maxMana.GetValue() && !championStats.isDead){
