@@ -21,10 +21,11 @@ MonoBehaviour:
   HP5: 10
   armor: 0
   magicResist: 0
-  autoRange: 1
+  rangeType: melee
+  autoRange: 2
   autoWindUp: 0.14
   attackSpeed: 0.63
-  attackProjectileSpeed: 1
+  attackProjectileSpeed: 0
   passive_sprite: {fileID: 0}
   spell_1_sprite: {fileID: 0}
   spell_2_sprite: {fileID: 0}

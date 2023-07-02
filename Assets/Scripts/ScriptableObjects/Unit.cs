@@ -20,6 +20,7 @@ public class Unit : ScriptableObject
     public float HP5;
     public float armor;
     public float magicResist;
+    public string rangeType;
     public float autoRange;
     public float autoWindUp;
     public float attackSpeed;

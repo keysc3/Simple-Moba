@@ -504,31 +504,6 @@ public class BahriAbilities : ChampionAbilities
     }
 
     /*
-    *   Attack - Starts the attack animation.
-    *   @param target - GameObject of the target to attack.
-    */
-    public override void Attack(GameObject target){
-        StartCoroutine(AutoAttack(target));
-    }
-
-    /*
-    *   AutoAttack - Animates the attack GameObject towards its target.
-    *   @param target - GameObject of the target to attack.
-    */
-    private IEnumerator AutoAttack(GameObject target){
-        // Create attack GameObject and set necessary variables.
-        GameObject attackProjectile = (GameObject)Instantiate(attack, transform.position, Quaternion.identity);
-        AutoAttackTrigger autoAttackTrigger = attackProjectile.gameObject.GetComponent<AutoAttackTrigger>();
-        autoAttackTrigger.target = target;
-        autoAttackTrigger.bahriAbilityHit = bahriAbilityHit;
-        // While the attack still exists animate it.
-        while(attackProjectile){
-            attackProjectile.transform.position = Vector3.MoveTowards(attackProjectile.transform.position, target.transform.position, championStats.attackProjectileSpeed.GetValue() * Time.deltaTime);
-            yield return null;
-        }
-    }
-
-    /*
     *   OnDeathCleanUp - Handles any spell cleanup that needs to be done for Bahri when they die.
     */
     public override void OnDeathCleanUp(){

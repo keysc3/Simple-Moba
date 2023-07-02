@@ -7,13 +7,11 @@ using UnityEngine;
 */
 public class ChampionStats : UnitStats
 {
-    //private Champion champion;
     [field: SerializeField] public float currentMana { get; private set; }
     [field: SerializeField] public float displayCurrentMana { get; private set; }
     [field: SerializeField] public Stat maxMana { get; private set; }
     [field: SerializeField] public Stat MP5 { get; private set; }
     [field: SerializeField] public Stat haste { get; private set; }
-    [field: SerializeField] public Stat bonusAttackSpeed { get; private set; }
 
     // Called when the script instance is being loaded.
     protected override void Awake(){
@@ -21,7 +19,6 @@ public class ChampionStats : UnitStats
         MP5 = new Stat(((Champion) unit).MP5);
         maxMana = new Stat(((Champion) unit).baseMana);
         haste = new Stat(0f);
-        bonusAttackSpeed = new Stat(0f);
         currentMana = maxMana.GetValue();
     }
 
@@ -114,13 +111,5 @@ public class ChampionStats : UnitStats
                 bonusAttackSpeed.RemoveModifier(item.attackSpeed);
             }
         }
-    }
-    
-    public void UpdateAttackSpeed(){
-        float finalAS = ((Champion) unit).attackSpeed * (1 + (bonusAttackSpeed.GetValue()/100));
-        if(finalAS > 2.5f)
-            finalAS = 2.5f;
-        attackSpeed.SetBaseValue(finalAS);
-        //return finalAS;
     }
 }
