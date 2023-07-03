@@ -528,13 +528,12 @@ public class BilliaAbilities : ChampionAbilities
         return false;
     }
 
-    /*
-    *   Attack - Champions auto attack method.
-    *   @param targetedEnemy - GameObject of the enemy to attack.
-    */
-    /*public override void Attack(GameObject targetedEnemy){
-        // TODO: Melee auto attack method.
-    }*/
+    private void LateUpdate(){
+        if(canUseSpell_4)
+            uiManager.SetSpellCoverActive(4, false);
+        else
+            uiManager.SetSpellCoverActive(4, true);
+    }
 
     /*
     *   OnDeathCleanUp - Method for any necessary spell cleanup on death.
