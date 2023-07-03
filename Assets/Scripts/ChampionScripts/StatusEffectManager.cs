@@ -146,7 +146,11 @@ public class StatusEffectManager : MonoBehaviour
         highestActiveCCValue = effect.effectType.ccValue;
     }
 
-
+    /*
+    *   RemoveEffect - Removes an effect from the status effect list.
+    *   @param effectType - ScriptableEffect of the status effect remove.
+    *   @param casted - GameObject of the effects caster.
+    */
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
         for(int i = 0; i < statusEffects.Count; i++){
             if(effectType == statusEffects[i].effectType && casted == statusEffects[i].casted){

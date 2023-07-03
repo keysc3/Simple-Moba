@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements a sleep effect where the slept has all spell and movement disabled.
+*
+* @author: Colin Keys
+*/
 public class Sleep : Effect
 {
     private NavMeshAgent effectedNavMeshAgent;

@@ -43,6 +43,7 @@ public class BilliaAbilities : ChampionAbilities
        spell_1_passiveStacks = 0;
     }
 
+    // Update is called once per frame
     void Update()
     {
         if(levelManager.spellLevels["Spell_4"] > 0){
@@ -531,6 +532,7 @@ public class BilliaAbilities : ChampionAbilities
         return false;
     }
 
+    // LateUpdate is called after all Update functions have been called
     private void LateUpdate(){
         if(canUseSpell_4)
             uiManager.SetSpellCoverActive(4, false);

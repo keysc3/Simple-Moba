@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements a dot effect.
+*
+* @author: Colin Keys
+*/
 public class Dot : Effect
 {
 

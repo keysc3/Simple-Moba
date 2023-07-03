@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Handles the collision checking and GameObject for Billia's third spell.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell3Trigger : MonoBehaviour
 {
+    public Vector3 forwardDirection;
+    public BilliaAbilities billiaAbilities;
 
     private bool hit = false;
-    public BilliaAbilities billiaAbilities;
-    public Vector3 forwardDirection;
 
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
