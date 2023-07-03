@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[System.Serializable]
+/*
+* Purpose: Implements the casting and animations for the champion Billia's abilities.
+* @author: Colin Keys
+*/
 public class BilliaAbilities : ChampionAbilities
 {
+    [field: SerializeField] public ScriptableSleep sleep { get; private set; }
+    public GameObject spell1Visual;
+    public GameObject spell2Visual;
+
+    [SerializeField] private int spell_1_passiveStacks;
+    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
     [SerializeField] private ScriptableDot passiveDot;
     [SerializeField] private GameObject seed;
-    [SerializeField] private int spell_1_passiveStacks;
     [SerializeField] private ScriptableDrowsy drowsy;
-    [field: SerializeField] public ScriptableSleep sleep { get; private set; }
+    private float spell1Visual_initialAlpha = 60.0f;
+    private float spell1Visual_finalAlpha = 160.0f;
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
     private bool canUseSpell_4 = false;
-    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
     private List<float> spell_1_passiveTracker = new List<float>();
-
     private Billia billia;
     private BilliaAbilityHit billiaAbilityHit;
-
-    public GameObject spell1Visual;
-    public float spell1Visual_initialAlpha = 60.0f;
-    public float spell1Visual_finalAlpha = 160.0f;
-    public GameObject spell2Visual;
 
     public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
     public DoubleRadiusHitboxHit spellHit;
 
+    // Called when the script instance is being loaded. 
     protected override void Awake(){
         base.Awake();
         billiaAbilityHit = GetComponent<BilliaAbilityHit>();
@@ -217,7 +220,7 @@ public class BilliaAbilities : ChampionAbilities
     */
     public override void Spell_2(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!spell_1_onCd && !isCasting && championStats.currentMana >= billia.spell2BaseMana[levelManager.spellLevels["Spell_2"]-1]){
+        if(!spell_2_onCd && !isCasting && championStats.currentMana >= billia.spell2BaseMana[levelManager.spellLevels["Spell_2"]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
