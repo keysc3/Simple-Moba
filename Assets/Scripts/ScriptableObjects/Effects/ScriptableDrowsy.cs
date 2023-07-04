@@ -8,7 +8,7 @@ public class ScriptableDrowsy : ScriptableEffect
     public ScriptableSleep sleep { get; private set; }
     public int spellLevel { get; private set; }
     [field: SerializeField] public float duration { get; private set; }
-    [field: SerializeField] public float slowPercent { get; private set; }
+    [field: SerializeField] public ScriptableSlow slow { get; private set; }
 
     /*
     *   InitializeEffect - Initializes a new drowsy effect.
@@ -19,6 +19,7 @@ public class ScriptableDrowsy : ScriptableEffect
         ccValue = 0;
         this.sleep = sleep;
         this.spellLevel = spellLevel;
-        return new Drowsy(this, slowPercent, duration, unitCasted, unitEffected);
+        slow.SetDuration(duration);
+        return new Drowsy(this, duration, unitCasted, unitEffected);
     }
 }

@@ -48,8 +48,7 @@ public class Charm : Effect
     public override void EndEffect(){
         // Reset the path and speed from the charm effect.
         effectedNavMeshAgent.ResetPath();
-        //effectedNavMeshAgent.speed = effectedSpeed;
-
+        
         // Give controls back if charmed is active GameObject.
         if(effectedUnitStats.unit is Champion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
             effected.GetComponent<PlayerController>().enabled = true;
