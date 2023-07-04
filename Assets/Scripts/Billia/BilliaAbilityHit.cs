@@ -77,7 +77,7 @@ public class BilliaAbilityHit : MonoBehaviour
     public void Spell_4_SleepProc(GameObject enemy, bool isDot){
         // Dots do not proc the sleep.
         if(!isDot){
-            if(enemy.GetComponent<StatusEffectManager>().CheckForEffect(billiaAbilities.sleep, gameObject)){
+            if(enemy.GetComponent<StatusEffectManager>().CheckForEffectWithSource(billiaAbilities.sleep, gameObject)){
                 float magicDamage = championStats.magicDamage.GetValue();
                 // Remove sleep, deal damage and remove function from delegate.
                 enemy.GetComponent<StatusEffectManager>().RemoveEffect(billiaAbilities.sleep, gameObject);
