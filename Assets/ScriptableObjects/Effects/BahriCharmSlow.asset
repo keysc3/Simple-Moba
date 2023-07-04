@@ -9,15 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55445560defb6cc4c8abaec522837868, type: 3}
-  m_Name: BahriCharm
+  m_Script: {fileID: 11500000, guid: 88c69c4aa644de647bfdf7ae145855a2, type: 3}
+  m_Name: BahriCharmSlow
   m_EditorClassIdentifier: 
   isStackable: 0
-  ccValue: 1
-  duration:
-  - 1.2
-  - 1.4
-  - 1.6
-  - 1.8
-  - 5
-  <slow>k__BackingField: {fileID: 11400000, guid: be3fdf73c49242e46aeaa70a0e7b6fe0, type: 2}
+  ccValue: 0
+  <duration>k__BackingField: 0
+  <slowPercent>k__BackingField: 0.65

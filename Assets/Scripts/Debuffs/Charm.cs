@@ -39,6 +39,7 @@ public class Charm : Effect
         }
         // Reset the units current path.
         effectedNavMeshAgent.ResetPath();
+        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableCharm) effectType).slow.InitializeEffect(casted, effected));
     }
 
     /*
@@ -47,7 +48,7 @@ public class Charm : Effect
     public override void EndEffect(){
         // Reset the path and speed from the charm effect.
         effectedNavMeshAgent.ResetPath();
-        effectedNavMeshAgent.speed = effectedSpeed;
+        //effectedNavMeshAgent.speed = effectedSpeed;
 
         // Give controls back if charmed is active GameObject.
         if(effectedUnitStats.unit is Champion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
@@ -63,7 +64,7 @@ public class Charm : Effect
         Debug.Log(effected);
         //effected.GetComponent<NavMeshAgent>().ResetPath();
         // Reduce speed and set destination.
-        effectedNavMeshAgent.speed = effectedSpeed * ((ScriptableCharm) effectType).slowPercent;
+        //effectedNavMeshAgent.speed = effectedSpeed * ((ScriptableCharm) effectType).slowPercent;
         effectedNavMeshAgent.destination = casted.transform.position;
         Vector3 nextTarget;
         // If a path is set.

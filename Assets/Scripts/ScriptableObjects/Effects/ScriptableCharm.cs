@@ -11,7 +11,7 @@ using UnityEngine;
 public class ScriptableCharm : ScriptableEffect
 {
     [SerializeField] private List<float> duration = new List<float>();
-    [field: SerializeField] public float slowPercent { get; private set; }
+    [field: SerializeField] public ScriptableSlow slow { get; private set; }
 
     /*
     *   InitializeEffect - Initializes a new charm effect with the objects duration and slow percent.
@@ -21,6 +21,7 @@ public class ScriptableCharm : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
         ccValue = 1;
+        slow.SetDuration(duration[spellLevel]);
         return new Charm(this, duration[spellLevel], unitCasted, unitEffected);
     }
 }

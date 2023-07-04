@@ -46,9 +46,11 @@ public class StatusEffectManager : MonoBehaviour
                         statusEffects.RemoveAt(i);
                         effectNames.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
-                        if(effect.effectType is ScriptableSlow)
-                            if(CheckForEffectByType(effect.effectType))
+                        if(effect.effectType is ScriptableSlow){
+                            if(CheckForEffectByType(effect)){
                                 SetStrongestSlow(effect);
+                            }
+                        }
                         // If there are still running effects, activate the most impairing.
                         if(statusEffects.Count > 0){
                             SetMostImpairing(GetMostImpairing());
@@ -133,9 +135,9 @@ public class StatusEffectManager : MonoBehaviour
     *   @param source - GameObject of the source of the effect.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectWithSource(ScriptableObject checkFor, GameObject source){
+    public bool CheckForEffectWithSource(ScriptableEffect checkFor, GameObject source){
         foreach(Effect effect in statusEffects){
-            if(effect.casted == source && effect.effectType == checkFor)
+            if(effect.casted.GetType() == source.GetType() && effect.effectType == checkFor)
                 return true;
         }
         return false;
@@ -146,9 +148,9 @@ public class StatusEffectManager : MonoBehaviour
     *   @param checkFor - ScriptableObject of the effect to check for.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectByName(ScriptableObject checkFor, string effectName){
+    public bool CheckForEffectByName(ScriptableEffect checkFor, string effectName){
         foreach(Effect effect in statusEffects){
-            if(effect.effectType == checkFor && effect.effectType.name == effectName)
+            if(effect.effectType.GetType() == checkFor.GetType() && effect.effectType.name == effectName)
                 return true;
         }
         return false;
@@ -156,12 +158,13 @@ public class StatusEffectManager : MonoBehaviour
 
     /*
     *   CheckForEffectByType - Checks for the given effect in the status managers effect list with given type.
-    *   @param checkFor - ScriptableObject of the effect to check for.
+    *   @param checkFor - Effect of the effect type to check for.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectByType(ScriptableObject checkFor){
+    public bool CheckForEffectByType(Effect checkFor){
         foreach(Effect effect in statusEffects){
-            if(effect.effectType == checkFor)
+            Debug.Log("For: " + effect.effectType.GetType() + "check for: " + checkFor.effectType.GetType());
+            if(effect.effectType.GetType() == checkFor.effectType.GetType())
                 return true;
         }
         return false;

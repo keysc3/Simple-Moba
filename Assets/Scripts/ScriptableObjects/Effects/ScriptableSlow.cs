@@ -18,6 +18,11 @@ public class ScriptableSlow : ScriptableEffect
         return new Slow(this, duration, unitCasted, unitEffected);
     }
 
+
+    public void SetDuration(float duration){
+        this.duration = duration;
+    }
+
     public bool isEffectStronger(ScriptableSlow strongest, ScriptableSlow newSlow){
         if(newSlow.slowPercent > strongest.slowPercent)
             return true;
