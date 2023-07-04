@@ -9,14 +9,14 @@ using UnityEngine;
 */
 public class BasicAttack : MonoBehaviour
 {
-    [SerializeField] private GameObject attackProjectile;
-
     public bool windingUp { get; private set; } = false;
     public float nextAuto { get; private set; } = 0.0f;
 
+    [SerializeField] private GameObject attackProjectile;
     private UnitStats unitStats;
     private PlayerController playerController;
 
+    // Called when the script instance is being loaded. 
     protected virtual void Awake(){
         unitStats = GetComponent<UnitStats>();
         playerController = GetComponent<PlayerController>();

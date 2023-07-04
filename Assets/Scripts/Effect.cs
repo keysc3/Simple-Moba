@@ -97,6 +97,10 @@ public abstract class Effect
         }
     }
 
+    /*
+    *   SetIsFinished - Set the effects finished bool.
+    *   @param isFinished - bool to set the effects finished bool to.
+    */
     public void SetIsFinished(bool isFinished){
         this.isFinished = isFinished;
     }

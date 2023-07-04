@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements a drowsy effect where the target isw slowed then put to sleep after a duration.
+*
+* @author: Colin Keys
+*/
 public class Drowsy : Effect
 {
     private UnitStats effectedUnitStats;

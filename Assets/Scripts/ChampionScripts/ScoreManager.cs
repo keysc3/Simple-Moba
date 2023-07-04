@@ -60,6 +60,9 @@ public class ScoreManager : MonoBehaviour
         uiManager.UpdateDeaths(deaths.ToString());
     }
 
+    /*
+    *   Assist - Updates the players assists and assist UI.
+    */
     public void Assist(){
         Debug.Log("Assist for " + gameObject.name + ".");
         assists += 1;

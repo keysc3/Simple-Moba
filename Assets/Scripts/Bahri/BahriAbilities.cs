@@ -205,7 +205,7 @@ public class BahriAbilities : ChampionAbilities
                             // Only want to target alive units.
                             if(!enemy.gameObject.GetComponent<UnitStats>().isDead && enemy.gameObject != gameObject){
                                 // If a player is currently under spell 3 effects, prioritize that player.
-                                if(enemy.gameObject.GetComponent<StatusEffectManager>().CheckForEffect(bahriAbilityHit.charmEffect, gameObject)){
+                                if(enemy.gameObject.GetComponent<StatusEffectManager>().CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
                                     target = enemy.gameObject;
                                     break;
                                 }

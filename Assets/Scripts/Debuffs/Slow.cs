@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements a slow effect.
+*
+* @author: Colin Keys
+*/
 public class Slow : Effect
 {
     private float effectedSpeed;

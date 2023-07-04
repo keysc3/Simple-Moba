@@ -319,7 +319,7 @@ public class UIManager : MonoBehaviour
     }
 
     /*
-    *   SetSpellCoverInactive - Sets the spells UI cover to active or not.
+    *   SetSpellCoverActive - Sets the spells UI cover to active or not.
     *   @param spell - int of the spell to update the UI for.
     *   @param isActive - bool of whether or not to activate the spell cover.
     */

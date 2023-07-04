@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[System.Serializable]
+/*
+* Purpose: Implements the casting and animations for the champion Billia's abilities.
+* @author: Colin Keys
+*/
 public class BilliaAbilities : ChampionAbilities
 {
+    [field: SerializeField] public ScriptableSleep sleep { get; private set; }
+    public GameObject spell1Visual;
+    public GameObject spell2Visual;
+
+    [SerializeField] private int spell_1_passiveStacks;
+    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
     [SerializeField] private ScriptableDot passiveDot;
     [SerializeField] private GameObject seed;
-    [SerializeField] private int spell_1_passiveStacks;
     [SerializeField] private ScriptableDrowsy drowsy;
-    [field: SerializeField] public ScriptableSleep sleep { get; private set; }
+    private float spell1Visual_initialAlpha = 60.0f;
+    private float spell1Visual_finalAlpha = 160.0f;
     private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
     private bool canUseSpell_4 = false;
-    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
     private List<float> spell_1_passiveTracker = new List<float>();
-
     private Billia billia;
     private BilliaAbilityHit billiaAbilityHit;
-
-    public GameObject spell1Visual;
-    public float spell1Visual_initialAlpha = 60.0f;
-    public float spell1Visual_finalAlpha = 160.0f;
-    public GameObject spell2Visual;
 
     public delegate void DoubleRadiusHitboxHit(GameObject hit, string radius); 
     public DoubleRadiusHitboxHit spellHit;
 
+    // Called when the script instance is being loaded. 
     protected override void Awake(){
         base.Awake();
         billiaAbilityHit = GetComponent<BilliaAbilityHit>();
@@ -40,6 +43,7 @@ public class BilliaAbilities : ChampionAbilities
        spell_1_passiveStacks = 0;
     }
 
+    // Update is called once per frame
     void Update()
     {
         if(levelManager.spellLevels["Spell_4"] > 0){
@@ -67,7 +71,7 @@ public class BilliaAbilities : ChampionAbilities
         // Check to make sure the dot is still on the unit.
         StatusEffectManager statusEffectManager = enemy.GetComponent<StatusEffectManager>();
         UnitStats unitStats = enemy.GetComponent<UnitStats>();
-        while(statusEffectManager.CheckForEffect(passiveDot, gameObject)){
+        while(statusEffectManager.CheckForEffectWithSource(passiveDot, gameObject)){
             // Heal the champion amount if unit is a champion.
             if(unitStats.unit is Champion){
                 Debug.Log("Billia passive found on: " + enemy.name);
@@ -217,7 +221,7 @@ public class BilliaAbilities : ChampionAbilities
     */
     public override void Spell_2(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!spell_1_onCd && !isCasting && championStats.currentMana >= billia.spell2BaseMana[levelManager.spellLevels["Spell_2"]-1]){
+        if(!spell_2_onCd && !isCasting && championStats.currentMana >= billia.spell2BaseMana[levelManager.spellLevels["Spell_2"]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
@@ -472,7 +476,7 @@ public class BilliaAbilities : ChampionAbilities
             if(!spell_4_onCd && !isCasting && championStats.currentMana >= billia.spell1BaseMana[levelManager.spellLevels["Spell_4"]-1]){
                 // Start cast time then cast the spell.
                 StartCoroutine(CastTime(billia.spell_4_castTime, true));
-                StartCoroutine(Spell_4_Cast());
+                StartCoroutine(Spell_4_Cast(GetChampionsWithPassive()));
                 // Use mana.
                 championStats.UseMana(billia.spell4BaseMana[levelManager.spellLevels["Spell_4"]-1]);
                 spell_4_onCd = true;
@@ -482,18 +486,20 @@ public class BilliaAbilities : ChampionAbilities
 
     /*
     *   Spell_4_Cast - Casts and starts the cd timer for spell 4. Would have to be refactored to implement projectile destruction/blocking.
+    *   @param List<GameObject> - List of GameObjects to apply the drowsy to.
     */
-    private IEnumerator Spell_4_Cast(){
+    private IEnumerator Spell_4_Cast(List<GameObject> applyDrowsy){
         while(isCasting)
             yield return null;
         StartCoroutine(Spell_Cd_Timer(billia.spell4BaseCd[levelManager.spellLevels["Spell_4"]-1], (myBool => spell_4_onCd = myBool), "Spell_4"));
-        StartCoroutine(Spell_4_Projectile());
+        StartCoroutine(Spell_4_Projectile(applyDrowsy));
     }
 
     /*
     *   Spell_4_Projectile - Handle the travel time of spell 4.
+    *   @param List<GameObject> - List of GameObjects to apply the drowsy to.
     */
-    private IEnumerator Spell_4_Projectile(){
+    private IEnumerator Spell_4_Projectile(List<GameObject> applyDrowsy){
         float travelTime = billia.spell_4_travelTime;
         float startTime = Time.time;
         while(Time.time - startTime < travelTime){
@@ -501,14 +507,15 @@ public class BilliaAbilities : ChampionAbilities
             yield return null;
         }
         // Apply drowsy debuff.
-        Spell_4_Drowsy();
+        Spell_4_Drowsy(applyDrowsy);
     }
 
     /*
     *   Spell_4_Drowsy - Applies the drowsy debuff from spell 4 to any champions applied with the passive dot.
+    *   @param List<GameObject> - List of GameObjects to apply the drowsy to.
     */
-    private void Spell_4_Drowsy(){
-        foreach(GameObject enemy in passiveApplied){
+    private void Spell_4_Drowsy(List<GameObject> applyDrowsy){
+        foreach(GameObject enemy in applyDrowsy){
             if(enemy.GetComponent<UnitStats>().unit is Champion){
                 enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"], gameObject, enemy));
                 enemy.GetComponent<UnitStats>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
@@ -520,21 +527,39 @@ public class BilliaAbilities : ChampionAbilities
     *   CanUseSpell_4 - Checks if any champion has Billia's passive on them, which allows the use of spell 4.
     */
     private bool CanUseSpell_4(){
-        foreach(GameObject enemy in passiveApplied){
-            if(enemy.GetComponent<UnitStats>().unit is Champion){
-                return true;
-            }
+        List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
+        if(passiveAppliedChamps.Count > 0){
+            return true;
         }
         return false;
     }
 
     /*
-    *   Attack - Champions auto attack method.
-    *   @param targetedEnemy - GameObject of the enemy to attack.
+    *   GetChampionsWithPassive - Get all champions with a Billia passive on them.
+    *   @return List<GameObject> - List of champion GameObjects with Billia passive dot on them.
     */
-    /*public override void Attack(GameObject targetedEnemy){
-        // TODO: Melee auto attack method.
-    }*/
+    private List<GameObject> GetChampionsWithPassive(){
+        List<GameObject> passiveAppliedChamps = new List<GameObject>();
+        // Get all StatusEffectManagers.
+        StatusEffectManager[] effectScripts = FindObjectsOfType<StatusEffectManager>();
+        for (int i = 0; i < effectScripts.Length; i++){
+            // If it is a champion and has the Billia dot then add it to the list.
+            if(effectScripts[i].unitStats.unit is Champion){
+                if(effectScripts[i].CheckForEffectByName(passiveDot, passiveDot.name)){
+                    passiveAppliedChamps.Add(effectScripts[i].gameObject);
+                }
+            }
+        }
+        return passiveAppliedChamps;
+    }
+
+    // LateUpdate is called after all Update functions have been called
+    private void LateUpdate(){
+        if(canUseSpell_4)
+            uiManager.SetSpellCoverActive(4, false);
+        else
+            uiManager.SetSpellCoverActive(4, true);
+    }
 
     /*
     *   OnDeathCleanUp - Method for any necessary spell cleanup on death.

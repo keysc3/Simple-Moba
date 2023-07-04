@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Creates a ScriptableObject for the champion Billia that extends the Champion ScriptableObject.
+*
+* @author: Colin Keys
+*/
 [CreateAssetMenu(fileName = "New Billia", menuName = "Unit/Champion/Billia")]
 public class Billia : Champion
 {

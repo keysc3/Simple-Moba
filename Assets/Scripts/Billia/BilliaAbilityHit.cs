@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Use damage values in scriptiable billia.
+/*
+* Purpose: Handles one of Billia's spells hitting a unit.
+* @author: Colin Keys
+*/
 public class BilliaAbilityHit : MonoBehaviour
 {
     [field: SerializeField] public ScriptableSlow slowEffect { get; private set; }
@@ -25,6 +28,11 @@ public class BilliaAbilityHit : MonoBehaviour
         billia = (Billia) championStats.unit;
     }
 
+    /*
+    *   Spell_1_Hit - Deals first spells damage to the enemy hit. Magic damage with additional true damage on outer hit.
+    *   @param enemy - GameObject of the enemy hit.
+    *   @param radius - string of which radius was hit.
+    */
     public void Spell_1_Hit(GameObject enemy, string radius){
         billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
@@ -36,6 +44,11 @@ public class BilliaAbilityHit : MonoBehaviour
         }
     }
 
+    /*
+    *   Spell_2_Hit - Deals second spells damage to the enemy hit. Magic damage with inner hit dealing increased magic damage.
+    *   @param enemy - GameObject of the enemy hit.
+    *   @param radius - string of which radius was hit.
+    */
     public void Spell_2_Hit(GameObject enemy, string radius){
         billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
@@ -45,6 +58,10 @@ public class BilliaAbilityHit : MonoBehaviour
             enemy.GetComponent<UnitStats>().TakeDamage(billia.spell2BaseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage, "magic", gameObject, false);
     }
 
+    /*
+    *   Spell_3_Hit - Deals third spells damage to the enemy hit. Magic damage with a slow on hit.
+    *   @param enemy - GameObject of the enemy hit.
+    */
     public void Spell_3_Hit(GameObject enemy){
         billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
@@ -52,10 +69,17 @@ public class BilliaAbilityHit : MonoBehaviour
         enemy.GetComponent<UnitStats>().TakeDamage(billia.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);   
     }
 
+    /*
+    *   Spell_4_SleepProc - Deals fourth spells damage to the enemy hit. Magic damage if target has sleep effect.
+    *   @param enemy - GameObject of the enemy hit.
+    *   @param isDot - bool of whether or not the damage taken was from a dot.
+    */
     public void Spell_4_SleepProc(GameObject enemy, bool isDot){
+        // Dots do not proc the sleep.
         if(!isDot){
-            if(enemy.GetComponent<StatusEffectManager>().CheckForEffect(billiaAbilities.sleep, gameObject)){
+            if(enemy.GetComponent<StatusEffectManager>().CheckForEffectWithSource(billiaAbilities.sleep, gameObject)){
                 float magicDamage = championStats.magicDamage.GetValue();
+                // Remove sleep, deal damage and remove function from delegate.
                 enemy.GetComponent<StatusEffectManager>().RemoveEffect(billiaAbilities.sleep, gameObject);
                 enemy.GetComponent<UnitStats>().bonusDamage -= Spell_4_SleepProc;
                 enemy.GetComponent<UnitStats>().TakeDamage(billia.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);

@@ -11,11 +11,12 @@ using UnityEngine;
 public class StatusEffectManager : MonoBehaviour
 {
 
+    public List<string> effectNames = new List<string>();
     public List<Effect> statusEffects { get; private set; } = new List<Effect>();
-    private UnitStats unitStats;
+    public UnitStats unitStats { get; private set; }
+
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
-    public List<string> effectNames = new List<string>();
 
     private void Awake(){
         unitStats = gameObject.GetComponent<UnitStats>();
@@ -97,14 +98,27 @@ public class StatusEffectManager : MonoBehaviour
     }
 
     /*
-    *   CheckForEffect - Checks for the given effect in the status managers effect list.
+    *   CheckForEffectWithSource - Checks for the given effect from the source in the status managers effect list.
     *   @param checkFor - ScriptableObject of the effect to check for.
     *   @param source - GameObject of the source of the effect.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffect(ScriptableObject checkFor, GameObject source){
+    public bool CheckForEffectWithSource(ScriptableObject checkFor, GameObject source){
         foreach(Effect effect in statusEffects){
             if(effect.casted == source && effect.effectType == checkFor)
+                return true;
+        }
+        return false;
+    }
+
+    /*
+    *   CheckForEffectByName - Checks for the given effect in the status managers effect list with given name.
+    *   @param checkFor - ScriptableObject of the effect to check for.
+    *   @return bool - bool of whether or not the effect exists on this GameObject.
+    */
+    public bool CheckForEffectByName(ScriptableObject checkFor, string effectName){
+        foreach(Effect effect in statusEffects){
+            if(effect.effectType == checkFor && effect.effectType.name == effectName)
                 return true;
         }
         return false;
@@ -146,7 +160,11 @@ public class StatusEffectManager : MonoBehaviour
         highestActiveCCValue = effect.effectType.ccValue;
     }
 
-
+    /*
+    *   RemoveEffect - Removes an effect from the status effect list.
+    *   @param effectType - ScriptableEffect of the status effect remove.
+    *   @param casted - GameObject of the effects caster.
+    */
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
         for(int i = 0; i < statusEffects.Count; i++){
             if(effectType == statusEffects[i].effectType && casted == statusEffects[i].casted){
