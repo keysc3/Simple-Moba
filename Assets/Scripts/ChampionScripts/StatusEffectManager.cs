@@ -41,9 +41,14 @@ public class StatusEffectManager : MonoBehaviour
                 // Avoid any indexing errors if unit dies from the effect tick.
                 if(!unitStats.isDead){
                     if(statusEffects[i].isFinished){
+                        Effect effect = statusEffects[i];
                         statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
                         effectNames.RemoveAt(i);
+                        // If effect was a slow find the new strongest slow if another exists.
+                        if(effect.effectType is ScriptableSlow)
+                            if(CheckForEffectByType(effect.effectType))
+                                SetStrongestSlow(effect);
                         // If there are still running effects, activate the most impairing.
                         if(statusEffects.Count > 0){
                             SetMostImpairing(GetMostImpairing());
@@ -60,6 +65,7 @@ public class StatusEffectManager : MonoBehaviour
 
     /*
     *   AddEffect - Adds an effect to the status managers effect list.
+    *   @param effect - Effect to add to the status effects list.
     */
     public void AddEffect(Effect effect){
         // If there is an existing effect, only the new one if it is more impairing than the current most.
@@ -86,8 +92,32 @@ public class StatusEffectManager : MonoBehaviour
         statusEffects.Add(effect);
         effectNames.Add(effect.effectType.name);
         // CC Values of zero are always active.
-        if(effect.effectType.ccValue == 0)
-            effect.SetIsActivated(true);
+        if(effect.effectType.ccValue == 0){
+            // If a new slow effect was added then only activate the strongest one.
+            if(effect.effectType is ScriptableSlow){
+                SetStrongestSlow(effect);
+            }
+            else
+                effect.SetIsActivated(true);
+        }
+    }
+
+    /*
+    *   SetStrongestSlow - Sets the strongest slow to be activated. Slow is the only zero cc value effect that applies the strongest.
+    *   @param effect - Slow Effect that was added.
+    */
+    public void SetStrongestSlow(Effect effect){
+        // Get the strongest slows index in the status effect list.
+        int index = ((ScriptableSlow) effect.effectType).GetStrongest(statusEffects);
+        // Deactivate all slows in the list that aren't the strongest.
+        for(int i = 0; i < statusEffects.Count; i++){
+            if(statusEffects[i].effectType is ScriptableSlow){
+                if(index == i)
+                    statusEffects[i].StartEffect();
+                else
+                    statusEffects[i].EndEffect();
+            } 
+        }
     }
 
     /*
@@ -119,6 +149,19 @@ public class StatusEffectManager : MonoBehaviour
     public bool CheckForEffectByName(ScriptableObject checkFor, string effectName){
         foreach(Effect effect in statusEffects){
             if(effect.effectType == checkFor && effect.effectType.name == effectName)
+                return true;
+        }
+        return false;
+    }
+
+    /*
+    *   CheckForEffectByType - Checks for the given effect in the status managers effect list with given type.
+    *   @param checkFor - ScriptableObject of the effect to check for.
+    *   @return bool - bool of whether or not the effect exists on this GameObject.
+    */
+    public bool CheckForEffectByType(ScriptableObject checkFor){
+        foreach(Effect effect in statusEffects){
+            if(effect.effectType == checkFor)
                 return true;
         }
         return false;

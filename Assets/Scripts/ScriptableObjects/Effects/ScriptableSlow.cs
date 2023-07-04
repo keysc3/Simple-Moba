@@ -17,4 +17,28 @@ public class ScriptableSlow : ScriptableEffect
         ccValue = 0;
         return new Slow(this, duration, unitCasted, unitEffected);
     }
+
+    public bool isEffectStronger(ScriptableSlow strongest, ScriptableSlow newSlow){
+        if(newSlow.slowPercent > strongest.slowPercent)
+            return true;
+        else
+            return false;
+    }
+
+    public int GetStrongest(List<Effect> myEffects){
+        int strongestIndex = -1;
+        int i = 0;
+        foreach(Effect effect in myEffects){
+            if(effect.effectType is ScriptableSlow){
+                if(strongestIndex != -1){
+                    if(isEffectStronger((ScriptableSlow) myEffects[strongestIndex].effectType, (ScriptableSlow) effect.effectType))
+                        strongestIndex = i;
+                }
+                else
+                    strongestIndex = i;
+            }
+            i++;
+        }
+        return strongestIndex;
+    }
 }
