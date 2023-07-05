@@ -11,6 +11,7 @@ public class BilliaSpell3Trigger : MonoBehaviour
 {
     public Vector3 forwardDirection;
     public BilliaAbilities billiaAbilities;
+    public bool hasLanded;
 
     private bool hit = false;
 
@@ -19,7 +20,7 @@ public class BilliaSpell3Trigger : MonoBehaviour
         int groundLayer = LayerMask.NameToLayer("Ground");
         int projectileLayer = LayerMask.NameToLayer("Projectile");
         // If a unit is hit.
-        if(other.gameObject.layer != groundLayer && other.gameObject.layer != projectileLayer && !hit){
+        if(other.gameObject.layer != groundLayer && other.gameObject.layer != projectileLayer && !hit && other.tag != "Player" && hasLanded){
             // Avoid same frame multi hits.
             hit = true;
             Debug.Log("Hit on roll: " + other.gameObject.name);
