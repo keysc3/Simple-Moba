@@ -169,6 +169,15 @@ public class StatusEffectManager : MonoBehaviour
         return false;
     }
 
+    public List<Effect> GetEffectsByType(System.Type type){
+        List<Effect> effects = new List<Effect>();
+        foreach(Effect effect in statusEffects){
+            if(effect.effectType.GetType() == type)
+                effects.Add(effect);
+        }
+        return effects;
+    }
+
     /*
     *   GetMostImpairing - Gets the most impairing effect in the status manager effects list. Highest cc value = most impairing.
     *   @return Effect - Effect of the most impairing effect in the list.
