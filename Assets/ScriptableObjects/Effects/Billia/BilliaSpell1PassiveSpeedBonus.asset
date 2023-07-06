@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7931f9387cbdde74bb045494181a93d1, type: 3}
-  m_Name: BilliaSpell1Passive
+  m_Name: BilliaSpell1PassiveSpeedBonus
   m_EditorClassIdentifier: 
-  isStackable: 0
+  isStackable: 1
   ccValue: 0
-  <duration>k__BackingField: 0
-  <bonusPercent>k__BackingField: 0
-  <isAdditive>k__BackingField: 0
+  <duration>k__BackingField: 6.5
+  <bonusPercent>k__BackingField: 0.07
+  <isAdditive>k__BackingField: 1

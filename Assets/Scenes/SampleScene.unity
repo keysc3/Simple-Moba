@@ -844,6 +844,10 @@ PrefabInstance:
       propertyPath: p1_y_offset
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+      propertyPath: <spell_1_passiveSpeedBonus>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 6325edf91b28df249848b2818ae6ba23, type: 2}
     - target: {fileID: 1384222467734263524, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_RootOrder
       value: 0
