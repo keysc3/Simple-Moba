@@ -122,12 +122,12 @@ MonoBehaviour:
   - 0.07
   spell_1_innerRadius: 3
   spell_1_outerRadius: 5
-  spell_2_maxMagnitude: 6
+  spell_2_maxMagnitude: 4
   spell_2_dashOffset: 1.8
   spell_2_innerRadius: 0.6
   spell_2_outerRadius: 2.5
   spell_2_dashTime: 0.759
-  spell_3_maxLobMagnitude: 3
+  spell_3_maxLobMagnitude: 3.5
   spell_3_lobTime: 0.5
   spell_3_seedSpeed: 5
   spell_3_seedRotation: 270

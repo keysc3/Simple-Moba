@@ -163,7 +163,6 @@ public class StatusEffectManager : MonoBehaviour
     */
     public bool CheckForEffectByType(Effect checkFor){
         foreach(Effect effect in statusEffects){
-            Debug.Log("For: " + effect.effectType.GetType() + "check for: " + checkFor.effectType.GetType());
             if(effect.effectType.GetType() == checkFor.effectType.GetType())
                 return true;
         }

@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
         navMeshAgent.updateRotation = false;
         navMeshAgent.speed = championStats.speed.GetValue();
         attackTime = 1.0f/championStats.attackSpeed.GetValue();
-        StartCoroutine(MovePlayerToEnemy());
 
     }
 
@@ -77,6 +76,12 @@ public class PlayerController : MonoBehaviour
             else if(navMeshAgent.hasPath)
                 PlayerLookDirection(navMeshAgent.steeringTarget);
         }
+
+        if(targetedEnemy != null){
+            MovePlayerToEnemy();
+        }
+        else
+            basicAttack.SetWindingUp(false);
     }
 
     /*
@@ -114,42 +119,30 @@ public class PlayerController : MonoBehaviour
     /*
     *   MovePlayerToEnemy - Moves the player into range of their targeted enemy whenever they have one.
     */
-    private IEnumerator MovePlayerToEnemy(){
-        while(true){
-            // If the player has a target.
-            if(targetedEnemy != null){
-                // Get the targets distance from the player.
-                Vector3 myTarget = targetedEnemy.transform.position;
-                myTarget.y = 0.0f;
-                float distToEnemy = (transform.position - myTarget).magnitude;
-                // If the enemy is in auto range then start autoing.
-                if(distToEnemy < championStats.autoRange.GetValue()){
-                    // Stop navmesh
-                    navMeshAgent.ResetPath();
-                    // If the time since last auto is greater than the next time the player is allowed to auto.
-                    // Make sure player isn't already winding up an auto.
-                    if(Time.time > basicAttack.nextAuto && !basicAttack.windingUp){
-                        basicAttack.SetWindingUp(true);
-                        StartCoroutine(basicAttack.BasicAttackWindUp());
-                    }
-                    else{
-
-                    }
-                        //Debug.Log("Waiting to Wind Up");
-                }
-                else{
-                    // Stop the auto wind up since the enemy is no longer in range.
-                    StopCoroutine(basicAttack.BasicAttackWindUp());
-                    basicAttack.SetWindingUp(false);
-                    // Move the player into range of the target.
-                    Vector3 enemyDest = targetedEnemy.transform.position;
-                    enemyDest.y = myCollider.bounds.center.y;
-                    navMeshAgent.destination = enemyDest;
-                }
+    private void MovePlayerToEnemy(){
+        // Get the targets distance from the player.
+        Vector3 myTarget = targetedEnemy.transform.position;
+        myTarget.y = 0.0f;
+        float distToEnemy = (transform.position - myTarget).magnitude;
+        // If the enemy is in auto range then start autoing.
+        if(distToEnemy < championStats.autoRange.GetValue()){
+            // Stop navmesh
+            navMeshAgent.ResetPath();
+            // If the time since last auto is greater than the next time the player is allowed to auto.
+            // Make sure player isn't already winding up an auto.
+            if(Time.time > basicAttack.nextAuto && !basicAttack.windingUp){
+                basicAttack.SetWindingUp(true);
+                StartCoroutine(basicAttack.BasicAttackWindUp());
             }
-            else
-                basicAttack.SetWindingUp(false);
-            yield return null;
+        }
+        else{
+            // Stop the auto wind up since the enemy is no longer in range.
+            StopCoroutine(basicAttack.BasicAttackWindUp());
+            basicAttack.SetWindingUp(false);
+            // Move the player into range of the target.
+            Vector3 enemyDest = targetedEnemy.transform.position;
+            enemyDest.y = myCollider.bounds.center.y;
+            navMeshAgent.destination = enemyDest;
         }
     }
 }
