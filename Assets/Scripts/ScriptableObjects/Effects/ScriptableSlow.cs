@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: ScriptableEffect for intializing a Slow effect.
+*
+* @author: Colin Keys
+*/
 [CreateAssetMenu(menuName = "Effects/Slow")]
 public class ScriptableSlow : ScriptableEffect
 {

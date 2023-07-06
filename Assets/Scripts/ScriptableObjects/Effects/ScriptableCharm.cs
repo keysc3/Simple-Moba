@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableObject for intializing a specific Charm effect.
+* Purpose: ScriptableEffect for intializing a Charm effect.
 *
 * @author: Colin Keys
 */

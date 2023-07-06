@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: ScriptableEffect for intializing a Drowsy effect.
+*
+* @author: Colin Keys
+*/
 [CreateAssetMenu(menuName = "Effects/Drowsy")]
 public class ScriptableDrowsy : ScriptableEffect
 {
