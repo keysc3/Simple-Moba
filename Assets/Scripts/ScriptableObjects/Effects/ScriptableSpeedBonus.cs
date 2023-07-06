@@ -25,10 +25,10 @@ public class ScriptableSpeedBonus : ScriptableEffect
     }
 
     /*
-    *   SetDuration - Sets the slows duration.
-    *   @param duration - float of duration to set slow to.
+    *   SetBonusPercent - Sets the bonus percent of the speed bonus.
+    *   @param bonusPercent - float of percent to set the bonus to.
     */
-    public void SetDuration(float duration){
-        this.duration = duration;
+    public void SetBonusPercent(float bonusPercent){
+        this.bonusPercent = bonusPercent;
     }
 }
