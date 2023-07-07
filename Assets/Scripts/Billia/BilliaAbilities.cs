@@ -447,6 +447,7 @@ public class BilliaAbilities : ChampionAbilities
         // Create spell object.
         GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
         spell_3_seed.GetComponent<BilliaSpell3Trigger>().billiaAbilities = this;
+        spell_3_seed.GetComponent<BilliaSpell3Trigger>().SetCaster(gameObject);
         // Set p0.
         Vector3 p0 = transform.position;
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.

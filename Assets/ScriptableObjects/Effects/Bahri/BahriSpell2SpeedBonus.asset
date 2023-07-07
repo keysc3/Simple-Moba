@@ -15,5 +15,5 @@ MonoBehaviour:
   isStackable: 0
   ccValue: 0
   <duration>k__BackingField: 2
-  <bonusPercent>k__BackingField: 0.000001358986
+  <bonusPercent>k__BackingField: 0.4
   <isAdditive>k__BackingField: 1
