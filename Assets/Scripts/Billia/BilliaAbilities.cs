@@ -10,20 +10,24 @@ using UnityEngine.AI;
 public class BilliaAbilities : ChampionAbilities
 {
     [field: SerializeField] public ScriptableSleep sleep { get; private set; }
+    [field: SerializeField] public ScriptableSpeedBonus spell_1_passiveSpeedBonus { get; private set; }
     public GameObject spell1Visual;
     public GameObject spell2Visual;
 
     [SerializeField] private int spell_1_passiveStacks;
+    [SerializeField] private float p1_y_offset;
+    [SerializeField] private float p2_y;
     [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
     [SerializeField] private ScriptableDot passiveDot;
     [SerializeField] private GameObject seed;
     [SerializeField] private ScriptableDrowsy drowsy;
     private float spell1Visual_initialAlpha = 60.0f;
     private float spell1Visual_finalAlpha = 160.0f;
-    private float spell_1_lastStackTime;
+    //private float spell_1_lastStackTime;
     private bool spell_1_passiveRunning;
     private bool canUseSpell_4 = false;
-    private List<float> spell_1_passiveTracker = new List<float>();
+    //private List<float> spell_1_passiveTracker = new List<float>();
+    private List<Effect> spell_1_passiveEffectTracker = new List<Effect>();
     private Billia billia;
     private BilliaAbilityHit billiaAbilityHit;
 
@@ -159,16 +163,65 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_1_PassiveProc - Handles spell 1's passive being activated or refreshed.
     */
     private void Spell_1_PassiveProc(){
-        spell_1_lastStackTime = Time.time;
+        //spell_1_lastStackTime = Time.time;
         if(spell_1_passiveStacks < billia.spell_1_passiveMaxStacks){
-            spell_1_passiveStacks += 1;
+            // Create a new speed bonus with the 
             float bonusPercent = billia.spell_1_passiveSpeed[levelManager.spellLevels["Spell_1"]-1];
-            float amountIncrease = championStats.speed.GetValue() * bonusPercent;
-            navMeshAgent.speed = navMeshAgent.speed + amountIncrease;
-            spell_1_passiveTracker.Add(amountIncrease);
+            Effect speedBonus = spell_1_passiveSpeedBonus.InitializeEffect(gameObject, gameObject);
+            ((ScriptableSpeedBonus) speedBonus.effectType).SetBonusPercent(bonusPercent);
+            GetComponent<StatusEffectManager>().AddEffect(speedBonus);
+            spell_1_passiveEffectTracker.Add(speedBonus);
+            spell_1_passiveStacks += 1;
+            //float amountIncrease = championStats.speed.GetValue() * bonusPercent;
+            //navMeshAgent.speed = navMeshAgent.speed + amountIncrease;
+            //spell_1_passiveTracker.Add(amountIncrease);
             // If the passive has started dropping stacks or has none, start running it again.
-            if(!spell_1_passiveRunning){
+            /*if(!spell_1_passiveRunning){
                 StartCoroutine(Spell_1_PassiveRunning());
+            }*/
+        }
+        if(spell_1_passiveStacks > 1){
+            ResetSpell_1_PassiveTimers();
+        }
+    }
+
+    /*
+    *   ResetSpell_1_PassiveTimers - Changes the duration of Billia's passive stacks. 
+    *   This is for when a passive proc happens and the timers need to be updated.
+    */
+    private void ResetSpell_1_PassiveTimers(){
+        int multiplier = spell_1_passiveStacks - 1;
+        // If at max stacks then reset the newest stack as well.
+        if(spell_1_passiveStacks == billia.spell_1_passiveMaxStacks){
+            int last = spell_1_passiveEffectTracker.Count - 1;
+            ChangeSpell_1_PassiveEffect(last, 0f);
+        }
+        // Reset each passive stacks timer to the base plus an increase based on where it is in the stack list.
+        for(int i = 0; i < spell_1_passiveEffectTracker.Count - 1; i++){
+            ChangeSpell_1_PassiveEffect(i, billia.spell_1_passiveExpireDuration * multiplier);
+            multiplier -= 1;
+        }
+    }
+
+    /*
+    *   ChangeSpell_1_PassiveEffect - Resets the timer and changes the duration of a spell 1 passive effect.
+    *   @param index - int of the stacks index being changed.
+    *   @param baseIncrease - float of the increase from the base duration for the stack.
+    */
+    private void ChangeSpell_1_PassiveEffect(int index, float baseIncrease){
+        spell_1_passiveEffectTracker[index].ResetTimer();
+        float newDuration = billia.spell_1_passiveSpeedDuration + baseIncrease;
+        spell_1_passiveEffectTracker[index].SetDuration(newDuration);
+    }
+
+    /*
+    *   RemoveSpell_1_PassiveStack - Removes any stacks from the passive list if they have finished.
+    */
+    private void RemoveSpell_1_PassiveStack(){
+        for(int i = spell_1_passiveEffectTracker.Count - 1; i >=0; i--){
+            if(spell_1_passiveEffectTracker[i].isFinished){
+                spell_1_passiveEffectTracker.RemoveAt(i);
+                spell_1_passiveStacks -= 1;
             }
         }
     }
@@ -176,7 +229,7 @@ public class BilliaAbilities : ChampionAbilities
     /*
     *   Spell_1_PassiveRunning - Controls logic for whether the passive is still running or not.
     */
-    private IEnumerator Spell_1_PassiveRunning(){
+    /*private IEnumerator Spell_1_PassiveRunning(){
         spell_1_passiveRunning = true;
         // While the time since last stack hasn't reached the time until stack dropping.
         while(Time.time - spell_1_lastStackTime < billia.spell_1_passiveSpeedDuration){
@@ -185,12 +238,12 @@ public class BilliaAbilities : ChampionAbilities
         spell_1_passiveRunning = false;
         // Initiate stack fall off coroutine.
         StartCoroutine(Spell_1_PassiveDropping());
-    }
+    }*/
 
     /*
     *   Spell_1_PassiveDropping - Drops spell 1 passive stacks one at a time.
     */
-    private IEnumerator Spell_1_PassiveDropping(){
+    /*private IEnumerator Spell_1_PassiveDropping(){
         // While spell 1 passive has stopped running drop a stack every iteration.
         while(!spell_1_passiveRunning && spell_1_passiveStacks > 0){
             navMeshAgent.speed = navMeshAgent.speed - spell_1_passiveTracker[spell_1_passiveStacks - 1];
@@ -198,7 +251,7 @@ public class BilliaAbilities : ChampionAbilities
             spell_1_passiveStacks -= 1;
             yield return new WaitForSeconds(billia.spell_1_passiveExpireDuration);
         }
-    }
+    }*/
 
     /*
     *   Spell_1_Visual - Visual hitbox indicator for Billia's first spell.
@@ -387,18 +440,44 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
-    *   Spell_3_Lob - Lobs the seed at the target location over a set time.
+    *   Spell_3_Lob - Lobs the seed at the target location over a set time using a Quadratic Bezier Curve.
     *   @param targetPosition - Vector3 of the target position for the seed to land.
     */
     private IEnumerator Spell_3_Lob(Vector3 targetPosition){
+        // Create spell object.
+        GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
+        spell_3_seed.GetComponent<BilliaSpell3Trigger>().billiaAbilities = this;
+        spell_3_seed.GetComponent<BilliaSpell3Trigger>().SetCaster(gameObject);
+        // Set p0.
+        Vector3 p0 = transform.position;
+        // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
+        Vector3 p1 = transform.position;
+        p1.y = p1.y + p1_y_offset;
+        Vector3 dir = (targetPosition - transform.position).normalized;
+        float mag = (transform.position - targetPosition).magnitude;
+        p1.x = p1.x + (dir.x * (mag/2f));
+        p1.z = p1.z + (dir.z * (mag/2f));
+        // Set p2. p2 y is a value directly above the ground.
+        Vector3 p2 = targetPosition;
+        p2.y = p2_y;
+        // While lob time has not finished.
         float timer = 0.0f;
-        while (timer < billia.spell_3_lobTime){
-            // TODO: Add lob animation to target position.
+        while(timer < billia.spell_3_lobTime){
+            // Get t value, a value between 0 and 1.
+            float t = Mathf.Clamp01(timer/billia.spell_3_lobTime);
+            // Get the next position on the Quadratic Bezier curve.
+            Vector3 point = QuadraticBezierCurvePoint(t, p0, p1, p2);
+            // Set the seeds new position.
+            spell_3_seed.transform.position = point;
             timer += Time.deltaTime;
             yield return null;
         }
-        // Roll after landing.
-        StartCoroutine(Spell_3_Move(targetPosition));
+        // Set the seeds final point.
+        Vector3 lastPoint = QuadraticBezierCurvePoint(1, p0, p1, p2);
+        spell_3_seed.transform.position = lastPoint;
+        spell_3_seed.GetComponent<BilliaSpell3Trigger>().hasLanded = true;
+        // Start the seeds rolling.
+        StartCoroutine(Spell_3_Move(targetPosition, spell_3_seed));
     }
 
     /*
@@ -406,17 +485,12 @@ public class BilliaAbilities : ChampionAbilities
     *   target forward direction until a collision.
     *   @param targetPosition - Vector3 of the lobbed seeds landing position.
     */
-
-    private IEnumerator Spell_3_Move(Vector3 targetPosition){
-        // Instantiate seed and setup rolling collision trigger variables.
-        // TODO: Instantiate and initial hit check in lob method once animation is made.
-        GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().billiaAbilities = this;
+    private IEnumerator Spell_3_Move(Vector3 targetPosition, GameObject spell_3_seed){
         // Direction to roll.
         Vector3 targetDirection =  (targetPosition - transform.position).normalized;
         spell_3_seed.GetComponent<BilliaSpell3Trigger>().forwardDirection = targetDirection;
         // Set inital seed position.
-        spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
+        //spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
         // Look at roll direction.
         spell_3_seed.transform.LookAt(spell_3_seed.transform.position + targetDirection);
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
@@ -466,6 +540,28 @@ public class BilliaAbilities : ChampionAbilities
             }
         }
     }
+
+    /*
+    *   QuadraticBezierCurvePoint - Calculates a point on a quadratic Bezier curve based on the t value.
+    *   It is a linear interpolation of two points obtained from linear Bezier curves from p0 to p1 and p1 to p2.
+    *   @param t - float of a time value between 0 and 1 for the progress on the curve.
+    *   @param p0 - Vector3 of the first control point (starting point).
+    *   @param p1 - Vector3 of the second control point (connecting point).
+    *   @param p2 - Vector 3 of the third control point (end point).
+    */
+    public Vector3 QuadraticBezierCurvePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2){
+        // p = ((1-t)^2 * P0) + (2(1-t)t * P1) + (t^2 * P2)
+        float coefficient = 1 - t;
+        float alpha = Mathf.Pow(coefficient, 2f);
+        float beta = 2 * coefficient * t;
+        float phi = Mathf.Pow(t, 2f);
+
+        float x = (alpha * p0.x) + (beta * p1.x) + (phi * p2.x);
+        float y = (alpha * p0.y) + (beta * p1.y) + (phi * p2.y);
+        float z = (alpha * p0.z) + (beta * p1.z) + (phi * p2.z);
+        return new Vector3(x, y, z);
+    }
+
 
     /*
     *   Spell_4 - Champions fourth ability method.
@@ -559,6 +655,7 @@ public class BilliaAbilities : ChampionAbilities
             uiManager.SetSpellCoverActive(4, false);
         else
             uiManager.SetSpellCoverActive(4, true);
+        RemoveSpell_1_PassiveStack();
     }
 
     /*

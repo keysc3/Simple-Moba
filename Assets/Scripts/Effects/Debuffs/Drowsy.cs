@@ -11,7 +11,6 @@ using UnityEngine.AI;
 public class Drowsy : Effect
 {
     private UnitStats effectedUnitStats;
-    private float slowPercent;
     private float reducedAmount;
     private NavMeshAgent effectedNavMeshAgent;
 
@@ -22,9 +21,8 @@ public class Drowsy : Effect
     *   @param unitCasted - GameObject of the unit that casted the drowsy.
     *   @param - unitEffected - GameObject of the unit that the drowsy is affecting.
     */
-    public Drowsy(ScriptableDrowsy drowsyEffect, float slowPercent, float duration, GameObject unitCasted, GameObject unitEffected) : base(drowsyEffect, duration, unitCasted, unitEffected){
+    public Drowsy(ScriptableDrowsy drowsyEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(drowsyEffect, duration, unitCasted, unitEffected){
         effectedUnitStats = effected.GetComponent<UnitStats>();
-        this.slowPercent = slowPercent;
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
     }
 
@@ -32,9 +30,7 @@ public class Drowsy : Effect
     *   StartEffect - Start the drowsy effect.
     */
     public override void StartEffect(){
-        float speed = effectedUnitStats.speed.GetValue();
-        reducedAmount = speed * slowPercent;
-        effectedNavMeshAgent.speed = speed - reducedAmount;
+        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableDrowsy) effectType).slow.InitializeEffect(casted, effected));
     }
 
     /*

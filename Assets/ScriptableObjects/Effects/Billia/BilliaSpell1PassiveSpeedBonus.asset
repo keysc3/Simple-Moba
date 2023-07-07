@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55445560defb6cc4c8abaec522837868, type: 3}
-  m_Name: BahriCharm
+  m_Script: {fileID: 11500000, guid: 7931f9387cbdde74bb045494181a93d1, type: 3}
+  m_Name: BilliaSpell1PassiveSpeedBonus
   m_EditorClassIdentifier: 
-  duration:
-  - 1.2
-  - 1.4
-  - 1.6
-  - 1.8
-  - 5
-  <slowPercent>k__BackingField: 0.65
+  isStackable: 1
+  ccValue: 0
+  <duration>k__BackingField: 6.5
+  <bonusPercent>k__BackingField: 0.07
+  <isAdditive>k__BackingField: 1

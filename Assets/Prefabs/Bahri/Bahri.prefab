@@ -107,3 +107,4 @@ MonoBehaviour:
   Spell_2_object: {fileID: 6906369101127838927, guid: c667042b1cc76b646834dfe06bbd0fb2, type: 3}
   Spell_3_object: {fileID: 6397520171583126843, guid: 1369f547fb7feb9439c3beaaa6ee5598, type: 3}
   attack: {fileID: 1606231681406296317, guid: 18b60daf1c0410f45b0e2ebfb9f3acee, type: 3}
+  <spell_2_SpeedBonus>k__BackingField: {fileID: 11400000, guid: 89530c92161c28e45b6544ecfabb8553, type: 2}

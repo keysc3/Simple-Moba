@@ -84,6 +84,19 @@ public abstract class Effect
     }
 
     /*
+    *   ResetTimer - Resets the effects timer.
+    */
+    public void ResetTimer(){
+        effectTimer = 0.0f;
+    }
+
+    /*
+    *   SetDuration - Sets the effects duration
+    */
+    public void SetDuration(float effectDuration){
+        this.effectDuration = effectDuration;
+    }
+    /*
     *   SetIsActivated - Sets the effect to start or stop.
     *   @param isActivated - bool of whether to activate or deactivate the effect.
     */

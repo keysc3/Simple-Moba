@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 /*
 * Purpose: Implements a generic units stats.
@@ -27,6 +28,9 @@ public class UnitStats : MonoBehaviour
     [field: SerializeField] public Stat bonusAttackSpeed { get; private set; }
     [field: SerializeField] public Unit unit { get; private set; }
 
+    private StatusEffectManager statusEffectManager;
+    private NavMeshAgent navMeshAgent;
+
     public delegate void BonusDamage(GameObject toDamage, bool isDot); 
     public BonusDamage bonusDamage;
 
@@ -46,6 +50,8 @@ public class UnitStats : MonoBehaviour
         bonusAttackSpeed = new Stat(0f);
         isDead = false;
         currentHealth = maxHealth.GetValue();
+        statusEffectManager = GetComponent<StatusEffectManager>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
     /*
     *   SetHealth - Set the champions current health value.
@@ -126,7 +132,35 @@ public class UnitStats : MonoBehaviour
         if(finalAS > 2.5f)
             finalAS = 2.5f;
         attackSpeed.SetBaseValue(finalAS);
-        //return finalAS;
     }
 
+    public float CalculateMoveSpeed(){
+        List<Effect> speedBonuses = statusEffectManager.GetEffectsByType(typeof(ScriptableSpeedBonus));
+        float additive = 1f;
+        float multiplicative = 1f;
+        foreach(Effect effect in speedBonuses){
+            ScriptableSpeedBonus myBonus = (ScriptableSpeedBonus) effect.effectType;
+            if(myBonus.isAdditive){
+                additive += myBonus.bonusPercent;
+            }
+            else{
+                multiplicative *= (1f + myBonus.bonusPercent);
+            }
+        }
+        List<Effect> slows = statusEffectManager.GetEffectsByType(typeof(ScriptableSlow));
+        float slowPercent = 1f;
+        foreach(Effect effect in slows){
+            if(effect.isActivated){
+                ScriptableSlow mySlow = (ScriptableSlow) effect.effectType;
+                slowPercent *= (1f - mySlow.slowPercent);
+            }
+        }
+        float finalMS = speed.GetValue() * additive * multiplicative * slowPercent;
+        return finalMS;
+    }
+
+    private void LateUpdate(){
+        float finalMS = CalculateMoveSpeed();
+        navMeshAgent.speed = finalMS;
+    }
 }

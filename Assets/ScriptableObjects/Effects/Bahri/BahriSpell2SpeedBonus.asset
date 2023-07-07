@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6f7020e41168ac49a08e0adc504932e, type: 3}
-  m_Name: BilliaDrowsy
+  m_Script: {fileID: 11500000, guid: 7931f9387cbdde74bb045494181a93d1, type: 3}
+  m_Name: BahriSpell2SpeedBonus
   m_EditorClassIdentifier: 
-  <duration>k__BackingField: 1.5
-  <slowPercent>k__BackingField: 0.1
+  isStackable: 0
+  ccValue: 0
+  <duration>k__BackingField: 2
+  <bonusPercent>k__BackingField: 0.4
+  <isAdditive>k__BackingField: 1

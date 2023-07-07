@@ -14,6 +14,7 @@ public class BahriAbilities : ChampionAbilities
     [SerializeField] private GameObject Spell_2_object;
     [SerializeField] private GameObject Spell_3_object;
     [SerializeField] private GameObject attack;
+    [field: SerializeField] public ScriptableSpeedBonus spell_2_SpeedBonus { get; private set; }
 
     private float spell_4_timer;
     private float spell_4_duration;
@@ -262,25 +263,31 @@ public class BahriAbilities : ChampionAbilities
 
     /*
     *   Spell_2_Speed - Apply the spell casts decaying speed boost to the player.
-    */  //TODO
+    */
     private IEnumerator Spell_2_Speed(){
         float timer = 0.0f;
         // Players speed with boost applied.
-        float newSpeed = navMeshAgent.speed + (championStats.speed.GetValue() * bahri.spell_2_msBoost);
-        navMeshAgent.speed = newSpeed;
+        //float newSpeed = navMeshAgent.speed + (championStats.speed.GetValue() * bahri.spell_2_msBoost);
+        //navMeshAgent.speed = newSpeed;
+        // Create and add a new speed bonus effect.
+        Effect speedBonus = spell_2_SpeedBonus.InitializeEffect(gameObject, gameObject);
+        ((ScriptableSpeedBonus) speedBonus.effectType).SetBonusPercent(bahri.spell_2_msBoost);
+        GetComponent<StatusEffectManager>().AddEffect(speedBonus);
         // While speed boost is still active.
-        while (timer < 2.0f){
+        while (timer < spell_2_SpeedBonus.duration){
             // Calculate the fraction of the speed boosts duration that has passed.
-            float timePassed = timer/2.0f;
-            // Create a step towards the desired speed boost based on time passed.
-            float step = newSpeed - Mathf.SmoothStep(championStats.speed.GetValue(), newSpeed, timePassed);
+            float timePassed = timer/spell_2_SpeedBonus.duration;
+            // Decay the speed bonus based on time since activated.
+            float newBonus = Mathf.SmoothStep(bahri.spell_2_msBoost, 0f, timePassed);
+            ((ScriptableSpeedBonus) speedBonus.effectType).SetBonusPercent(newBonus);
+            //float step = newSpeed - Mathf.SmoothStep(championStats.speed.GetValue(), newSpeed, timePassed);
             // Apply the current speed boost.
-            navMeshAgent.speed =  championStats.speed.GetValue() + step;
+            //navMeshAgent.speed =  championStats.speed.GetValue() + step;
             timer += Time.deltaTime;
             yield return null;
         }
         // Ensure initial speed is reached after speed boost ran out.
-        navMeshAgent.speed = championStats.speed.GetValue();
+        //navMeshAgent.speed = championStats.speed.GetValue();
     }
 
     /*
@@ -429,7 +436,7 @@ public class BahriAbilities : ChampionAbilities
     /*
     *   Spell_4_Speed - Moves Bahri to the targetPosition of the last cast of spell 4.
     *   @param targetPosition - Vector3 of the target position to cast the spell towards.
-    */ //TODO
+    */
     private IEnumerator Spell_4_Speed(Vector3 targetPosition){
         // Set necessary values and disable navmesh.
         isCasting = true;
