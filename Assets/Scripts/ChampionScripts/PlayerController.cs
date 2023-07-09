@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
             }
 
             // Point players forward at the direction they are cast or moving.
-            if(playerAbilities.isCasting)
+            if(playerAbilities.isCasting && !playerAbilities.castCanMove)
                 PlayerLookDirection(playerAbilities.mouseOnCast);
             else if(navMeshAgent.hasPath)
                 PlayerLookDirection(navMeshAgent.steeringTarget);
