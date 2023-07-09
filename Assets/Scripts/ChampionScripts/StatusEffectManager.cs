@@ -137,7 +137,7 @@ public class StatusEffectManager : MonoBehaviour
     */
     public bool CheckForEffectWithSource(ScriptableEffect checkFor, GameObject source){
         foreach(Effect effect in statusEffects){
-            if(effect.casted.GetType() == source.GetType() && effect.effectType == checkFor)
+            if(effect.casted == source && effect.effectType.GetType() == checkFor.GetType())
                 return true;
         }
         return false;

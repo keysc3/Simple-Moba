@@ -13,6 +13,7 @@ public class BilliaAbilities : ChampionAbilities
     [field: SerializeField] public ScriptableSpeedBonus spell_1_passiveSpeedBonus { get; private set; }
     public GameObject spell1Visual;
     public GameObject spell2Visual;
+    public GameObject drowsyVisual;
 
     [SerializeField] private int spell_1_passiveStacks;
     [SerializeField] private float p1_y_offset;
@@ -615,6 +616,12 @@ public class BilliaAbilities : ChampionAbilities
             if(enemy.GetComponent<UnitStats>().unit is Champion){
                 enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"], gameObject, enemy));
                 enemy.GetComponent<UnitStats>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+                GameObject drowsyObject = (GameObject)Instantiate(drowsyVisual, enemy.transform.position, Quaternion.identity);
+                drowsyObject.transform.SetParent(enemy.transform);
+                BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
+                visualScript.drowsyDuration = drowsy.duration;
+                visualScript.drowsy = drowsy;
+                visualScript.source = gameObject;
             }
         }
     }
