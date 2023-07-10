@@ -470,6 +470,7 @@ public class UIManager : MonoBehaviour
     *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for.
     *   @param effect - Effect to add to the UI.
     */
+    //TODO: Handle stackable buffs/debuffs to be one element. Maybe make a class for storing UI elements information? Could be useful for tooltips as well?
     public void AddStatusEffectUI(StatusEffectManager statusEffectManager, Effect effect){
         //Instantiate status effect prefab.
         GameObject myEffect = (GameObject)Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
