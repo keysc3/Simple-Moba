@@ -470,11 +470,15 @@ public class UIManager : MonoBehaviour
     *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for.
     *   @param effect - Effect to add to the UI.
     */
-    //TODO: Handle stackable buffs/debuffs to be one element. Maybe make a class for storing UI elements information? Could be useful for tooltips as well?
     public void AddStatusEffectUI(StatusEffectManager statusEffectManager, Effect effect){
+        // If a stackable effect already has 1 stack, don't create a new UI element.
+        if(effect.effectType.isStackable)
+            if(statusEffectManager.GetEffectsByType(effect.effectType.GetType()).Count > 1)
+                return;
         //Instantiate status effect prefab.
         GameObject myEffect = (GameObject)Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
         myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        myEffect.name = effect.effectType.name;
         float effectWidth = myEffect.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
         Vector2 offset = Vector2.zero;
         float newXOffset = 0.0f;
@@ -516,15 +520,44 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
+    //TODO: REFACTOR STACKABLE UI EFFECTS
     public IEnumerator StatusEffectUI(StatusEffectManager statusEffectManager, Effect effect, GameObject effectUI){
+        if(effect.effectType.isStackable)
+            effectUI.transform.GetChild(3).gameObject.SetActive(true);
+        Effect displayEffect = effect;
+        int stacks = 0;
+        float duration = 0f;
+        float elapsedDuration;
+        float reduceAmount = 0f;
         // Get the timer image component.
         Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
         float effectWidth = effectUI.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
         while(statusEffectManager.statusEffects.Contains(effect)){
-            // Update status effect timer.
-            float elapsedDuration = 1f - effect.effectTimer/effect.effectDuration;
-            timer.fillAmount = elapsedDuration;
-            yield return null;
+            if(effect.effectType.isStackable){
+                int newStacks = statusEffectManager.GetEffectsByType(effect.effectType.GetType()).Count;
+                effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = stacks.ToString();
+                displayEffect = GetNextExpiringStack(statusEffectManager, effect);
+                if(stacks != newStacks){
+                    if(newStacks < stacks){
+                        duration = displayEffect.effectDuration - displayEffect.effectTimer;
+                        reduceAmount = displayEffect.effectTimer;
+                    }
+                    else{
+                        duration = displayEffect.effectDuration;
+                        reduceAmount = 0f;
+                    }
+                }
+                elapsedDuration = 1f - ((displayEffect.effectTimer - reduceAmount)/duration);
+                timer.fillAmount = elapsedDuration;
+                stacks = newStacks;
+                yield return null;
+            }
+            else{
+                // Update status effect timer.
+                elapsedDuration = 1f - displayEffect.effectTimer/displayEffect.effectDuration;
+                timer.fillAmount = elapsedDuration;
+                yield return null;
+            }
         }
         // Buff ended, update the offset.
         if(effect.effectType.isBuff){
@@ -544,6 +577,22 @@ public class UIManager : MonoBehaviour
         UpdateStatusEffectsPositions(effect, effectWidth, effectUI);
         // Remove UI component.
         Destroy(effectUI);
+    }
+
+    public Effect GetNextExpiringStack(StatusEffectManager statusEffectManager, Effect effect){
+        List<Effect> myEffects = statusEffectManager.GetEffectsByType(effect.effectType.GetType());
+        Effect nextExipiring = myEffects[0];
+        float timeTillExpired = myEffects[0].effectDuration - myEffects[0].effectTimer;
+        if(myEffects.Count > 1){
+            for(int i = 1; i < myEffects.Count; i++){
+                float check = myEffects[i].effectDuration - myEffects[i].effectTimer;
+                if(check < timeTillExpired){
+                    timeTillExpired = check;
+                    nextExipiring = myEffects[i];
+                }
+            }
+        }
+        return nextExipiring;
     }
 
     /*
