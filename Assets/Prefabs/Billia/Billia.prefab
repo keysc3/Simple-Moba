@@ -86,6 +86,7 @@ MonoBehaviour:
   <spell_1_passiveSpeedBonus>k__BackingField: {fileID: 11400000, guid: 6325edf91b28df249848b2818ae6ba23, type: 2}
   spell1Visual: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}
   spell2Visual: {fileID: 2809299097425876486, guid: d0a19b033a1664247bf7d4d5591b1784, type: 3}
+  drowsyVisual: {fileID: 4242376865509565499, guid: a8c53cc55b1f4d14da2bc6922b75ddcf, type: 3}
   spell_1_passiveStacks: 0
   p1_y_offset: 3
   p2_y: 0.85

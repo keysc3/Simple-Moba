@@ -17,9 +17,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
+    private UIManager uiManager;
 
     private void Awake(){
         unitStats = gameObject.GetComponent<UnitStats>();
+        uiManager = GetComponent<UIManager>();
     }
 
     // Update is called once per frame
@@ -102,6 +104,13 @@ public class StatusEffectManager : MonoBehaviour
             else
                 effect.SetIsActivated(true);
         }
+        // If the effect is a slow and a child of another effect then do not add it to the UI.
+        if(effect.effectType is ScriptableSlow){
+            if(((ScriptableSlow) effect.effectType).isChild){
+                return;
+            }
+        }
+        uiManager.AddStatusEffectUI(this, effect);
     }
 
     /*
@@ -137,7 +146,7 @@ public class StatusEffectManager : MonoBehaviour
     */
     public bool CheckForEffectWithSource(ScriptableEffect checkFor, GameObject source){
         foreach(Effect effect in statusEffects){
-            if(effect.casted.GetType() == source.GetType() && effect.effectType == checkFor)
+            if(effect.casted == source && effect.effectType.GetType() == checkFor.GetType())
                 return true;
         }
         return false;
@@ -221,7 +230,7 @@ public class StatusEffectManager : MonoBehaviour
     */
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
         for(int i = 0; i < statusEffects.Count; i++){
-            if(effectType == statusEffects[i].effectType && casted == statusEffects[i].casted){
+            if(effectType.GetType() == statusEffects[i].effectType.GetType() && casted == statusEffects[i].casted){
                 statusEffects[i].SetIsActivated(false);
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);

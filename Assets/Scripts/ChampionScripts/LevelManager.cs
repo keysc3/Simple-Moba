@@ -24,6 +24,8 @@ public class LevelManager : MonoBehaviour
     private bool newLevel = true;
     private List<float> championKillXP = new List<float>(){42f, 114f, 144f, 174f, 204f, 234f, 308f, 392f, 486f, 
     590f, 640f, 690f, 740f, 790f, 840f, 890f, 940f, 990f};
+    private float xShift = 0f;
+    private float yShift = 15f;
     private ChampionStats championStats;
     private Champion champion;
     private UIManager uiManager;
@@ -160,6 +162,7 @@ public class LevelManager : MonoBehaviour
     *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
     */
     private IEnumerator LevelUpSkill(){
+        uiManager.ShiftStatusEffects(new Vector2(xShift, yShift));
         // Use all skill points before stopping.
         while(spellLevelPoints != 0){
             // If a level up or skill point was used since the last UI update then update the UI.
@@ -189,6 +192,8 @@ public class LevelManager : MonoBehaviour
         }
         // Disable skill level up UI.
         uiManager.SetSkillLevelUpActive(spellLevels, level, false);
+        // Shift effects UI back.
+        uiManager.ShiftStatusEffects(new Vector2(-xShift, -yShift));
     }
 
     /*

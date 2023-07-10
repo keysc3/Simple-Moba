@@ -12,6 +12,7 @@ using UnityEngine.AI;
 public abstract class ChampionAbilities : MonoBehaviour
 {
     public bool isCasting { get; protected set; }
+    public bool castCanMove { get; protected set; }
     public Vector3 mouseOnCast { get; private set; }
     
     protected bool spell_1_onCd = false;
@@ -111,6 +112,7 @@ public abstract class ChampionAbilities : MonoBehaviour
     *   @param canMove - bool for whether or not the unit can move while casting.
     */
     protected IEnumerator CastTime(float castTime, bool canMove){
+        castCanMove = canMove;
         float timer = 0.0f;
         isCasting = true;
         // While still casting spell stop the player.

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Billia
   m_EditorClassIdentifier: 
   name: Billia
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 98245bfc88e04134cb766799b4320cb4, type: 3}
   baseHealth: 100
   magicDamage: 4
   physicalDamage: 3
@@ -26,11 +26,11 @@ MonoBehaviour:
   autoWindUp: 0.14
   attackSpeed: 0.63
   attackProjectileSpeed: 0
-  passive_sprite: {fileID: 0}
-  spell_1_sprite: {fileID: 0}
-  spell_2_sprite: {fileID: 0}
-  spell_3_sprite: {fileID: 0}
-  spell_4_sprite: {fileID: 0}
+  passive_sprite: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
+  spell_1_sprite: {fileID: 21300000, guid: a575cdccf5aa38c4b8118aaf1cd601c2, type: 3}
+  spell_2_sprite: {fileID: 21300000, guid: 9ba580c375543b040a6837e76f8ac46d, type: 3}
+  spell_3_sprite: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
+  spell_4_sprite: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
   baseMana: 50
   MP5: 10
   physicalDamageGrowth: 3.1

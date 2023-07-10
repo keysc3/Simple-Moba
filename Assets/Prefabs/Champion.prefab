@@ -246,6 +246,9 @@ MonoBehaviour:
   <attackProjectileSpeed>k__BackingField:
     baseValue: 0
     modifiers: []
+  <bonusAttackSpeed>k__BackingField:
+    baseValue: 0
+    modifiers: []
   <unit>k__BackingField: {fileID: 0}
   <currentMana>k__BackingField: 0
   <displayCurrentMana>k__BackingField: 0
@@ -256,9 +259,6 @@ MonoBehaviour:
     baseValue: 0
     modifiers: []
   <haste>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <bonusAttackSpeed>k__BackingField:
     baseValue: 0
     modifiers: []
 --- !u!114 &8496406171268358466
@@ -330,6 +330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   championUI: {fileID: 0}
   playerBar: {fileID: 1774551540932771883, guid: b35871c264e664a4391ddfcce933b2ab, type: 3}
+  statusEffectPrefab: {fileID: 355054382995843608, guid: c2056e5ccb088694998bcab8b037ef3a, type: 3}
 --- !u!114 &-3963185242520391866
 MonoBehaviour:
   m_ObjectHideFlags: 0

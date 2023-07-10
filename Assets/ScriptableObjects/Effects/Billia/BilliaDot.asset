@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isStackable: 0
   ccValue: 0
+  isBuff: 0
+  sprite: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
   <duration>k__BackingField: 3
   <damageType>k__BackingField: magic
   <tickRate>k__BackingField: 0.5

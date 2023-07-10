@@ -13,6 +13,7 @@ public class BilliaAbilities : ChampionAbilities
     [field: SerializeField] public ScriptableSpeedBonus spell_1_passiveSpeedBonus { get; private set; }
     public GameObject spell1Visual;
     public GameObject spell2Visual;
+    public GameObject drowsyVisual;
 
     [SerializeField] private int spell_1_passiveStacks;
     [SerializeField] private float p1_y_offset;
@@ -304,6 +305,7 @@ public class BilliaAbilities : ChampionAbilities
             Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * billia.spell_2_dashOffset);
+            StartCoroutine(CastTime(billia.spell_2_castTime, false));
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
             // Apply the dash.
@@ -334,7 +336,7 @@ public class BilliaAbilities : ChampionAbilities
     private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
             // Disable pathing.
             navMeshAgent.ResetPath();
-            navMeshAgent.enabled = false;
+            navMeshAgent.isStopped = true;
             // Get dash speed since dash duration is a fixed time.
             float dashSpeed = (targetPosition - transform.position).magnitude/billia.spell_2_dashTime; 
             float timer = 0.0f;
@@ -347,7 +349,7 @@ public class BilliaAbilities : ChampionAbilities
             }
             // Apply last tick dash and enable pathing.
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
-            navMeshAgent.enabled = true;
+            navMeshAgent.isStopped = false;
             Spell_2_Cast(spellTargetPosition);
     }
 
@@ -615,6 +617,12 @@ public class BilliaAbilities : ChampionAbilities
             if(enemy.GetComponent<UnitStats>().unit is Champion){
                 enemy.GetComponent<StatusEffectManager>().AddEffect(drowsy.InitializeEffect(sleep, levelManager.spellLevels["Spell_4"], gameObject, enemy));
                 enemy.GetComponent<UnitStats>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+                GameObject drowsyObject = (GameObject)Instantiate(drowsyVisual, enemy.transform.position, Quaternion.identity);
+                drowsyObject.transform.SetParent(enemy.transform);
+                BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
+                visualScript.drowsyDuration = drowsy.duration;
+                visualScript.drowsy = drowsy;
+                visualScript.source = gameObject;
             }
         }
     }
@@ -651,7 +659,7 @@ public class BilliaAbilities : ChampionAbilities
 
     // LateUpdate is called after all Update functions have been called
     private void LateUpdate(){
-        if(canUseSpell_4)
+        if(canUseSpell_4 && !spell_4_onCd)
             uiManager.SetSpellCoverActive(4, false);
         else
             uiManager.SetSpellCoverActive(4, true);
