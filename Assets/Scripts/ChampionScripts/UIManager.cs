@@ -465,6 +465,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /*
+    *   AddStatusEffectUI - Adds a status effect indicator to the UI. Left side is buffs, right side is debuffs.
+    *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for.
+    *   @param effect - Effect to add to the UI.
+    */
     public void AddStatusEffectUI(StatusEffectManager statusEffectManager, Effect effect){
         //Instantiate status effect prefab.
         GameObject myEffect = (GameObject)Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
@@ -504,48 +509,75 @@ public class UIManager : MonoBehaviour
         StartCoroutine(StatusEffectUI(statusEffectManager, effect, myEffect));
     }
 
+    /*
+    *   StatusEffectUI - Coroutine to animate the UI to show time left on an effect.
+    *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for. 
+    *   @param effect - Effect to adjust time left for.
+    *   @param effectUI - GameObject of the UI component to be animated.
+    */
     public IEnumerator StatusEffectUI(StatusEffectManager statusEffectManager, Effect effect, GameObject effectUI){
+        // Get the timer image component.
         Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
         float effectWidth = effectUI.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
         while(statusEffectManager.statusEffects.Contains(effect)){
+            // Update status effect timer.
             float elapsedDuration = 1f - effect.effectTimer/effect.effectDuration;
             timer.fillAmount = elapsedDuration;
             yield return null;
         }
+        // Buff ended, update the offset.
         if(effect.effectType.isBuff){
             buffXOffset -= effectWidth;
             if(statusEffectsUI.GetChild(0).childCount > 1){
                 buffXOffset -= xOffset;
             }
         }
+        // Debuff ended, update the offset.
         else{
             debuffXOffset -= effectWidth;
             if(statusEffectsUI.GetChild(1).childCount > 1){
                 debuffXOffset -= xOffset;
             }
         }
+        // Update UI positions based on what position the ended effect was in.
         UpdateStatusEffectsPositions(effect, effectWidth, effectUI);
+        // Remove UI component.
         Destroy(effectUI);
     }
 
+    /*
+    *   UpdateStatusEffectsPositions - Moves the status effect UI components that were created after the one that ended.
+    *   This is to prevent gaps between UI components.
+    *   @param effect - Effect of the status effect that ended.
+    *   @param effectWidth - float of the status effect UI prefabs width.
+    *   @param effectUI - GameObject of the status effect UI component to remove.
+    */
     public void UpdateStatusEffectsPositions(Effect effect, float effectWidth, GameObject effectUI){
+        // Get the UI components child index and its current position.
         int index = effectUI.transform.GetSiblingIndex();
         Vector2 newPos = effectUI.GetComponent<RectTransform>().anchoredPosition;
         Vector2 lastPos = Vector2.zero;
-        if(effect.effectType.isBuff){
-
+        Transform UI;
+        // Get the appropriate UI container.
+        if(effect.effectType.isBuff)
+            UI = statusEffectsUI.GetChild(0);
+        else
+            UI = statusEffectsUI.GetChild(1);
+        // Update every status effect UI components position after the one being removed.
+        for(int i = index + 1; i < UI.childCount; i++){
+            // Store the position to move the next child to.
+            lastPos = UI.GetChild(i).GetComponent<RectTransform>().anchoredPosition;
+            // Set the position to the previous components old position.
+            UI.GetChild(i).GetComponent<RectTransform>().anchoredPosition = newPos;
+            // Set where to move next UI component to.
+            newPos = lastPos;
         }
-        else{
-            Transform debuffUI = statusEffectsUI.GetChild(1);
-            for(int i = index+1; i < debuffUI.childCount; i++){
-                lastPos = debuffUI.GetChild(i).GetComponent<RectTransform>().anchoredPosition;
-                debuffUI.GetChild(i).GetComponent<RectTransform>().anchoredPosition = newPos;
-                newPos = lastPos;
-            }
-        }
-        
     }
 
+    /*
+    *   ShiftStatusEffects - Shifts the status effects UI container a specific amount. Used for overflow and to avoid skill level up UI blocking the status effects UI.
+    *   @param shiftAmount - Vector2 of the x and y amounts to shift the UI component.
+    */
     public void ShiftStatusEffects(Vector2 shiftAmount){
         statusEffectsUI.GetComponent<RectTransform>().anchoredPosition += shiftAmount;
     }

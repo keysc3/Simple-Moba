@@ -104,6 +104,7 @@ public class StatusEffectManager : MonoBehaviour
             else
                 effect.SetIsActivated(true);
         }
+        // If the effect is a slow and a child of another effect then do not add it to the UI.
         if(effect.effectType is ScriptableSlow){
             if(((ScriptableSlow) effect.effectType).isChild){
                 return;
