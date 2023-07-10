@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df98b97b2f468104d86030bcdfd3e2da, type: 3}
   m_Name: BilliaSleep
   m_EditorClassIdentifier: 
+  isStackable: 0
+  ccValue: 2
+  isBuff: 0
+  sprite: {fileID: 21300000, guid: d7b4c6c2ff6ef794e8165d368df2fbd1, type: 3}
   duration:
   - 2
   - 2.25

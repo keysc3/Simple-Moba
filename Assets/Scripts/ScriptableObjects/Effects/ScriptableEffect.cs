@@ -11,5 +11,7 @@ public abstract class ScriptableEffect : ScriptableObject
 {
     public bool isStackable = false;
     public int ccValue;
+    public bool isBuff;
+    public Sprite sprite;
 
 }

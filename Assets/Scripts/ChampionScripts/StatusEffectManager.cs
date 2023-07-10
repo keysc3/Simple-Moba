@@ -17,9 +17,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
+    private UIManager uiManager;
 
     private void Awake(){
         unitStats = gameObject.GetComponent<UnitStats>();
+        uiManager = GetComponent<UIManager>();
     }
 
     // Update is called once per frame
@@ -102,6 +104,7 @@ public class StatusEffectManager : MonoBehaviour
             else
                 effect.SetIsActivated(true);
         }
+        uiManager.AddStatusEffectUI(this, effect);
     }
 
     /*

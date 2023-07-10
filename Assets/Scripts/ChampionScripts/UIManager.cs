@@ -14,11 +14,17 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private GameObject championUI;
     [SerializeField] private GameObject playerBar;
+    [SerializeField] private GameObject statusEffectPrefab;
+    private float buffDebuffUIWidth;
+    [SerializeField] private float buffXOffset = 0.0f;
+    [SerializeField] private float debuffXOffset = 0.0f;
+    private float xOffset = 2f;
     private Transform spellsHPManaUI;
     private Transform iconXPUI;
     private Transform scoreUI;
     private Transform itemsUI;
     private Transform statsUI;
+    private Transform statusEffectsUI;
 
     private Slider health;
     private Slider mana;
@@ -48,8 +54,10 @@ public class UIManager : MonoBehaviour
         scoreUI = championUI.transform.GetChild(2);
         itemsUI = championUI.transform.GetChild(3);
         iconXPUI = championUI.transform.GetChild(4);
+        statusEffectsUI = championUI.transform.GetChild(5);
         health = spellsHPManaUI.Find("HealthBar").GetComponent<Slider>();
         mana = spellsHPManaUI.Find("ManaBar").GetComponent<Slider>();
+        buffDebuffUIWidth = statusEffectsUI.GetChild(0).GetComponent<RectTransform>().rect.width;
     }
 
     // Start is called before the first frame update.
@@ -455,5 +463,90 @@ public class UIManager : MonoBehaviour
         else{
             SetHealthRegenActive(false);
         }
+    }
+
+    public void AddStatusEffectUI(StatusEffectManager statusEffectManager, Effect effect){
+        //Instantiate status effect prefab.
+        GameObject myEffect = (GameObject)Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
+        myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        float effectWidth = myEffect.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
+        Vector2 offset = Vector2.zero;
+        float newXOffset = 0.0f;
+        myEffect.transform.GetChild(1).GetComponent<Image>().sprite = effect.effectType.sprite;
+        if(effect.effectType.isBuff){
+            // Get buff UI
+            Transform buffUI = statusEffectsUI.GetChild(0);
+            myEffect.transform.SetParent(buffUI);
+            // Set border to blue.
+            myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.blue;
+            // Set x offset.
+            if(buffUI.childCount > 1){
+                newXOffset = xOffset;
+            }
+            offset = new Vector2(0f - (buffDebuffUIWidth/2f) + (effectWidth/2f) + buffXOffset + newXOffset, 0f);
+            buffXOffset += effectWidth + newXOffset;
+        }
+        else{
+            // Get debuff UI.
+            Transform debuffUI = statusEffectsUI.GetChild(1);
+            myEffect.transform.SetParent(debuffUI);
+            // Set border to red.
+            myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.red;
+            // Set x offset
+            if(debuffUI.childCount > 0){
+                newXOffset = xOffset;
+            }
+            offset = new Vector2(0f + (buffDebuffUIWidth/2f) - (effectWidth/2f) - debuffXOffset - newXOffset, 0f);
+            debuffXOffset += effectWidth + newXOffset;
+        }
+        myEffect.GetComponent<RectTransform>().anchoredPosition = offset;
+        // Start effect timer animation coroutine.
+        StartCoroutine(StatusEffectUI(statusEffectManager, effect, myEffect));
+    }
+
+    public IEnumerator StatusEffectUI(StatusEffectManager statusEffectManager, Effect effect, GameObject effectUI){
+        Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
+        float effectWidth = effectUI.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
+        while(statusEffectManager.statusEffects.Contains(effect)){
+            float elapsedDuration = 1f - effect.effectTimer/effect.effectDuration;
+            timer.fillAmount = elapsedDuration;
+            yield return null;
+        }
+        if(effect.effectType.isBuff){
+            buffXOffset -= effectWidth;
+            if(statusEffectsUI.GetChild(0).childCount > 1){
+                buffXOffset -= xOffset;
+            }
+        }
+        else{
+            debuffXOffset -= effectWidth;
+            if(statusEffectsUI.GetChild(1).childCount > 1){
+                debuffXOffset -= xOffset;
+            }
+        }
+        UpdateStatusEffectsPositions(effect, effectWidth, effectUI);
+        Destroy(effectUI);
+    }
+
+    public void UpdateStatusEffectsPositions(Effect effect, float effectWidth, GameObject effectUI){
+        int index = effectUI.transform.GetSiblingIndex();
+        Vector2 newPos = effectUI.GetComponent<RectTransform>().anchoredPosition;
+        Vector2 lastPos = Vector2.zero;
+        if(effect.effectType.isBuff){
+
+        }
+        else{
+            Transform debuffUI = statusEffectsUI.GetChild(1);
+            for(int i = index+1; i < debuffUI.childCount; i++){
+                lastPos = debuffUI.GetChild(i).GetComponent<RectTransform>().anchoredPosition;
+                debuffUI.GetChild(i).GetComponent<RectTransform>().anchoredPosition = newPos;
+                newPos = lastPos;
+            }
+        }
+        
+    }
+
+    public void ShiftStatusEffects(Vector2 shiftAmount){
+        statusEffectsUI.GetComponent<RectTransform>().anchoredPosition += shiftAmount;
     }
 }
