@@ -12,6 +12,7 @@ public class ScriptableSlow : ScriptableEffect
 {
     [field: SerializeField] public float duration { get; private set; }
     [field: SerializeField] public float slowPercent { get; private set; }
+    public bool isChild;
 
     /*
     *   InitializeEffect - Initializes a new slow effect with the duration and slow percent.

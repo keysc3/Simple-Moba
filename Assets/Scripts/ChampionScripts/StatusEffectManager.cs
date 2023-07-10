@@ -104,6 +104,11 @@ public class StatusEffectManager : MonoBehaviour
             else
                 effect.SetIsActivated(true);
         }
+        if(effect.effectType is ScriptableSlow){
+            if(((ScriptableSlow) effect.effectType).isChild){
+                return;
+            }
+        }
         uiManager.AddStatusEffectUI(this, effect);
     }
 
@@ -224,7 +229,7 @@ public class StatusEffectManager : MonoBehaviour
     */
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
         for(int i = 0; i < statusEffects.Count; i++){
-            if(effectType == statusEffects[i].effectType && casted == statusEffects[i].casted){
+            if(effectType.GetType() == statusEffects[i].effectType.GetType() && casted == statusEffects[i].casted){
                 statusEffects[i].SetIsActivated(false);
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);

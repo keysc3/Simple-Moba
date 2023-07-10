@@ -13,7 +13,6 @@ public class Drowsy : Effect
     private UnitStats effectedUnitStats;
     private float reducedAmount;
     private NavMeshAgent effectedNavMeshAgent;
-    public Effect associatedSlow { get; private set; }
 
     /*
     *   Drowsy - Initialize a new drowsy effect.
@@ -31,8 +30,7 @@ public class Drowsy : Effect
     *   StartEffect - Start the drowsy effect.
     */
     public override void StartEffect(){
-        associatedSlow = ((ScriptableDrowsy) effectType).slow.InitializeEffect(casted, effected);
-        effected.GetComponent<StatusEffectManager>().AddEffect(associatedSlow);
+        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableDrowsy) effectType).slow.InitializeEffect(casted, effected));
     }
 
     /*
