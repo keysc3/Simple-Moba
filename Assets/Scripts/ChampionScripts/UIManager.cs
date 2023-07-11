@@ -468,6 +468,9 @@ public class UIManager : MonoBehaviour
     *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for.
     *   @param effect - Effect to add to the UI.
     */
+    // TODO: Handle truncation of effects when there are too many to fit the initial container.
+    // Could set a max size per row, if number of children % max size per row  > 0 -> 
+    // increase size of container, increase y offset.
     public void AddStatusEffectUI(StatusEffectManager statusEffectManager, Effect effect){
         // If a stackable effect already has 1 stack, don't create a new UI element.
         if(effect.effectType.isStackable)
@@ -607,8 +610,13 @@ public class UIManager : MonoBehaviour
         Destroy(effectUI);
     }
 
+    /*
+    *   GetNextExpiringStack - Gets the next expiring stack of a stackable effect.
+    *   @param statusEffectManager - StatusEffectManager script of the GameObject the UI is for.
+    *   @param effect - Effect to get the next expiring stack for.
+    */
     public Effect GetNextExpiringStack(StatusEffectManager statusEffectManager, Effect effect){
-        List<Effect> myEffects = statusEffectManager.GetEffectsByType(effect.effectType.GetType());
+        List<Effect> myEffects = statusEffectManager.GetEffectsByName(effect.effectType.name);
         Effect nextExipiring = myEffects[0];
         float timeTillExpired = myEffects[0].effectDuration - myEffects[0].effectTimer;
         if(myEffects.Count > 1){

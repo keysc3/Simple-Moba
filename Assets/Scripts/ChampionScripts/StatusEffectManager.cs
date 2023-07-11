@@ -178,10 +178,27 @@ public class StatusEffectManager : MonoBehaviour
         return false;
     }
 
+    /*
+    *   GetEffectsByType - Gets all effects matching the given type.
+    *   @param type - Type of the effect type to search for.
+    */
     public List<Effect> GetEffectsByType(System.Type type){
         List<Effect> effects = new List<Effect>();
         foreach(Effect effect in statusEffects){
             if(effect.effectType.GetType() == type)
+                effects.Add(effect);
+        }
+        return effects;
+    }
+
+    /*
+    *   GetEffectsByName - Gets all effects matching the given name.
+    *   @param name - string of the name to search for.
+    */
+    public List<Effect> GetEffectsByName(string name){
+        List<Effect> effects = new List<Effect>();
+        foreach(Effect effect in statusEffects){
+            if(effect.effectType.name == name)
                 effects.Add(effect);
         }
         return effects;
