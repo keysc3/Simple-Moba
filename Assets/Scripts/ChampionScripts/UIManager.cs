@@ -16,8 +16,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerBar;
     [SerializeField] private GameObject statusEffectPrefab;
     private float buffDebuffUIWidth;
-    [SerializeField] private float buffXOffset = 0.0f;
-    [SerializeField] private float debuffXOffset = 0.0f;
     private float xOffset = 2f;
     private Transform spellsHPManaUI;
     private Transform iconXPUI;
@@ -479,39 +477,52 @@ public class UIManager : MonoBehaviour
         GameObject myEffect = (GameObject)Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
         myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         myEffect.name = effect.effectType.name;
-        float effectWidth = myEffect.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
-        Vector2 offset = Vector2.zero;
-        float newXOffset = 0.0f;
         myEffect.transform.GetChild(1).GetComponent<Image>().sprite = effect.effectType.sprite;
+        // Set color and position of the UI element.
         if(effect.effectType.isBuff){
-            // Get buff UI
-            Transform buffUI = statusEffectsUI.GetChild(0);
-            myEffect.transform.SetParent(buffUI);
-            // Set border to blue.
             myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.blue;
-            // Set x offset.
-            if(buffUI.childCount > 1){
-                newXOffset = xOffset;
-            }
-            offset = new Vector2(0f - (buffDebuffUIWidth/2f) + (effectWidth/2f) + buffXOffset + newXOffset, 0f);
-            buffXOffset += effectWidth + newXOffset;
+            SetStatusEffectUIPosition(statusEffectsUI.GetChild(0), myEffect, true);
         }
         else{
-            // Get debuff UI.
-            Transform debuffUI = statusEffectsUI.GetChild(1);
-            myEffect.transform.SetParent(debuffUI);
-            // Set border to red.
             myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.red;
-            // Set x offset
-            if(debuffUI.childCount > 0){
-                newXOffset = xOffset;
-            }
-            offset = new Vector2(0f + (buffDebuffUIWidth/2f) - (effectWidth/2f) - debuffXOffset - newXOffset, 0f);
-            debuffXOffset += effectWidth + newXOffset;
+            SetStatusEffectUIPosition(statusEffectsUI.GetChild(1), myEffect, false);
         }
-        myEffect.GetComponent<RectTransform>().anchoredPosition = offset;
         // Start effect timer animation coroutine.
         StartCoroutine(StatusEffectUI(statusEffectManager, effect, myEffect));
+    }
+
+    /*
+    *   SetStatusEffectUIPosition - Sets the position of the given status effect UI element.
+    *   @param UI - Transform of the new elements parent to set.
+    *   @param myEffect - GameObject of the new UI element.
+    *   @param isBuff - bool for if the status effect is a buff or debuff.
+    *   @param typeXOffset - float of the x offset to apply to the UI elements position.
+    */
+    public void SetStatusEffectUIPosition(Transform UI, GameObject myEffect, bool isBuff){
+        // Set up variables
+        float effectWidth = myEffect.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
+        Vector2 offset = Vector2.zero;
+        // Set parent.
+        myEffect.transform.SetParent(UI);
+        int index = myEffect.transform.GetSiblingIndex();
+        // Calculate the position to put the new UI element in its parent.
+        if(index > 0){
+            Vector2 prevPos = UI.GetChild(index-1).GetComponent<RectTransform>().anchoredPosition;
+            Vector2 sizeOffset = new Vector2(effectWidth + xOffset, 0f);
+            // Debuff is opposite from buff.
+            if(!isBuff)
+                sizeOffset = -(sizeOffset);
+            offset = prevPos + sizeOffset;
+        }
+        else{
+            // Calculate first elements position from center of the parent.
+            offset = new Vector2(0f - (buffDebuffUIWidth/2f) + (effectWidth/2f), 0f);
+            // Debuff is opposite from buff.
+            if(!isBuff)
+                offset = -(offset);
+        }
+        // Apply position.
+        myEffect.GetComponent<RectTransform>().anchoredPosition = offset;
     }
 
     /*
@@ -557,20 +568,6 @@ public class UIManager : MonoBehaviour
                 elapsedDuration = 1f - displayEffect.effectTimer/displayEffect.effectDuration;
                 timer.fillAmount = elapsedDuration;
                 yield return null;
-            }
-        }
-        // Buff ended, update the offset.
-        if(effect.effectType.isBuff){
-            buffXOffset -= effectWidth;
-            if(statusEffectsUI.GetChild(0).childCount > 1){
-                buffXOffset -= xOffset;
-            }
-        }
-        // Debuff ended, update the offset.
-        else{
-            debuffXOffset -= effectWidth;
-            if(statusEffectsUI.GetChild(1).childCount > 1){
-                debuffXOffset -= xOffset;
             }
         }
         // Update UI positions based on what position the ended effect was in.
