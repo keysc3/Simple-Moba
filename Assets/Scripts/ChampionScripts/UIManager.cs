@@ -583,7 +583,7 @@ public class UIManager : MonoBehaviour
             if(stacks != newStacks){
                 // Set the stacks text and get the next expiring stack to display.
                 effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = newStacks.ToString();
-                displayEffect = GetNextExpiringStack(statusEffectManager, effect);
+                displayEffect = statusEffectManager.GetNextExpiringStack(effect);
                 // If a stack expired.
                 if(newStacks < stacks){
                     // Get the duration left on the next expiring stack.
@@ -608,27 +608,6 @@ public class UIManager : MonoBehaviour
         UpdateStatusEffectsPositions(effect, effectUI);
         // Remove UI component.
         Destroy(effectUI);
-    }
-
-    /*
-    *   GetNextExpiringStack - Gets the next expiring stack of a stackable effect.
-    *   @param statusEffectManager - StatusEffectManager script of the GameObject the UI is for.
-    *   @param effect - Effect to get the next expiring stack for.
-    */
-    public Effect GetNextExpiringStack(StatusEffectManager statusEffectManager, Effect effect){
-        List<Effect> myEffects = statusEffectManager.GetEffectsByName(effect.effectType.name);
-        Effect nextExipiring = myEffects[0];
-        float timeTillExpired = myEffects[0].effectDuration - myEffects[0].effectTimer;
-        if(myEffects.Count > 1){
-            for(int i = 1; i < myEffects.Count; i++){
-                float check = myEffects[i].effectDuration - myEffects[i].effectTimer;
-                if(check < timeTillExpired){
-                    timeTillExpired = check;
-                    nextExipiring = myEffects[i];
-                }
-            }
-        }
-        return nextExipiring;
     }
 
     /*

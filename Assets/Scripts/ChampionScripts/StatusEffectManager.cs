@@ -205,6 +205,28 @@ public class StatusEffectManager : MonoBehaviour
     }
 
     /*
+    *   GetNextExpiringStack - Gets the next expiring stack of a stackable effect.
+    *   @param effect - Effect to get the next expiring stack for.
+    */
+    public Effect GetNextExpiringStack(Effect effect){
+        List<Effect> myEffects = GetEffectsByName(effect.effectType.name);
+        // Set default values.
+        Effect nextExipiring = myEffects[0];
+        float timeTillExpired = myEffects[0].effectDuration - myEffects[0].effectTimer;
+        if(myEffects.Count > 1){
+            for(int i = 1; i < myEffects.Count; i++){
+                // If duration left is less than the current timeTillExpired then set the new next expiring.
+                float check = myEffects[i].effectDuration - myEffects[i].effectTimer;
+                if(check < timeTillExpired){
+                    timeTillExpired = check;
+                    nextExipiring = myEffects[i];
+                }
+            }
+        }
+        return nextExipiring;
+    }
+
+    /*
     *   GetMostImpairing - Gets the most impairing effect in the status manager effects list. Highest cc value = most impairing.
     *   @return Effect - Effect of the most impairing effect in the list.
     */
