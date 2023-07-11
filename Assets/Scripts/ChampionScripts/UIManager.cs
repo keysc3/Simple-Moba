@@ -576,10 +576,11 @@ public class UIManager : MonoBehaviour
         while(statusEffectManager.statusEffects.Contains(effect)){
             // Get how many stacks the effect has.
             int newStacks = statusEffectManager.GetEffectsByType(effect.effectType.GetType()).Count;
-            effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = stacks.ToString();
-            displayEffect = GetNextExpiringStack(statusEffectManager, effect);
             // If stacks aren't equal then a stack expired or was added.
             if(stacks != newStacks){
+                // Set the stacks text and get the next expiring stack to display.
+                effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = newStacks.ToString();
+                displayEffect = GetNextExpiringStack(statusEffectManager, effect);
                 // If a stack expired.
                 if(newStacks < stacks){
                     // Get the duration left on the next expiring stack.
