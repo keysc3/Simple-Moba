@@ -613,10 +613,9 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateStatusEffectsPositions - Moves the status effect UI components that were created after the one that ended.
     *   This is to prevent gaps between UI components.
-    *   @param effect - Effect of the status effect that ended.
     *   @param effectUI - GameObject of the status effect UI component to remove.
     */
-    public void UpdateStatusEffectsPositions(Effect effect, GameObject effectUI){
+    public void UpdateStatusEffectsPositions(GameObject effectUI){
         // Get the UI components child index and its current position.
         int index = effectUI.transform.GetSiblingIndex();
         Vector2 newPos = effectUI.GetComponent<RectTransform>().anchoredPosition;
