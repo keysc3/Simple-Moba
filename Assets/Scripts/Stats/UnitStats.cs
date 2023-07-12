@@ -91,6 +91,7 @@ public class UnitStats : MonoBehaviour
             Debug.Log(transform.name + " killed by " + from.transform.name);
             from.GetComponent<ScoreManager>().Kill(gameObject);
             GetComponent<RespawnDeath>().Death();
+            // Grant any assists if the unit is a champion.
             if(unit is Champion){
                 foreach(GameObject assist in GetComponent<DamageTracker>().CheckForAssists()){
                     if(assist != from)
@@ -99,6 +100,7 @@ public class UnitStats : MonoBehaviour
                 GetComponent<ScoreManager>()?.Death();
             }
         }
+        // Apply any damage that procs after recieving damage.
         else{
             bonusDamage?.Invoke(gameObject, isDot);
         }
