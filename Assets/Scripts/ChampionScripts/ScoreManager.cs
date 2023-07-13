@@ -13,24 +13,13 @@ public class ScoreManager : MonoBehaviour
     public delegate void Takedown(GameObject killed);
     public event Takedown takedownCallback;
     
-    private int kills;
-    private int assists;
-    private int deaths;
-    private int cs;
+    private Score score;
     private UIManager uiManager;
 
     // Called when the script instance is being loaded.
     private void Awake(){
+        score = new Score();
         uiManager = GetComponent<UIManager>();
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        kills = 0;
-        assists = 0;
-        deaths = 0;
-        cs = 0;
     }
 
     /*
@@ -40,13 +29,13 @@ public class ScoreManager : MonoBehaviour
     public void Kill(GameObject killed){
         // If the unit is a champion add a kill and update the kill UI.
         if(killed.GetComponent<UnitStats>().unit is Champion){
-            kills += 1;
-            uiManager.UpdateKills(kills.ToString());
+            score.ChampionKill();
+            uiManager.UpdateKills(score.kills.ToString());
         }
         // Update the creeps score and creep score UI.
         else{
-            cs += 1;
-            uiManager.UpdateCS(cs.ToString());
+            score.CreepKill();
+            uiManager.UpdateCS(score.cs.ToString());
         }
         // Invoke the takedown (kill) callback.
         takedownCallback?.Invoke(killed);
@@ -56,8 +45,8 @@ public class ScoreManager : MonoBehaviour
     *   Death - Updates the players deaths and deaths UI.
     */
     public void Death(){
-        deaths += 1;
-        uiManager.UpdateDeaths(deaths.ToString());
+        score.Death();
+        uiManager.UpdateDeaths(score.deaths.ToString());
     }
 
     /*
@@ -65,7 +54,7 @@ public class ScoreManager : MonoBehaviour
     */
     public void Assist(){
         Debug.Log("Assist for " + gameObject.name + ".");
-        assists += 1;
-        uiManager.UpdateAssists(assists.ToString());
+        score.Assist();
+        uiManager.UpdateAssists(score.assists.ToString());
     }
 }

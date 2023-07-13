@@ -110,7 +110,8 @@ public class StatusEffectManager : MonoBehaviour
                 return;
             }
         }
-        uiManager.AddStatusEffectUI(this, effect);
+        if(unitStats.unit is Champion)
+            uiManager.AddStatusEffectUI(this, effect);
     }
 
     /*

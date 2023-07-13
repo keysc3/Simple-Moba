@@ -3,86 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Implements an inventory.
+* Purpose: Manages a champions inventory and updates necessary systems.
 *
 * @author: Colin Keys
 */
 public class ChampionInventory : MonoBehaviour
 {
-    private int space = 6;
-    private Dictionary<int, Item> myItems = new Dictionary<int, Item>();
-    private List<string> displayItemsInsp = new List<string>();
+
+    //private List<string> displayItemsInsp = new List<string>();
     private UIManager uiManager;
     private ChampionStats championStats;
-
-    //public static ChampionInventory instance;
-
-    /*public delegate void InventoryChanged(Item item, string changeType);
-    public static event InventoryChanged inventoryChangedCallback;*/
+    public Inventory inventory { get; private set; }
     
     // Called when the script instance is being loaded.
     private void Awake(){
+        inventory = new Inventory();
         uiManager = GetComponent<UIManager>();
         championStats = GetComponent<ChampionStats>();
-        /*if(instance != null)
-            Debug.LogWarning("Inventory instance already active");
-        else
-            instance = this;*/
-    
     }
 
-    /*
-    *   AddItem - Adds an item to the champions inventory and calls the inventory changed handler.
-    *   @param item - Item object of the item wanting to be added to the inventory.
-    */
-    public void AddItem(Item item){
-        // If inventory isn't full
-        if(myItems.Count < space){
-            int itemSlot = 1;
-            // Iterate over the inventory and find the open slot.
-            for(int i = 1; i < 7; i++){
-                // Add item to the open slot and adjust stats.
-                if(!myItems.ContainsKey(i)){
-                    itemSlot = i;
-                    myItems.Add(itemSlot, item);
-                    AddItemStats(item); 
-                    uiManager.AddItem(itemSlot, item.icon);
-                    championStats.UpdateAttackSpeed();
-                    uiManager.UpdateAllStats();
-                    DisplayItems();
-                    return;
-                }
-            } 
-        }
-        else{
-            Debug.Log("Inventory Full");
-        }
-    }
-
-    /*
-    *   RemoveItem - Removes an item from the champions inventory and calls the inventory changed handler.
-    *   @param slot - int of the item slot in the inventory to remove an item from.
-    */
-    public void RemoveItem(int slot){
-        // If that inventory slot has an item remove it and adjust stats.
-        if(myItems.ContainsKey(slot)){
-            Item item = myItems[slot];
-            myItems.Remove(slot);
-            RemoveItemStats(item);
-            uiManager.RemoveItem(slot);
+    public void BoughtItem(Item item){
+        int inventorySlot= inventory.AddItem(item);
+        if(inventorySlot > -1){
+            AddItemStats(item); 
+            uiManager.AddItem(inventorySlot, item.icon);
             championStats.UpdateAttackSpeed();
             uiManager.UpdateAllStats();
-            DisplayItems();
+            //DisplayItems();
         }
-        else{
-            Debug.Log("No Item to sell in selected slot");
+    }
+
+    public void SoldItem(int inventorySlot){
+        Item itemSold = inventory.RemoveItem(inventorySlot);
+        if(itemSold != null){
+            RemoveItemStats(itemSold);
+            uiManager.RemoveItem(inventorySlot);
+            championStats.UpdateAttackSpeed();
+            uiManager.UpdateAllStats();
+            //DisplayItems();
         }
     }
 
     /*
     *  DisplayItems - Display the items in the inspector by adding dictionary values to a list.
     */
-    private void DisplayItems(){
+    /*private void DisplayItems(){
         displayItemsInsp.Clear();
         for(int i = 1; i < 7; i++){
             if(myItems.ContainsKey(i))
@@ -90,7 +55,7 @@ public class ChampionInventory : MonoBehaviour
             else
                 displayItemsInsp.Add("No Item");
         }
-    }
+    }*/
 
     /*
     *   AddItemStats - Add an items stats to the champions stats.
