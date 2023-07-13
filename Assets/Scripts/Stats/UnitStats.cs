@@ -82,7 +82,7 @@ public class UnitStats : MonoBehaviour
     *   @param from - GameObject of the damage source.
     */
     public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
-        float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, gameObject);
+        float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, from.GetComponent<UnitStats>().unit, gameObject.GetComponent<UnitStats>().unit);
         currentHealth -= damageToTake;
         Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
         // If dead then award a kill and start the death method.
