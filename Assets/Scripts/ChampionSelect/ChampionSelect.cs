@@ -5,17 +5,23 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/*
+* Purpose: Handles the champion select UI.
+*
+* @author: Colin Keys
+*/
 public class ChampionSelect : MonoBehaviour
 {
 
-    public Champion currentChampion;
-    public List<Champion> champions;
-    public GameObject buttonPrefab;
-    public float width;
-    public Vector2 currentPos = Vector2.zero;
-    public Button startButton;
+    private Champion currentChampion;
+    [SerializeField] private List<Champion> champions;
+    [SerializeField] private GameObject buttonPrefab;
+    private float width;
+    private Vector2 currentPos = Vector2.zero;
 
+    // Called when the script instance is being loaded.
     void Awake(){
+        // Sort the champions alphabetically.
         champions.Sort(CompareByName);
         width = buttonPrefab.GetComponent<RectTransform>().rect.width;
     }
@@ -23,10 +29,10 @@ public class ChampionSelect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startButton.onClick.AddListener(StartClick);
         int size = champions.Count;
         currentPos.x = currentPos.x - (width * (size - 1));
         foreach(Champion champ in champions){
+            // Create and setup a new champion button.
             GameObject button = (GameObject) Instantiate(buttonPrefab, Vector2.zero, Quaternion.identity);
             button.transform.SetParent(transform.GetChild(0));
             button.GetComponent<RectTransform>().anchoredPosition = currentPos;
@@ -34,26 +40,34 @@ public class ChampionSelect : MonoBehaviour
             button.transform.GetChild(0).GetComponent<TMP_Text>().SetText(champ.name);
             button.name = champ.name;
             button.GetComponent<Image>().sprite = champ.icon;
+            // Add the on click for the button.
             button.GetComponent<Button>().onClick.AddListener(() => ChampClick(button.transform));
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /*
+    *   ChampClick - Sets the current and selected champion values.
+    *   @param button - Transform of the button that was clicked.
+    */
     private void ChampClick(Transform button){
-        GameController.instance.selectedChampion = button.GetSiblingIndex();
-        GameController.instance.currentChampion = GameController.instance.champions[GameController.instance.selectedChampion];
+        GameController.instance.SetSelectedChampion(button.GetSiblingIndex());
+        GameController.instance.SetCurrentChampion();
     }
 
-    private void StartClick(){
+    /*
+    *   StartClick - Loads the Gameplay scene.
+    */
+    public void StartClick(){
         if(GameController.instance.currentChampion != null)
             SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
     }
 
+    /*
+    *   CompareByName - Compares two Champions by their names.
+    *   @param c1 - First Champion to compare.
+    *   @param c2 - Second Champion to compare.
+    *   @return int - int representing the result of the comparison.
+    */
     private int CompareByName(Champion c1, Champion c2){
         return c1.name.CompareTo(c2.name);
     }

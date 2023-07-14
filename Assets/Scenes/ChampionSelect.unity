@@ -206,7 +206,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 186551639}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 677097221}
+        m_TargetAssemblyTypeName: ChampionSelect, Assembly-CSharp
+        m_MethodName: StartClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &186551639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,14 +504,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cbb9cbaa03e854189656b110ea5fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentChampion: {fileID: 0}
   champions:
   - {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
   - {fileID: 11400000, guid: 9a8035ae09b05f64e87fb76e8842de82, type: 2}
   buttonPrefab: {fileID: 6686707201834677994, guid: fd90d136f3ce0f94b961d22a55a048a1, type: 3}
-  width: 0
-  currentPos: {x: 0, y: 0}
-  startButton: {fileID: 186551638}
 --- !u!1 &1064862384
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,10 +539,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   champions:
-  - {fileID: 5980474150250256565, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
   - {fileID: 5483897106226106971, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-  selectedChampion: 0
-  currentChampion: {fileID: 0}
+  - {fileID: 5980474150250256565, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
 --- !u!114 &1064862386
 MonoBehaviour:
   m_ObjectHideFlags: 0

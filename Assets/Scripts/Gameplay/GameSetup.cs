@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+* Purpose: Handles setting up the Gameplay scene.
+*
+* @author: Colin Keys
+*/
 public class GameSetup : MonoBehaviour
 {
     public Vector3 spawnPos;
@@ -17,15 +22,13 @@ public class GameSetup : MonoBehaviour
             ActiveChampion.instance.SetActiveChamp();
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
+    /*
+    *   Back - Loads the champion select scene.
+    */
     public void Back(){
-        GameController.instance.currentChampion = null;
+        GameController.instance.SetSelectedChampion(-1);
+        GameController.instance.SetCurrentChampion();
         SceneManager.LoadScene("ChampionSelect", LoadSceneMode.Single);
     } 
 }
