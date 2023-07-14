@@ -30,8 +30,10 @@ public class ActiveChampion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.J))
-            StartCoroutine(PickActiveChamp());
+        if(GameController.instance.currentChampion == null){
+            if(Input.GetKeyDown(KeyCode.J))
+                StartCoroutine(PickActiveChamp());
+        }
     }
 
     public void SetActiveChamp(){
