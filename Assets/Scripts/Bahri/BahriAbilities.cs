@@ -15,6 +15,7 @@ public class BahriAbilities : ChampionAbilities
     [SerializeField] private GameObject Spell_3_object;
     [SerializeField] private GameObject attack;
     [field: SerializeField] public ScriptableSpeedBonus spell_2_SpeedBonus { get; private set; }
+    [field: SerializeField] public ScriptableSpell spell4 { get; private set; }
 
     private float spell_4_timer;
     private float spell_4_duration;
@@ -24,6 +25,7 @@ public class BahriAbilities : ChampionAbilities
     private BahriAbilityHit bahriAbilityHit;
     private Bahri bahri;
     private ScoreManager scoreManager;
+    private Spell spell4Effect = null;
 
     // Called when the script instance is being loaded.
     protected override void Awake(){
@@ -355,6 +357,8 @@ public class BahriAbilities : ChampionAbilities
     *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
     */
     private IEnumerator Spell_4_Start(){
+        spell4Effect = (Spell) spell4.InitializeEffect(gameObject, gameObject);
+        GetComponent<StatusEffectManager>().AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = bahri.spell_4_duration;
         float lastCastTimer = 0.0f;
@@ -372,6 +376,7 @@ public class BahriAbilities : ChampionAbilities
                 StartCoroutine(Spell_Cd_Timer(1.0f, (myBool => isCd = myBool), "Spell_4"));
                 lastCastTimer = 0.0f;
                 spell_4_chargesLeft -= 1.0f;
+                spell4Effect.UpdateStacks((int)(spell_4_chargesLeft));
             }
             uiManager.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer);
             if(spell_4_chargesLeft == 0)
@@ -393,6 +398,9 @@ public class BahriAbilities : ChampionAbilities
                 spell_4_chargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;
+                spell4Effect.UpdateStacks((int)spell_4_chargesLeft);
+                spell4Effect.ResetTimer();
+                spell4Effect.SetDuration(spell_4_duration);
             }
         }
     }
