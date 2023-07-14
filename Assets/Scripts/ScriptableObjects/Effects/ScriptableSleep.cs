@@ -10,7 +10,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects/Sleep")]
 public class ScriptableSleep : ScriptableEffect
 {
-    [SerializeField] private List<float> duration = new List<float>();
+    //[SerializeField] private List<float> duration = new List<float>();
 
     /*
     *   InitializeEffect - Initializes a new sleep effect with the objects duration and total amount of damage to deal.
@@ -20,6 +20,6 @@ public class ScriptableSleep : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
         ccValue = 2;
-        return new Sleep(this, duration[spellLevel-1], unitCasted, unitEffected);
+        return new Sleep(this, duration[spellLevel], unitCasted, unitEffected);
     }
 }

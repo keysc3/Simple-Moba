@@ -10,7 +10,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects/Spell")]
 public class ScriptableSpell : ScriptableEffect
 {
-    [field: SerializeField] public float duration { get; private set; }
+    //[field: SerializeField] public float duration { get; private set; }
     [field: SerializeField] public int stacks { get; private set; }
     
     /*
@@ -18,12 +18,8 @@ public class ScriptableSpell : ScriptableEffect
     *   @param unitCasted - GameObject of the unit that casted the spell.
     *   @param unitEffected - GameObject of the unit effected by the spell.
     */
-    public Effect InitializeEffect(GameObject unitCasted, GameObject unitEffected){
+    public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
         ccValue = 0;
-        if(unitCasted == unitEffected)
-            isBuff = true;
-        else
-            isBuff = false;
-        return new Spell(this, duration, stacks, unitCasted, unitEffected);
+        return new Spell(this, duration[spellLevel], stacks, unitCasted, unitEffected);
     }
 }

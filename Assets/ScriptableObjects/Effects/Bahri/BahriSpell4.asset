@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7fdade617282a64ba5068a92a246a5d, type: 3}
   m_Name: BahriSpell4
   m_EditorClassIdentifier: 
+  <duration>k__BackingField:
+  - 15
+  - 15
+  - 15
   isStackable: 0
   ccValue: 0
-  isBuff: 0
+  isBuff: 1
   sprite: {fileID: 21300000, guid: dcdc6d014cbc1534a8252bb25183e5b6, type: 3}
-  <duration>k__BackingField: 15
   <stacks>k__BackingField: 2

@@ -12,9 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c69c4aa644de647bfdf7ae145855a2, type: 3}
   m_Name: BilliaSeedSlow
   m_EditorClassIdentifier: 
+  <duration>k__BackingField:
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
   isStackable: 0
   ccValue: 0
   isBuff: 0
   sprite: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
-  <duration>k__BackingField: 3
-  <slowPercent>k__BackingField: 0.4
+  <slowPercent>k__BackingField:
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
+  - 0.4
+  <isChild>k__BackingField: 0

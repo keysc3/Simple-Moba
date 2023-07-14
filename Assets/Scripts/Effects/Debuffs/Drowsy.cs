@@ -10,6 +10,7 @@ using UnityEngine.AI;
 */
 public class Drowsy : Effect
 {
+    private int spellLevel;
     private UnitStats effectedUnitStats;
     private float reducedAmount;
     private NavMeshAgent effectedNavMeshAgent;
@@ -21,7 +22,8 @@ public class Drowsy : Effect
     *   @param unitCasted - GameObject of the unit that casted the drowsy.
     *   @param - unitEffected - GameObject of the unit that the drowsy is affecting.
     */
-    public Drowsy(ScriptableDrowsy drowsyEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(drowsyEffect, duration, unitCasted, unitEffected){
+    public Drowsy(ScriptableDrowsy drowsyEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(drowsyEffect, duration, unitCasted, unitEffected){
+        this.spellLevel = spellLevel;
         effectedUnitStats = effected.GetComponent<UnitStats>();
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
     }
@@ -30,7 +32,8 @@ public class Drowsy : Effect
     *   StartEffect - Start the drowsy effect.
     */
     public override void StartEffect(){
-        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableDrowsy) effectType).slow.InitializeEffect(casted, effected));
+        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableDrowsy) effectType).slow
+        .InitializeEffect(spellLevel, casted, effected));
     }
 
     /*
@@ -40,6 +43,6 @@ public class Drowsy : Effect
         effectedNavMeshAgent.speed =  effectedNavMeshAgent.speed + reducedAmount;
         // Initialize new sleep effect.
         effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableDrowsy) effectType).sleep
-        .InitializeEffect(((ScriptableDrowsy) effectType).spellLevel, casted, effected));
+        .InitializeEffect(spellLevel, casted, effected));
     }
 }

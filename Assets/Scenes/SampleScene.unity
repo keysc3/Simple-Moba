@@ -219,14 +219,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a2aaf3e0ad09624ea7e22359510be38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeChampion: 5
+  activeChampion: 1
   champions:
   - {fileID: 1732516671}
+  - {fileID: 2129848471}
   - {fileID: 961470537}
   - {fileID: 1532659490}
   - {fileID: 1948123414}
   - {fileID: 1188237559}
-  - {fileID: 2129848471}
   cameraMovement: {fileID: 0}
 --- !u!114 &222785775
 MonoBehaviour:
@@ -241,8 +241,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   champions: []
-  selectedChampion: 0
-  currentChampion: {fileID: 0}
 --- !u!1 &449569395
 GameObject:
   m_ObjectHideFlags: 0

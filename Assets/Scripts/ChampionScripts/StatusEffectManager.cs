@@ -48,9 +48,9 @@ public class StatusEffectManager : MonoBehaviour
                         statusEffects.RemoveAt(i);
                         effectNames.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
-                        if(effect.effectType is ScriptableSlow){
+                        if(effect is Slow){
                             if(CheckForEffectByType(effect)){
-                                SetStrongestSlow(effect);
+                                SetStrongestSlow((Slow) effect);
                             }
                         }
                         // If there are still running effects, activate the most impairing.
@@ -98,14 +98,14 @@ public class StatusEffectManager : MonoBehaviour
         // CC Values of zero are always active.
         if(effect.effectType.ccValue == 0){
             // If a new slow effect was added then only activate the strongest one.
-            if(effect.effectType is ScriptableSlow){
-                SetStrongestSlow(effect);
+            if(effect is Slow){
+                SetStrongestSlow((Slow) effect);
             }
             else
                 effect.SetIsActivated(true);
         }
         // If the effect is a slow and a child of another effect then do not add it to the UI.
-        if(effect.effectType is ScriptableSlow){
+        if(effect is Slow){
             if(((ScriptableSlow) effect.effectType).isChild){
                 return;
             }
@@ -118,16 +118,16 @@ public class StatusEffectManager : MonoBehaviour
     *   SetStrongestSlow - Sets the strongest slow to be activated. Slow is the only zero cc value effect that applies the strongest.
     *   @param effect - Slow Effect that was added.
     */
-    public void SetStrongestSlow(Effect effect){
+    public void SetStrongestSlow(Slow effect){
         // Get the strongest slows index in the status effect list.
-        int index = ((ScriptableSlow) effect.effectType).GetStrongest(statusEffects);
+        int index = effect.GetStrongest(statusEffects);
         // Deactivate all slows in the list that aren't the strongest.
         for(int i = 0; i < statusEffects.Count; i++){
-            if(statusEffects[i].effectType is ScriptableSlow){
+            if(statusEffects[i] is Slow){
                 if(index == i)
-                    statusEffects[i].StartEffect();
+                    statusEffects[i].SetIsActivated(true);
                 else
-                    statusEffects[i].EndEffect();
+                    statusEffects[i].SetIsActivated(false);
             } 
         }
     }

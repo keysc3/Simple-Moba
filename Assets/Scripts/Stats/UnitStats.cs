@@ -127,10 +127,10 @@ public class UnitStats : MonoBehaviour
         foreach(Effect effect in speedBonuses){
             ScriptableSpeedBonus myBonus = (ScriptableSpeedBonus) effect.effectType;
             if(myBonus.isAdditive){
-                additive += myBonus.bonusPercent;
+                additive += ((SpeedBonus) effect).bonusPercent;
             }
             else{
-                multiplicative *= (1f + myBonus.bonusPercent);
+                multiplicative *= (1f + ((SpeedBonus) effect).bonusPercent);
             }
         }
         List<Effect> slows = statusEffectManager.GetEffectsByType(typeof(ScriptableSlow));
@@ -138,8 +138,10 @@ public class UnitStats : MonoBehaviour
         // Calculate the slow percentage to apply to the units speed.
         foreach(Effect effect in slows){
             if(effect.isActivated){
-                ScriptableSlow mySlow = (ScriptableSlow) effect.effectType;
+                Debug.Log("champ: " + gameObject.name + "act?: " + effect.isActivated);
+                Slow mySlow = (Slow) effect;
                 slowPercent *= (1f - mySlow.slowPercent);
+                break;
             }
         }
         // Calculate final value.
