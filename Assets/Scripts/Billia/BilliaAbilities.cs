@@ -440,7 +440,7 @@ public class BilliaAbilities : ChampionAbilities
         StartCoroutine(Spell_Cd_Timer(billia.spell3BaseCd[levelManager.spellLevels["Spell_3"]-1], (myBool => spell_3_onCd = myBool), "Spell_3"));
         StartCoroutine(Spell_3_Lob(targetPosition, targetDirection));
     }
-    //TODO: FIX DIRECTION OF BALL ROLL.
+    
     /*
     *   Spell_3_Lob - Lobs the seed at the target location over a set time using a Quadratic Bezier Curve.
     *   @param targetPosition - Vector3 of the target position for the seed to land.
