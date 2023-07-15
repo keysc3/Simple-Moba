@@ -24,6 +24,7 @@ public abstract class ChampionAbilities : MonoBehaviour
     protected UIManager uiManager;
     protected LevelManager levelManager;
     protected ChampionStats championStats;
+    protected Player player;
 
     private Collider myCollider;
     private Camera mainCamera;
@@ -33,6 +34,7 @@ public abstract class ChampionAbilities : MonoBehaviour
     protected virtual void Awake(){
         isCasting = false;
         mainCamera = Camera.main;
+        player = GetComponent<Player>();
         uiManager = GetComponent<UIManager>();
         myCollider = GetComponent<Collider>();
         levelManager = GetComponent<LevelManager>();

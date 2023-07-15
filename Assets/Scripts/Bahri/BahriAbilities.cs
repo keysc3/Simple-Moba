@@ -36,9 +36,9 @@ public class BahriAbilities : ChampionAbilities
     // Start is called before the first frame update
     protected override void Start(){
         base.Start();
-        bahri = (Bahri) GetComponent<Player>().unit;
-        GetComponent<Player>().score.takedownCallback += Passive;
-        GetComponent<Player>().score.takedownCallback += Spell_4_Takedown;
+        bahri = (Bahri) player.unit;
+        player.score.takedownCallback += Passive;
+        player.score.takedownCallback += Spell_4_Takedown;
         spell4Casting = false;
         passiveStacks = 0;
     }
@@ -107,9 +107,9 @@ public class BahriAbilities : ChampionAbilities
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject)Instantiate(Orb, transform.position, Quaternion.identity);
         SpellObjectCreated(orb);
-        orb.GetComponent<Spell1Trigger>().bahriAbilityHit = bahriAbilityHit;
-        orb.GetComponent<Spell1Trigger>().bahri = gameObject;
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
+        spell1Trigger.bahriAbilityHit = bahriAbilityHit;
+        spell1Trigger.bahri = gameObject; 
         // Set initial return values.
         bool returning = false;
         float returnSpeed = bahri.spell_1_minSpeed;
@@ -205,10 +205,11 @@ public class BahriAbilities : ChampionAbilities
                     if(hitColliders.Length > 0){
                         // Check each enemy hit for closest to the GameObject.
                         foreach(Collider enemy in hitColliders){
+                            Unit enemyUnit = enemy.gameObject.GetComponent<Unit>();
                             // Only want to target alive units.
-                            if(!enemy.gameObject.GetComponent<Unit>().isDead && enemy.gameObject != gameObject){
+                            if(enemyUnit.isDead && enemy.gameObject != gameObject){
                                 // If a player is currently under spell 3 effects, prioritize that player.
-                                if(enemy.gameObject.GetComponent<Unit>().statusEffects.CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
+                                if(enemyUnit.statusEffects.CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
                                     target = enemy.gameObject;
                                     break;
                                 }
@@ -275,7 +276,7 @@ public class BahriAbilities : ChampionAbilities
         // Create and add a new speed bonus effect.
         SpeedBonus speedBonus = (SpeedBonus) spell_2_SpeedBonus.InitializeEffect(spellLevel, gameObject, gameObject);
         speedBonus.SetBonusPercent(bahri.spell_2_msBoost);
-        GetComponent<Player>().statusEffects.AddEffect(speedBonus);
+        player.statusEffects.AddEffect(speedBonus);
         // While speed boost is still active.
         while (timer < spell_2_SpeedBonus.duration[spellLevel]){
             // Calculate the fraction of the speed boosts duration that has passed.
@@ -326,8 +327,9 @@ public class BahriAbilities : ChampionAbilities
         // Create spell 3 GameObject and set its necessary variables.
         GameObject spell_3_object = (GameObject)Instantiate(Spell_3_object, transform.position, Quaternion.identity);
         SpellObjectCreated(spell_3_object);
-        spell_3_object.GetComponent<Spell3Trigger>().bahriAbilityHit = bahriAbilityHit;
-        spell_3_object.GetComponent<Spell3Trigger>().bahri = gameObject;
+        Spell3Trigger spell3Trigger = spell_3_object.GetComponent<Spell3Trigger>();
+        spell3Trigger.bahriAbilityHit = bahriAbilityHit;
+        spell3Trigger.bahri = gameObject;
         // While the spell object still exists.
         while(spell_3_object){
             // If target location has not been reached then move the object towards the target location.
@@ -359,7 +361,7 @@ public class BahriAbilities : ChampionAbilities
     */
     private IEnumerator Spell_4_Start(){
         spell4Effect = (Spell) spell4.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, gameObject);
-        GetComponent<Unit>().statusEffects.AddEffect(spell4Effect);
+        player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = bahri.spell_4_duration;
         float lastCastTimer = 0.0f;
@@ -371,7 +373,7 @@ public class BahriAbilities : ChampionAbilities
         // While the spells duration has not expired.
         while(spell_4_timer < spell_4_duration){
             // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
-            if(Input.GetKeyDown(KeyCode.R) && !isCasting && spell_4_chargesLeft > 0.0f && !isCd && !GetComponent<Unit>().isDead){
+            if(Input.GetKeyDown(KeyCode.R) && !isCasting && spell_4_chargesLeft > 0.0f && !isCd && !player.isDead){
                 Spell_4_Move();
                 isCd = true;
                 StartCoroutine(Spell_Cd_Timer(1.0f, (myBool => isCd = myBool), "Spell_4"));
@@ -453,12 +455,12 @@ public class BahriAbilities : ChampionAbilities
         navMeshAgent.ResetPath();
         navMeshAgent.enabled = false;
         // While not at target position or not dead.
-        while (transform.position != targetPosition && !GetComponent<Unit>().isDead){
+        while (transform.position != targetPosition && !player.isDead){
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, newSpeed * Time.deltaTime);
             yield return null;
         }
         // Only fire end of dash projectiles if still alive.
-        if(!GetComponent<Unit>().isDead)
+        if(!player.isDead)
             Spell_4_Missiles();
         navMeshAgent.enabled = true;
         isCasting = false;
@@ -509,8 +511,8 @@ public class BahriAbilities : ChampionAbilities
                 // Create missile and set necessary variables
                 GameObject missile = (GameObject)Instantiate(Spell_2_object, transform.position, Quaternion.identity);
                 SpellObjectCreated(missile);
-                missile.GetComponent<Spell2Trigger>().bahriAbilityHit = bahriAbilityHit;
                 Spell2Trigger spell2Trigger = missile.GetComponent<Spell2Trigger>();
+                spell2Trigger.bahriAbilityHit = bahriAbilityHit;
                 spell2Trigger.target = target;
                 spell2Trigger.spellCast = 4;
                 // Use the same animation as spell two to send the missiles to their target.

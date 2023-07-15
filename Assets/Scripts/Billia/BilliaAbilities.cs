@@ -45,7 +45,7 @@ public class BilliaAbilities : ChampionAbilities
     protected override void Start()
     {
         base.Start();
-        billia = (Billia) GetComponent<Player>().unit;
+        billia = (Billia) player.unit;
         spell_1_passiveStacks = 0;
     }
 
@@ -170,7 +170,7 @@ public class BilliaAbilities : ChampionAbilities
             float bonusPercent = billia.spell_1_passiveSpeed[levelManager.spellLevels["Spell_1"]-1];
             SpeedBonus speedBonus = (SpeedBonus) spell_1_passiveSpeedBonus.InitializeEffect(levelManager.spellLevels["Spell_1"]-1, gameObject, gameObject);
             speedBonus.SetBonusPercent(bonusPercent);
-            GetComponent<Player>().statusEffects.AddEffect(speedBonus);
+            player.statusEffects.AddEffect(speedBonus);
             spell_1_passiveEffectTracker.Add(speedBonus);
             spell_1_passiveStacks += 1;
             //float amountIncrease = championStats.speed.GetValue() * bonusPercent;
@@ -440,7 +440,7 @@ public class BilliaAbilities : ChampionAbilities
         StartCoroutine(Spell_Cd_Timer(billia.spell3BaseCd[levelManager.spellLevels["Spell_3"]-1], (myBool => spell_3_onCd = myBool), "Spell_3"));
         StartCoroutine(Spell_3_Lob(targetPosition));
     }
-
+    //TODO: FIX DIRECTION OF BALL ROLL.
     /*
     *   Spell_3_Lob - Lobs the seed at the target location over a set time using a Quadratic Bezier Curve.
     *   @param targetPosition - Vector3 of the target position for the seed to land.
@@ -448,8 +448,9 @@ public class BilliaAbilities : ChampionAbilities
     private IEnumerator Spell_3_Lob(Vector3 targetPosition){
         // Create spell object.
         GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().billiaAbilities = this;
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().SetCaster(gameObject);
+        BilliaSpell3Trigger billiaSpell3Trigger = spell_3_seed.GetComponent<BilliaSpell3Trigger>();
+        billiaSpell3Trigger.billiaAbilities = this;
+        billiaSpell3Trigger.SetCaster(gameObject);
         // Set p0.
         Vector3 p0 = transform.position;
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
@@ -477,9 +478,9 @@ public class BilliaAbilities : ChampionAbilities
         // Set the seeds final point.
         Vector3 lastPoint = QuadraticBezierCurvePoint(1, p0, p1, p2);
         spell_3_seed.transform.position = lastPoint;
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().hasLanded = true;
+        billiaSpell3Trigger.hasLanded = true;
         // Start the seeds rolling.
-        StartCoroutine(Spell_3_Move(targetPosition, spell_3_seed));
+        StartCoroutine(Spell_3_Move(targetPosition, spell_3_seed, billiaSpell3Trigger));
     }
 
     /*
@@ -487,10 +488,10 @@ public class BilliaAbilities : ChampionAbilities
     *   target forward direction until a collision.
     *   @param targetPosition - Vector3 of the lobbed seeds landing position.
     */
-    private IEnumerator Spell_3_Move(Vector3 targetPosition, GameObject spell_3_seed){
+    private IEnumerator Spell_3_Move(Vector3 targetPosition, GameObject spell_3_seed, BilliaSpell3Trigger billiaSpell3Trigger){
         // Direction to roll.
         Vector3 targetDirection =  (targetPosition - transform.position).normalized;
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().forwardDirection = targetDirection;
+        billiaSpell3Trigger.forwardDirection = targetDirection;
         // Set inital seed position.
         //spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
         // Look at roll direction.
@@ -614,10 +615,13 @@ public class BilliaAbilities : ChampionAbilities
     */
     private void Spell_4_Drowsy(List<GameObject> applyDrowsy){
         foreach(GameObject enemy in applyDrowsy){
-            if(enemy.GetComponent<Unit>() is Player){
+            Unit enemyUnit = enemy.GetComponent<Unit>();
+            if(enemyUnit is Player){
+                // Add drowsy to enemy player and update the bonus damage delegate.
                 Drowsy newDrowsy = (Drowsy) drowsy.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, enemy);
-                enemy.GetComponent<Player>().statusEffects.AddEffect(newDrowsy);
-                enemy.GetComponent<Player>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+                enemyUnit.statusEffects.AddEffect(newDrowsy);
+                enemyUnit.bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+                // Animate the drowsy effect.
                 GameObject drowsyObject = (GameObject)Instantiate(drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
