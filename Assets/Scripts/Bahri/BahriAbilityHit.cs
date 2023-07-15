@@ -28,7 +28,7 @@ public class BahriAbilityHit : MonoBehaviour
     private void Start()
     {
         championStats = (ChampionStats) GetComponent<Player>().unitStats;
-        bahri = (Bahri) championStats.unit;
+        bahri = (Bahri) GetComponent<Player>().unit;
     }
 
     // Update is called once per frame

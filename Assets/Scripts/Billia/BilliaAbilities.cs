@@ -45,7 +45,7 @@ public class BilliaAbilities : ChampionAbilities
     protected override void Start()
     {
         base.Start();
-        billia = (Billia) championStats.unit;
+        billia = (Billia) GetComponent<Player>().unit;
         spell_1_passiveStacks = 0;
     }
 

@@ -14,6 +14,6 @@ public class MinionStats : UnitStats
     public string team;
 
     public MinionStats(ScriptableMinion minion) : base(minion){
-        team = ((ScriptableMinion) unit).team;
+        team = minion.team;
     }
 }

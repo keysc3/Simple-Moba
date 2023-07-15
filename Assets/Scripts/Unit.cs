@@ -17,13 +17,20 @@ public class Unit : MonoBehaviour, IDamagable
     public BonusDamage bonusDamage;
 
     protected virtual void Awake(){
+        uiManager = GetComponent<UIManager>();
         //this.champion = champion;
-        unitStats = new UnitStats(unit);
+        //unitStats = new UnitStats(unit);
+        Init();
         uiManager = GetComponent<UIManager>();
         statusEffects = new StatusEffects(this, uiManager);
         navMeshAgent = GetComponent<NavMeshAgent>();
         isDead = false;
     }
+
+    protected virtual void Init(){
+        unitStats = new UnitStats(unit);
+    }
+    
     // Start is called before the first frame update
     void Start()
     {

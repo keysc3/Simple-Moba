@@ -78,7 +78,10 @@ public class PlayerController : MonoBehaviour
         }
 
         if(targetedEnemy != null && !playerAbilities.isCasting){
-            MovePlayerToEnemy();
+            if(!targetedEnemy.GetComponent<Unit>().isDead)
+                MovePlayerToEnemy();
+            else
+                targetedEnemy = null;
         }
         else
             basicAttack.SetWindingUp(false);
@@ -94,7 +97,7 @@ public class PlayerController : MonoBehaviour
             dest = hitInfo.point;
             dest.y = myCollider.bounds.center.y;
             // If the player clicked an enemy set the target, otherwise set the destination.
-            if(hitInfo.collider.tag == "Enemy" && hitInfo.collider.gameObject != gameObject){
+            if(hitInfo.collider.tag == "Enemy" && hitInfo.collider.gameObject != gameObject && !hitInfo.collider.gameObject.GetComponent<Unit>().isDead){
                 targetedEnemy = hitInfo.collider.gameObject;
             }
             else{

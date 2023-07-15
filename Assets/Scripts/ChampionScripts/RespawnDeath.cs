@@ -25,19 +25,21 @@ public class RespawnDeath : MonoBehaviour
     private ChampionAbilities championAbilities;
     private StatusEffects statusEffects;
     private UnitStats unitStats;
+    private Unit unit;
     private DamageTracker damageTracker;
 
     // Called when the script instance is being loaded.
     void Awake(){
         navMeshAgent = GetComponent<NavMeshAgent>();
         rend = GetComponent<Renderer>();
+        unit = GetComponent<Unit>();
     }
     // Start is called before the first frame update
     void Start()
     {
-        unitStats = GetComponent<Unit>().unitStats;
-        statusEffects = GetComponent<Unit>().statusEffects;
-        if(unitStats.unit is ScriptableChampion){
+        unitStats = unit.unitStats;
+        statusEffects = unit.statusEffects;
+        if(unit.unit is ScriptableChampion){
             uiManager = GetComponent<UIManager>();
             myCollider = GetComponent<Collider>();
             levelManager = GetComponent<LevelManager>();
@@ -69,7 +71,7 @@ public class RespawnDeath : MonoBehaviour
     */
     public void Death(){
         // If the unit is a minion destroy it.
-        if(unitStats.unit is ScriptableMinion){
+        if(unit.unit is ScriptableMinion){
             Destroy(gameObject);
             return;
         }

@@ -8,14 +8,10 @@ public class Player : Unit
     public Inventory inventory;
     public Score score;
 
-    protected override void Awake(){
-        navMeshAgent = GetComponent<NavMeshAgent>();
+    protected override void Init(){
         unitStats = new ChampionStats((ScriptableChampion)unit);
-        uiManager = GetComponent<UIManager>();
-        statusEffects = new StatusEffects(this, uiManager);
         inventory = new Inventory(this);
         score = new Score();
-        isDead = false;
     }
 
     // Start is called before the first frame update

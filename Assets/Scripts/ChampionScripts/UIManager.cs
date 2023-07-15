@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
     private GradientAlphaKey[] alphaKey;
     private Color defaultBorderColor;
 
-    private Player player;
+    private Unit unit;
 
     // Called when the script instance is being loaded.
     void Awake(){
@@ -61,8 +61,8 @@ public class UIManager : MonoBehaviour
 
     // Start is called before the first frame update.
     void Start(){
-        player = GetComponent<Player>();
-        championStats = (ChampionStats) player.unitStats;
+        unit = GetComponent<Unit>();
+        championStats = (ChampionStats) unit.unitStats;
         UpdateHealthBar();
         UpdateManaBar();
         SetUpIcons();
@@ -70,7 +70,7 @@ public class UIManager : MonoBehaviour
     }
 
     void SetUpIcons(){
-        ScriptableChampion champ = (ScriptableChampion) championStats.unit;
+        ScriptableChampion champ = (ScriptableChampion) unit.unit;
         spellsHPManaUI.GetChild(0).GetChild(1).GetComponent<Image>().sprite = champ.passive_sprite;
         spellsHPManaUI.GetChild(1).GetChild(2).GetComponent<Image>().sprite = champ.spell_1_sprite;
         spellsHPManaUI.GetChild(2).GetChild(2).GetComponent<Image>().sprite = champ.spell_2_sprite;
@@ -180,7 +180,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateHealthBar(){
         // If the champion is dead.
-        if(!player.isDead){
+        if(!unit.isDead){
             // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
             float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
             health.transform.GetChild(2).GetComponent<TMP_Text>()
@@ -452,13 +452,13 @@ public class UIManager : MonoBehaviour
                 gameObject.GetComponent<Player>().TakeDamage(10, "magic", gameObject, false);
         }
         // Activate mana and health regen UI if the player is not full mana or full health.
-        if(championStats.currentMana < championStats.maxMana.GetValue() && !player.isDead){
+        if(championStats.currentMana < championStats.maxMana.GetValue() && !unit.isDead){
             SetManaRegenActive(true);
         }
         else{
             SetManaRegenActive(false);
         }
-        if(championStats.currentHealth < championStats.maxHealth.GetValue() && !player.isDead){
+        if(championStats.currentHealth < championStats.maxHealth.GetValue() && !unit.isDead){
             SetHealthRegenActive(true);
         }
         else{

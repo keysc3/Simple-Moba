@@ -25,7 +25,7 @@ public class BilliaAbilityHit : MonoBehaviour
     void Start()
     {
         championStats = (ChampionStats) GetComponent<Player>().unitStats;
-        billia = (Billia) championStats.unit;
+        billia = (Billia) GetComponent<Player>().unit;
     }
 
     /*

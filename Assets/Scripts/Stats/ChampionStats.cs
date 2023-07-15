@@ -13,8 +13,8 @@ public class ChampionStats : UnitStats
     [field: SerializeField] public Stat haste { get; private set; }
 
     public ChampionStats(ScriptableChampion champion) : base(champion){
-        MP5 = new Stat(((ScriptableChampion) unit).MP5);
-        maxMana = new Stat(((ScriptableChampion) unit).baseMana);
+        MP5 = new Stat(((ScriptableChampion) champion).MP5);
+        maxMana = new Stat(((ScriptableChampion) champion).baseMana);
         haste = new Stat(0f);
         currentMana = maxMana.GetValue();
     }

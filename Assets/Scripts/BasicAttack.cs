@@ -14,15 +14,17 @@ public class BasicAttack : MonoBehaviour
 
     [SerializeField] private GameObject attackProjectile;
     private UnitStats unitStats;
+    private Unit unit;
     private PlayerController playerController;
 
     // Called when the script instance is being loaded. 
     protected virtual void Awake(){
         playerController = GetComponent<PlayerController>();
+        unit = GetComponent<Unit>();
     }
 
     protected virtual void Start(){
-        unitStats = GetComponent<Unit>().unitStats;
+        unitStats = unit.unitStats;
     }
 
     /*
@@ -30,7 +32,7 @@ public class BasicAttack : MonoBehaviour
     *   @param target - GameObject of the enemy to attack.
     */
     public void Attack(GameObject target){
-        if(unitStats.unit.rangeType == "melee")
+        if(unit.unit.rangeType == "melee")
             MeleeAttack(target);
         else
             RangeAttack(target);

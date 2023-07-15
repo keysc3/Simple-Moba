@@ -64,4 +64,11 @@ public class Stat {
         if(modifier != 0)
             modifiers.Remove(modifier);
     }
+
+    /*
+    *   ClearModifiers - Clears all modifiers from the stat.
+    */
+    public void ClearModifiers(){
+        modifiers.Clear();
+    }
 }

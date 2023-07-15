@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start(){
         championStats = (ChampionStats) GetComponent<Player>().unitStats;
-        champion = (ScriptableChampion) championStats.unit;
+        champion = (ScriptableChampion) GetComponent<Player>().unit;
         CurrentRespawnTime();
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);

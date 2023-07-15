@@ -36,7 +36,7 @@ public class BahriAbilities : ChampionAbilities
     // Start is called before the first frame update
     protected override void Start(){
         base.Start();
-        bahri = (Bahri) championStats.unit;
+        bahri = (Bahri) GetComponent<Player>().unit;
         GetComponent<Player>().score.takedownCallback += Passive;
         GetComponent<Player>().score.takedownCallback += Spell_4_Takedown;
         spell4Casting = false;

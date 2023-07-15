@@ -28,7 +28,7 @@ public class ScoreManager : MonoBehaviour
     */
     public void Kill(GameObject killed){
         // If the unit is a champion add a kill and update the kill UI.
-        if(killed.GetComponent<UnitStats>().unit is ScriptableChampion){
+        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
             score.ChampionKill(killed);
             uiManager.UpdateKills(score.kills.ToString());
         }
