@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55445560defb6cc4c8abaec522837868, type: 3}
   m_Name: BahriCharm
   m_EditorClassIdentifier: 
-  isStackable: 0
-  ccValue: 1
-  isBuff: 0
-  sprite: {fileID: 21300000, guid: b47ab3f27b63d6f44b5818e3c6155395, type: 3}
-  duration:
+  <duration>k__BackingField:
   - 1.2
   - 1.4
   - 1.6
   - 1.8
-  - 5
+  - 2
+  isStackable: 0
+  ccValue: 1
+  isBuff: 0
+  sprite: {fileID: 21300000, guid: b47ab3f27b63d6f44b5818e3c6155395, type: 3}
   <slow>k__BackingField: {fileID: 11400000, guid: be3fdf73c49242e46aeaa70a0e7b6fe0, type: 2}

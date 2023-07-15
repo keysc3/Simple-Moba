@@ -10,6 +10,7 @@ using UnityEngine.AI;
 */
 public class Charm : Effect
 {
+    private int spellLevel;
     private float effectedSpeed;
     private Vector3 currentTarget;
     private NavMeshAgent effectedNavMeshAgent;
@@ -22,7 +23,8 @@ public class Charm : Effect
     *   @param unitCasted - GameObject of the unit that casted the charm.
     *   @param - unitEffected - GameObject of the unit that the charm is affecting.
     */
-    public Charm(ScriptableCharm charmEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
+    public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
+        this.spellLevel = spellLevel;
         effectedUnitStats = effected.GetComponent<UnitStats>();
         effectedSpeed = effectedUnitStats.speed.GetValue();
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
@@ -39,7 +41,8 @@ public class Charm : Effect
         }
         // Reset the units current path.
         effectedNavMeshAgent.ResetPath();
-        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableCharm) effectType).slow.InitializeEffect(casted, effected));
+        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableCharm) effectType).slow
+        .InitializeEffect(spellLevel, casted, effected));
     }
 
     /*

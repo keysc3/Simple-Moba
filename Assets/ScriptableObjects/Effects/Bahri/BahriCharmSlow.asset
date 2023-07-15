@@ -12,10 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c69c4aa644de647bfdf7ae145855a2, type: 3}
   m_Name: BahriCharmSlow
   m_EditorClassIdentifier: 
+  <duration>k__BackingField:
+  - 1.2
+  - 1.4
+  - 1.6
+  - 1.8
+  - 2
   isStackable: 0
   ccValue: 0
   isBuff: 0
   sprite: {fileID: 21300000, guid: b47ab3f27b63d6f44b5818e3c6155395, type: 3}
-  <duration>k__BackingField: 1.2
-  <slowPercent>k__BackingField: 0.65
-  isChild: 1
+  <slowPercent>k__BackingField:
+  - 0.65
+  - 0.65
+  - 0.65
+  - 0.65
+  - 0.65
+  <isChild>k__BackingField: 1

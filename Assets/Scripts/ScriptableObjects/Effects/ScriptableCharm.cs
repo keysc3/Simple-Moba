@@ -10,7 +10,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects/Charm")]
 public class ScriptableCharm : ScriptableEffect
 {
-    [SerializeField] private List<float> duration = new List<float>();
+    //[SerializeField] private List<float> duration = new List<float>();
     [field: SerializeField] public ScriptableSlow slow { get; private set; }
 
     /*
@@ -21,7 +21,8 @@ public class ScriptableCharm : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
         ccValue = 1;
-        slow.SetDuration(duration[spellLevel]);
-        return new Charm(this, duration[spellLevel], unitCasted, unitEffected);
+        //this.spellLevel = spellLevel;
+        //slow.SetDuration(duration[spellLevel]);
+        return new Charm(this, duration[spellLevel], spellLevel, unitCasted, unitEffected);
     }
 }

@@ -10,9 +10,7 @@ using UnityEngine.AI;
 */
 public class Slow : Effect
 {
-    private float effectedSpeed;
-    private NavMeshAgent effectedNavMeshAgent;
-    private UnitStats effectedUnitStats;
+    public float slowPercent { get; private set; }
     
     /*
     *   Slow - Initialize a new slow effect.
@@ -21,24 +19,56 @@ public class Slow : Effect
     *   @param unitCasted - GameObject of the unit that casted the slow.
     *   @param - unitEffected - GameObject of the unit that the slow is affecting.
     */
-    public Slow(ScriptableSlow slowEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(slowEffect, duration, unitCasted, unitEffected){
-        effectedUnitStats = effected.GetComponent<UnitStats>();
-        effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
+    public Slow(ScriptableSlow slowEffect, float duration, float slowPercent, GameObject unitCasted, GameObject unitEffected) : base(slowEffect, duration, unitCasted, unitEffected){
+        this.slowPercent = slowPercent;
     }
 
     /*
     *   StartEffect - Start the slow effect.
     */
     public override void StartEffect(){
-        float speed = effectedUnitStats.speed.GetValue();
-        effectedSpeed = speed * ((ScriptableSlow) effectType).slowPercent;
-        effectedNavMeshAgent.speed = speed - effectedSpeed;
+
     }
 
     /*
     *   EndEffect - End the slow effect.
     */
     public override void EndEffect(){
-        effectedNavMeshAgent.speed =  effectedNavMeshAgent.speed + effectedSpeed;
+
+    }
+
+    /*
+    *   isEffectStronger - Checks if the the second effect is stronger than the first.
+    *   @param strongest - Slow of a slow.
+    *   @param newSlow - Slow of the slow to check if stronger.
+    */
+    public bool isEffectStronger(Slow strongest, Slow newSlow){
+        if(newSlow.slowPercent > strongest.slowPercent){
+            return true;
+        }
+        else
+            return false;
+    }
+
+    /*
+    *   GetStrongest - Finds the index of the strongest slow. GetStrongest is only called if a slow exists in the list given.
+    *   @param myEffects - List containing all effects to check.
+    *   @return int - int of the index the strongest slow is at.
+    */
+    public int GetStrongest(List<Effect> myEffects){
+        int strongestIndex = -1;
+        int i = 0;
+        foreach(Effect effect in myEffects){
+            if(effect is Slow){
+                if(strongestIndex != -1){
+                    if(isEffectStronger((Slow) myEffects[strongestIndex], (Slow) effect))
+                        strongestIndex = i;
+                }
+                else
+                    strongestIndex = i;
+            }
+            i++;
+        }
+        return strongestIndex;
     }
 }

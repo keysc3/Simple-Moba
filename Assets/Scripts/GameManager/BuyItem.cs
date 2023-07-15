@@ -57,7 +57,7 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to purchase.
     */
     private void PurchaseItem(int itemNumber){
-        ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<ChampionInventory>().AddItem(allItems[itemNumber-1]);
+        ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<ChampionInventory>().BoughtItem(allItems[itemNumber-1]);
     }
 
     /*
@@ -65,6 +65,6 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to sell.
     */
     private void SellItem(int itemSlot){
-        ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<ChampionInventory>().RemoveItem(itemSlot);
+        ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<ChampionInventory>().SoldItem(itemSlot);
     }
 }

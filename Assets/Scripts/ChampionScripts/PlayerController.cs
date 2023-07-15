@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
                 PlayerLookDirection(navMeshAgent.steeringTarget);
         }
 
-        if(targetedEnemy != null){
+        if(targetedEnemy != null && !playerAbilities.isCasting){
             MovePlayerToEnemy();
         }
         else

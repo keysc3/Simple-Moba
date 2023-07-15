@@ -48,9 +48,9 @@ public class StatusEffectManager : MonoBehaviour
                         statusEffects.RemoveAt(i);
                         effectNames.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
-                        if(effect.effectType is ScriptableSlow){
+                        if(effect is Slow){
                             if(CheckForEffectByType(effect)){
-                                SetStrongestSlow(effect);
+                                SetStrongestSlow((Slow) effect);
                             }
                         }
                         // If there are still running effects, activate the most impairing.
@@ -98,35 +98,36 @@ public class StatusEffectManager : MonoBehaviour
         // CC Values of zero are always active.
         if(effect.effectType.ccValue == 0){
             // If a new slow effect was added then only activate the strongest one.
-            if(effect.effectType is ScriptableSlow){
-                SetStrongestSlow(effect);
+            if(effect is Slow){
+                SetStrongestSlow((Slow) effect);
             }
             else
                 effect.SetIsActivated(true);
         }
         // If the effect is a slow and a child of another effect then do not add it to the UI.
-        if(effect.effectType is ScriptableSlow){
+        if(effect is Slow){
             if(((ScriptableSlow) effect.effectType).isChild){
                 return;
             }
         }
-        uiManager.AddStatusEffectUI(this, effect);
+        if(unitStats.unit is Champion)
+            uiManager.AddStatusEffectUI(this, effect);
     }
 
     /*
     *   SetStrongestSlow - Sets the strongest slow to be activated. Slow is the only zero cc value effect that applies the strongest.
     *   @param effect - Slow Effect that was added.
     */
-    public void SetStrongestSlow(Effect effect){
+    public void SetStrongestSlow(Slow effect){
         // Get the strongest slows index in the status effect list.
-        int index = ((ScriptableSlow) effect.effectType).GetStrongest(statusEffects);
+        int index = effect.GetStrongest(statusEffects);
         // Deactivate all slows in the list that aren't the strongest.
         for(int i = 0; i < statusEffects.Count; i++){
-            if(statusEffects[i].effectType is ScriptableSlow){
+            if(statusEffects[i] is Slow){
                 if(index == i)
-                    statusEffects[i].StartEffect();
+                    statusEffects[i].SetIsActivated(true);
                 else
-                    statusEffects[i].EndEffect();
+                    statusEffects[i].SetIsActivated(false);
             } 
         }
     }
@@ -202,6 +203,28 @@ public class StatusEffectManager : MonoBehaviour
                 effects.Add(effect);
         }
         return effects;
+    }
+
+    /*
+    *   GetNextExpiringStack - Gets the next expiring stack of a stackable effect.
+    *   @param effect - Effect to get the next expiring stack for.
+    */
+    public Effect GetNextExpiringStack(Effect effect){
+        List<Effect> myEffects = GetEffectsByName(effect.effectType.name);
+        // Set default values.
+        Effect nextExipiring = myEffects[0];
+        float timeTillExpired = myEffects[0].effectDuration - myEffects[0].effectTimer;
+        if(myEffects.Count > 1){
+            for(int i = 1; i < myEffects.Count; i++){
+                // If duration left is less than the current timeTillExpired then set the new next expiring.
+                float check = myEffects[i].effectDuration - myEffects[i].effectTimer;
+                if(check < timeTillExpired){
+                    timeTillExpired = check;
+                    nextExipiring = myEffects[i];
+                }
+            }
+        }
+        return nextExipiring;
     }
 
     /*

@@ -10,21 +10,19 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects/Drowsy")]
 public class ScriptableDrowsy : ScriptableEffect
 {
-    public ScriptableSleep sleep { get; private set; }
-    public int spellLevel { get; private set; }
-    [field: SerializeField] public float duration { get; private set; }
+    //[field: SerializeField] public float duration { get; private set; }
     [field: SerializeField] public ScriptableSlow slow { get; private set; }
+    [field: SerializeField] public ScriptableSleep sleep { get; private set; }
 
     /*
     *   InitializeEffect - Initializes a new drowsy effect.
     *   @param unitCasted - GameObject of the unit that casted the charm.
     *   @param unitEffected - GameObject of the unit effected by the charm.
     */
-    public Effect InitializeEffect(ScriptableSleep sleep, int spellLevel, GameObject unitCasted, GameObject unitEffected){
+    public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
         ccValue = 0;
-        this.sleep = sleep;
-        this.spellLevel = spellLevel;
-        slow.SetDuration(duration);
-        return new Drowsy(this, duration, unitCasted, unitEffected);
+        //this.sleep = sleep;
+        //slow.SetDuration(duration);
+        return new Drowsy(this, duration[spellLevel], spellLevel, unitCasted, unitEffected);
     }
 }

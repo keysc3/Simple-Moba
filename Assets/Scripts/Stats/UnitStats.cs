@@ -76,57 +76,39 @@ public class UnitStats : MonoBehaviour
     }
 
     /*
-    *   TakeDamage - Damages the champion.
+    *   TakeDamage - Damages the unit.
     *   @param incomingDamage - float of the incoming damage amount.
     *   @param damageType - string of the type of damage that is being inflicted.
     *   @param from - GameObject of the damage source.
     */
     public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
-        float finalDamage = incomingDamage;
-        // If still alive then apply damage mitigation.
-        if(currentHealth > 0f){
-            if(damageType == "magic")
-                finalDamage = MitigateMagicDamage(incomingDamage);
-            else if(damageType == "physical")
-                finalDamage = MitigatePhysicalDamage(incomingDamage);
-            currentHealth -= finalDamage;
-            Debug.Log(transform.name + " took " + finalDamage + " " + damageType + " damage from " + from.transform.name);
-            // If dead then award a kill and start the death method.
-            if(currentHealth <= 0f){
-                isDead = true;
-                Debug.Log(transform.name + " killed by " + from.transform.name);
-                from.GetComponent<ScoreManager>().Kill(gameObject);
-                GetComponent<RespawnDeath>().Death();
-                if(unit is Champion){
-                    foreach(GameObject assist in GetComponent<DamageTracker>().CheckForAssists()){
-                        if(assist != from)
-                            assist.GetComponent<ScoreManager>().Assist();
-                    }
-                    GetComponent<ScoreManager>()?.Death();
+        float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, from.GetComponent<UnitStats>().unit, gameObject.GetComponent<UnitStats>().unit);
+        currentHealth -= damageToTake;
+        Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
+        // If dead then award a kill and start the death method.
+        if(currentHealth <= 0f){
+            isDead = true;
+            Debug.Log(transform.name + " killed by " + from.transform.name);
+            from.GetComponent<ScoreManager>().Kill(gameObject);
+            GetComponent<RespawnDeath>().Death();
+            // Grant any assists if the unit is a champion.
+            if(unit is Champion){
+                foreach(GameObject assist in GetComponent<DamageTracker>().CheckForAssists()){
+                    if(assist != from)
+                        assist.GetComponent<ScoreManager>().Assist();
                 }
-            }
-            else{
-                bonusDamage?.Invoke(gameObject, isDot);
+                GetComponent<ScoreManager>()?.Death();
             }
         }
-    }
-
-    /*
-    *   MitigateMagicDamage - Reduces the incoming magic damage based on the champions stats.
-    */
-    private float MitigateMagicDamage(float incomingDamage){
-        //TODO: mitigate
-        return incomingDamage;
-    }
-
-    /*
-    *   MitigatePhysicalDamage - Reduces the incoming physical damage based on the champions stats.
-    */
-    private float MitigatePhysicalDamage(float incomingDamage){
-        //TODO: mitigate
-        return incomingDamage;
+        // Apply any damage that procs after recieving damage.
+        else{
+            bonusDamage?.Invoke(gameObject, isDot);
+        }
     }
     
+    /*
+    *   UpdateAttackSpeed - Updates a units attack speed.
+    */
     public void UpdateAttackSpeed(){
         float finalAS = ((Champion) unit).attackSpeed * (1 + (bonusAttackSpeed.GetValue()/100));
         if(finalAS > 2.5f)
@@ -134,31 +116,40 @@ public class UnitStats : MonoBehaviour
         attackSpeed.SetBaseValue(finalAS);
     }
 
+    /*
+    *   CalculateMoveSpeed - Calculates a units move speed. All speed boosts are used but only one slow is used.
+    */
     public float CalculateMoveSpeed(){
         List<Effect> speedBonuses = statusEffectManager.GetEffectsByType(typeof(ScriptableSpeedBonus));
         float additive = 1f;
         float multiplicative = 1f;
+        // Calculate the additive and multiplicative speed boosts.
         foreach(Effect effect in speedBonuses){
             ScriptableSpeedBonus myBonus = (ScriptableSpeedBonus) effect.effectType;
             if(myBonus.isAdditive){
-                additive += myBonus.bonusPercent;
+                additive += ((SpeedBonus) effect).bonusPercent;
             }
             else{
-                multiplicative *= (1f + myBonus.bonusPercent);
+                multiplicative *= (1f + ((SpeedBonus) effect).bonusPercent);
             }
         }
         List<Effect> slows = statusEffectManager.GetEffectsByType(typeof(ScriptableSlow));
         float slowPercent = 1f;
+        // Calculate the slow percentage to apply to the units speed.
         foreach(Effect effect in slows){
             if(effect.isActivated){
-                ScriptableSlow mySlow = (ScriptableSlow) effect.effectType;
+                Debug.Log("champ: " + gameObject.name + "act?: " + effect.isActivated);
+                Slow mySlow = (Slow) effect;
                 slowPercent *= (1f - mySlow.slowPercent);
+                break;
             }
         }
+        // Calculate final value.
         float finalMS = speed.GetValue() * additive * multiplicative * slowPercent;
         return finalMS;
     }
 
+    // Called after all update functions are called.
     private void LateUpdate(){
         float finalMS = CalculateMoveSpeed();
         navMeshAgent.speed = finalMS;

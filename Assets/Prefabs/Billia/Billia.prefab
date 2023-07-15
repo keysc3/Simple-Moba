@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: -6407682122250772637, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: championUI
       value: 
-      objectReference: {fileID: 8842905393809374821, guid: dd70f252af0b6444c9852f20d66b5d10, type: 3}
+      objectReference: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
     - target: {fileID: 1921830857179254351, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: m_Name
       value: Billia

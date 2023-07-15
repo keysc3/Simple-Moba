@@ -5,9 +5,7 @@ using UnityEngine.AI;
 
 public class SpeedBonus : Effect
 {
-    private float effectedSpeed;
-    private NavMeshAgent effectedNavMeshAgent;
-    private UnitStats effectedUnitStats;
+    public float bonusPercent { get; private set; }
     
     /*
     *   Slow - Initialize a new speed bonus effect.
@@ -16,7 +14,8 @@ public class SpeedBonus : Effect
     *   @param unitCasted - GameObject of the unit that casted the speed bonus.
     *   @param - unitEffected - GameObject of the unit that the speed bonus is affecting.
     */
-    public SpeedBonus(ScriptableSpeedBonus speedBonusEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(speedBonusEffect, duration, unitCasted, unitEffected){
+    public SpeedBonus(ScriptableSpeedBonus speedBonusEffect, float duration, float bonusPercent, GameObject unitCasted, GameObject unitEffected) : base(speedBonusEffect, duration, unitCasted, unitEffected){
+        this.bonusPercent = bonusPercent;
     }
 
     /*
@@ -29,5 +28,13 @@ public class SpeedBonus : Effect
     *   EndEffect - End the slow effect.
     */
     public override void EndEffect(){
+    }
+
+    /*
+    *   SetBonusPercent - Sets the bonus percent of the speed bonus.
+    *   @param bonusPercent - float of percent to set the bonus to.
+    */
+    public void SetBonusPercent(float bonusPercent){
+        this.bonusPercent = bonusPercent;
     }
 }

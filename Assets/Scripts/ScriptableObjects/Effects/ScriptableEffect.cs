@@ -9,6 +9,7 @@ using UnityEngine;
 */
 public abstract class ScriptableEffect : ScriptableObject
 {
+    [field: SerializeField] public List<float> duration { get; private set; } = new List<float>();
     public bool isStackable = false;
     public int ccValue;
     public bool isBuff;

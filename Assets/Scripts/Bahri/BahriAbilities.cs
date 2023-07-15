@@ -15,6 +15,7 @@ public class BahriAbilities : ChampionAbilities
     [SerializeField] private GameObject Spell_3_object;
     [SerializeField] private GameObject attack;
     [field: SerializeField] public ScriptableSpeedBonus spell_2_SpeedBonus { get; private set; }
+    [field: SerializeField] public ScriptableSpell spell4 { get; private set; }
 
     private float spell_4_timer;
     private float spell_4_duration;
@@ -24,6 +25,7 @@ public class BahriAbilities : ChampionAbilities
     private BahriAbilityHit bahriAbilityHit;
     private Bahri bahri;
     private ScoreManager scoreManager;
+    private Spell spell4Effect = null;
 
     // Called when the script instance is being loaded.
     protected override void Awake(){
@@ -266,20 +268,21 @@ public class BahriAbilities : ChampionAbilities
     */
     private IEnumerator Spell_2_Speed(){
         float timer = 0.0f;
+        int spellLevel = levelManager.spellLevels["Spell_2"]-1;
         // Players speed with boost applied.
         //float newSpeed = navMeshAgent.speed + (championStats.speed.GetValue() * bahri.spell_2_msBoost);
         //navMeshAgent.speed = newSpeed;
         // Create and add a new speed bonus effect.
-        Effect speedBonus = spell_2_SpeedBonus.InitializeEffect(gameObject, gameObject);
-        ((ScriptableSpeedBonus) speedBonus.effectType).SetBonusPercent(bahri.spell_2_msBoost);
+        SpeedBonus speedBonus = (SpeedBonus) spell_2_SpeedBonus.InitializeEffect(spellLevel, gameObject, gameObject);
+        speedBonus.SetBonusPercent(bahri.spell_2_msBoost);
         GetComponent<StatusEffectManager>().AddEffect(speedBonus);
         // While speed boost is still active.
-        while (timer < spell_2_SpeedBonus.duration){
+        while (timer < spell_2_SpeedBonus.duration[spellLevel]){
             // Calculate the fraction of the speed boosts duration that has passed.
-            float timePassed = timer/spell_2_SpeedBonus.duration;
+            float timePassed = timer/spell_2_SpeedBonus.duration[spellLevel];
             // Decay the speed bonus based on time since activated.
             float newBonus = Mathf.SmoothStep(bahri.spell_2_msBoost, 0f, timePassed);
-            ((ScriptableSpeedBonus) speedBonus.effectType).SetBonusPercent(newBonus);
+            speedBonus.SetBonusPercent(newBonus);
             //float step = newSpeed - Mathf.SmoothStep(championStats.speed.GetValue(), newSpeed, timePassed);
             // Apply the current speed boost.
             //navMeshAgent.speed =  championStats.speed.GetValue() + step;
@@ -340,7 +343,7 @@ public class BahriAbilities : ChampionAbilities
 
     /*
     *   Spell_4 - Sets up and creates the players fourth spell GameObjects. The spell quickly moves Bahri in the target direction and launches projectiles 
-    *   at up to three enemies in range upon reaching the dashes end location. The spell lasts a set duration and can be re-casted 2 times with a 1s lockout on re-casting.
+    *  spell4Effect at up to three enemies in range upon reaching the dashes end location. The spell lasts a set duration and can be re-casted 2 times with a 1s lockout on re-casting.
     */
     public override void Spell_4(){
         if(!spell_4_onCd && !isCasting && championStats.currentMana >= bahri.spell4BaseMana[levelManager.spellLevels["Spell_4"]-1]){
@@ -355,6 +358,8 @@ public class BahriAbilities : ChampionAbilities
     *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
     */
     private IEnumerator Spell_4_Start(){
+        spell4Effect = (Spell) spell4.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, gameObject);
+        GetComponent<StatusEffectManager>().AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = bahri.spell_4_duration;
         float lastCastTimer = 0.0f;
@@ -372,6 +377,7 @@ public class BahriAbilities : ChampionAbilities
                 StartCoroutine(Spell_Cd_Timer(1.0f, (myBool => isCd = myBool), "Spell_4"));
                 lastCastTimer = 0.0f;
                 spell_4_chargesLeft -= 1.0f;
+                spell4Effect.UpdateStacks((int)(spell_4_chargesLeft));
             }
             uiManager.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer);
             if(spell_4_chargesLeft == 0)
@@ -393,6 +399,9 @@ public class BahriAbilities : ChampionAbilities
                 spell_4_chargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;
+                spell4Effect.UpdateStacks((int)spell_4_chargesLeft);
+                spell4Effect.ResetTimer();
+                spell4Effect.SetDuration(spell_4_duration);
             }
         }
     }
