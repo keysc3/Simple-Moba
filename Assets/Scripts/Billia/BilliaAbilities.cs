@@ -422,7 +422,7 @@ public class BilliaAbilities : ChampionAbilities
                 targetPosition = transform.position + (targetPosition.normalized * billia.spell_3_maxLobMagnitude);
             else
                 targetPosition = transform.position + (targetDirection - transform.position);
-            StartCoroutine(Spell_3_Cast(targetPosition));
+            StartCoroutine(Spell_3_Cast(targetPosition, targetPosition - transform.position));
             // Use mana.
             championStats.UseMana(billia.spell3BaseMana[levelManager.spellLevels["Spell_3"]-1]);
             spell_3_onCd = true;
@@ -433,21 +433,21 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_3_Cast - Casts Billia's third ability after the cast time.
     *   @param targetPosition - Vector3 of where the seed is to be lobbed.
     */
-    private IEnumerator Spell_3_Cast(Vector3 targetPosition){
+    private IEnumerator Spell_3_Cast(Vector3 targetPosition, Vector3 targetDirection){
         // Wait for cast time.
         while(isCasting)
             yield return null;
         StartCoroutine(Spell_Cd_Timer(billia.spell3BaseCd[levelManager.spellLevels["Spell_3"]-1], (myBool => spell_3_onCd = myBool), "Spell_3"));
-        StartCoroutine(Spell_3_Lob(targetPosition));
+        StartCoroutine(Spell_3_Lob(targetPosition, targetDirection));
     }
     //TODO: FIX DIRECTION OF BALL ROLL.
     /*
     *   Spell_3_Lob - Lobs the seed at the target location over a set time using a Quadratic Bezier Curve.
     *   @param targetPosition - Vector3 of the target position for the seed to land.
     */
-    private IEnumerator Spell_3_Lob(Vector3 targetPosition){
+    private IEnumerator Spell_3_Lob(Vector3 targetPosition, Vector3 targetDirection){
         // Create spell object.
-        GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
+        GameObject spell_3_seed = (GameObject)Instantiate(seed, transform.position, Quaternion.identity);
         BilliaSpell3Trigger billiaSpell3Trigger = spell_3_seed.GetComponent<BilliaSpell3Trigger>();
         billiaSpell3Trigger.billiaAbilities = this;
         billiaSpell3Trigger.SetCaster(gameObject);
@@ -456,8 +456,9 @@ public class BilliaAbilities : ChampionAbilities
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
         Vector3 p1 = transform.position;
         p1.y = p1.y + p1_y_offset;
-        Vector3 dir = (targetPosition - transform.position).normalized;
-        float mag = (transform.position - targetPosition).magnitude;
+        Vector3 dir = targetDirection.normalized;
+        float mag = targetDirection.magnitude;
+        //float mag = targetDirection.normalized;
         p1.x = p1.x + (dir.x * (mag/2f));
         p1.z = p1.z + (dir.z * (mag/2f));
         // Set p2. p2 y is a value directly above the ground.
@@ -480,17 +481,15 @@ public class BilliaAbilities : ChampionAbilities
         spell_3_seed.transform.position = lastPoint;
         billiaSpell3Trigger.hasLanded = true;
         // Start the seeds rolling.
-        StartCoroutine(Spell_3_Move(targetPosition, spell_3_seed, billiaSpell3Trigger));
+        StartCoroutine(Spell_3_Move(targetDirection.normalized, spell_3_seed, billiaSpell3Trigger));
     }
 
     /*
     *   Spell_3_Move - Instantiates the seed and checks for collision on lob landing. If no landing collision the seed rolls in the 
     *   target forward direction until a collision.
-    *   @param targetPosition - Vector3 of the lobbed seeds landing position.
+    *   @param targetDirection - Vector3 of the lobbed seeds direction to roll.
     */
-    private IEnumerator Spell_3_Move(Vector3 targetPosition, GameObject spell_3_seed, BilliaSpell3Trigger billiaSpell3Trigger){
-        // Direction to roll.
-        Vector3 targetDirection =  (targetPosition - transform.position).normalized;
+    private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject spell_3_seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
         // Set inital seed position.
         //spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
