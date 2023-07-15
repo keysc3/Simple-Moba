@@ -166,7 +166,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator LevelUpSkill(){
         uiManager.ShiftStatusEffects(new Vector2(xShift, yShift));
         // Use all skill points before stopping.
-        while(spellLevelPoints != 0){
+        while(spellLevelPoints > 0){
             // If a level up or skill point was used since the last UI update then update the UI.
             if(newLevel){
                 uiManager.SetSkillLevelUpActive(spellLevels, level, true);
