@@ -9,6 +9,9 @@ public class Score
     public int deaths;
     public int cs;
 
+    public delegate void Takedown(GameObject killed);
+    public event Takedown takedownCallback;
+
     public Score(){
         kills = 0;
         assists = 0;
@@ -16,12 +19,14 @@ public class Score
         cs = 0;
     }
 
-    public void ChampionKill(){
+    public void ChampionKill(GameObject killed){
         kills += 1;
+        takedownCallback?.Invoke(killed);
     }
 
-    public void CreepKill(){
+    public void CreepKill(GameObject killed){
         cs += 1;
+        takedownCallback?.Invoke(killed);
     }
 
     public void Death(){

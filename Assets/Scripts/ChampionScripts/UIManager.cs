@@ -32,6 +32,8 @@ public class UIManager : MonoBehaviour
     private GradientAlphaKey[] alphaKey;
     private Color defaultBorderColor;
 
+    private Player player;
+
     // Called when the script instance is being loaded.
     void Awake(){
         championUI = Instantiate(championUI, championUI.transform.position, championUI.transform.rotation);
@@ -44,7 +46,6 @@ public class UIManager : MonoBehaviour
         Vector3 playerBarPos = playerBar.GetComponent<RectTransform>().anchoredPosition;
         playerBar.transform.SetParent(gameObject.transform);
         playerBar.GetComponent<RectTransform>().anchoredPosition3D = playerBarPos;
-        championStats = GetComponent<ChampionStats>();
         defaultBorderColor = new Color(167f/255f, 126f/255f, 69f/255f);
         SetUpGradient();
         spellsHPManaUI = championUI.transform.GetChild(0);
@@ -60,6 +61,8 @@ public class UIManager : MonoBehaviour
 
     // Start is called before the first frame update.
     void Start(){
+        player = GetComponent<Player>();
+        championStats = (ChampionStats) player.unitStats;
         UpdateHealthBar();
         UpdateManaBar();
         SetUpIcons();
@@ -67,7 +70,7 @@ public class UIManager : MonoBehaviour
     }
 
     void SetUpIcons(){
-        Champion champ = (Champion) championStats.unit;
+        ScriptableChampion champ = (ScriptableChampion) championStats.unit;
         spellsHPManaUI.GetChild(0).GetChild(1).GetComponent<Image>().sprite = champ.passive_sprite;
         spellsHPManaUI.GetChild(1).GetChild(2).GetComponent<Image>().sprite = champ.spell_1_sprite;
         spellsHPManaUI.GetChild(2).GetChild(2).GetComponent<Image>().sprite = champ.spell_2_sprite;
@@ -177,7 +180,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateHealthBar(){
         // If the champion is dead.
-        if(!championStats.isDead){
+        if(!player.isDead){
             // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
             float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
             health.transform.GetChild(2).GetComponent<TMP_Text>()
@@ -446,16 +449,16 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.M)){
             if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
-                gameObject.GetComponent<ChampionStats>().TakeDamage(10, "magic", gameObject, false);
+                gameObject.GetComponent<Player>().TakeDamage(10, "magic", gameObject, false);
         }
         // Activate mana and health regen UI if the player is not full mana or full health.
-        if(championStats.currentMana < championStats.maxMana.GetValue() && !championStats.isDead){
+        if(championStats.currentMana < championStats.maxMana.GetValue() && !player.isDead){
             SetManaRegenActive(true);
         }
         else{
             SetManaRegenActive(false);
         }
-        if(championStats.currentHealth < championStats.maxHealth.GetValue() && !championStats.isDead){
+        if(championStats.currentHealth < championStats.maxHealth.GetValue() && !player.isDead){
             SetHealthRegenActive(true);
         }
         else{
@@ -471,10 +474,10 @@ public class UIManager : MonoBehaviour
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
     // increase size of container, increase y offset.
-    public void AddStatusEffectUI(StatusEffectManager statusEffectManager, Effect effect){
+    public void AddStatusEffectUI(StatusEffects statusEffects, Effect effect){
         // If a stackable effect already has 1 stack, don't create a new UI element.
         if(effect.effectType.isStackable)
-            if(statusEffectManager.GetEffectsByType(effect.effectType.GetType()).Count > 1)
+            if(statusEffects.GetEffectsByType(effect.effectType.GetType()).Count > 1)
                 return;
         //Instantiate status effect prefab.
         GameObject myEffect = (GameObject)Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
@@ -492,9 +495,9 @@ public class UIManager : MonoBehaviour
         }
         // Start effect timer animation coroutine.
         if(effect.effectType.isStackable)
-            StartCoroutine(StackableStatusEffectUI(statusEffectManager, effect, myEffect));
+            StartCoroutine(StackableStatusEffectUI(statusEffects, effect, myEffect));
         else
-            StartCoroutine(StatusEffectUI(statusEffectManager, effect, myEffect));
+            StartCoroutine(StatusEffectUI(statusEffects, effect, myEffect));
     }
 
     /*
@@ -537,12 +540,12 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StatusEffectUI(StatusEffectManager statusEffectManager, Effect effect, GameObject effectUI){
+    public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI){
         float elapsedDuration;
         // Get the timer image component.
         Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
         // While the effect still exists on the GameObject.
-        while(statusEffectManager.statusEffects.Contains(effect)){
+        while(statusEffects.statusEffects.Contains(effect)){
                 if(effect.effectType is ScriptableSpell){
                     if(((Spell)effect).stacks > 0){
                         // Set stack text active.
@@ -570,7 +573,7 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StackableStatusEffectUI(StatusEffectManager statusEffectManager, Effect effect, GameObject effectUI){
+    public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI){
         // Set stack text active.
         effectUI.transform.GetChild(3).gameObject.SetActive(true);
         // Setup variables.
@@ -586,14 +589,14 @@ public class UIManager : MonoBehaviour
         // Get the timer image component.
         Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
         // While the effect still exists on the GameObject.
-        while(statusEffectManager.statusEffects.Contains(effect)){
+        while(statusEffects.statusEffects.Contains(effect)){
             // Get how many stacks the effect has.
-            int newStacks = statusEffectManager.GetEffectsByType(effect.effectType.GetType()).Count;
+            int newStacks = statusEffects.GetEffectsByType(effect.effectType.GetType()).Count;
             // If stacks aren't equal then a stack expired or was added.
             if(stacks != newStacks){
                 // Set the stacks text and get the next expiring stack to display.
                 effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = newStacks.ToString();
-                displayEffect = statusEffectManager.GetNextExpiringStack(effect);
+                displayEffect = statusEffects.GetNextExpiringStack(effect);
                 // If a stack expired.
                 if(newStacks < stacks){
                     // Get the duration left on the next expiring stack.

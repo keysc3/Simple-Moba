@@ -13,14 +13,7 @@ public class MinionStats : UnitStats
 
     public string team;
 
-    protected override void Awake(){
-        base.Awake();
-        team = ((Minion) unit).team;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        displayCurrentHealth = currentHealth;
+    public MinionStats(ScriptableMinion minion) : base(minion){
+        team = ((ScriptableMinion) unit).team;
     }
 }

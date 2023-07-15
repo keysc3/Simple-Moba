@@ -42,10 +42,11 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-       billia = (Billia) championStats.unit;
-       spell_1_passiveStacks = 0;
+        base.Start();
+        billia = (Billia) championStats.unit;
+        spell_1_passiveStacks = 0;
     }
 
     // Update is called once per frame
@@ -61,7 +62,7 @@ public class BilliaAbilities : ChampionAbilities
     *   @param enemy - GameObject of the unit to apply the passive to.
     */
     public void Passive(GameObject enemy){
-        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(30f, 0, gameObject, enemy));
+        enemy.GetComponent<Unit>().statusEffects.AddEffect(passiveDot.InitializeEffect(30f, 0, gameObject, enemy));
         if(!passiveApplied.Contains(enemy)){
             passiveApplied.Add(enemy);
             StartCoroutine(PassiveHeal(enemy));
@@ -74,18 +75,17 @@ public class BilliaAbilities : ChampionAbilities
     */
     private IEnumerator PassiveHeal(GameObject enemy){
         // Check to make sure the dot is still on the unit.
-        StatusEffectManager statusEffectManager = enemy.GetComponent<StatusEffectManager>();
-        UnitStats unitStats = enemy.GetComponent<UnitStats>();
-        while(statusEffectManager.CheckForEffectWithSource(passiveDot, gameObject)){
+        Unit unit = enemy.GetComponent<Unit>();
+        while(unit.statusEffects.CheckForEffectWithSource(passiveDot, gameObject)){
             // Heal the champion amount if unit is a champion.
-            if(unitStats.unit is Champion){
+            if(unit.unit is ScriptableChampion){
                 Debug.Log("Billia passive found on: " + enemy.name);
                 float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration[0];
                 championStats.SetHealth(championStats.currentHealth + healAmount);
                 Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
             }
-            else if(unitStats.unit is Monster){
-                if(((Monster) unitStats.unit).size == "large"){
+            else if(unit.unit is ScriptableMonster){
+                if(((ScriptableMonster) unit.unit).size == "large"){
                     Debug.Log("Billia passive found on: " + enemy.name);
                     float healAmount = (39f + ((15f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration[0];
                     championStats.SetHealth(championStats.currentHealth + healAmount);
@@ -170,7 +170,7 @@ public class BilliaAbilities : ChampionAbilities
             float bonusPercent = billia.spell_1_passiveSpeed[levelManager.spellLevels["Spell_1"]-1];
             SpeedBonus speedBonus = (SpeedBonus) spell_1_passiveSpeedBonus.InitializeEffect(levelManager.spellLevels["Spell_1"]-1, gameObject, gameObject);
             speedBonus.SetBonusPercent(bonusPercent);
-            GetComponent<StatusEffectManager>().AddEffect(speedBonus);
+            GetComponent<Player>().statusEffects.AddEffect(speedBonus);
             spell_1_passiveEffectTracker.Add(speedBonus);
             spell_1_passiveStacks += 1;
             //float amountIncrease = championStats.speed.GetValue() * bonusPercent;
@@ -614,10 +614,10 @@ public class BilliaAbilities : ChampionAbilities
     */
     private void Spell_4_Drowsy(List<GameObject> applyDrowsy){
         foreach(GameObject enemy in applyDrowsy){
-            if(enemy.GetComponent<UnitStats>().unit is Champion){
+            if(enemy.GetComponent<Unit>() is Player){
                 Drowsy newDrowsy = (Drowsy) drowsy.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, enemy);
-                enemy.GetComponent<StatusEffectManager>().AddEffect(newDrowsy);
-                enemy.GetComponent<UnitStats>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+                enemy.GetComponent<Player>().statusEffects.AddEffect(newDrowsy);
+                enemy.GetComponent<Player>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
                 GameObject drowsyObject = (GameObject)Instantiate(drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
@@ -646,13 +646,11 @@ public class BilliaAbilities : ChampionAbilities
     private List<GameObject> GetChampionsWithPassive(){
         List<GameObject> passiveAppliedChamps = new List<GameObject>();
         // Get all StatusEffectManagers.
-        StatusEffectManager[] effectScripts = FindObjectsOfType<StatusEffectManager>();
-        for (int i = 0; i < effectScripts.Length; i++){
+        Player[] playerScripts = FindObjectsOfType<Player>();
+        for (int i = 0; i < playerScripts.Length; i++){
             // If it is a champion and has the Billia dot then add it to the list.
-            if(effectScripts[i].unitStats.unit is Champion){
-                if(effectScripts[i].CheckForEffectByName(passiveDot, passiveDot.name)){
-                    passiveAppliedChamps.Add(effectScripts[i].gameObject);
-                }
+            if(playerScripts[i].statusEffects.CheckForEffectByName(passiveDot, passiveDot.name)){
+                passiveAppliedChamps.Add(playerScripts[i].gameObject);
             }
         }
         return passiveAppliedChamps;

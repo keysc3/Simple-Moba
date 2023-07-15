@@ -9,7 +9,7 @@ using UnityEngine;
 */
 [System.Serializable]
 [CreateAssetMenu(fileName = "New Bahri", menuName = "Unit/Champion/Bahri")]
-public class Bahri : Champion
+public class Bahri : ScriptableChampion
 {
     #region "Spell_1"
     public float spell_1_magnitude;

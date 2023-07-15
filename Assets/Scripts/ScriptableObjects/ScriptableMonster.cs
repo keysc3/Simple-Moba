@@ -8,7 +8,7 @@ using UnityEngine;
 * @author: Colin Keys
 */
 [CreateAssetMenu(fileName = "New Monster", menuName = "Unit/Monster")]
-public class Monster : Unit
+public class ScriptableMonster : ScriptableUnit
 {
     public float patienceAmount;
     public float patienceRange;

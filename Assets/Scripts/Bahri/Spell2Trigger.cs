@@ -18,7 +18,7 @@ public class Spell2Trigger : MonoBehaviour
     {
         // Destroy GameObject if target dies.
         if(target != null){
-            if(target.GetComponent<UnitStats>().isDead){
+            if(target.GetComponent<Unit>().isDead){
                 Destroy(gameObject);
             }
         }

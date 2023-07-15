@@ -10,7 +10,7 @@ using UnityEngine;
 public class Dot : Effect
 {
 
-    private UnitStats effectedUnitStats;
+    private Unit effectedUnit;
     private float damagePerTick;
     private float totalDamage;
     private float totalDealt;
@@ -25,7 +25,8 @@ public class Dot : Effect
     *   @param - unitEffected - GameObject of the unit that the dot is affecting.
     */
     public Dot(ScriptableDot dotEffect, float totalDamage, float duration, GameObject unitCasted, GameObject unitEffected) : base(dotEffect, duration, unitCasted, unitEffected){
-        effectedUnitStats = effected.GetComponent<UnitStats>();
+        //effectedUnitStats = effected.GetComponent<Player>().summoner.championStats;
+        effectedUnit = effected.GetComponent<Unit>();
         this.totalDamage = totalDamage;
     }
 
@@ -54,7 +55,7 @@ public class Dot : Effect
         if(nextTick <= Time.time){
             totalDealt += damagePerTick;
             // Apply the dot and calculate next tick time.
-            effectedUnitStats.TakeDamage(damagePerTick, ((ScriptableDot) effectType).damageType, casted, true);
+            effectedUnit.TakeDamage(damagePerTick, ((ScriptableDot) effectType).damageType, casted, true);
             nextTick = Time.time + ((ScriptableDot) effectType).tickRate;
         }
     }

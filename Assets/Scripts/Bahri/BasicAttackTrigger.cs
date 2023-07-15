@@ -17,7 +17,7 @@ public class BasicAttackTrigger : MonoBehaviour
     {
         // Destroy the attack object if the target dies.
         if(target != null){
-            if(target.GetComponent<UnitStats>().isDead){
+            if(target.GetComponent<Unit>().isDead){
                 Destroy(gameObject);
             }
         }

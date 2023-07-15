@@ -8,7 +8,7 @@ using UnityEngine;
 * @author: Colin Keys
 */
 [CreateAssetMenu(fileName = "New Billia", menuName = "Unit/Champion/Billia")]
-public class Billia : Champion
+public class Billia : ScriptableChampion
 {
     #region "Spell_1"
     public float spell_1_passiveSpeedDuration;

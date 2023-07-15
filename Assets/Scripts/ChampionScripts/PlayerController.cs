@@ -27,13 +27,13 @@ public class PlayerController : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         myCollider = GetComponent<Collider>();
         playerAbilities = GetComponent<ChampionAbilities>();
-        championStats = GetComponent<ChampionStats>();
         basicAttack = GetComponent<BasicAttack>();
         mainCamera = Camera.main;
     }
     // Start is called before the first frame update
     private void Start()
     {
+        championStats = (ChampionStats) GetComponent<Player>().unitStats;
         navMeshAgent.updateRotation = false;
         navMeshAgent.speed = championStats.speed.GetValue();
         attackTime = 1.0f/championStats.attackSpeed.GetValue();

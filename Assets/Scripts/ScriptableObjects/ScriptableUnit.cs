@@ -7,7 +7,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class Unit : ScriptableObject
+public class ScriptableUnit : ScriptableObject
 {
     new public string name = "New Unit";
     public Sprite icon = null;

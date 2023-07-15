@@ -11,7 +11,6 @@ using UnityEngine.AI;
 public class Sleep : Effect
 {
     private NavMeshAgent effectedNavMeshAgent;
-    private UnitStats effectedUnitStats;
     /*
     *   Sleep - Initialize a new sleep effect.
     *   @param sleepEffect - ScriptableSleep of the sleep effect to apply.
@@ -20,7 +19,6 @@ public class Sleep : Effect
     *   @param unitEffected - GameObject of the unit that the sleeep is affecting.
     */
     public Sleep(ScriptableSleep sleepEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(sleepEffect, duration, unitCasted, unitEffected){
-        effectedUnitStats = effected.GetComponent<UnitStats>();
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
     }
 

@@ -28,13 +28,13 @@ public class ScoreManager : MonoBehaviour
     */
     public void Kill(GameObject killed){
         // If the unit is a champion add a kill and update the kill UI.
-        if(killed.GetComponent<UnitStats>().unit is Champion){
-            score.ChampionKill();
+        if(killed.GetComponent<UnitStats>().unit is ScriptableChampion){
+            score.ChampionKill(killed);
             uiManager.UpdateKills(score.kills.ToString());
         }
         // Update the creeps score and creep score UI.
         else{
-            score.CreepKill();
+            score.CreepKill(killed);
             uiManager.UpdateCS(score.cs.ToString());
         }
         // Invoke the takedown (kill) callback.

@@ -17,7 +17,7 @@ public static class DamageCalculator
     *   @param from - GameObject of the damage source.
     *   @param to - GameObject the damage is going to.
     */
-    public static float CalculateDamage(float incomingDamage, string damageType, Unit from, Unit to){
+    public static float CalculateDamage(float incomingDamage, string damageType, UnitStats from, UnitStats to){
         float finalDamage = incomingDamage;
         if(damageType == "magic")
             finalDamage = MitigateMagicDamage(incomingDamage, to);
@@ -29,20 +29,20 @@ public static class DamageCalculator
     /*
     *   MitigateMagicDamage - Reduces the incoming magic damage based on the champions stats.
     *   @param incomingDamage - float of the magic damage to mitigate.
-    *   @param from - Unit whose magic resist stat to use for mitigating.
+    *   @param from - UnitStats whose magic resist stat to use for mitigating.
     */
-    private static float MitigateMagicDamage(float incomingDamage, Unit to){
-        float finalDamage = incomingDamage * (100/(100 + to.magicResist));
+    private static float MitigateMagicDamage(float incomingDamage, UnitStats to){
+        float finalDamage = incomingDamage * (100/(100 + to.magicResist.GetValue()));
         return finalDamage;
     }
 
     /*
     *   MitigatePhysicalDamage - Reduces the incoming physical damage based on the champions stats.
     *   @param incomingDamage - float of the physical damage to mitigate.
-    *   @param from - Unit whose armor stat to use for mitigating.
+    *   @param from - UnitStats whose armor stat to use for mitigating.
     */
-    private static float MitigatePhysicalDamage(float incomingDamage, Unit to){
-        float finalDamage = incomingDamage * (100/(100 + to.armor));
+    private static float MitigatePhysicalDamage(float incomingDamage, UnitStats to){
+        float finalDamage = incomingDamage * (100/(100 + to.armor.GetValue()));
         return finalDamage;
     }
 }

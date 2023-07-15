@@ -2,46 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-* Purpose: Manages the buffs and debuffs on a unit.
-*
-* @author: Colin Keys
-*/
-
-public class StatusEffectManager : MonoBehaviour
+public class StatusEffects
 {
 
     public List<string> effectNames = new List<string>();
     public List<Effect> statusEffects { get; private set; } = new List<Effect>();
-    public UnitStats unitStats { get; private set; }
-
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
-    private UIManager uiManager;
+    public Unit unit;
+    public UIManager uiManager;
 
-    private void Awake(){
-        unitStats = gameObject.GetComponent<UnitStats>();
-        uiManager = GetComponent<UIManager>();
+    public StatusEffects(Unit unit, UIManager uiManager){
+        this.unit = unit;
+        this.uiManager = uiManager;
     }
-
-    // Update is called once per frame
-    private void Update()
-    {
-       //UpdateEffects();
-    }
-
 
     /*
     *   UpdateEffects - Ticks the effects.
     */
-    /*private void UpdateEffects(){
-        // If there is an effect.
-         if(statusEffects.Count > 0){
-            // Increment every effects timer.
-            for(int i = statusEffects.Count - 1; i >= 0; i--){
+    public void UpdateEffects(){
+        // Increment every effects timer.
+        for(int i = statusEffects.Count - 1; i >= 0; i--){
+            // If there is an effect, used here incase the user dies from an effect tick that isn't the last effect.
+            if(statusEffects.Count > 0){
                 statusEffects[i].TimerTick(Time.deltaTime);
                 // Avoid any indexing errors if unit dies from the effect tick.
-                if(!unitStats.isDead){
+                if(!unit.isDead){
                     if(statusEffects[i].isFinished){
                         Effect effect = statusEffects[i];
                         statusEffects[i].EndEffect();
@@ -65,7 +51,7 @@ public class StatusEffectManager : MonoBehaviour
                     highestActiveCCValue = 0;
             }
         }
-    }*/
+    }
 
     /*
     *   AddEffect - Adds an effect to the status managers effect list.
@@ -110,8 +96,8 @@ public class StatusEffectManager : MonoBehaviour
                 return;
             }
         }
-        if(unitStats.unit is ScriptableChampion){}
-            //uiManager.AddStatusEffectUI(this, effect);
+        if(unit.unit is ScriptableChampion)
+            uiManager.AddStatusEffectUI(this, effect);
     }
 
     /*

@@ -11,10 +11,9 @@ using UnityEngine.AI;
 public class Charm : Effect
 {
     private int spellLevel;
-    private float effectedSpeed;
     private Vector3 currentTarget;
     private NavMeshAgent effectedNavMeshAgent;
-    private UnitStats effectedUnitStats;
+    private Unit effectedUnit;
     
     /*
     *   Charm - Initialize a new charm effect.
@@ -25,8 +24,7 @@ public class Charm : Effect
     */
     public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
         this.spellLevel = spellLevel;
-        effectedUnitStats = effected.GetComponent<UnitStats>();
-        effectedSpeed = effectedUnitStats.speed.GetValue();
+        effectedUnit = effected.GetComponent<Unit>();
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
     }
 
@@ -35,13 +33,13 @@ public class Charm : Effect
     */
     public override void StartEffect(){
         // If the charmed unit ia a champion disable their controls.
-        if(effectedUnitStats.unit is Champion){
+        if(effectedUnit.unit is ScriptableChampion){
             effected.GetComponent<PlayerController>().enabled = false;
             effected.GetComponent<PlayerSpellInput>().enabled = false;
         }
         // Reset the units current path.
         effectedNavMeshAgent.ResetPath();
-        effected.GetComponent<StatusEffectManager>().AddEffect(((ScriptableCharm) effectType).slow
+        effectedUnit.statusEffects.AddEffect(((ScriptableCharm) effectType).slow
         .InitializeEffect(spellLevel, casted, effected));
     }
 
@@ -53,7 +51,7 @@ public class Charm : Effect
         effectedNavMeshAgent.ResetPath();
         
         // Give controls back if charmed is active GameObject.
-        if(effectedUnitStats.unit is Champion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
+        if(effectedUnit.unit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
             effected.GetComponent<PlayerController>().enabled = true;
             effected.GetComponent<PlayerSpellInput>().enabled = true;
         }
@@ -63,10 +61,6 @@ public class Charm : Effect
     *   EffectTick - Tick for the charms effect.
     */
     public override void EffectTick(){
-        Debug.Log(effected);
-        //effected.GetComponent<NavMeshAgent>().ResetPath();
-        // Reduce speed and set destination.
-        //effectedNavMeshAgent.speed = effectedSpeed * ((ScriptableCharm) effectType).slowPercent;
         effectedNavMeshAgent.destination = casted.transform.position;
         Vector3 nextTarget;
         // If a path is set.

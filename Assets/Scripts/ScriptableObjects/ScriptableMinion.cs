@@ -8,7 +8,7 @@ using UnityEngine;
 * @author: Colin Keys
 */
 [CreateAssetMenu(fileName = "New Minion", menuName = "Unit/Minion")]
-public class Minion : Unit
+public class ScriptableMinion : ScriptableUnit
 {
     public string team;
 }

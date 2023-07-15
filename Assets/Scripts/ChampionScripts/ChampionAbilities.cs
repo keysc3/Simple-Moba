@@ -36,8 +36,11 @@ public abstract class ChampionAbilities : MonoBehaviour
         uiManager = GetComponent<UIManager>();
         myCollider = GetComponent<Collider>();
         levelManager = GetComponent<LevelManager>();
-        championStats = GetComponent<ChampionStats>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+
+    protected virtual void Start(){
+        championStats = (ChampionStats) GetComponent<Player>().unitStats;
     }
 
     /*

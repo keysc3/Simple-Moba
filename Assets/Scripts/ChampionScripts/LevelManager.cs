@@ -27,24 +27,24 @@ public class LevelManager : MonoBehaviour
     private float xShift = 0f;
     private float yShift = 15f;
     private ChampionStats championStats;
-    private Champion champion;
+    private ScriptableChampion champion;
     private UIManager uiManager;
 
     // Called when the script instance is being loaded.
     private void Awake()
     {
-        championStats = GetComponent<ChampionStats>();
         uiManager = GetComponent<UIManager>();
     }
 
     // Start is called before the first frame update
     private void Start(){
+        championStats = (ChampionStats) GetComponent<Player>().unitStats;
+        champion = (ScriptableChampion) championStats.unit;
         CurrentRespawnTime();
-        champion = (Champion) championStats.unit;
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         StartCoroutine(LevelUpSkill());
-        GetComponent<ScoreManager>().takedownCallback += GainXP; 
+        GetComponent<Player>().score.takedownCallback += GainXP; 
     }
 
     /*
@@ -65,7 +65,7 @@ public class LevelManager : MonoBehaviour
     */
     private void GainXP(GameObject killed){
         float gained;
-        if(killed.GetComponent<UnitStats>().unit is Champion)
+        if(killed.GetComponent<Unit>().unit is ScriptableChampion)
             gained = championKillXP[killed.GetComponent<LevelManager>().level - 1];
         else
             gained = 30f;

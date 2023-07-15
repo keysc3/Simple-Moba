@@ -13,7 +13,7 @@ public class BilliaDrowsyVisual : MonoBehaviour
 
     private Image drowsyVisual;
     private RectTransform rectTransform;
-    private StatusEffectManager statusEffectManager;
+    private StatusEffects statusEffects;
     public float drowsyDuration;
     public GameObject source;
     public float yOffset = 1f;
@@ -23,7 +23,7 @@ public class BilliaDrowsyVisual : MonoBehaviour
     void Start()
     {
         drowsyVisual = transform.GetChild(0).GetComponent<Image>();
-        statusEffectManager = transform.parent.GetComponent<StatusEffectManager>();
+        statusEffects = transform.parent.GetComponent<Unit>().statusEffects;
         rectTransform = GetComponent<RectTransform>();
         rectTransform.anchoredPosition3D = new Vector3(0f, (-(transform.parent.GetComponent<Collider>().bounds.size.y/2f)) + yOffset, 0f);
         rectTransform.rotation = Quaternion.Euler(90f, 0f , 0f);
@@ -35,7 +35,7 @@ public class BilliaDrowsyVisual : MonoBehaviour
     */
     private IEnumerator AnimateDrowsy(){
         float timer = 0.0f;
-        while(statusEffectManager.CheckForEffectWithSource(drowsy, source)){
+        while(statusEffects.CheckForEffectWithSource(drowsy, source)){
             // Change the fill amount based on percentage of drowsy time passed.
             float fill = timer/drowsyDuration;
             drowsyVisual.fillAmount = fill;

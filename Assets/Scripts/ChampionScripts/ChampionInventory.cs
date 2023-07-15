@@ -17,12 +17,12 @@ public class ChampionInventory : MonoBehaviour
     
     // Called when the script instance is being loaded.
     private void Awake(){
-        inventory = new Inventory();
+        //inventory = new Inventory();
         uiManager = GetComponent<UIManager>();
         championStats = GetComponent<ChampionStats>();
     }
 
-    public void BoughtItem(Item item){
+    /*public void BoughtItem(Item item){
         int inventorySlot= inventory.AddItem(item);
         if(inventorySlot > -1){
             AddItemStats(item); 
@@ -31,9 +31,9 @@ public class ChampionInventory : MonoBehaviour
             uiManager.UpdateAllStats();
             //DisplayItems();
         }
-    }
+    }*/
 
-    public void SoldItem(int inventorySlot){
+    /*public void SoldItem(int inventorySlot){
         Item itemSold = inventory.RemoveItem(inventorySlot);
         if(itemSold != null){
             RemoveItemStats(itemSold);
@@ -42,7 +42,7 @@ public class ChampionInventory : MonoBehaviour
             uiManager.UpdateAllStats();
             //DisplayItems();
         }
-    }
+    }*/
 
     /*
     *  DisplayItems - Display the items in the inspector by adding dictionary values to a list.
@@ -61,7 +61,7 @@ public class ChampionInventory : MonoBehaviour
     *   AddItemStats - Add an items stats to the champions stats.
     *   @param item - Item to that was added to the inventory.
     */
-    private void AddItemStats(Item item){
+    /*private void AddItemStats(Item item){
         if(item != null){
             // Bought an item so add the items stats.
             championStats.magicDamage.AddModifier(item.magicDamage);
@@ -85,13 +85,13 @@ public class ChampionInventory : MonoBehaviour
             championStats.speed.AddModifier(item.speed);
             championStats.bonusAttackSpeed.AddModifier(item.attackSpeed);
         }
-    }
+    }*/
 
     /*
     *   RemoveItemStats - Remove an items stats from the champions stats.
     *   @param item - Item to that was added to the inventory.
     */
-    private void RemoveItemStats(Item item){
+    /*private void RemoveItemStats(Item item){
         if(item != null){
             // Selling an item so remove the items stats.
             championStats.magicDamage.RemoveModifier(item.magicDamage);
@@ -113,5 +113,5 @@ public class ChampionInventory : MonoBehaviour
             championStats.speed.RemoveModifier(item.speed);
             championStats.bonusAttackSpeed.RemoveModifier(item.attackSpeed);
         }
-    }
+    }*/
 }

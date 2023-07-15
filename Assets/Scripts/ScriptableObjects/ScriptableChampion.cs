@@ -8,7 +8,7 @@ using UnityEngine;
 * @author: Colin Keys
 */
 [CreateAssetMenu(fileName = "New Champion", menuName = "Unit/Champion")]
-public class Champion : Unit
+public class ScriptableChampion : ScriptableUnit
 {
     #region "Sprites"
     public Sprite passive_sprite;

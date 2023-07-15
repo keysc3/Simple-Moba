@@ -9,18 +9,20 @@ using UnityEngine;
 */
 public class HealthManaRegen : MonoBehaviour
 {
+    private Player player;
     private ChampionStats championStats;
     private UIManager uiManager;
 
     // Called when the script instance is being loaded.
     private void Awake(){
-        championStats = GetComponent<ChampionStats>();
         uiManager = GetComponent<UIManager>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
+        player = GetComponent<Player>();
+        championStats = (ChampionStats) player.unitStats;
         StartCoroutine(RegenMana());
         StartCoroutine(RegenHealth());
     }
@@ -36,7 +38,7 @@ public class HealthManaRegen : MonoBehaviour
             float maxMana = championStats.maxMana.GetValue();
             float currentMana = championStats.currentMana;
             // If not at max mana and not dead then regen mana.
-            if(currentMana < maxMana && !championStats.isDead){
+            if(currentMana < maxMana && !player.isDead){
                 currentMana += manaToRegen;
                 // If regen goes over max mana set current mana to max.
                 if(currentMana > maxMana)
@@ -62,7 +64,7 @@ public class HealthManaRegen : MonoBehaviour
             float maxHealth = championStats.maxHealth.GetValue();
             float currentHealth = championStats.currentHealth;
             // If not at max mana and not dead then regen health.
-            if(currentHealth < maxHealth && !championStats.isDead){
+            if(currentHealth < maxHealth && !player.isDead){
                 currentHealth += healthToRegen;
                 // If regen goes over max health set current health to max.
                 if(currentHealth > maxHealth)

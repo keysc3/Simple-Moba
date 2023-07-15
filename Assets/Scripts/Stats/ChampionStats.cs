@@ -8,23 +8,15 @@ using UnityEngine;
 public class ChampionStats : UnitStats
 {
     [field: SerializeField] public float currentMana { get; private set; }
-    [field: SerializeField] public float displayCurrentMana { get; private set; }
     [field: SerializeField] public Stat maxMana { get; private set; }
     [field: SerializeField] public Stat MP5 { get; private set; }
     [field: SerializeField] public Stat haste { get; private set; }
 
-    // Called when the script instance is being loaded.
-    protected override void Awake(){
-        base.Awake();
-        MP5 = new Stat(((Champion) unit).MP5);
-        maxMana = new Stat(((Champion) unit).baseMana);
+    public ChampionStats(ScriptableChampion champion) : base(champion){
+        MP5 = new Stat(((ScriptableChampion) unit).MP5);
+        maxMana = new Stat(((ScriptableChampion) unit).baseMana);
         haste = new Stat(0f);
         currentMana = maxMana.GetValue();
-    }
-
-    private void Update(){
-        displayCurrentMana = currentMana; 
-        displayCurrentHealth = currentHealth;
     }
 
     /*
@@ -35,7 +27,7 @@ public class ChampionStats : UnitStats
         currentMana -= cost;
         if(currentMana < 0)
             currentMana = 0;
-        GetComponent<UIManager>().UpdateManaBar();
+        //GetComponent<UIManager>().UpdateManaBar();
     }
 
     /*
@@ -51,11 +43,5 @@ public class ChampionStats : UnitStats
     */
     public void ResetMana(){
         currentMana = maxMana.GetValue();
-    }
-
-    public override void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
-        base.TakeDamage(incomingDamage, damageType, from, isDot);
-        GetComponent<DamageTracker>().DamageTaken(from, incomingDamage, damageType);
-        GetComponent<UIManager>().UpdateHealthBar();
     }
 }

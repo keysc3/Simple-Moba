@@ -18,8 +18,11 @@ public class BasicAttack : MonoBehaviour
 
     // Called when the script instance is being loaded. 
     protected virtual void Awake(){
-        unitStats = GetComponent<UnitStats>();
         playerController = GetComponent<PlayerController>();
+    }
+
+    protected virtual void Start(){
+        unitStats = GetComponent<Unit>().unitStats;
     }
 
     /*
@@ -55,7 +58,7 @@ public class BasicAttack : MonoBehaviour
     */
     public virtual void AttackHit(GameObject target){
         float physicalDamage = unitStats.physicalDamage.GetValue();
-        target.GetComponent<UnitStats>().TakeDamage(physicalDamage, "physical", gameObject, false);
+        target.GetComponent<Player>().TakeDamage(physicalDamage, "physical", gameObject, false);
     }
 
     /*

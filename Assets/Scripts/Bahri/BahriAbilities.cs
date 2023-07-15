@@ -24,21 +24,21 @@ public class BahriAbilities : ChampionAbilities
     private int passiveStacks;
     private BahriAbilityHit bahriAbilityHit;
     private Bahri bahri;
-    private ScoreManager scoreManager;
+    //private ScoreManager scoreManager;
     private Spell spell4Effect = null;
 
     // Called when the script instance is being loaded.
     protected override void Awake(){
         base.Awake();
         bahriAbilityHit = GetComponent<BahriAbilityHit>();
-        scoreManager = GetComponent<ScoreManager>();
     }
 
     // Start is called before the first frame update
-    private void Start(){
+    protected override void Start(){
+        base.Start();
         bahri = (Bahri) championStats.unit;
-        scoreManager.takedownCallback += Passive;
-        scoreManager.takedownCallback += Spell_4_Takedown;
+        GetComponent<Player>().score.takedownCallback += Passive;
+        GetComponent<Player>().score.takedownCallback += Spell_4_Takedown;
         spell4Casting = false;
         passiveStacks = 0;
     }
@@ -57,7 +57,7 @@ public class BahriAbilities : ChampionAbilities
         Debug.Log("Takedown; use passive");
         float healAmount;
         // Heal off champion kill
-        if(killed.GetComponent<UnitStats>().unit is Champion){
+        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
             healAmount = ((90f / 17f) * (float)(levelManager.level - 1)) + 75f;
             championStats.SetHealth(championStats.currentHealth + healAmount + championStats.magicDamage.GetValue());
             Debug.Log("Healed " + healAmount + " health from champion kill.");
@@ -206,9 +206,9 @@ public class BahriAbilities : ChampionAbilities
                         // Check each enemy hit for closest to the GameObject.
                         foreach(Collider enemy in hitColliders){
                             // Only want to target alive units.
-                            if(!enemy.gameObject.GetComponent<UnitStats>().isDead && enemy.gameObject != gameObject){
+                            if(!enemy.gameObject.GetComponent<Unit>().isDead && enemy.gameObject != gameObject){
                                 // If a player is currently under spell 3 effects, prioritize that player.
-                                if(enemy.gameObject.GetComponent<StatusEffectManager>().CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
+                                if(enemy.gameObject.GetComponent<Unit>().statusEffects.CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
                                     target = enemy.gameObject;
                                     break;
                                 }
@@ -275,7 +275,7 @@ public class BahriAbilities : ChampionAbilities
         // Create and add a new speed bonus effect.
         SpeedBonus speedBonus = (SpeedBonus) spell_2_SpeedBonus.InitializeEffect(spellLevel, gameObject, gameObject);
         speedBonus.SetBonusPercent(bahri.spell_2_msBoost);
-        GetComponent<StatusEffectManager>().AddEffect(speedBonus);
+        GetComponent<Player>().statusEffects.AddEffect(speedBonus);
         // While speed boost is still active.
         while (timer < spell_2_SpeedBonus.duration[spellLevel]){
             // Calculate the fraction of the speed boosts duration that has passed.
@@ -359,7 +359,7 @@ public class BahriAbilities : ChampionAbilities
     */
     private IEnumerator Spell_4_Start(){
         spell4Effect = (Spell) spell4.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, gameObject);
-        GetComponent<StatusEffectManager>().AddEffect(spell4Effect);
+        GetComponent<Unit>().statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = bahri.spell_4_duration;
         float lastCastTimer = 0.0f;
@@ -371,7 +371,7 @@ public class BahriAbilities : ChampionAbilities
         // While the spells duration has not expired.
         while(spell_4_timer < spell_4_duration){
             // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
-            if(Input.GetKeyDown(KeyCode.R) && !isCasting && spell_4_chargesLeft > 0.0f && !isCd && !championStats.isDead){
+            if(Input.GetKeyDown(KeyCode.R) && !isCasting && spell_4_chargesLeft > 0.0f && !isCd && !GetComponent<Unit>().isDead){
                 Spell_4_Move();
                 isCd = true;
                 StartCoroutine(Spell_Cd_Timer(1.0f, (myBool => isCd = myBool), "Spell_4"));
@@ -393,7 +393,7 @@ public class BahriAbilities : ChampionAbilities
     }
 
     private void Spell_4_Takedown(GameObject killed){
-        if(killed.GetComponent<UnitStats>().unit is Champion){
+        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
             if(spell_4_chargesLeft < bahri.spell_4_charges && spell4Casting){
                 uiManager.SetSpellCoverActive(4, false);
                 spell_4_chargesLeft += 1;
@@ -453,12 +453,12 @@ public class BahriAbilities : ChampionAbilities
         navMeshAgent.ResetPath();
         navMeshAgent.enabled = false;
         // While not at target position or not dead.
-        while (transform.position != targetPosition && !championStats.isDead){
+        while (transform.position != targetPosition && !GetComponent<Unit>().isDead){
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, newSpeed * Time.deltaTime);
             yield return null;
         }
         // Only fire end of dash projectiles if still alive.
-        if(!championStats.isDead)
+        if(!GetComponent<Unit>().isDead)
             Spell_4_Missiles();
         navMeshAgent.enabled = true;
         isCasting = false;
@@ -476,7 +476,7 @@ public class BahriAbilities : ChampionAbilities
         if(hitColliders.Length > 0){
             foreach(Collider collider in hitColliders){
                 // If the target is alive.
-                if(!collider.gameObject.GetComponent<UnitStats>().isDead && collider.gameObject != gameObject){
+                if(!collider.gameObject.GetComponent<Unit>().isDead && collider.gameObject != gameObject){
                     // If three targets have already been found.
                     if(targets.Count > 2){
                         // Set the farthest enemy as first in the targets found list.

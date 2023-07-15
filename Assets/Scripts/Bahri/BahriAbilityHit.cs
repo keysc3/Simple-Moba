@@ -20,7 +20,6 @@ public class BahriAbilityHit : MonoBehaviour
 
     // Called when the script instance is being loaded.
     private void Awake(){
-        championStats = GetComponent<ChampionStats>();
         bahriAbilities = GetComponent<BahriAbilities>();
         levelManager = GetComponent<LevelManager>();
     }
@@ -28,6 +27,7 @@ public class BahriAbilityHit : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        championStats = (ChampionStats) GetComponent<Player>().unitStats;
         bahri = (Bahri) championStats.unit;
     }
 
@@ -36,7 +36,7 @@ public class BahriAbilityHit : MonoBehaviour
     {
         // For testing charm effect.
         if(Input.GetKeyDown(KeyCode.Z) && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
-            GetComponent<StatusEffectManager>().AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject.transform.Find("/Champions/Red Bahri").gameObject, gameObject));
+            GetComponent<Unit>().statusEffects.AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject.transform.Find("/Champions/Red Bahri").gameObject, gameObject));
     }
 
     /*
@@ -52,10 +52,10 @@ public class BahriAbilityHit : MonoBehaviour
             damageValue = bahri.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage;
             // Magic damage on first part then true damage on return.
             if(!isReturning){
-                enemy.GetComponent<UnitStats>().TakeDamage(damageValue, "magic", gameObject, false);
+                enemy.GetComponent<Unit>().TakeDamage(damageValue, "magic", gameObject, false);
             }
             else{
-                enemy.GetComponent<UnitStats>().TakeDamage(damageValue, "true", gameObject, false);
+                enemy.GetComponent<Unit>().TakeDamage(damageValue, "true", gameObject, false);
             }
             spell_1_enemiesHit.Add(enemy);
         }
@@ -72,7 +72,7 @@ public class BahriAbilityHit : MonoBehaviour
         if(spell_2_enemiesHit.Contains(enemy)){
             finalDamage = Mathf.Round(finalDamage * bahri.spell_2_multiplier);
         }
-        enemy.GetComponent<UnitStats>().TakeDamage(finalDamage, "magic", gameObject, false);
+        enemy.GetComponent<Unit>().TakeDamage(finalDamage, "magic", gameObject, false);
         spell_2_enemiesHit.Add(enemy);
     }
 
@@ -83,8 +83,8 @@ public class BahriAbilityHit : MonoBehaviour
     public void Spell_3_Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
         // Add the charm effect to the hit GameObject.
-        enemy.GetComponent<StatusEffectManager>().AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
-        enemy.GetComponent<UnitStats>().TakeDamage(bahri.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);
+        enemy.GetComponent<Unit>().statusEffects.AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
+        enemy.GetComponent<Unit>().TakeDamage(bahri.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);
     }
 
     /*
@@ -93,7 +93,7 @@ public class BahriAbilityHit : MonoBehaviour
     */
     public void Spell_4_Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
-        enemy.GetComponent<UnitStats>().TakeDamage(bahri.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
+        enemy.GetComponent<Unit>().TakeDamage(bahri.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
     }
 
     /*
@@ -102,7 +102,7 @@ public class BahriAbilityHit : MonoBehaviour
     */
     public void AutoAttack(GameObject enemy){
         float physicalDamage = championStats.physicalDamage.GetValue();
-        enemy.GetComponent<UnitStats>().TakeDamage(physicalDamage, "physical", gameObject, false);
+        enemy.GetComponent<Unit>().TakeDamage(physicalDamage, "physical", gameObject, false);
     }
 
     /*

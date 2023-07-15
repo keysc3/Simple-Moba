@@ -23,21 +23,21 @@ public class RespawnDeath : MonoBehaviour
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
     private ChampionAbilities championAbilities;
-    private StatusEffectManager statusEffectManager;
+    private StatusEffects statusEffects;
     private UnitStats unitStats;
     private DamageTracker damageTracker;
 
     // Called when the script instance is being loaded.
     void Awake(){
-        unitStats = GetComponent<UnitStats>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        statusEffectManager = GetComponent<StatusEffectManager>();
         rend = GetComponent<Renderer>();
     }
     // Start is called before the first frame update
     void Start()
     {
-        if(unitStats.unit is Champion){
+        unitStats = GetComponent<Unit>().unitStats;
+        statusEffects = GetComponent<Unit>().statusEffects;
+        if(unitStats.unit is ScriptableChampion){
             uiManager = GetComponent<UIManager>();
             myCollider = GetComponent<Collider>();
             levelManager = GetComponent<LevelManager>();
@@ -54,7 +54,7 @@ public class RespawnDeath : MonoBehaviour
     {
         if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
             if(Input.GetKeyDown(KeyCode.T)){
-                unitStats.SetDeathStatus(true);
+                GetComponent<Player>().SetDeathStatus(true);
                 Death();
             }
         }
@@ -69,7 +69,7 @@ public class RespawnDeath : MonoBehaviour
     */
     public void Death(){
         // If the unit is a minion destroy it.
-        if(unitStats.unit is Minion){
+        if(unitStats.unit is ScriptableMinion){
             Destroy(gameObject);
             return;
         }
@@ -80,7 +80,7 @@ public class RespawnDeath : MonoBehaviour
         navMeshAgent.enabled = false;
         // Disable collider and remove status effects.
         myCollider.enabled = false;
-        statusEffectManager.ResetEffects();
+        statusEffects.ResetEffects();
         // Handle champion death clean up.
         championAbilities.OnDeathCleanUp();
         rend.material = dead;
@@ -110,7 +110,7 @@ public class RespawnDeath : MonoBehaviour
         damageTracker.ResetDamageTracker();
         // Set alive values.
         rend.material = alive;
-        unitStats.SetDeathStatus(false);
+        GetComponent<Unit>().SetDeathStatus(false);
         uiManager.UpdateManaBar();
         uiManager.UpdateHealthBar();
         uiManager.SetPlayerBarActive(true);
