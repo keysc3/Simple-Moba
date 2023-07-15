@@ -30,8 +30,7 @@ public class LevelManager : MonoBehaviour
     private ScriptableChampion champion;
     private UIManager uiManager;
     private Player player;
-
-    //TODO: FIX TWEO SKILL LEVEL UP BUTTONS PRESSED AT SOME TIME.
+    
     // Called when the script instance is being loaded.
     private void Awake()
     {
@@ -178,14 +177,14 @@ public class LevelManager : MonoBehaviour
                 if(Input.GetKey(KeyCode.LeftControl)){
                     if(Input.GetKeyDown(KeyCode.Q))
                         SpellLevelUpRequest("Spell_1", "basic");
-                // If second spell level up key bind pressed and it is not at max level then level it.
-                    if(Input.GetKeyDown(KeyCode.W))
+                    // If second spell level up key bind pressed and it is not at max level then level it.
+                    else if(Input.GetKeyDown(KeyCode.W))
                         SpellLevelUpRequest("Spell_2", "basic");
-                // If third spell level up key bind pressed and it is not at max level then level it.
-                    if(Input.GetKeyDown(KeyCode.E))
+                    // If third spell level up key bind pressed and it is not at max level then level it.
+                    else if(Input.GetKeyDown(KeyCode.E))
                         SpellLevelUpRequest("Spell_3", "basic");
-                // If fourth spell level up key bind pressed and it is not at max level then level it.
-                    if(Input.GetKeyDown(KeyCode.R))
+                    // If fourth spell level up key bind pressed and it is not at max level then level it.
+                    else if(Input.GetKeyDown(KeyCode.R))
                         SpellLevelUpRequest("Spell_4", "ultimate");
                 }
             }
