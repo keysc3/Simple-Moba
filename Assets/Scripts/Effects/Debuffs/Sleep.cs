@@ -11,6 +11,9 @@ using UnityEngine.AI;
 public class Sleep : Effect
 {
     private NavMeshAgent effectedNavMeshAgent;
+    private PlayerController playerController;
+    private PlayerSpellInput playerSpellInput;
+
     /*
     *   Sleep - Initialize a new sleep effect.
     *   @param sleepEffect - ScriptableSleep of the sleep effect to apply.
@@ -20,14 +23,16 @@ public class Sleep : Effect
     */
     public Sleep(ScriptableSleep sleepEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(sleepEffect, duration, unitCasted, unitEffected){
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
+        playerController = effected.GetComponent<PlayerController>();
+        playerSpellInput = effected.GetComponent<PlayerSpellInput>();
     }
 
     /*
     *   StartEffect - Start the sleep effect.
     */
     public override void StartEffect(){
-        effected.GetComponent<PlayerController>().enabled = false;
-        effected.GetComponent<PlayerSpellInput>().enabled = false;
+        playerController.enabled = false;
+        playerSpellInput.enabled = false;
         // Add bonus effect method to a take damage delegate?
         // Reset the units current path.
         effectedNavMeshAgent.ResetPath();
@@ -41,8 +46,8 @@ public class Sleep : Effect
         effectedNavMeshAgent.ResetPath();
         // Give controls back if slept is active GameObject.
         if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
-            effected.GetComponent<PlayerController>().enabled = true;
-            effected.GetComponent<PlayerSpellInput>().enabled = true;
+            playerSpellInput.enabled = true;
+            playerSpellInput.enabled = true;
         }
     }
 }

@@ -56,7 +56,7 @@ public class RespawnDeath : MonoBehaviour
     {
         if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
             if(Input.GetKeyDown(KeyCode.T)){
-                GetComponent<Player>().SetDeathStatus(true);
+                unit.SetDeathStatus(true);
                 Death();
             }
         }
@@ -112,7 +112,7 @@ public class RespawnDeath : MonoBehaviour
         damageTracker.ResetDamageTracker();
         // Set alive values.
         rend.material = alive;
-        GetComponent<Unit>().SetDeathStatus(false);
+        unit.SetDeathStatus(false);
         uiManager.UpdateManaBar();
         uiManager.UpdateHealthBar();
         uiManager.SetPlayerBarActive(true);

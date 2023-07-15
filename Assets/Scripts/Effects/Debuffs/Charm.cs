@@ -14,6 +14,8 @@ public class Charm : Effect
     private Vector3 currentTarget;
     private NavMeshAgent effectedNavMeshAgent;
     private Unit effectedUnit;
+    private PlayerController playerController;
+    private PlayerSpellInput playerSpellInput;
     
     /*
     *   Charm - Initialize a new charm effect.
@@ -34,8 +36,10 @@ public class Charm : Effect
     public override void StartEffect(){
         // If the charmed unit ia a champion disable their controls.
         if(effectedUnit.unit is ScriptableChampion){
-            effected.GetComponent<PlayerController>().enabled = false;
-            effected.GetComponent<PlayerSpellInput>().enabled = false;
+            playerController = effected.GetComponent<PlayerController>();
+            playerController.enabled = false;
+            playerSpellInput = effected.GetComponent<PlayerSpellInput>();
+            playerSpellInput.enabled = false;
         }
         // Reset the units current path.
         effectedNavMeshAgent.ResetPath();
@@ -52,8 +56,8 @@ public class Charm : Effect
         
         // Give controls back if charmed is active GameObject.
         if(effectedUnit.unit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
-            effected.GetComponent<PlayerController>().enabled = true;
-            effected.GetComponent<PlayerSpellInput>().enabled = true;
+            playerController.enabled = true;
+            playerSpellInput.enabled = true;
         }
     }
 

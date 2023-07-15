@@ -16,12 +16,12 @@ public class HealthManaRegen : MonoBehaviour
     // Called when the script instance is being loaded.
     private void Awake(){
         uiManager = GetComponent<UIManager>();
+        player = GetComponent<Player>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        player = GetComponent<Player>();
         championStats = (ChampionStats) player.unitStats;
         StartCoroutine(RegenMana());
         StartCoroutine(RegenHealth());

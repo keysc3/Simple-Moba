@@ -29,22 +29,25 @@ public class LevelManager : MonoBehaviour
     private ChampionStats championStats;
     private ScriptableChampion champion;
     private UIManager uiManager;
+    private Player player;
 
+    //TODO: FIX TWEO SKILL LEVEL UP BUTTONS PRESSED AT SOME TIME.
     // Called when the script instance is being loaded.
     private void Awake()
     {
         uiManager = GetComponent<UIManager>();
+        player = GetComponent<Player>();
     }
 
     // Start is called before the first frame update
     private void Start(){
-        championStats = (ChampionStats) GetComponent<Player>().unitStats;
-        champion = (ScriptableChampion) GetComponent<Player>().unit;
+        championStats = (ChampionStats) player.unitStats;
+        champion = (ScriptableChampion) player.unit;
         CurrentRespawnTime();
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         StartCoroutine(LevelUpSkill());
-        GetComponent<Player>().score.takedownCallback += GainXP; 
+        player.score.takedownCallback += GainXP; 
     }
 
     /*
