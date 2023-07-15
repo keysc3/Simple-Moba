@@ -42,7 +42,7 @@ public abstract class ChampionAbilities : MonoBehaviour
     }
 
     protected virtual void Start(){
-        championStats = (ChampionStats) GetComponent<Player>().unitStats;
+        championStats = (ChampionStats) player.unitStats;
     }
 
     /*

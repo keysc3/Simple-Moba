@@ -13,6 +13,7 @@ public class BahriAbilityHit : MonoBehaviour
 
     private List<GameObject> spell_1_enemiesHit = new List<GameObject>();
     private List<GameObject> spell_2_enemiesHit = new List<GameObject>();
+    private Player player;
     private ChampionStats championStats;
     private ChampionAbilities bahriAbilities;
     private Bahri bahri;
@@ -20,6 +21,7 @@ public class BahriAbilityHit : MonoBehaviour
 
     // Called when the script instance is being loaded.
     private void Awake(){
+        player = GetComponent<Player>();
         bahriAbilities = GetComponent<BahriAbilities>();
         levelManager = GetComponent<LevelManager>();
     }
@@ -27,16 +29,8 @@ public class BahriAbilityHit : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        championStats = (ChampionStats) GetComponent<Player>().unitStats;
-        bahri = (Bahri) GetComponent<Player>().unit;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        // For testing charm effect.
-        if(Input.GetKeyDown(KeyCode.Z) && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
-            GetComponent<Unit>().statusEffects.AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject.transform.Find("/Champions/Red Bahri").gameObject, gameObject));
+        championStats = (ChampionStats) player.unitStats;
+        bahri = (Bahri) player.unit;
     }
 
     /*
@@ -83,8 +77,9 @@ public class BahriAbilityHit : MonoBehaviour
     public void Spell_3_Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
         // Add the charm effect to the hit GameObject.
-        enemy.GetComponent<Unit>().statusEffects.AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
-        enemy.GetComponent<Unit>().TakeDamage(bahri.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);
+        Unit enemyUnit = enemy.GetComponent<Unit>();
+        enemyUnit.statusEffects.AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
+        enemyUnit.TakeDamage(bahri.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);
     }
 
     /*

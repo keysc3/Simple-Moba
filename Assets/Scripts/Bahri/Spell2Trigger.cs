@@ -13,13 +13,19 @@ public class Spell2Trigger : MonoBehaviour
     public GameObject target = null;
     public BahriAbilityHit bahriAbilityHit;
 
+    private Unit targetUnit = null;
+
     // Update is called once per frame
     private void Update()
     {
         // Destroy GameObject if target dies.
         if(target != null){
-            if(target.GetComponent<Unit>().isDead){
-                Destroy(gameObject);
+            // Cache Unit component so it isn't being accessed every frame once a target is found.
+            if(targetUnit == null)
+                targetUnit = target.GetComponent<Unit>();
+            else{
+                if(targetUnit.isDead)
+                    Destroy(gameObject);
             }
         }
     }

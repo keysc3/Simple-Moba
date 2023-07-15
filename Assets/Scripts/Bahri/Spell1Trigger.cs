@@ -15,16 +15,25 @@ public class Spell1Trigger : MonoBehaviour
 
     private Bounds bahriBounds;
 
+    private Unit unit;
+    private Collider unitCollider;
+    private SphereCollider orbCollider;
+
+    private void Start(){
+        unit = bahri.GetComponent<Unit>();
+        unitCollider = bahri.GetComponent<Collider>();
+        orbCollider = GetComponent<SphereCollider>();
+    }
+
     // Update is called once per frame
     private void Update()
     {
         // Get Bahri's bounds for when they die.
-        if(bahri != null && !bahri.GetComponent<Unit>().isDead)
-            bahriBounds = bahri.GetComponent<Collider>().bounds;
+        if(!unit.isDead)
+            bahriBounds = unitCollider.bounds;
         // If bahri is dead destroy the orb when it has returned to Bahri.
-        if(bahri.GetComponent<Unit>().isDead){
+        else{
             if(isReturning){
-                Collider orbCollider = GetComponent<SphereCollider>();
                 if(bahriBounds.Contains(orbCollider.bounds.min) && bahriBounds.Contains(orbCollider.bounds.max)){
                     Destroy(gameObject);
                 }
@@ -40,7 +49,6 @@ public class Spell1Trigger : MonoBehaviour
         }
         //  Destroy GameObject if it has returned to Bahri.
         if(other.gameObject == bahri && isReturning){
-            Collider orbCollider = GetComponent<SphereCollider>();
             if(other.bounds.Contains(orbCollider.bounds.min) && other.bounds.Contains(orbCollider.bounds.max)){
                 Destroy(gameObject);
             }

@@ -207,7 +207,7 @@ public class BahriAbilities : ChampionAbilities
                         foreach(Collider enemy in hitColliders){
                             Unit enemyUnit = enemy.gameObject.GetComponent<Unit>();
                             // Only want to target alive units.
-                            if(enemyUnit.isDead && enemy.gameObject != gameObject){
+                            if(!enemyUnit.isDead && enemy.gameObject != gameObject){
                                 // If a player is currently under spell 3 effects, prioritize that player.
                                 if(enemyUnit.statusEffects.CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
                                     target = enemy.gameObject;
