@@ -308,8 +308,7 @@ public class BilliaAbilities : ChampionAbilities
             StartCoroutine(CastTime(billia.spell_2_castTime, false));
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
-            // Apply the dash.
-            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
+            StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_2"]-1]);
             spell_2_onCd = true;
@@ -330,33 +329,49 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
-    *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
-    *   @param targetPosition - Vector3 of the position to move Billia to.
+    *   Spell_2_Cast - Handles cast time and dash initialization of Spell 2.
+    *   @param billiaTargetPosition - Vector3 of the position to move Billia to.
+    *   @param targetPosition - Vecto3 of the center of the spell.
     */
-    private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
-            // Disable pathing.
-            navMeshAgent.ResetPath();
-            navMeshAgent.isStopped = true;
-            // Get dash speed since dash duration is a fixed time.
-            float dashSpeed = (targetPosition - transform.position).magnitude/billia.spell_2_dashTime; 
-            float timer = 0.0f;
-            // While still dashing.
-            while(timer < billia.spell_2_dashTime){
-                // Move towards target position.
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            // Apply last tick dash and enable pathing.
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
-            navMeshAgent.isStopped = false;
-            Spell_2_Cast(spellTargetPosition);
+    private IEnumerator Spell_2_Cast(Vector3 billiaTargetPosition, Vector3 targetPosition){
+        while(isCasting)
+            yield return null;
+        // Apply the dash.
+        StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
     }
 
     /*
-    *   Spell_2_Cast - Casts Billia's second spell.
+    *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
+    *   @param targetPosition - Vector3 of the position to move Billia to.
+    *   @param spellTargetPosition - Vector3 of the center of the spell.
     */
-    private void Spell_2_Cast(Vector3 targetPosition){
+    private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
+        isCasting = true;
+        // Disable pathing.
+        navMeshAgent.ResetPath();
+        navMeshAgent.isStopped = true;
+        // Get dash speed since dash duration is a fixed time.
+        float dashSpeed = (targetPosition - transform.position).magnitude/billia.spell_2_dashTime; 
+        float timer = 0.0f;
+        // While still dashing.
+        while(timer < billia.spell_2_dashTime){
+            // Move towards target position.
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        // Apply last tick dash and enable pathing.
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+        navMeshAgent.isStopped = false;
+        isCasting = false;
+        Spell_2_Finished(spellTargetPosition);
+    }
+
+    /*
+    *   Spell_2_Finished - Handles spell cd and hitbox checking when the spell 2 is finished animating.
+    *   @param targetPosition - Vector3 of the center of the spell.
+    */
+    private void Spell_2_Finished(Vector3 targetPosition){
         StartCoroutine(Spell_Cd_Timer(billia.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
         // Set method to use if a hit.
         spellHit = billiaAbilityHit.Spell_2_Hit;
