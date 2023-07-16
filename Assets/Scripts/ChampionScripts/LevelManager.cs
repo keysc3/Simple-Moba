@@ -168,7 +168,6 @@ public class LevelManager : MonoBehaviour
     *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
     */
     private IEnumerator LevelUpSkill(){
-        Debug.Log("LEVELUPSKILL: " + gameObject.name);
         UIManager.instance.ShiftStatusEffects(new Vector2(xShift, yShift), player.playerUI);
         // Use all skill points before stopping.
         while(spellLevelPoints > 0){

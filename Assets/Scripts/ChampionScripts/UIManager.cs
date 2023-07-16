@@ -678,7 +678,6 @@ public class UIManager : MonoBehaviour
     *   @param shiftAmount - Vector2 of the x and y amounts to shift the UI component.
     */
     public void ShiftStatusEffects(Vector2 shiftAmount, GameObject playerUI){
-        Debug.Log("SHIFTSTATUSEFFECTS: " + playerUI.name + " " + shiftAmount);
         playerUI.transform.GetChild(5).GetComponent<RectTransform>().anchoredPosition += shiftAmount;
     }
 }
