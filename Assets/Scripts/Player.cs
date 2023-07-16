@@ -73,6 +73,9 @@ public class Player : Unit, IRespawnable
         GetComponent<UIManager>().UpdateHealthBar();
     }
 
+    /*
+    *   Death - Handles the death of a player by disabling functionality.
+    */
     public override void Death(){
         // Disable all combat and movement controls.
         playerController.enabled = false; 
@@ -88,6 +91,9 @@ public class Player : Unit, IRespawnable
         StartCoroutine(RespawnTimer(levelManager.respawnTime));
     }
 
+    /*
+    *   Respawn - Respawn the player by enabling functionality, resetting stats, and moving to respawn location.
+    */
     public void Respawn(){
         navMeshAgent.enabled = true;
         // If active champion then enable controls.

@@ -71,6 +71,9 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
         isDead = dead;
     }
 
+    /*
+    *   Death - Handles the death of a unit by destroying it.
+    */
     public virtual void Death(){
         Destroy(gameObject);
         return;
