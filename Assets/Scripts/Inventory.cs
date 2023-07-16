@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements an inventory for a player.
+*
+* @author: Colin Keys
+*/
 public class Inventory {
 
     private int space = 6;

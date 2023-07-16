@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements a status effects object..
+*
+* @author: Colin Keys
+*/
 public class StatusEffects
 {
 
@@ -10,7 +15,6 @@ public class StatusEffects
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
     public Unit unit;
-    //public UIManager uiManager;
 
     public StatusEffects(Unit unit){
         this.unit = unit;

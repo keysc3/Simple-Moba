@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements a player unit.
+*
+* @author: Colin Keys
+*/
 public class Player : Unit, IRespawnable
 {
     public Inventory inventory;
@@ -22,6 +27,9 @@ public class Player : Unit, IRespawnable
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
 
 
+    /*
+    *   Init - Handles setup specific to this child class.
+    */
     protected override void Init(){
         unitStats = new ChampionStats((ScriptableChampion)unit);
         playerController = GetComponent<PlayerController>();
@@ -47,6 +55,7 @@ public class Player : Unit, IRespawnable
     *   @param incomingDamage - float of the incoming damage amount.
     *   @param damageType - string of the type of damage that is being inflicted.
     *   @param from - GameObject of the damage source.
+    *   @param isDot - bool if the damage was from a dot.
     */
     public override void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
         Unit fromUnit = from.GetComponent<Unit>();

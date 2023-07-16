@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements a score object for a unit.
+*
+* @author: Colin Keys
+*/
 public class Score
 {
     public int kills;
