@@ -122,3 +122,15 @@ MonoBehaviour:
   attack: {fileID: 1606231681406296317, guid: 18b60daf1c0410f45b0e2ebfb9f3acee, type: 3}
   <spell_2_SpeedBonus>k__BackingField: {fileID: 11400000, guid: 89530c92161c28e45b6544ecfabb8553, type: 2}
   <spell4>k__BackingField: {fileID: 11400000, guid: 4736469b3c8781d4f88ddd2de1be352b, type: 2}
+--- !u!114 &-625293995896609258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5483897106226106971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f47262ce278cc4696868123cf38913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

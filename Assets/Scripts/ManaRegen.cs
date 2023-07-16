@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceRegen : MonoBehaviour
+public class ManaRegen : MonoBehaviour
 {
     private Player player;
     private ChampionStats championStats;
