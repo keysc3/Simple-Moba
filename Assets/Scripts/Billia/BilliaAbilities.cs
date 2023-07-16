@@ -165,7 +165,7 @@ public class BilliaAbilities : ChampionAbilities
     */
     private void Spell_1_PassiveProc(){
         //spell_1_lastStackTime = Time.time;
-        if(spell_1_passiveStacks < billia.spell_1_passiveMaxStacks){
+        if(levelManager.spellLevels["Spell_1"] > 0 && spell_1_passiveStacks < billia.spell_1_passiveMaxStacks){
             // Create a new speed bonus with the 
             float bonusPercent = billia.spell_1_passiveSpeed[levelManager.spellLevels["Spell_1"]-1];
             SpeedBonus speedBonus = (SpeedBonus) spell_1_passiveSpeedBonus.InitializeEffect(levelManager.spellLevels["Spell_1"]-1, gameObject, gameObject);
@@ -524,8 +524,10 @@ public class BilliaAbilities : ChampionAbilities
     */
 
     public void Spell_3_ConeHitbox(GameObject spell_3_seed, GameObject initialHit, Vector3 forwardDirection){
+        bool passiveStack = false;
         if(initialHit.tag == "Enemy"){
             billiaAbilityHit.Spell_3_Hit(initialHit);
+            passiveStack = true;
         }
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
@@ -538,9 +540,12 @@ public class BilliaAbilities : ChampionAbilities
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
                 if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
                     billiaAbilityHit.Spell_3_Hit(collider.gameObject);
+                    passiveStack = true;
                 }
             }
         }
+        if(passiveStack)
+            Spell_1_PassiveProc();
     }
 
     /*
