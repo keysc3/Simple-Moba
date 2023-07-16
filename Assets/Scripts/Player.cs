@@ -10,13 +10,14 @@ using UnityEngine.AI;
 */
 public class Player : Unit, IRespawnable
 {
+    public DamageTracker damageTracker;
     public Inventory inventory;
     public Score score;
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
     private ChampionAbilities championAbilities;
     private LevelManager levelManager;
-    private DamageTracker damageTracker;
+    //private DamageTracker damageTracker;
     private Material alive;
     [SerializeField] private Material dead;
     public GameObject playerUIPrefab;
@@ -36,7 +37,8 @@ public class Player : Unit, IRespawnable
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championAbilities = GetComponent<ChampionAbilities>();
         levelManager = GetComponent<LevelManager>();
-        damageTracker = GetComponent<DamageTracker>();
+        //damageTracker = GetComponent<DamageTracker>();
+        damageTracker = new DamageTracker();
         inventory = new Inventory(this);
         score = new Score();
         playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
@@ -48,6 +50,12 @@ public class Player : Unit, IRespawnable
     void Start()
     {
         alive = rend.material;
+    }
+
+    protected override void Update(){
+        base.Update();
+        if(damageTracker.damageReceived.Count > 0)
+            damageTracker.CheckForReset(Time.time);
     }
 
     /*
@@ -72,7 +80,7 @@ public class Player : Unit, IRespawnable
                 killer.score.ChampionKill(gameObject);
                 UIManager.instance.UpdateKills(killer.score.kills.ToString(), killer.playerUI);
                 // Grant any assists if the unit is a champion.
-                foreach(GameObject assist in GetComponent<DamageTracker>().CheckForAssists()){
+                foreach(GameObject assist in damageTracker.CheckForAssists()){
                     if(assist != from)
                         assist.GetComponent<Player>().score.Assist();
                 }
@@ -84,7 +92,7 @@ public class Player : Unit, IRespawnable
         else{
             bonusDamage?.Invoke(gameObject, isDot);
         }
-        GetComponent<DamageTracker>().DamageTaken(from, incomingDamage, damageType);
+        damageTracker.AddDamage(from, incomingDamage, damageType);
         UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
     }
 

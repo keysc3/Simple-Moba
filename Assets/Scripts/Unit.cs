@@ -40,7 +40,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         statusEffects.UpdateEffects();
     }
