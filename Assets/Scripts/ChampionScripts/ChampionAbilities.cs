@@ -145,10 +145,10 @@ public abstract class ChampionAbilities : MonoBehaviour
         while(spell_timer <= spell_cd){
             //Debug.Log(spell_timer);
             spell_timer += Time.deltaTime;
-            uiManager.UpdateCooldown(spell, spell_cd - spell_timer, spell_cd);
+            UIManager.instance.UpdateCooldown(spell, spell_cd - spell_timer, spell_cd, player.playerUI);
             yield return null;
         }
-        uiManager.UpdateCooldown(spell, 0, spell_cd);
+        UIManager.instance.UpdateCooldown(spell, 0, spell_cd, player.playerUI);
         myResult(false);
     }
 

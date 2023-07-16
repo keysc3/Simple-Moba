@@ -12,31 +12,24 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 
-    [SerializeField] private GameObject championUI;
+    public static UIManager instance { get; private set; }
+
     [SerializeField] private GameObject playerBar;
     [SerializeField] private GameObject statusEffectPrefab;
+    [SerializeField] private GameObject championUIPrefab;
     private float buffDebuffUIWidth;
     private float xOffset = 2f;
-    private Transform spellsHPManaUI;
-    private Transform iconXPUI;
-    private Transform scoreUI;
-    private Transform itemsUI;
-    private Transform statsUI;
-    private Transform statusEffectsUI;
 
-    private Slider health;
-    private Slider mana;
-    private ChampionStats championStats;
     private Gradient gradient;
     private GradientColorKey[] colorKey;
     private GradientAlphaKey[] alphaKey;
     private Color defaultBorderColor;
 
-    private Unit unit;
 
     // Called when the script instance is being loaded.
     void Awake(){
-        championUI = Instantiate(championUI, championUI.transform.position, championUI.transform.rotation);
+        instance = this;
+        /*championUI = Instantiate(championUI, championUI.transform.position, championUI.transform.rotation);
         championUI.name = gameObject.name + "UI";
         championUI.transform.SetParent(GameObject.Find("/Canvas").transform);
         championUI.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
@@ -45,32 +38,104 @@ public class UIManager : MonoBehaviour
         playerBar.name = gameObject.name + "PlayerBar";
         Vector3 playerBarPos = playerBar.GetComponent<RectTransform>().anchoredPosition;
         playerBar.transform.SetParent(gameObject.transform);
-        playerBar.GetComponent<RectTransform>().anchoredPosition3D = playerBarPos;
+        playerBar.GetComponent<RectTransform>().anchoredPosition3D = playerBarPos;*/
         defaultBorderColor = new Color(167f/255f, 126f/255f, 69f/255f);
         SetUpGradient();
-        spellsHPManaUI = championUI.transform.GetChild(0);
+        /*spellsHPManaUI = championUI.transform.GetChild(0);
         statsUI = championUI.transform.GetChild(1);
         scoreUI = championUI.transform.GetChild(2);
         itemsUI = championUI.transform.GetChild(3);
         iconXPUI = championUI.transform.GetChild(4);
         statusEffectsUI = championUI.transform.GetChild(5);
         health = spellsHPManaUI.Find("HealthBar").GetComponent<Slider>();
-        mana = spellsHPManaUI.Find("ManaBar").GetComponent<Slider>();
-        buffDebuffUIWidth = statusEffectsUI.GetChild(0).GetComponent<RectTransform>().rect.width;
+        mana = spellsHPManaUI.Find("ManaBar").GetComponent<Slider>();*/
+        buffDebuffUIWidth = championUIPrefab.transform.GetChild(5).GetChild(0).GetComponent<RectTransform>().rect.width;
     }
 
     // Start is called before the first frame update.
     void Start(){
-        unit = GetComponent<Unit>();
-        championStats = (ChampionStats) unit.unitStats;
-        UpdateHealthBar();
+        //unit = GetComponent<Unit>();
+        //championStats = (ChampionStats) unit.unitStats;
+        /*UpdateHealthBar();
         UpdateManaBar();
         SetUpIcons();
-        UpdateAllStats();
+        UpdateAllStats();*/
     }
 
-    void SetUpIcons(){
-        ScriptableChampion champ = (ScriptableChampion) unit.unit;
+    public void SetUpPlayerUI(Player player, GameObject playerUI, GameObject playerBar){
+        UpdateHealthBar(player, playerUI, playerBar);
+        UpdateManaBar((ChampionStats) player.unitStats, playerUI, playerBar);
+        SetUpIcons((ScriptableChampion) player.unit, playerUI);
+        UpdateAllStats((ChampionStats) player.unitStats, playerUI);
+    }
+
+    public GameObject CreatePlayerHUD(GameObject champion, GameObject championUI, Player player){
+        // Set up the players HUD.
+        GameObject newChampionUI = (GameObject) Instantiate(championUI, championUI.transform.position, championUI.transform.rotation);
+        newChampionUI.name = champion.name + "UI";
+        newChampionUI.transform.SetParent(GameObject.Find("/Canvas").transform);
+        RectTransform newChampionUIRectTransform = newChampionUI.GetComponent<RectTransform>();
+        newChampionUIRectTransform.offsetMin = new Vector2(0, 0);
+        newChampionUIRectTransform.offsetMax = new Vector2(0, 0);
+        // Set up the players health/mana/xp bar above their GameObject.
+        return newChampionUI;
+    }
+
+    public GameObject CreatePlayerBar(GameObject champion){
+        GameObject newPlayerBar = (GameObject) Instantiate(playerBar, playerBar.transform.position, playerBar.transform.rotation);
+        newPlayerBar.name = champion.name + "PlayerBar";
+        RectTransform newPlayerBarRectTransform = newPlayerBar.GetComponent<RectTransform>();
+        Vector3 newPlayerBarPos = newPlayerBarRectTransform.anchoredPosition;
+        newPlayerBar.transform.SetParent(champion.transform);
+        newPlayerBarRectTransform.anchoredPosition3D = newPlayerBarPos;
+        return newPlayerBar;
+    }
+
+    /*
+    *   UpdateHealthBar - Updates the health bar UI.
+    */
+    public void UpdateHealthBar(Player player, GameObject championUI, GameObject playerBar){
+        Transform spellsHPManaUI = championUI.transform.GetChild(0);
+        Slider health = spellsHPManaUI.Find("HealthBar").GetComponent<Slider>();
+        // If the champion is dead.
+        if(!player.isDead){
+            ChampionStats championStats = (ChampionStats) player.unitStats;
+            // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
+            float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
+            health.transform.GetChild(2).GetComponent<TMP_Text>()
+            .SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
+            // Set the fill based on players health percent.
+            playerBar.transform.GetChild(0).GetChild(1).GetComponent<Slider>().value = healthPercent;
+            health.value = healthPercent;
+        }
+        else{
+            // Set players health text and fill to 0.
+            ChampionStats championStats = (ChampionStats) player.unitStats;
+            playerBar.SetActive(false);
+            health.transform.GetChild(2).GetComponent<TMP_Text>()
+            .SetText(0 + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
+            health.value = 0;
+        }
+    }
+
+    /*
+    *   UpdateManaBar - Updates the mana bar UI.
+    */
+    public void UpdateManaBar(ChampionStats championStats, GameObject championUI, GameObject playerBar){
+        Transform spellsHPManaUI = championUI.transform.GetChild(0);
+        Slider mana = spellsHPManaUI.Find("ManaBar").GetComponent<Slider>();
+        // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
+        float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
+        mana.transform.GetChild(2).GetComponent<TMP_Text>()
+        .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
+        // Set the fill based on the player mana percent.
+        playerBar.transform.GetChild(0).GetChild(2).GetComponent<Slider>().value = manaPercent;
+        mana.value = manaPercent;
+    }
+
+    void SetUpIcons(ScriptableChampion champ, GameObject championUI){
+        Transform spellsHPManaUI = championUI.transform.GetChild(0);
+        Transform iconXPUI = championUI.transform.GetChild(4);
         spellsHPManaUI.GetChild(0).GetChild(1).GetComponent<Image>().sprite = champ.passive_sprite;
         spellsHPManaUI.GetChild(1).GetChild(2).GetComponent<Image>().sprite = champ.spell_1_sprite;
         spellsHPManaUI.GetChild(2).GetChild(2).GetComponent<Image>().sprite = champ.spell_2_sprite;
@@ -79,25 +144,26 @@ public class UIManager : MonoBehaviour
         iconXPUI.GetChild(2).GetComponent<Image>().sprite = champ.icon;
     }
     
-    public void UpdateAllStats(){
-        UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue());
-        UpdateStat("Armor", championStats.armor.GetValue());
+    public void UpdateAllStats(ChampionStats championStats, GameObject playerUI){
+        Transform statsContainer = playerUI.transform.GetChild(1).GetChild(0);
+        UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue(), statsContainer);
+        UpdateStat("Armor", championStats.armor.GetValue(), statsContainer);
         if(championStats.attackSpeed.GetValue() > 2.5f)
-            UpdateStat("AttackSpeed", 2.5f);
+            UpdateStat("AttackSpeed", 2.5f, statsContainer);
         else
-            UpdateStat("AttackSpeed", championStats.attackSpeed.GetValue());
-        UpdateStat("Crit", 0f);
-        UpdateStat("MagicDamage", championStats.magicDamage.GetValue());
-        UpdateStat("MagicResist", championStats.magicResist.GetValue());
-        UpdateStat("Haste", championStats.haste.GetValue());
-        UpdateStat("Speed", championStats.speed.GetValue());
+            UpdateStat("AttackSpeed", championStats.attackSpeed.GetValue(), statsContainer);
+        UpdateStat("Crit", 0f, statsContainer);
+        UpdateStat("MagicDamage", championStats.magicDamage.GetValue(), statsContainer);
+        UpdateStat("MagicResist", championStats.magicResist.GetValue(), statsContainer);
+        UpdateStat("Haste", championStats.haste.GetValue(), statsContainer);
+        UpdateStat("Speed", championStats.speed.GetValue(), statsContainer);
     }
 
-    public void UpdateStat(string statName, float value){
+    public void UpdateStat(string statName, float value, Transform statsContainer){
         if(statName != "AttackSpeed")
-            statsUI.GetChild(0).Find(statName).GetChild(1).GetComponent<TMP_Text>().SetText(Mathf.Round(value).ToString());
+            statsContainer.Find(statName).GetChild(1).GetComponent<TMP_Text>().SetText(Mathf.Round(value).ToString());
         else
-            statsUI.GetChild(0).Find(statName).GetChild(1).GetComponent<TMP_Text>().SetText((Mathf.Round(value * 100f) * 0.01f).ToString());
+            statsContainer.Find(statName).GetChild(1).GetComponent<TMP_Text>().SetText((Mathf.Round(value * 100f) * 0.01f).ToString());
     }
 
     /*
@@ -126,8 +192,8 @@ public class UIManager : MonoBehaviour
     *   @param cooldownLeft - string of the amount of time left on the spells cooldown.
     *   @param totalCooldown - float of the total cooldown duration of the spell.
     */
-    public void UpdateCooldown(string spell, float cooldownLeft, float totalCooldown){
-        Transform spellCD = spellsHPManaUI.Find(spell).GetChild(3);
+    public void UpdateCooldown(string spell, float cooldownLeft, float totalCooldown, GameObject playerUI){
+        Transform spellCD = playerUI.transform.GetChild(0).Find(spell).GetChild(3);
         // Set the cooldown panel children to be active.
         for(int i = 0; i < 3; i++){
             spellCD.GetChild(i).gameObject.SetActive(true);
@@ -159,10 +225,10 @@ public class UIManager : MonoBehaviour
     *   SpellLearned - Sets the spell cover for the given spell to inactive.
     *   @param spell - string of the spell that was learned.
     */
-    public void SpellLearned(string spell){
-        Transform spellCD = spellsHPManaUI.Find(spell).GetChild(3);
+    public void SpellLearned(string spell, GameObject playerUI){
+        Transform spellCD = playerUI.transform.GetChild(0).Find(spell).GetChild(3);
         spellCD.GetChild(0).gameObject.SetActive(false);
-        SpellLeveled(spell, 1);
+        SpellLeveled(spell, 1, playerUI);
     }
     
     /*
@@ -170,39 +236,17 @@ public class UIManager : MonoBehaviour
     *   @param spell - string of the spell that was leveled.
     *   @param spellLevel - int of the new level of the spell.
     */
-    public void SpellLeveled(string spell, int spellLevel){
-        Transform spellUI = spellsHPManaUI.Find(spell);
+    public void SpellLeveled(string spell, int spellLevel, GameObject playerUI){
+        Transform spellUI = playerUI.transform.GetChild(0).Find(spell);
         spellUI.GetChild(4).GetChild(spellLevel-1).GetChild(0).gameObject.SetActive(false);
-    }
-
-    /*
-    *   UpdateHealthBar - Updates the health bar UI.
-    */
-    public void UpdateHealthBar(){
-        // If the champion is dead.
-        if(!unit.isDead){
-            // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
-            float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
-            health.transform.GetChild(2).GetComponent<TMP_Text>()
-            .SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
-            // Set the fill based on players health percent.
-            playerBar.transform.GetChild(0).GetChild(1).GetComponent<Slider>().value = healthPercent;
-            health.value = healthPercent;
-        }
-        else{
-            // Set players health text and fill to 0.
-            playerBar.SetActive(false);
-            health.transform.GetChild(2).GetComponent<TMP_Text>()
-            .SetText(0 + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
-            health.value = 0;
-        }
     }
 
     /*
     *   UpdateHealthRegen - Updates the health regen text UI.
     *   @param healthRegen - float of the value to update the text to.
     */
-    public void UpdateHealthRegen(float healthRegen){
+    public void UpdateHealthRegen(float healthRegen, GameObject playerUI){
+        Slider health = playerUI.transform.GetChild(0).Find("HealthBar").GetComponent<Slider>();
         health.transform.GetChild(3).GetComponent<TMP_Text>().SetText("+" + Mathf.Round(healthRegen * 100.0f) * 0.01f);
     }
 
@@ -210,37 +254,27 @@ public class UIManager : MonoBehaviour
     *   SetHealthRegenActive - Updates the health regen UI to be showing or not.
     *   @param isActive - bool of whether to active the UI or not.
     */
-    public void SetHealthRegenActive(bool isActive){
+    public void SetHealthRegenActive(bool isActive, GameObject playerUI){
+        Slider health = playerUI.transform.GetChild(0).Find("HealthBar").GetComponent<Slider>();
         health.transform.GetChild(3).gameObject.SetActive(isActive);
-    }
-
-    /*
-    *   UpdateManaBar - Updates the mana bar UI.
-    */
-    public void UpdateManaBar(){
-        // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
-        float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
-        mana.transform.GetChild(2).GetComponent<TMP_Text>()
-        .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
-        // Set the fill based on the player mana percent.
-        playerBar.transform.GetChild(0).GetChild(2).GetComponent<Slider>().value = manaPercent;
-        mana.value = manaPercent;
-    }
-
-    /*
-    *   UpdateManaRegen - Updates the mana regen text UI.
-    *   @param manaRegen - float of the value to update the text to.
-    */
-    public void UpdateManaRegen(float manaRegen){
-        mana.transform.GetChild(3).GetComponent<TMP_Text>().SetText("+" + Mathf.Round(manaRegen * 100.0f) * 0.01f);
     }
 
     /*
     *   SetManaRegenActive - Updates the mana regen UI to be showing or not.
     *   @param isActive - bool of whether to active the UI or not.
     */
-    public void SetManaRegenActive(bool isActive){
+    public void SetManaRegenActive(bool isActive, GameObject playerUI){
+        Slider mana = playerUI.transform.GetChild(0).Find("ManaBar").GetComponent<Slider>();
         mana.transform.GetChild(3).gameObject.SetActive(isActive);
+    }
+
+    /*
+    *   UpdateManaRegen - Updates the mana regen text UI.
+    *   @param manaRegen - float of the value to update the text to.
+    */
+    public void UpdateManaRegen(float manaRegen, GameObject playerUI){
+        Slider mana = playerUI.transform.GetChild(0).Find("ManaBar").GetComponent<Slider>();
+        mana.transform.GetChild(3).GetComponent<TMP_Text>().SetText("+" + Mathf.Round(manaRegen * 100.0f) * 0.01f);
     }
 
     /*
@@ -249,7 +283,8 @@ public class UIManager : MonoBehaviour
     *   @param level - int of the players level.
     *   @param isActive - bool of whether to set the UI elements active or not.
     */
-    public void SetSkillLevelUpActive(Dictionary<string, int> spellLevels, int level, bool isActive){
+    public void SetSkillLevelUpActive(Dictionary<string, int> spellLevels, int level, bool isActive, GameObject playerUI){
+        Transform spellsHPManaUI = playerUI.transform.GetChild(0);
         // For each spell.
         foreach(KeyValuePair<string, int> spell in spellLevels){
             // If the UI should be active.
@@ -283,11 +318,11 @@ public class UIManager : MonoBehaviour
     /*
     * SkillLevelUpGradient - Increments the skill level up available gradient time to animate it pulsing.
     */
-    public void SkillLevelUpGradient(){
+    public void SkillLevelUpGradient(GameObject playerUI){
         float value = Time.time;
         // For each spell.
         for(int i = 0; i < 4; i++)
-            spellsHPManaUI.GetChild(i+1).GetChild(0).GetChild(0).GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
+            playerUI.transform.GetChild(0).GetChild(i+1).GetChild(0).GetChild(0).GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
     }
 
     /*
@@ -295,8 +330,8 @@ public class UIManager : MonoBehaviour
     *   @param spell - string of the spell UI to update.
     *   @param inUse - bool of whether or not the spell is in use.
     */
-    public void SetSpellInUse(string spell, bool inUse){
-        GameObject spellOutline = spellsHPManaUI.Find(spell).transform.GetChild(1).gameObject;
+    public void SetSpellInUse(string spell, bool inUse, GameObject playerUI){
+        GameObject spellOutline = playerUI.transform.GetChild(0).Find(spell).transform.GetChild(1).gameObject;
         if(inUse)
             spellOutline.GetComponent<Image>().color = Color.white;
         else
@@ -309,12 +344,12 @@ public class UIManager : MonoBehaviour
     *   @param duration - float of the total duration of the spell.
     *   @param active - float of the amount of time the spell has been active so far.
     */
-    public void SetSpellActiveDuration(int spell, float duration, float active){
+    public void SetSpellActiveDuration(int spell, float duration, float active, GameObject playerUI){
         // Get value between 0 and 1 representing the percent of the spell duration left.
         float fill = 1.0f - (active/duration);
         fill = Mathf.Clamp(fill, 0f, 1f);
         // Set the fill on the active spells slider.
-        GameObject spellDurationSlider = spellsHPManaUI.GetChild(spell).GetChild(1).GetChild(1).gameObject;
+        GameObject spellDurationSlider = playerUI.transform.GetChild(0).GetChild(spell).GetChild(1).GetChild(1).gameObject;
         spellDurationSlider.SetActive(true);
         spellDurationSlider.transform.GetChild(1).GetComponent<Image>().fillAmount = fill;
     }
@@ -323,8 +358,8 @@ public class UIManager : MonoBehaviour
     *   SetSpellDurationOver - Set the spells active slider to inactive.
     *   @param spell - int of the spell to deactivate the UI for.
     */
-    public void SetSpellDurationOver(int spell){
-        spellsHPManaUI.GetChild(spell).GetChild(1).GetChild(1).gameObject.SetActive(false);
+    public void SetSpellDurationOver(int spell, GameObject playerUI){
+        playerUI.transform.GetChild(0).GetChild(spell).GetChild(1).GetChild(1).gameObject.SetActive(false);
     }
 
     /*
@@ -332,8 +367,8 @@ public class UIManager : MonoBehaviour
     *   @param spell - int of the spell to update the UI for.
     *   @param isActive - bool of whether or not to activate the spell cover.
     */
-    public void SetSpellCoverActive(int spell, bool isActive){
-        spellsHPManaUI.GetChild(spell).GetChild(3).GetChild(0).gameObject.SetActive(isActive);
+    public void SetSpellCoverActive(int spell, bool isActive, GameObject playerUI){
+        playerUI.transform.GetChild(0).GetChild(spell).GetChild(3).GetChild(0).gameObject.SetActive(isActive);
     }
 
     /*
@@ -341,16 +376,16 @@ public class UIManager : MonoBehaviour
     *   @param currentXP - float of the players current experience.
     *   @param requiredXP float of the total required experience for the players next level.
     */
-    public void UpdateExperienceBar(float currentXP, float requiredXP){
-        iconXPUI.GetChild(3).GetComponent<Slider>().value = Mathf.Round((currentXP/requiredXP) * 100);
+    public void UpdateExperienceBar(float currentXP, float requiredXP, GameObject playerUI){
+        playerUI.transform.GetChild(4).GetChild(3).GetComponent<Slider>().value = Mathf.Round((currentXP/requiredXP) * 100);
     }
 
     /*
     *   UpdateLevelText - Updates the player level UI text.
     *   @param currentLevel - int of the players current level.
     */
-    public void UpdateLevelText(int currentLevel){
-        iconXPUI.GetChild(5).GetChild(1).GetComponent<TMP_Text>().SetText(currentLevel.ToString());
+    public void UpdateLevelText(int currentLevel, GameObject playerUI, GameObject playerBar){
+        playerUI.transform.GetChild(4).GetChild(5).GetChild(1).GetComponent<TMP_Text>().SetText(currentLevel.ToString());
         playerBar.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<TMP_Text>().SetText(currentLevel.ToString());
     }
 
@@ -358,8 +393,8 @@ public class UIManager : MonoBehaviour
     *   UpdateDeathTimer - Updates the death timer UI of the player.
     *   @param timeLeft - float of the time left before respawn.
     */
-    public void UpdateDeathTimer(float timeLeft){
-        GameObject iconCover = iconXPUI.GetChild(4).gameObject;
+    public void UpdateDeathTimer(float timeLeft, GameObject playerUI){
+        GameObject iconCover = playerUI.transform.GetChild(4).GetChild(4).gameObject;
         // Active icon cover if not already activated.
         if(!iconCover.activeSelf)
             iconCover.SetActive(true);
@@ -375,8 +410,8 @@ public class UIManager : MonoBehaviour
     *   UpdateKills - Updates the UI text with the players current amount of kills.
     *   @param kills - string of the amount of kills to update to.
     */
-    public void UpdateKills(string kills){
-        TMP_Text killsText = scoreUI.GetChild(0).GetComponent<TMP_Text>();
+    public void UpdateKills(string kills, GameObject playerUI){
+        TMP_Text killsText = playerUI.transform.GetChild(2).GetChild(0).GetComponent<TMP_Text>();
         killsText.SetText(kills);
     }
 
@@ -384,8 +419,8 @@ public class UIManager : MonoBehaviour
     *   UpdateDeaths - Updates the UI text with the players current amount of deaths.
     *   @param deaths - string of the amount of deaths to update to.
     */
-    public void UpdateDeaths(string deaths){
-        TMP_Text deathsText = scoreUI.GetChild(1).GetComponent<TMP_Text>();
+    public void UpdateDeaths(string deaths, GameObject playerUI){
+        TMP_Text deathsText = playerUI.transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>();
         deathsText.SetText(deaths);
     }
 
@@ -393,8 +428,8 @@ public class UIManager : MonoBehaviour
     *   UpdateAssists - Updates the UI text with the players current amount of assists.
     *   @param assists - string of the amount of assists to update to.
     */
-    public void UpdateAssists(string assists){
-        TMP_Text assistsText = scoreUI.GetChild(2).GetComponent<TMP_Text>();
+    public void UpdateAssists(string assists, GameObject playerUI){
+        TMP_Text assistsText = playerUI.transform.GetChild(2).GetChild(2).GetComponent<TMP_Text>();
         assistsText.SetText(assists);
     }
 
@@ -402,8 +437,8 @@ public class UIManager : MonoBehaviour
     *   UpdateCS - Updates the UI text with the players current amount of cs.
     *   @param cs - string of the amount of cs to update to.
     */
-    public void UpdateCS(string cs){
-        TMP_Text csText = scoreUI.GetChild(3).GetComponent<TMP_Text>();
+    public void UpdateCS(string cs, GameObject playerUI){
+        TMP_Text csText = playerUI.transform.GetChild(2).GetChild(3).GetComponent<TMP_Text>();
         csText.SetText(cs);
     }
 
@@ -412,8 +447,8 @@ public class UIManager : MonoBehaviour
     *   @param itemSlot - int of the UI item slot to add the item to.
     *   @param itemSprite - sprite of the item.
     */
-    public void AddItem(int itemSlot, Sprite itemSprite){
-        GameObject itemImage = itemsUI.GetChild(itemSlot-1).GetChild(0).gameObject;
+    public void AddItem(int itemSlot, Sprite itemSprite, GameObject playerUI){
+        GameObject itemImage = playerUI.transform.GetChild(3).GetChild(itemSlot-1).GetChild(0).gameObject;
         itemImage.GetComponent<Image>().sprite = itemSprite;
         itemImage.SetActive(true);
     }
@@ -422,8 +457,8 @@ public class UIManager : MonoBehaviour
     *   AddItem - Removes an item from the inventory UI.
     *   @param itemSlot - int of the UI item slot to remove the item from.
     */
-    public void RemoveItem(int itemSlot){
-        GameObject itemImage = itemsUI.GetChild(itemSlot-1).GetChild(0).gameObject;
+    public void RemoveItem(int itemSlot, GameObject playerUI){
+        GameObject itemImage = playerUI.transform.GetChild(3).GetChild(itemSlot-1).GetChild(0).gameObject;
         itemImage.SetActive(false);
         itemImage.GetComponent<Image>().sprite = null;
     }
@@ -432,7 +467,7 @@ public class UIManager : MonoBehaviour
     *   SetPlayerBarActive - Sets the player bar UI to active or not.
     *   @param isActive - bool of whether or not to activate the spell cover.
     */
-    public void SetPlayerBarActive(bool isActive){
+    public void SetPlayerBarActive(bool isActive, GameObject playerBar){
         playerBar.SetActive(isActive);
     }
 
@@ -440,14 +475,14 @@ public class UIManager : MonoBehaviour
     *   SetChampionUIActive - Sets the champion UI to active or not.
     *   @param isActive - bool of whether or not to activate the spell cover.
     */
-    public void SetChampionUIActive(bool isActive){
-        championUI.SetActive(isActive);
+    public void SetChampionUIActive(bool isActive, GameObject playerUI){
+        playerUI.SetActive(isActive);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.M)){
+        /*if(Input.GetKeyDown(KeyCode.M)){
             if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
                 gameObject.GetComponent<Player>().TakeDamage(10, "magic", gameObject, false);
         }
@@ -463,7 +498,7 @@ public class UIManager : MonoBehaviour
         }
         else{
             SetHealthRegenActive(false);
-        }
+        }*/
     }
 
     /*
@@ -474,7 +509,7 @@ public class UIManager : MonoBehaviour
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
     // increase size of container, increase y offset.
-    public void AddStatusEffectUI(StatusEffects statusEffects, Effect effect){
+    public void AddStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject playerUI){
         // If a stackable effect already has 1 stack, don't create a new UI element.
         if(effect.effectType.isStackable)
             if(statusEffects.GetEffectsByType(effect.effectType.GetType()).Count > 1)
@@ -487,17 +522,17 @@ public class UIManager : MonoBehaviour
         // Set color and position of the UI element.
         if(effect.effectType.isBuff){
             myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.blue;
-            SetStatusEffectUIPosition(statusEffectsUI.GetChild(0), myEffect, true);
+            SetStatusEffectUIPosition(playerUI.transform.GetChild(5).GetChild(0), myEffect, true);
         }
         else{
             myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.red;
-            SetStatusEffectUIPosition(statusEffectsUI.GetChild(1), myEffect, false);
+            SetStatusEffectUIPosition(playerUI.transform.GetChild(5).GetChild(1), myEffect, false);
         }
         // Start effect timer animation coroutine.
         if(effect.effectType.isStackable)
-            StartCoroutine(StackableStatusEffectUI(statusEffects, effect, myEffect));
+            StartCoroutine(StackableStatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.GetChild(5)));
         else
-            StartCoroutine(StatusEffectUI(statusEffects, effect, myEffect));
+            StartCoroutine(StatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.GetChild(5)));
     }
 
     /*
@@ -540,7 +575,7 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI){
+    public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         float elapsedDuration;
         // Get the timer image component.
         Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
@@ -562,7 +597,7 @@ public class UIManager : MonoBehaviour
                 yield return null;
         }
         // Update UI positions based on what position the ended effect was in.
-        UpdateStatusEffectsPositions(effect, effectUI);
+        UpdateStatusEffectsPositions(effect, effectUI, statusEffectsUI);
         // Remove UI component.
         Destroy(effectUI);
     }
@@ -573,7 +608,7 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI){
+    public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         // Set stack text active.
         effectUI.transform.GetChild(3).gameObject.SetActive(true);
         // Setup variables.
@@ -618,7 +653,7 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
         // Update UI positions based on what position the ended effect was in.
-        UpdateStatusEffectsPositions(effect, effectUI);
+        UpdateStatusEffectsPositions(effect, effectUI, statusEffectsUI);
         // Remove UI component.
         Destroy(effectUI);
     }
@@ -629,7 +664,7 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect that expired.
     *   @param effectUI - GameObject of the status effect UI component to remove.
     */
-    public void UpdateStatusEffectsPositions(Effect effect, GameObject effectUI){
+    public void UpdateStatusEffectsPositions(Effect effect, GameObject effectUI, Transform statusEffectsUI){
         // Get the UI components child index and its current position.
         int index = effectUI.transform.GetSiblingIndex();
         Vector2 newPos = effectUI.GetComponent<RectTransform>().anchoredPosition;
@@ -655,7 +690,8 @@ public class UIManager : MonoBehaviour
     *   ShiftStatusEffects - Shifts the status effects UI container a specific amount. Used for overflow and to avoid skill level up UI blocking the status effects UI.
     *   @param shiftAmount - Vector2 of the x and y amounts to shift the UI component.
     */
-    public void ShiftStatusEffects(Vector2 shiftAmount){
-        statusEffectsUI.GetComponent<RectTransform>().anchoredPosition += shiftAmount;
+    public void ShiftStatusEffects(Vector2 shiftAmount, GameObject playerUI){
+        Debug.Log("SHIFTSTATUSEFFECTS: " + playerUI.name + " " + shiftAmount);
+        playerUI.transform.GetChild(5).GetComponent<RectTransform>().anchoredPosition += shiftAmount;
     }
 }

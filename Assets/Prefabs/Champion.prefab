@@ -202,6 +202,8 @@ MonoBehaviour:
   uiManager: {fileID: 0}
   <isDead>k__BackingField: 0
   dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
+  playerUI: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
+  playerBar: {fileID: 0}
 --- !u!114 &1421787264644147416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f3780f163ea1404bb8e4d4c5ad2a39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  championUI: {fileID: 0}
   playerBar: {fileID: 1774551540932771883, guid: b35871c264e664a4391ddfcce933b2ab, type: 3}
   statusEffectPrefab: {fileID: 355054382995843608, guid: c2056e5ccb088694998bcab8b037ef3a, type: 3}
 --- !u!114 &-3963185242520391866

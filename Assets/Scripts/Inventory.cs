@@ -13,7 +13,7 @@ public class Inventory {
     public Inventory(Player player){
         this.player = player;
         this.championStats = (ChampionStats) player.unitStats;
-        this.uiManager = player.uiManager;
+        //this.uiManager = player.uiManager;
     }
 
     /*
@@ -31,9 +31,9 @@ public class Inventory {
                     itemSlot = i;
                     myItems.Add(itemSlot, item);
                     AddItemStats(item); 
-                    uiManager.AddItem(itemSlot, item.icon);
+                    UIManager.instance.AddItem(itemSlot, item.icon, player.playerUI);
                     championStats.UpdateAttackSpeed();
-                    uiManager.UpdateAllStats();
+                    UIManager.instance.UpdateAllStats(championStats, player.playerUI);
                     return itemSlot;
                 }
             } 
@@ -55,9 +55,9 @@ public class Inventory {
             removedItem = myItems[slot];
             myItems.Remove(slot);
             RemoveItemStats(removedItem);
-            uiManager.RemoveItem(slot);
+            UIManager.instance.RemoveItem(slot, player.playerUI);
             championStats.UpdateAttackSpeed();
-            uiManager.UpdateAllStats();
+            UIManager.instance.UpdateAllStats(championStats, player.playerUI);
         }
         else{
             Debug.Log("No Item to sell in selected slot");
@@ -79,7 +79,7 @@ public class Inventory {
                 championStats.maxHealth.AddModifier(item.health);
                 if(!player.isDead){
                     championStats.SetHealth(championStats.currentHealth + item.health);
-                    uiManager.UpdateHealthBar();
+                    UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
                 }
             }
             // Increase current mana by items mana amount.
@@ -87,7 +87,7 @@ public class Inventory {
                 championStats.maxMana.AddModifier(item.mana);
                 if(!player.isDead){
                     championStats.SetMana(championStats.currentMana + item.mana);
-                    uiManager.UpdateManaBar();
+                    UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
                 }
             }
             championStats.speed.AddModifier(item.speed);
@@ -109,14 +109,14 @@ public class Inventory {
                 if(championStats.currentHealth > (championStats.maxHealth.GetValue() - item.health))
                     championStats.SetHealth(championStats.currentHealth - (item.health - (championStats.maxHealth.GetValue() - championStats.currentHealth))); 
                 championStats.maxHealth.RemoveModifier(item.health);
-                uiManager.UpdateHealthBar();
+                UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
             }
             //If the items mana hasn't been used yet, remove the amount that hasn't been used from the current mana.
             if(item.mana != 0){
                 if(championStats.currentMana > (championStats.maxMana.GetValue() - item.mana))
                     championStats.SetMana(championStats.currentMana - (item.mana - (championStats.maxMana.GetValue() - championStats.currentMana)));
                 championStats.maxMana.RemoveModifier(item.mana);
-                uiManager.UpdateManaBar();
+                UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
             }
             championStats.speed.RemoveModifier(item.speed);
             championStats.bonusAttackSpeed.RemoveModifier(item.attackSpeed);

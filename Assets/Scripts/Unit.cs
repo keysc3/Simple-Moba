@@ -10,7 +10,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     //public Level level;
     public StatusEffects statusEffects;
     public NavMeshAgent navMeshAgent;
-    public UIManager uiManager;
+    //public UIManager uiManager;
     protected Collider myCollider;
     protected Renderer rend;
     [field: SerializeField] public bool isDead { get; protected set; }
@@ -19,11 +19,11 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     public BonusDamage bonusDamage;
 
     protected virtual void Awake(){
-        uiManager = GetComponent<UIManager>();
+        //uiManager = GetComponent<UIManager>();
         //this.champion = champion;
         //unitStats = new UnitStats(unit);
         Init();
-        statusEffects = new StatusEffects(this, uiManager);
+        statusEffects = new StatusEffects(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         myCollider = GetComponent<Collider>();
         rend = GetComponent<Renderer>();
@@ -32,12 +32,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
 
     protected virtual void Init(){
         unitStats = new UnitStats(unit);
-    }
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame

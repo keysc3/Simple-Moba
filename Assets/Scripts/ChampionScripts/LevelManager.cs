@@ -58,7 +58,7 @@ public class LevelManager : MonoBehaviour
         if(currentXP >= requiredXP && level != maxLevel){
             LevelUp();
         }
-        uiManager.UpdateExperienceBar(currentXP, requiredXP);
+        UIManager.instance.UpdateExperienceBar(currentXP, requiredXP, player.playerUI);
     }
 
     /*
@@ -75,7 +75,7 @@ public class LevelManager : MonoBehaviour
         if(currentXP >= requiredXP && level != maxLevel){
             LevelUp();
         }
-        uiManager.UpdateExperienceBar(currentXP, requiredXP);
+        UIManager.instance.UpdateExperienceBar(currentXP, requiredXP, player.playerUI);
     }
 
     /*
@@ -85,7 +85,7 @@ public class LevelManager : MonoBehaviour
     private void LevelUp(){
         // Increase level and required amount for the next level.
         level++;
-        uiManager.UpdateLevelText(level);
+        UIManager.instance.UpdateLevelText(level, player.playerUI, player.playerBar);
         // Keep any overflow xp for the next.
         currentXP = currentXP - requiredXP;
         requiredXP += 100.0f;
@@ -100,10 +100,14 @@ public class LevelManager : MonoBehaviour
         IncreaseChampionStats();
         CurrentRespawnTime();
         championStats.UpdateAttackSpeed();
-        uiManager.UpdateHealthBar();
-        uiManager.UpdateManaBar();
-        uiManager.UpdateExperienceBar(currentXP, requiredXP);
-        uiManager.UpdateAllStats();
+        UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
+        UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+        UIManager.instance.UpdateAllStats(championStats, player.playerUI);
+
+        //uiManager.UpdateHealthBar();
+        //uiManager.UpdateManaBar();
+        UIManager.instance.UpdateExperienceBar(currentXP, requiredXP, player.playerUI);
+        //uiManager.UpdateAllStats();
     }
 
     /*
@@ -164,12 +168,13 @@ public class LevelManager : MonoBehaviour
     *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
     */
     private IEnumerator LevelUpSkill(){
-        uiManager.ShiftStatusEffects(new Vector2(xShift, yShift));
+        Debug.Log("LEVELUPSKILL: " + gameObject.name);
+        UIManager.instance.ShiftStatusEffects(new Vector2(xShift, yShift), player.playerUI);
         // Use all skill points before stopping.
         while(spellLevelPoints > 0){
             // If a level up or skill point was used since the last UI update then update the UI.
             if(newLevel){
-                uiManager.SetSkillLevelUpActive(spellLevels, level, true);
+                UIManager.instance.SetSkillLevelUpActive(spellLevels, level, true, player.playerUI);
                 newLevel = false;
             }
             if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
@@ -189,13 +194,13 @@ public class LevelManager : MonoBehaviour
                 }
             }
             // Skill level up available animation.
-            uiManager.SkillLevelUpGradient();
+            UIManager.instance.SkillLevelUpGradient(player.playerUI);
             yield return null;
         }
         // Disable skill level up UI.
-        uiManager.SetSkillLevelUpActive(spellLevels, level, false);
+        UIManager.instance.SetSkillLevelUpActive(spellLevels, level, false, player.playerUI);
         // Shift effects UI back.
-        uiManager.ShiftStatusEffects(new Vector2(-xShift, -yShift));
+        UIManager.instance.ShiftStatusEffects(new Vector2(-xShift, -yShift), player.playerUI);
     }
 
     /*
@@ -230,9 +235,9 @@ public class LevelManager : MonoBehaviour
         newLevel = true;
         // If the spell wasn't level 1 yet then take of the spell unlearned cover.
         if(spellLevels[spell] == 1)
-            uiManager.SpellLearned(spell);
+            UIManager.instance.SpellLearned(spell, player.playerUI);
         else
-            uiManager.SpellLeveled(spell, spellLevels[spell]);
+            UIManager.instance.SpellLeveled(spell, spellLevels[spell], player.playerUI);
     }
 
     /*

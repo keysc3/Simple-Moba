@@ -10,11 +10,10 @@ public class StatusEffects
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
     public Unit unit;
-    public UIManager uiManager;
+    //public UIManager uiManager;
 
-    public StatusEffects(Unit unit, UIManager uiManager){
+    public StatusEffects(Unit unit){
         this.unit = unit;
-        this.uiManager = uiManager;
     }
 
     /*
@@ -97,7 +96,7 @@ public class StatusEffects
             }
         }
         if(unit.unit is ScriptableChampion)
-            uiManager.AddStatusEffectUI(this, effect);
+            UIManager.instance.AddStatusEffectUI(this, effect, ((Player) unit).playerUI);
     }
 
     /*

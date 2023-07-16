@@ -662,9 +662,9 @@ public class BilliaAbilities : ChampionAbilities
     // LateUpdate is called after all Update functions have been called
     private void LateUpdate(){
         if(canUseSpell_4 && !spell_4_onCd)
-            uiManager.SetSpellCoverActive(4, false);
+            UIManager.instance.SetSpellCoverActive(4, false, player.playerUI);
         else
-            uiManager.SetSpellCoverActive(4, true);
+            UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
         RemoveSpell_1_PassiveStack();
     }
 

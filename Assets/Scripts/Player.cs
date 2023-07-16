@@ -14,6 +14,9 @@ public class Player : Unit, IRespawnable
     private DamageTracker damageTracker;
     private Material alive;
     [SerializeField] private Material dead;
+    public GameObject playerUIPrefab;
+    public GameObject playerUI;
+    public GameObject playerBar { get; private set; }
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
@@ -28,6 +31,9 @@ public class Player : Unit, IRespawnable
         damageTracker = GetComponent<DamageTracker>();
         inventory = new Inventory(this);
         score = new Score();
+        playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
+        playerBar = UIManager.instance.CreatePlayerBar(gameObject);
+        UIManager.instance.SetUpPlayerUI(this, playerUI, playerBar);
     }
 
     // Start is called before the first frame update
@@ -55,7 +61,7 @@ public class Player : Unit, IRespawnable
             if(fromUnit is Player){
                 Player killer = (Player) fromUnit;
                 killer.score.ChampionKill(gameObject);
-                killer.uiManager.UpdateKills(killer.score.kills.ToString());
+                UIManager.instance.UpdateKills(killer.score.kills.ToString(), killer.playerUI);
                 // Grant any assists if the unit is a champion.
                 foreach(GameObject assist in GetComponent<DamageTracker>().CheckForAssists()){
                     if(assist != from)
@@ -63,14 +69,14 @@ public class Player : Unit, IRespawnable
                 }
             }
             score.Death();
-            uiManager.UpdateDeaths(score.deaths.ToString());
+            UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
         }
         // Apply any damage that procs after recieving damage.
         else{
             bonusDamage?.Invoke(gameObject, isDot);
         }
         GetComponent<DamageTracker>().DamageTaken(from, incomingDamage, damageType);
-        GetComponent<UIManager>().UpdateHealthBar();
+        UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
     }
 
     /*
@@ -112,9 +118,9 @@ public class Player : Unit, IRespawnable
         // Set alive values.
         rend.material = alive;
         isDead = false;
-        uiManager.UpdateManaBar();
-        uiManager.UpdateHealthBar();
-        uiManager.SetPlayerBarActive(true);
+        UIManager.instance.UpdateManaBar((ChampionStats) unitStats, playerUI, playerBar);
+        UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
+        UIManager.instance.SetPlayerBarActive(true, playerBar);
         // Move player to respawn location.
         transform.position = respawnPosition;
     }
@@ -126,10 +132,10 @@ public class Player : Unit, IRespawnable
         float timer = 0.0f;
         while(timer < respawn){
             timer += Time.deltaTime;
-            uiManager.UpdateDeathTimer(respawn - timer);
+            UIManager.instance.UpdateDeathTimer(respawn - timer, playerUI);
             yield return null;
         }
-        uiManager.UpdateDeathTimer(0f);
+        UIManager.instance.UpdateDeathTimer(0f, playerUI);
         Respawn();
     }
 }

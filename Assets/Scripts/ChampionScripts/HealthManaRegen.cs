@@ -27,6 +27,22 @@ public class HealthManaRegen : MonoBehaviour
         StartCoroutine(RegenHealth());
     }
 
+    void Update(){
+        // Activate mana and health regen UI if the player is not full mana or full health.
+        if(championStats.currentMana < championStats.maxMana.GetValue() && !player.isDead){
+            UIManager.instance.SetManaRegenActive(true, player.playerUI);
+        }
+        else{
+            UIManager.instance.SetManaRegenActive(false, player.playerUI);
+        }
+        if(championStats.currentHealth < championStats.maxHealth.GetValue() && !player.isDead){
+            UIManager.instance.SetHealthRegenActive(true, player.playerUI);
+        }
+        else{
+            UIManager.instance.SetHealthRegenActive(false, player.playerUI);
+        }
+    }
+
     /*
     *   RegenMana - Regens the champions mana every 0.5s based on their MP5 stat.
     */
@@ -45,9 +61,10 @@ public class HealthManaRegen : MonoBehaviour
                     currentMana = maxMana;
                 // Set mana and only regen every 0.5s.
                 championStats.SetMana(currentMana);
-                uiManager.UpdateManaBar();
+                UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+                //uiManager.UpdateManaBar();
                 // Display per 1s on UI.
-                uiManager.UpdateManaRegen(championStats.MP5.GetValue()/5.0f);
+                UIManager.instance.UpdateManaRegen(championStats.MP5.GetValue()/5.0f, player.playerUI);
             }
             yield return new WaitForSeconds(0.5f);
         }
@@ -71,9 +88,10 @@ public class HealthManaRegen : MonoBehaviour
                     currentHealth = maxHealth;
                 // Set health and only regen every 0.5s.
                 championStats.SetHealth(currentHealth);
-                uiManager.UpdateHealthBar();
+                UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
+                //uiManager.UpdateHealthBar();
                 // Display per 1s on UI.
-                uiManager.UpdateHealthRegen(championStats.HP5.GetValue()/5.0f);
+                UIManager.instance.UpdateHealthRegen(championStats.HP5.GetValue()/5.0f, player.playerUI);
             }
             yield return new WaitForSeconds(0.5f);
         }

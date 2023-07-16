@@ -239,7 +239,7 @@ public class BahriAbilities : ChampionAbilities
                     }
                 }
             }
-            uiManager.SetSpellActiveDuration(2, bahri.spell_2_duration, timer);
+            UIManager.instance.SetSpellActiveDuration(2, bahri.spell_2_duration, timer, player.playerUI);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -247,7 +247,7 @@ public class BahriAbilities : ChampionAbilities
         if(spell_2_parent)
             Destroy(spell_2_parent);
         bahriAbilityHit.SpellResetEnemiesHit("2");
-        uiManager.SetSpellDurationOver(2);
+        UIManager.instance.SetSpellDurationOver(2, player.playerUI);
         StartCoroutine(Spell_Cd_Timer(bahri.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
     }
 
@@ -381,23 +381,23 @@ public class BahriAbilities : ChampionAbilities
                 spell_4_chargesLeft -= 1.0f;
                 spell4Effect.UpdateStacks((int)(spell_4_chargesLeft));
             }
-            uiManager.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer);
+            UIManager.instance.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer, player.playerUI);
             if(spell_4_chargesLeft == 0)
-                uiManager.SetSpellCoverActive(4, true);
+                UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
             spell_4_timer += Time.deltaTime;
             lastCastTimer += Time.deltaTime;
             yield return null;
         }
         // Reset charges and start spell cooldown timer.
         spell4Casting = false;
-        uiManager.SetSpellDurationOver(4);
+        UIManager.instance.SetSpellDurationOver(4, player.playerUI);
         StartCoroutine(Spell_Cd_Timer(bahri.spell4BaseCd[levelManager.spellLevels["Spell_4"]-1], (myBool => spell_4_onCd = myBool), "Spell_4"));
     }
 
     private void Spell_4_Takedown(GameObject killed){
         if(killed.GetComponent<Unit>().unit is ScriptableChampion){
             if(spell_4_chargesLeft < bahri.spell_4_charges && spell4Casting){
-                uiManager.SetSpellCoverActive(4, false);
+                UIManager.instance.SetSpellCoverActive(4, false, player.playerUI);
                 spell_4_chargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;

@@ -31,6 +31,14 @@ PrefabInstance:
       propertyPath: unit
       value: 
       objectReference: {fileID: 11400000, guid: 9a8035ae09b05f64e87fb76e8842de82, type: 2}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: playerUI
+      value: 
+      objectReference: {fileID: 8842905393809374821, guid: dd70f252af0b6444c9852f20d66b5d10, type: 3}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: playerUIPrefab
+      value: 
+      objectReference: {fileID: 8842905393809374821, guid: dd70f252af0b6444c9852f20d66b5d10, type: 3}
     - target: {fileID: 6584509455410724894, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: m_RootOrder
       value: 0
