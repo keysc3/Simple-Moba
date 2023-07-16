@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Unit : MonoBehaviour, IDamagable
+public class Unit : MonoBehaviour, IDamagable, IKillable
 {
     public ScriptableUnit unit;
     public UnitStats unitStats;
@@ -11,6 +11,8 @@ public class Unit : MonoBehaviour, IDamagable
     public StatusEffects statusEffects;
     public NavMeshAgent navMeshAgent;
     public UIManager uiManager;
+    protected Collider myCollider;
+    protected Renderer rend;
     [field: SerializeField] public bool isDead { get; protected set; }
 
     public delegate void BonusDamage(GameObject toDamage, bool isDot); 
@@ -21,9 +23,10 @@ public class Unit : MonoBehaviour, IDamagable
         //this.champion = champion;
         //unitStats = new UnitStats(unit);
         Init();
-        uiManager = GetComponent<UIManager>();
         statusEffects = new StatusEffects(this, uiManager);
         navMeshAgent = GetComponent<NavMeshAgent>();
+        myCollider = GetComponent<Collider>();
+        rend = GetComponent<Renderer>();
         isDead = false;
     }
 
@@ -56,7 +59,7 @@ public class Unit : MonoBehaviour, IDamagable
         // If dead then award a kill and start the death method.
         if(unitStats.currentHealth <= 0f){
             isDead = true;
-            GetComponent<RespawnDeath>().Death();
+            Death();
         }
         // Apply any damage that procs after recieving damage.
         else{
@@ -66,5 +69,10 @@ public class Unit : MonoBehaviour, IDamagable
 
     public void SetDeathStatus(bool dead){
         isDead = dead;
+    }
+
+    public virtual void Death(){
+        Destroy(gameObject);
+        return;
     }
 }

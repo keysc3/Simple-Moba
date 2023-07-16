@@ -359,7 +359,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bahri
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9099839228181447378, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fe3c8220dbae8e7459c43866ff7c4968, type: 2}
+    m_RemovedComponents:
+    - {fileID: 2546871085300235606, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
 --- !u!1 &514457465
 GameObject:
@@ -679,11 +684,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Billia
       objectReference: {fileID: 0}
+    - target: {fileID: 6966295948718721084, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3334bcfd13f053249898895d8250e5a0, type: 2}
     m_RemovedComponents:
     - {fileID: 5131820632513671694, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
     - {fileID: 1928897181916793449, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
     - {fileID: 8044505279677623867, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
     - {fileID: 2364200911350425436, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+    - {fileID: 4448451504855873464, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
 --- !u!1 &963194225
 GameObject:
@@ -1021,7 +1031,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 11400000, guid: 9a8035ae09b05f64e87fb76e8842de82, type: 2}
   unitStats:
-    <isDead>k__BackingField: 0
     <currentHealth>k__BackingField: 0
     <displayCurrentHealth>k__BackingField: 0
     <maxHealth>k__BackingField:
@@ -1060,7 +1069,10 @@ MonoBehaviour:
     <bonusAttackSpeed>k__BackingField:
       baseValue: 0
       modifiers: []
-    <unit>k__BackingField: {fileID: 0}
+  navMeshAgent: {fileID: 0}
+  uiManager: {fileID: 0}
+  <isDead>k__BackingField: 0
+  dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
 --- !u!1 &1739497618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,7 +1439,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
   unitStats:
-    <isDead>k__BackingField: 0
     <currentHealth>k__BackingField: 0
     <displayCurrentHealth>k__BackingField: 0
     <maxHealth>k__BackingField:
@@ -1466,4 +1477,7 @@ MonoBehaviour:
     <bonusAttackSpeed>k__BackingField:
       baseValue: 0
       modifiers: []
-    <unit>k__BackingField: {fileID: 0}
+  navMeshAgent: {fileID: 0}
+  uiManager: {fileID: 0}
+  <isDead>k__BackingField: 0
+  dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
