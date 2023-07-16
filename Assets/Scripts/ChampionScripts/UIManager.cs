@@ -482,23 +482,10 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        /*if(Input.GetKeyDown(KeyCode.M)){
+        if(Input.GetKeyDown(KeyCode.M)){
             if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
                 gameObject.GetComponent<Player>().TakeDamage(10, "magic", gameObject, false);
         }
-        // Activate mana and health regen UI if the player is not full mana or full health.
-        if(championStats.currentMana < championStats.maxMana.GetValue() && !unit.isDead){
-            SetManaRegenActive(true);
-        }
-        else{
-            SetManaRegenActive(false);
-        }
-        if(championStats.currentHealth < championStats.maxHealth.GetValue() && !unit.isDead){
-            SetHealthRegenActive(true);
-        }
-        else{
-            SetHealthRegenActive(false);
-        }*/
     }
 
     /*
