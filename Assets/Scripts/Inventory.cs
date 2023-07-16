@@ -7,13 +7,11 @@ public class Inventory {
     private int space = 6;
     private Dictionary<int, Item> myItems = new Dictionary<int, Item>();
     private ChampionStats championStats;
-    private UIManager uiManager;
     private Player player;
 
     public Inventory(Player player){
         this.player = player;
         this.championStats = (ChampionStats) player.unitStats;
-        //this.uiManager = player.uiManager;
     }
 
     /*

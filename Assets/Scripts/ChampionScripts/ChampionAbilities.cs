@@ -21,7 +21,6 @@ public abstract class ChampionAbilities : MonoBehaviour
     protected bool spell_4_onCd = false;
     protected List<GameObject> activeSpellObjects = new List<GameObject>(); 
     protected NavMeshAgent navMeshAgent;
-    protected UIManager uiManager;
     protected LevelManager levelManager;
     protected ChampionStats championStats;
     protected Player player;
@@ -35,7 +34,6 @@ public abstract class ChampionAbilities : MonoBehaviour
         isCasting = false;
         mainCamera = Camera.main;
         player = GetComponent<Player>();
-        uiManager = GetComponent<UIManager>();
         myCollider = GetComponent<Collider>();
         levelManager = GetComponent<LevelManager>();
         navMeshAgent = GetComponent<NavMeshAgent>();

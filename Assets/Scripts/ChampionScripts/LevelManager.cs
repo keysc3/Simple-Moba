@@ -28,13 +28,11 @@ public class LevelManager : MonoBehaviour
     private float yShift = 15f;
     private ChampionStats championStats;
     private ScriptableChampion champion;
-    private UIManager uiManager;
     private Player player;
     
     // Called when the script instance is being loaded.
     private void Awake()
     {
-        uiManager = GetComponent<UIManager>();
         player = GetComponent<Player>();
     }
 

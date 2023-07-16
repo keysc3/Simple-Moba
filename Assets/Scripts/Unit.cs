@@ -10,7 +10,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     //public Level level;
     public StatusEffects statusEffects;
     public NavMeshAgent navMeshAgent;
-    //public UIManager uiManager;
     protected Collider myCollider;
     protected Renderer rend;
     [field: SerializeField] public bool isDead { get; protected set; }
@@ -19,9 +18,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     public BonusDamage bonusDamage;
 
     protected virtual void Awake(){
-        //uiManager = GetComponent<UIManager>();
-        //this.champion = champion;
-        //unitStats = new UnitStats(unit);
         Init();
         statusEffects = new StatusEffects(this);
         navMeshAgent = GetComponent<NavMeshAgent>();

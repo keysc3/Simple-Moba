@@ -11,11 +11,9 @@ public class HealthManaRegen : MonoBehaviour
 {
     private Player player;
     private ChampionStats championStats;
-    private UIManager uiManager;
 
     // Called when the script instance is being loaded.
     private void Awake(){
-        uiManager = GetComponent<UIManager>();
         player = GetComponent<Player>();
     }
 
