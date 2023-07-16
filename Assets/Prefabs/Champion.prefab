@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 3751159416856542718}
   - component: {fileID: 1259280961064540059}
   - component: {fileID: 8555274344643138580}
+  - component: {fileID: 4280575506826881327}
   - component: {fileID: 1421787264644147416}
   - component: {fileID: 5932148292249239579}
   - component: {fileID: 2017069902188150047}
-  - component: {fileID: 8496406171268358466}
   - component: {fileID: 750664812343880983}
   - component: {fileID: -6407682122250772637}
   - component: {fileID: -3963185242520391866}
@@ -146,6 +146,62 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 0
+--- !u!114 &4280575506826881327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921830857179254351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abb3b696d6c4064ca5849dafe41291a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 0}
+  unitStats:
+    <currentHealth>k__BackingField: 0
+    <displayCurrentHealth>k__BackingField: 0
+    <maxHealth>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <magicDamage>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <physicalDamage>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <HP5>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <armor>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <magicResist>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <speed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <autoRange>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <autoWindUp>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <attackSpeed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <attackProjectileSpeed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <bonusAttackSpeed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+  navMeshAgent: {fileID: 0}
+  uiManager: {fileID: 0}
+  <isDead>k__BackingField: 0
+  dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
 --- !u!114 &1421787264644147416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,19 +238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79736f83d4f6713408686f464edb94ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8496406171268358466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec815bb3550bed24fa53c521c43e3ade, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
 --- !u!114 &750664812343880983
 MonoBehaviour:
   m_ObjectHideFlags: 0

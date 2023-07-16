@@ -27,6 +27,10 @@ PrefabInstance:
       propertyPath: <unit>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 9a8035ae09b05f64e87fb76e8842de82, type: 2}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: unit
+      value: 
+      objectReference: {fileID: 11400000, guid: 9a8035ae09b05f64e87fb76e8842de82, type: 2}
     - target: {fileID: 6584509455410724894, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -71,7 +75,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8496406171268358466, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
 --- !u!1 &5483897106226106971 stripped
 GameObject:
