@@ -10,10 +10,10 @@ using UnityEngine;
 [System.Serializable]
 public class Score
 {
-    public int kills;
-    public int assists;
-    public int deaths;
-    public int cs;
+    [field: SerializeField] public int kills { get; private set; }
+    [field: SerializeField] public int assists { get; private set; }
+    [field: SerializeField] public int deaths { get; private set; }
+    [field: SerializeField] public int cs { get; private set; }
 
     public delegate void Takedown(GameObject killed);
     public event Takedown takedownCallback;

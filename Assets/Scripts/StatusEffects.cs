@@ -14,6 +14,7 @@ public class StatusEffects
     [field: SerializeField]
     [field: SerializeReference]
     public List<Effect> statusEffects { get; private set; } = new List<Effect>();
+    
     [SerializeField] private int highestActiveCCValue = 0;
     [SerializeField] private Effect mostImpairing;
     private Unit unit;
@@ -107,7 +108,7 @@ public class StatusEffects
     *   SetStrongestSlow - Sets the strongest slow to be activated. Slow is the only zero cc value effect that applies the strongest.
     *   @param effect - Slow Effect that was added.
     */
-    public void SetStrongestSlow(Slow effect){
+    private void SetStrongestSlow(Slow effect){
         // Get the strongest slows index in the status effect list.
         int index = effect.GetStrongest(statusEffects);
         // Deactivate all slows in the list that aren't the strongest.
@@ -220,7 +221,7 @@ public class StatusEffects
     *   GetMostImpairing - Gets the most impairing effect in the status manager effects list. Highest cc value = most impairing.
     *   @return Effect - Effect of the most impairing effect in the list.
     */
-    public Effect GetMostImpairing(){
+    private Effect GetMostImpairing(){
         int index = 0;
         int highestCC = 0;
         // Check for highest CC value effect.
@@ -246,7 +247,7 @@ public class StatusEffects
     *   SetMostImpairing - Activates and sets the tracking variables for the most impairing status effect in the list.
     *   @param effect - Effect of the status effect to activate and set.
     */
-    public void SetMostImpairing(Effect effect){
+    private void SetMostImpairing(Effect effect){
         effect.SetIsActivated(true);
         mostImpairing = effect;
         highestActiveCCValue = effect.effectType.ccValue;

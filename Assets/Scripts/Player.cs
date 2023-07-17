@@ -10,9 +10,9 @@ using UnityEngine.AI;
 */
 public class Player : Unit, IRespawnable
 {
-    public DamageTracker damageTracker;
-    public Inventory inventory;
-    public Score score;
+    [field: SerializeField] public DamageTracker damageTracker { get; private set; }
+    [field: SerializeField] public Inventory inventory { get; private set; }
+    [field: SerializeField] public Score score { get; private set; }
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
     private ChampionAbilities championAbilities;
@@ -21,8 +21,8 @@ public class Player : Unit, IRespawnable
     //private DamageTracker damageTracker;
     private Material alive;
     [SerializeField] private Material dead;
-    public GameObject playerUIPrefab;
-    public GameObject playerUI;
+    [field: SerializeField] public GameObject playerUIPrefab { get; private set; }
+    public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
 
     // TODO: handle respawn position somewhere else.
@@ -49,7 +49,7 @@ public class Player : Unit, IRespawnable
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         alive = rend.material;
     }
@@ -108,7 +108,8 @@ public class Player : Unit, IRespawnable
         // Handle champion death clean up.
         championAbilities.OnDeathCleanUp();
         rend.material = dead;
-        StartCoroutine(RespawnTimer(levelManager.respawnTime));
+        damageTracker.ResetDamageTracker();
+        StartCoroutine(RespawnTimer(levelManager.RespawnTime()));
     }
 
     /*
@@ -128,7 +129,6 @@ public class Player : Unit, IRespawnable
         // Set currenthp and currentmana to max values.
         ((ChampionStats) unitStats).ResetHealth();
         ((ChampionStats) unitStats).ResetMana();
-        damageTracker.ResetDamageTracker();
         // Set alive values.
         rend.material = alive;
         isDead = false;

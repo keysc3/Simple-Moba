@@ -12,7 +12,6 @@ using UnityEngine.AI;
 public class UnitStats
 {
     [field: SerializeField] public float currentHealth { get; private set; }
-    [field: SerializeField] public float displayCurrentHealth { get; protected set; }
     [field: SerializeField] public Stat maxHealth { get; private set; }
     [field: SerializeField] public Stat magicDamage { get; private set; }
     [field: SerializeField] public Stat physicalDamage { get; private set; }

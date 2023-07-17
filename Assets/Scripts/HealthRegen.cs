@@ -20,7 +20,7 @@ public class HealthRegen : MonoBehaviour
     }
 
     // Called once per frame.
-    void Update(){
+    private void Update(){
         // Activate and health regen UI if the player is not full health.
         if(championStats.currentHealth < championStats.maxHealth.GetValue() && !player.isDead){
             UIManager.instance.SetHealthRegenActive(true, player.playerUI);

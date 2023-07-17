@@ -24,7 +24,7 @@ public class BilliaAbilityHit : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         championStats = (ChampionStats) player.unitStats;
         billia = (Billia) player.unit;

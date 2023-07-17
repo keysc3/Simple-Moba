@@ -14,13 +14,13 @@ public class BilliaDrowsyVisual : MonoBehaviour
     private Image drowsyVisual;
     private RectTransform rectTransform;
     private StatusEffects statusEffects;
-    public float drowsyDuration;
-    public GameObject source;
-    public float yOffset = 1f;
-    public ScriptableDrowsy drowsy;
+    public float drowsyDuration { get; private set; }
+    public GameObject source { get; private set; }
+    private float yOffset = 1f;
+    public ScriptableDrowsy drowsy { get; private set; }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         drowsyVisual = transform.GetChild(0).GetComponent<Image>();
         statusEffects = transform.parent.GetComponent<Unit>().statusEffects;
@@ -43,5 +43,29 @@ public class BilliaDrowsyVisual : MonoBehaviour
             yield return null;
         }
         Destroy(gameObject);
+    }
+
+    /*
+    *   SetDrowsyDuration - Sets the duration of the Drowsy Effect for animation time.
+    *   @param drowsyDuration - float of the duration of the animation.
+    */
+    public void SetDrowsyDuration(float drowsyDuration){
+        this.drowsyDuration = drowsyDuration;
+    }
+
+    /*
+    *   SetDrowsy - Sets the drowsy object being animated.
+    *   @param drowsy - Scriptable drowsy to animate.
+    */
+    public void SetDrowsy(ScriptableDrowsy drowsy){
+        this.drowsy = drowsy;
+    }
+
+    /*
+    *   SetSource - Sets the drowsy's source GameObject.
+    *   @param source - GameObject of the source.
+    */
+    public void SetSource(GameObject source){
+        this.source = source;
     }
 }

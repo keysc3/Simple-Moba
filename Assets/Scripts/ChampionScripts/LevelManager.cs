@@ -11,7 +11,7 @@ public class LevelManager : MonoBehaviour
 {
     public int level { get; private set; } = 1;
     public int maxLevel { get; private set; } = 18;
-    public float respawnTime { get; private set; }
+    //public float respawnTime { get; private set; }
     public Dictionary<string, int> spellLevels { get; private set; } = new Dictionary<string, int>();
 
     [SerializeField] private float currentXP;
@@ -40,7 +40,7 @@ public class LevelManager : MonoBehaviour
     private void Start(){
         championStats = (ChampionStats) player.unitStats;
         champion = (ScriptableChampion) player.unit;
-        CurrentRespawnTime();
+        //CurrentRespawnTime();
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         StartCoroutine(LevelUpSkill());
@@ -96,7 +96,7 @@ public class LevelManager : MonoBehaviour
         }
         // Increase the champions base stats.
         IncreaseChampionStats();
-        CurrentRespawnTime();
+        //CurrentRespawnTime();
         championStats.UpdateAttackSpeed();
         UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
         UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
@@ -238,9 +238,11 @@ public class LevelManager : MonoBehaviour
     }
 
     /*
-    *   CurrentRespawnTime - Calculates the current respawn time based on the players level.
+    *   RespawnTime - Calculates the respawn time based on the players level.
+    *   @return float - Time to wait before respawning this player.
     */
-    private void CurrentRespawnTime(){
+    public float RespawnTime(){
+        float respawnTime;
         if(level < 7){
             respawnTime = (level * 2f) + 4f;
         }
@@ -250,5 +252,6 @@ public class LevelManager : MonoBehaviour
         else{
             respawnTime = (level * 2.5f) + 7.5f;
         }
+        return respawnTime;
     }
 }

@@ -20,7 +20,7 @@ public class ManaRegen : MonoBehaviour
     }
 
     // Called once per frame.
-    void Update(){
+    private void Update(){
         // Activate mana regen UI if the player is not full mana.
         if(championStats.currentMana < championStats.maxMana.GetValue() && !player.isDead){
             UIManager.instance.SetManaRegenActive(true, player.playerUI);

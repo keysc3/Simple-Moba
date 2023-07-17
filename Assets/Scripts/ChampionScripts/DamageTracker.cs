@@ -10,7 +10,7 @@ using UnityEngine;
 [System.Serializable]
 public class DamageTracker
 {
-    [field: SerializeField] public List<Damage> damageReceived;
+    [field: SerializeField] public List<Damage> damageReceived { get; private set; }
     private float resetTime = 15f; 
     private float assistTime = 10.0f;
     //public float lastDamageReceived;

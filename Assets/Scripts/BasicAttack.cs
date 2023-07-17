@@ -60,7 +60,7 @@ public class BasicAttack : MonoBehaviour
     */
     public virtual void AttackHit(GameObject target){
         float physicalDamage = unitStats.physicalDamage.GetValue();
-        target.GetComponent<Player>().TakeDamage(physicalDamage, "physical", gameObject, false);
+        target.GetComponent<Unit>().TakeDamage(physicalDamage, "physical", gameObject, false);
     }
 
     /*
@@ -71,8 +71,8 @@ public class BasicAttack : MonoBehaviour
         // Create attack GameObject and set necessary variables.
         GameObject projectile = (GameObject)Instantiate(attackProjectile, transform.position, Quaternion.identity);
         BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
-        basicAttackTrigger.target = target;
-        basicAttackTrigger.basicAttack = this;
+        basicAttackTrigger.SetTarget(target);
+        basicAttackTrigger.SetBasicAttack(this);
         // While the attack still exists animate it.
         while(projectile){
             projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.transform.position, unitStats.attackProjectileSpeed.GetValue() * Time.deltaTime);

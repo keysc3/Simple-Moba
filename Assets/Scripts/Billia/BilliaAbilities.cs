@@ -11,9 +11,9 @@ public class BilliaAbilities : ChampionAbilities
 {
     [field: SerializeField] public ScriptableSleep sleep { get; private set; }
     [field: SerializeField] public ScriptableSpeedBonus spell_1_passiveSpeedBonus { get; private set; }
-    public GameObject spell1Visual;
-    public GameObject spell2Visual;
-    public GameObject drowsyVisual;
+    [field: SerializeField] public GameObject spell1Visual { get; private set; }
+    [field: SerializeField] public GameObject spell2Visual { get; private set; }
+    [field: SerializeField] public GameObject drowsyVisual { get; private set; }
 
     [SerializeField] private int spell_1_passiveStacks;
     [SerializeField] private float p1_y_offset;
@@ -50,7 +50,7 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if(levelManager.spellLevels["Spell_4"] > 0){
             canUseSpell_4 = CanUseSpell_4();
@@ -226,33 +226,6 @@ public class BilliaAbilities : ChampionAbilities
             }
         }
     }
-
-    /*
-    *   Spell_1_PassiveRunning - Controls logic for whether the passive is still running or not.
-    */
-    /*private IEnumerator Spell_1_PassiveRunning(){
-        spell_1_passiveRunning = true;
-        // While the time since last stack hasn't reached the time until stack dropping.
-        while(Time.time - spell_1_lastStackTime < billia.spell_1_passiveSpeedDuration){
-            yield return null;
-        }
-        spell_1_passiveRunning = false;
-        // Initiate stack fall off coroutine.
-        StartCoroutine(Spell_1_PassiveDropping());
-    }*/
-
-    /*
-    *   Spell_1_PassiveDropping - Drops spell 1 passive stacks one at a time.
-    */
-    /*private IEnumerator Spell_1_PassiveDropping(){
-        // While spell 1 passive has stopped running drop a stack every iteration.
-        while(!spell_1_passiveRunning && spell_1_passiveStacks > 0){
-            navMeshAgent.speed = navMeshAgent.speed - spell_1_passiveTracker[spell_1_passiveStacks - 1];
-            spell_1_passiveTracker.RemoveAt(spell_1_passiveTracker.Count - 1);
-            spell_1_passiveStacks -= 1;
-            yield return new WaitForSeconds(billia.spell_1_passiveExpireDuration);
-        }
-    }*/
 
     /*
     *   Spell_1_Visual - Visual hitbox indicator for Billia's first spell.
@@ -464,7 +437,7 @@ public class BilliaAbilities : ChampionAbilities
         // Create spell object.
         GameObject spell_3_seed = (GameObject)Instantiate(seed, transform.position, Quaternion.identity);
         BilliaSpell3Trigger billiaSpell3Trigger = spell_3_seed.GetComponent<BilliaSpell3Trigger>();
-        billiaSpell3Trigger.billiaAbilities = this;
+        billiaSpell3Trigger.SetBilliaAbilitiesScript(this);
         billiaSpell3Trigger.SetCaster(gameObject);
         // Set p0.
         Vector3 p0 = transform.position;
@@ -494,7 +467,7 @@ public class BilliaAbilities : ChampionAbilities
         // Set the seeds final point.
         Vector3 lastPoint = QuadraticBezierCurvePoint(1, p0, p1, p2);
         spell_3_seed.transform.position = lastPoint;
-        billiaSpell3Trigger.hasLanded = true;
+        billiaSpell3Trigger.SetHasLanded(true);
         // Start the seeds rolling.
         StartCoroutine(Spell_3_Move(targetDirection.normalized, spell_3_seed, billiaSpell3Trigger));
     }
@@ -505,7 +478,7 @@ public class BilliaAbilities : ChampionAbilities
     *   @param targetDirection - Vector3 of the lobbed seeds direction to roll.
     */
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject spell_3_seed, BilliaSpell3Trigger billiaSpell3Trigger){
-        billiaSpell3Trigger.forwardDirection = targetDirection;
+        billiaSpell3Trigger.SetForwardDirection(targetDirection);
         // Set inital seed position.
         //spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
         // Look at roll direction.
@@ -571,7 +544,7 @@ public class BilliaAbilities : ChampionAbilities
     *   @param p1 - Vector3 of the second control point (connecting point).
     *   @param p2 - Vector 3 of the third control point (end point).
     */
-    public Vector3 QuadraticBezierCurvePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2){
+    private Vector3 QuadraticBezierCurvePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2){
         // p = ((1-t)^2 * P0) + (2(1-t)t * P1) + (t^2 * P2)
         float coefficient = 1 - t;
         float alpha = Mathf.Pow(coefficient, 2f);
@@ -644,9 +617,9 @@ public class BilliaAbilities : ChampionAbilities
                 GameObject drowsyObject = (GameObject)Instantiate(drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
-                visualScript.drowsyDuration = newDrowsy.effectDuration;
-                visualScript.drowsy = drowsy;
-                visualScript.source = gameObject;
+                visualScript.SetDrowsyDuration(newDrowsy.effectDuration);
+                visualScript.SetDrowsy(drowsy);
+                visualScript.SetSource(gameObject);
             }
         }
     }

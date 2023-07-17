@@ -108,8 +108,8 @@ public class BahriAbilities : ChampionAbilities
         GameObject orb = (GameObject)Instantiate(Orb, transform.position, Quaternion.identity);
         SpellObjectCreated(orb);
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
-        spell1Trigger.bahriAbilityHit = bahriAbilityHit;
-        spell1Trigger.bahri = gameObject; 
+        spell1Trigger.SetBahriAbilityHit(bahriAbilityHit);
+        spell1Trigger.SetBahri(gameObject); 
         // Set initial return values.
         bool returning = false;
         float returnSpeed = bahri.spell_1_minSpeed;
@@ -124,7 +124,7 @@ public class BahriAbilities : ChampionAbilities
                 else{
                     // Set return bools.
                     returning = true;
-                    spell1Trigger.isReturning = true;
+                    spell1Trigger.SetIsReturning(true);
                     bahriAbilityHit.SpellResetEnemiesHit("1");
                 }
             }
@@ -156,7 +156,9 @@ public class BahriAbilities : ChampionAbilities
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
                 GameObject spell = (GameObject)Instantiate(Spell_2_object, spell_2_parent.transform.position, Quaternion.identity);
-                spell.GetComponent<Spell2Trigger>().bahriAbilityHit = bahriAbilityHit;
+                Spell2Trigger spell2Trigger = GetComponent<Spell2Trigger>();
+                spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
+                spell2Trigger.SetSpellCast(2);
                 spell.transform.SetParent(spell_2_parent.transform);
                 spell.transform.localPosition = new Vector3(1,0,1).normalized * bahri.spell_2_magnitude;
                 spell.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
@@ -233,8 +235,7 @@ public class BahriAbilities : ChampionAbilities
                     if(target != null){
                         StartCoroutine(Spell_2_Target(child.gameObject, target));
                         Spell2Trigger spell2Trigger = child.gameObject.GetComponent<Spell2Trigger>();
-                        spell2Trigger.target = target;
-                        spell2Trigger.spellCast = 2;
+                        spell2Trigger.SetTarget(target);
                         child.parent = null;
                     }
                 }
@@ -328,8 +329,8 @@ public class BahriAbilities : ChampionAbilities
         GameObject spell_3_object = (GameObject)Instantiate(Spell_3_object, transform.position, Quaternion.identity);
         SpellObjectCreated(spell_3_object);
         Spell3Trigger spell3Trigger = spell_3_object.GetComponent<Spell3Trigger>();
-        spell3Trigger.bahriAbilityHit = bahriAbilityHit;
-        spell3Trigger.bahri = gameObject;
+        spell3Trigger.SetBahriAbilityHit(bahriAbilityHit);
+        spell3Trigger.SetBahri(gameObject);
         // While the spell object still exists.
         while(spell_3_object){
             // If target location has not been reached then move the object towards the target location.
@@ -512,9 +513,9 @@ public class BahriAbilities : ChampionAbilities
                 GameObject missile = (GameObject)Instantiate(Spell_2_object, transform.position, Quaternion.identity);
                 SpellObjectCreated(missile);
                 Spell2Trigger spell2Trigger = missile.GetComponent<Spell2Trigger>();
-                spell2Trigger.bahriAbilityHit = bahriAbilityHit;
-                spell2Trigger.target = target;
-                spell2Trigger.spellCast = 4;
+                spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
+                spell2Trigger.SetTarget(target);
+                spell2Trigger.SetSpellCast(4);
                 // Use the same animation as spell two to send the missiles to their target.
                 StartCoroutine(Spell_2_Target(missile, target));
             }

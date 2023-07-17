@@ -9,8 +9,8 @@ using UnityEngine;
 */
 public class Spell3Trigger : MonoBehaviour
 {
-    public BahriAbilityHit bahriAbilityHit;
-    public GameObject bahri;
+    public BahriAbilityHit bahriAbilityHit { get; private set; }
+    public GameObject bahri { get; private set; }
 
     private bool hit = false;
 
@@ -23,5 +23,21 @@ public class Spell3Trigger : MonoBehaviour
             hit = true;
             Destroy(gameObject);
         }
+    }
+
+    /*
+    *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
+    *   @param bahriAbilityHit - BahriAbilityHit script reference.
+    */
+    public void SetBahriAbilityHit(BahriAbilityHit bahriAbilityHit){
+        this.bahriAbilityHit = bahriAbilityHit;
+    }
+
+    /*
+    *   SetBahri - Sets the GameObject that casted the spell.
+    *   @param bahri - GameObject of the caster.
+    */
+    public void SetBahri(GameObject bahri){
+        this.bahri = bahri;
     }
 }

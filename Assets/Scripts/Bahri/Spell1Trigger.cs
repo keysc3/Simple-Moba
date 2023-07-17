@@ -9,9 +9,9 @@ using UnityEngine;
 */
 public class Spell1Trigger : MonoBehaviour
 {
-    public bool isReturning = false;
-    public BahriAbilityHit bahriAbilityHit;
-    public GameObject bahri;
+    public bool isReturning { get; private set; } = false;
+    public BahriAbilityHit bahriAbilityHit { get; private set; }
+    public GameObject bahri { get; private set; }
 
     private Bounds bahriBounds;
 
@@ -53,5 +53,29 @@ public class Spell1Trigger : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    /*
+    *   SetIsReturning - Sets the isReturning bool
+    *   @param isReturning - bool to set isReturning to.
+    */
+    public void SetIsReturning(bool isReturning){
+        this.isReturning = isReturning;
+    }
+
+    /*
+    *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
+    *   @param bahriAbilityHit - BahriAbilityHit script reference.
+    */
+    public void SetBahriAbilityHit(BahriAbilityHit bahriAbilityHit){
+        this.bahriAbilityHit = bahriAbilityHit;
+    }
+
+    /*
+    *   SetBahri - Sets the GameObject that casted the spell.
+    *   @param bahri - GameObject of the caster.
+    */
+    public void SetBahri(GameObject bahri){
+        this.bahri = bahri;
     }
 }

@@ -10,11 +10,11 @@ using UnityEngine.AI;
 */
 public class Unit : MonoBehaviour, IDamagable, IKillable
 {
-    public ScriptableUnit unit;
-    public UnitStats unitStats;
+    [field: SerializeField] public ScriptableUnit unit { get; private set; }
+    [field: SerializeField] public UnitStats unitStats { get; protected set; }
     //public Level level;
-    public StatusEffects statusEffects;
-    public NavMeshAgent navMeshAgent;
+    [field: SerializeField] public StatusEffects statusEffects { get; private set; }
+    [field: SerializeField] public NavMeshAgent navMeshAgent { get; private set; }
     protected Collider myCollider;
     [field: SerializeField] public bool isDead { get; protected set; }
 
@@ -44,7 +44,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     }
 
     // Called after all Update functions.
-    void LateUpdate(){
+    private void LateUpdate(){
         float finalMS = unitStats.CalculateMoveSpeed(statusEffects);
         navMeshAgent.speed = finalMS;
     }

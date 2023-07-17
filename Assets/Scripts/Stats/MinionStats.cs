@@ -11,7 +11,7 @@ public class MinionStats : UnitStats
 {
     //public Minion minion;
 
-    public string team;
+    [field: SerializeField] public string team { get; private set; }
 
     public MinionStats(ScriptableMinion minion) : base(minion){
         team = minion.team;

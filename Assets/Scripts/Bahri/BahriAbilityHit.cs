@@ -90,16 +90,7 @@ public class BahriAbilityHit : MonoBehaviour
         float magicDamage = championStats.magicDamage.GetValue();
         enemy.GetComponent<Unit>().TakeDamage(bahri.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
     }
-
-    /*
-    *   AutoAttack - Deals auto attacks damage to the enemy hit.
-    *   @param enemy - GameObject of the enemy hit.
-    */
-    public void AutoAttack(GameObject enemy){
-        float physicalDamage = championStats.physicalDamage.GetValue();
-        enemy.GetComponent<Unit>().TakeDamage(physicalDamage, "physical", gameObject, false);
-    }
-
+    
     /*
     *   SpellResetEnemiesHit - Resets a spells enemies hit list.
     *   @param spell - String of which spells list needs to be reset.
