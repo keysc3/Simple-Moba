@@ -7,19 +7,19 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
+[System.Serializable]
 public abstract class Effect
 {
-    //[field: SerializeField] public string effectName { get; private set; }
-    public bool isFinished { get; private set; }
-    public ScriptableEffect effectType { get; private set; }
-    public GameObject casted { get; private set; } 
+    [field: SerializeField] public bool isFinished { get; private set; }
+    [field: SerializeField] public ScriptableEffect effectType { get; private set; }
+    [field: SerializeField] public GameObject casted { get; private set; } 
     
-    protected GameObject effected;
-    protected Collider effectedCollider;
+    [field: SerializeField] protected GameObject effected;
+    [field: SerializeField] protected Collider effectedCollider;
 
-    public float effectTimer { get; private set; } = 0f;
-    public float effectDuration { get; private set; }
-    public bool isActivated { get; private set; } = false;
+    [field: SerializeField] public float effectTimer { get; private set; } = 0f;
+    [field: SerializeField] public float effectDuration { get; private set; }
+    [field: SerializeField] public bool isActivated { get; private set; } = false;
     //private bool isActivated;
 
     /*

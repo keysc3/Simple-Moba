@@ -7,6 +7,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
+[System.Serializable]
 public class Score
 {
     public int kills;

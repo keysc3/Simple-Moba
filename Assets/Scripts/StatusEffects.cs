@@ -7,14 +7,16 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
+[System.Serializable]
 public class StatusEffects
 {
 
-    public List<string> effectNames = new List<string>();
+    [field: SerializeField]
+    [field: SerializeReference]
     public List<Effect> statusEffects { get; private set; } = new List<Effect>();
-    private int highestActiveCCValue = 0;
-    private Effect mostImpairing;
-    public Unit unit;
+    [SerializeField] private int highestActiveCCValue = 0;
+    [SerializeField] private Effect mostImpairing;
+    private Unit unit;
 
     public StatusEffects(Unit unit){
         this.unit = unit;
@@ -35,7 +37,6 @@ public class StatusEffects
                         Effect effect = statusEffects[i];
                         statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
-                        effectNames.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
                         if(effect is Slow){
                             if(CheckForEffectByType(effect)){
@@ -83,7 +84,6 @@ public class StatusEffects
             SetMostImpairing(effect);
         }
         statusEffects.Add(effect);
-        effectNames.Add(effect.effectType.name);
         // CC Values of zero are always active.
         if(effect.effectType.ccValue == 0){
             // If a new slow effect was added then only activate the strongest one.
@@ -263,7 +263,6 @@ public class StatusEffects
                 statusEffects[i].SetIsActivated(false);
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);
-                effectNames.RemoveAt(i);
                 SetMostImpairing(GetMostImpairing());
                 //effect.SetIsFinished(true);
                 return;
