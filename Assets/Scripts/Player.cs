@@ -68,38 +68,33 @@ public class Player : Unit, IRespawnable
     *   @param isDot - bool if the damage was from a dot.
     */
     public override void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
-        Unit fromUnit = from.GetComponent<Unit>();
-        float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, fromUnit.unitStats, unitStats);
-        unitStats.SetHealth(unitStats.currentHealth - damageToTake);
-        Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
-        // If dead then award a kill and start the death method.
-        if(unitStats.currentHealth <= 0f){
-            isDead = true;
-            Debug.Log(transform.name + " killed by " + from.transform.name);
-            Death();
-            if(fromUnit is Player){
-                Player killer = (Player) fromUnit;
-                killer.score.ChampionKill(gameObject);
-                UIManager.instance.UpdateKills(killer.score.kills.ToString(), killer.playerUI);
-                // Grant any assists if the unit is a champion.
-                foreach(GameObject assist in damageTracker.CheckForAssists()){
-                    if(assist != from)
-                        assist.GetComponent<Player>().score.Assist();
-                }
-            }
-            score.Death();
-            UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
-        }
-        // Apply any damage that procs after recieving damage.
-        else{
-            bonusDamage?.Invoke(gameObject, isDot);
-        }
+        base.TakeDamage(incomingDamage, damageType, from, isDot);
         damageTracker.AddDamage(from, incomingDamage, damageType);
         UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
     }
 
     /*
-    *   Death - Handles the death of a player by disabling functionality.
+    *   DeathActions - Handles any game state/other Unit actions upon this Players death.
+    *   @param fromUnit - Unit that killed this Player.
+    */
+    protected override void DeathActions(Unit fromUnit){
+        base.DeathActions(fromUnit);
+        if(fromUnit is Player){
+            Player killer = (Player) fromUnit;
+            killer.score.ChampionKill(gameObject);
+            UIManager.instance.UpdateKills(killer.score.kills.ToString(), killer.playerUI);
+            // Grant any assists if the unit is a champion.
+            foreach(GameObject assist in damageTracker.CheckForAssists()){
+                if(assist != fromUnit.gameObject)
+                    assist.GetComponent<Player>().score.Assist();
+            }
+        }
+        score.Death();
+        UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
+    }
+
+    /*
+    *   Death - Handles the death of a player.
     */
     public override void Death(){
         // Disable all combat and movement controls.

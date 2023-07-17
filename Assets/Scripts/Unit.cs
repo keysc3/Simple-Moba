@@ -63,7 +63,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
         Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
         // If dead then award a kill and start the death method.
         if(unitStats.currentHealth <= 0f){
-            isDead = true;
+            DeathActions(fromUnit);
             Death();
         }
         // Apply any damage that procs after recieving damage.
@@ -86,5 +86,13 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     public virtual void Death(){
         Destroy(gameObject);
         return;
+    }
+    
+    /*
+    *   DeathActions - Handles any game state/other Unit actions upon this Units death.
+    *   @param fromUnit - Unit that killed this Unit.
+    */
+    protected virtual void DeathActions(Unit fromUnit){
+        isDead = true;
     }
 }
