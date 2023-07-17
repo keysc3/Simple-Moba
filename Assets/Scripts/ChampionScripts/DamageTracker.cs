@@ -12,6 +12,7 @@ public class DamageTracker
 {
     [field: SerializeField] public List<Damage> damageReceived;
     private float resetTime = 15f; 
+    private float assistTime = 10.0f;
     //public float lastDamageReceived;
 
     public DamageTracker(){
@@ -45,7 +46,7 @@ public class DamageTracker
     public List<GameObject> CheckForAssists(){
         List<GameObject> assist = new List<GameObject>();
         foreach(Damage damage in damageReceived){
-            if(Time.time - damage.time <= 10f && !assist.Contains(damage.from)){
+            if(Time.time - damage.time <= assistTime && !assist.Contains(damage.from)){
                 assist.Add(damage.from);
             } 
         }
