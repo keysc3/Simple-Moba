@@ -17,6 +17,7 @@ public class Player : Unit, IRespawnable
     private PlayerSpellInput playerSpellInput;
     private ChampionAbilities championAbilities;
     private LevelManager levelManager;
+    protected Renderer rend;
     //private DamageTracker damageTracker;
     private Material alive;
     [SerializeField] private Material dead;
@@ -37,6 +38,7 @@ public class Player : Unit, IRespawnable
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championAbilities = GetComponent<ChampionAbilities>();
         levelManager = GetComponent<LevelManager>();
+        rend = GetComponent<Renderer>();
         //damageTracker = GetComponent<DamageTracker>();
         damageTracker = new DamageTracker();
         inventory = new Inventory(this);

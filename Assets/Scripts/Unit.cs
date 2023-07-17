@@ -16,7 +16,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     public StatusEffects statusEffects;
     public NavMeshAgent navMeshAgent;
     protected Collider myCollider;
-    protected Renderer rend;
     [field: SerializeField] public bool isDead { get; protected set; }
 
     public delegate void BonusDamage(GameObject toDamage, bool isDot); 
@@ -28,7 +27,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
         statusEffects = new StatusEffects(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         myCollider = GetComponent<Collider>();
-        rend = GetComponent<Renderer>();
         isDead = false;
     }
 
