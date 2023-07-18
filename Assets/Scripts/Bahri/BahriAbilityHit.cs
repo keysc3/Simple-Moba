@@ -23,12 +23,12 @@ public class BahriAbilityHit : MonoBehaviour
     private void Awake(){
         player = GetComponent<Player>();
         bahriAbilities = GetComponent<BahriAbilities>();
-        levelManager = GetComponent<LevelManager>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
+        levelManager = player.levelManager;
         championStats = (ChampionStats) player.unitStats;
         bahri = (Bahri) player.unit;
     }

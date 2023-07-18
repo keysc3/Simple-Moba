@@ -35,12 +35,12 @@ public abstract class ChampionAbilities : MonoBehaviour
         mainCamera = Camera.main;
         player = GetComponent<Player>();
         myCollider = GetComponent<Collider>();
-        levelManager = GetComponent<LevelManager>();
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     protected virtual void Start(){
         championStats = (ChampionStats) player.unitStats;
+        levelManager = player.levelManager;
     }
 
     /*

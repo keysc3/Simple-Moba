@@ -13,12 +13,18 @@ public class PlayerSpellInput : MonoBehaviour
 {
     private ChampionAbilities myAbilities;
     private LevelManager levelManager;
+    private Player player;
+
+    // Called when the script instance is being loaded.
+    private void Awake(){
+        player = GetComponent<Player>();
+    }
 
     // Start is called before the first frame update
     private void Start()
     {
         myAbilities = GetComponent<ChampionAbilities>();
-        levelManager = GetComponent<LevelManager>();
+        levelManager = player.levelManager;
     }
 
     // Update is called once per frame

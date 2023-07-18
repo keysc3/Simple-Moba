@@ -20,12 +20,12 @@ public class BilliaAbilityHit : MonoBehaviour
     private void Awake(){
         player = GetComponent<Player>();
         billiaAbilities = GetComponent<BilliaAbilities>();
-        levelManager = GetComponent<LevelManager>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
+        levelManager = player.levelManager;
         championStats = (ChampionStats) player.unitStats;
         billia = (Billia) player.unit;
     }

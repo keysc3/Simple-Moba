@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 4280575506826881327}
   - component: {fileID: 1421787264644147416}
   - component: {fileID: 5932148292249239579}
-  - component: {fileID: 750664812343880983}
   - component: {fileID: -4468221765342084069}
   - component: {fileID: 8624274334401153067}
   m_Layer: 0
@@ -156,10 +155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6abb3b696d6c4064ca5849dafe41291a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 0}
-  unitStats:
+  <unit>k__BackingField: {fileID: 0}
+  <unitStats>k__BackingField:
     <currentHealth>k__BackingField: 0
-    <displayCurrentHealth>k__BackingField: 0
     <maxHealth>k__BackingField:
       baseValue: 0
       modifiers: []
@@ -196,13 +194,31 @@ MonoBehaviour:
     <bonusAttackSpeed>k__BackingField:
       baseValue: 0
       modifiers: []
-  navMeshAgent: {fileID: 0}
+  <statusEffects>k__BackingField:
+    <statusEffects>k__BackingField: []
+    highestActiveCCValue: 0
+  <navMeshAgent>k__BackingField: {fileID: 0}
   <isDead>k__BackingField: 0
-  damageTracker:
-    damageReceived: []
+  <damageTracker>k__BackingField:
+    <damageReceived>k__BackingField: []
+  <score>k__BackingField:
+    <kills>k__BackingField: 0
+    <assists>k__BackingField: 0
+    <deaths>k__BackingField: 0
+    <cs>k__BackingField: 0
+  <levelManager>k__BackingField:
+    <level>k__BackingField: 0
+    levelInfo: {fileID: 0}
+    currentXP: 0
+    gainAmount: 0
+    <spellLevelPoints>k__BackingField: 0
+    <skillLevelUpUIActive>k__BackingField: 0
   dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
-  playerUIPrefab: {fileID: 0}
-  playerUI: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
+  levelInfo: {fileID: 11400000, guid: 03943da5035aae247961edafce916db1, type: 2}
+  <playerUIPrefab>k__BackingField: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &1421787264644147416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,23 +243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d181b9514f5b27c4e8bfc9f399d0ccba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &750664812343880983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4613455c364ce614494837dccf0a87e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentXP: 0
-  requiredXP: 280
-  gainAmount: 100
-  maxSpellLevel: 5
-  maxUltLevel: 3
 --- !u!114 &-4468221765342084069
 MonoBehaviour:
   m_ObjectHideFlags: 0

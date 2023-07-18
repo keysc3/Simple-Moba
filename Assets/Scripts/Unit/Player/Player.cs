@@ -13,14 +13,16 @@ public class Player : Unit, IRespawnable
     [field: SerializeField] public DamageTracker damageTracker { get; private set; }
     [field: SerializeField] public Inventory inventory { get; private set; }
     [field: SerializeField] public Score score { get; private set; }
+    [field: SerializeField] public LevelManager levelManager { get; private set; }
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
     private ChampionAbilities championAbilities;
-    private LevelManager levelManager;
+    //private LevelManager levelManager;
     protected Renderer rend;
     //private DamageTracker damageTracker;
     private Material alive;
     [SerializeField] private Material dead;
+    [SerializeField] private LevelInfo levelInfo;
     [field: SerializeField] public GameObject playerUIPrefab { get; private set; }
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
@@ -37,12 +39,12 @@ public class Player : Unit, IRespawnable
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championAbilities = GetComponent<ChampionAbilities>();
-        levelManager = GetComponent<LevelManager>();
         rend = GetComponent<Renderer>();
         //damageTracker = GetComponent<DamageTracker>();
         damageTracker = new DamageTracker();
         inventory = new Inventory(this);
         score = new Score();
+        levelManager = new LevelManager(this, levelInfo);
         playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
         playerBar = UIManager.instance.CreatePlayerBar(gameObject);
         UIManager.instance.SetUpPlayerUI(this, playerUI, playerBar);
@@ -54,10 +56,26 @@ public class Player : Unit, IRespawnable
         alive = rend.material;
     }
 
+    // Update is called once per frame
     protected override void Update(){
         base.Update();
+        // Check if damage tracker needs resetting.
         if(damageTracker.damageReceived.Count > 0)
             damageTracker.CheckForReset(Time.time);
+        // Check for level up skill input if skill level up available.
+        if(levelManager.spellLevelPoints > 0){
+            levelManager.LevelUpSkill();
+        }
+        else{
+            // Deactivate skill level up UI if necessary.
+            if(levelManager.skillLevelUpUIActive)
+                levelManager.DeactivateSkillLevelUpUI();
+        }
+        // Test GainXP
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
+            if(Input.GetKeyDown(KeyCode.K))
+                levelManager.GainXPTester(levelManager.gainAmount);
+        }
     }
 
     /*
