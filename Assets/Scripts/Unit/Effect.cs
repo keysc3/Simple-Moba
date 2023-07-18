@@ -26,7 +26,7 @@ public abstract class Effect
     *   Effect - Initialize a new Effect object.
     *   @param effect - ScriptableObject of the effect to initialize.
     *   @param duration - float of the duration for the effect to last.
-    *   @param unitCasted - GamObject of the unit that caused the effect.
+    *   @param unitCasted - GameObject of the unit that caused the effect.
     *   @param unitEffected - GameObject of the unit that is being affected by the effect.
     */
     public Effect(ScriptableEffect effect, float duration, GameObject unitCasted, GameObject unitEffected){
