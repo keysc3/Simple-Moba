@@ -569,14 +569,15 @@ public class UIManager : MonoBehaviour
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
                 if(effect.effectType is ScriptableSpell){
-                    if(((Spell)effect).stacks > 0){
+                    effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ((Spell)effect).stacks.ToString();
+                    /*if(((Spell)effect).stacks > 0){
                         // Set stack text active.
                         effectUI.transform.GetChild(3).gameObject.SetActive(true);
                         effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ((Spell)effect).stacks.ToString();
                     }
                     else{
                         effectUI.transform.GetChild(3).gameObject.SetActive(false);
-                    }
+                    }*/
                 }
                 // Update status effect timer.
                 elapsedDuration = 1f - effect.effectTimer/effect.effectDuration;

@@ -23,6 +23,14 @@ PrefabInstance:
       propertyPath: unit
       value: 
       objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: <unit>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: <playerUIPrefab>k__BackingField
+      value: 
+      objectReference: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
     - target: {fileID: 6584509455410724894, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: m_RootOrder
       value: 0

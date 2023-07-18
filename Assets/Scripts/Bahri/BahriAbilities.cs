@@ -155,15 +155,15 @@ public class BahriAbilities : ChampionAbilities
             float angle = 0.0f;
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
-                GameObject spell = (GameObject)Instantiate(Spell_2_object, spell_2_parent.transform.position, Quaternion.identity);
-                Spell2Trigger spell2Trigger = GetComponent<Spell2Trigger>();
+                GameObject spell2 = (GameObject)Instantiate(Spell_2_object, spell_2_parent.transform.position, Quaternion.identity);
+                Spell2Trigger spell2Trigger = spell2.GetComponent<Spell2Trigger>();
                 spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
                 spell2Trigger.SetSpellCast(2);
-                spell.transform.SetParent(spell_2_parent.transform);
-                spell.transform.localPosition = new Vector3(1,0,1).normalized * bahri.spell_2_magnitude;
-                spell.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
+                spell2.transform.SetParent(spell_2_parent.transform);
+                spell2.transform.localPosition = new Vector3(1,0,1).normalized * bahri.spell_2_magnitude;
+                spell2.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
                 angle += 120.0f;
-                SpellObjectCreated(spell);
+                SpellObjectCreated(spell2);
             }
             // Start the coroutines for animating the spell and dealing with its effects.
             StartCoroutine(Spell_2_Move(spell_2_parent));
