@@ -7,56 +7,47 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class LevelManager : MonoBehaviour
+[System.Serializable]
+public class LevelManager
 {
-    public int level { get; private set; } = 1;
-    public int maxLevel { get; private set; } = 18;
-    public float respawnTime { get; private set; }
+    [field: SerializeField] public int level { get; private set; } = 1;
+    [field: SerializeField] public int spellLevelPoints { get; private set; } = 1;
+    [field: SerializeField] public bool skillLevelUpUIActive { get; private set; } = false;
+    [field: SerializeField] public LevelInfo levelInfo;
+    [field: SerializeField] public float gainAmount { get; private set; } = 100f;
     public Dictionary<string, int> spellLevels { get; private set; } = new Dictionary<string, int>();
-
+    
     [SerializeField] private float currentXP;
-    [SerializeField] private float requiredXP;
-    [SerializeField] private float gainAmount;
-    [SerializeField] private int maxSpellLevel;
-    [SerializeField] private int maxUltLevel;
-
-    private int spellLevelPoints = 1;
     private bool newLevel = true;
-    private List<float> championKillXP = new List<float>(){42f, 114f, 144f, 174f, 204f, 234f, 308f, 392f, 486f, 
-    590f, 640f, 690f, 740f, 790f, 840f, 890f, 940f, 990f};
-    private float xShift = 0f;
-    private float yShift = 15f;
     private ChampionStats championStats;
-    private Champion champion;
-    private UIManager uiManager;
-
-    // Called when the script instance is being loaded.
-    private void Awake()
-    {
-        championStats = GetComponent<ChampionStats>();
-        uiManager = GetComponent<UIManager>();
-    }
-
-    // Start is called before the first frame update
-    private void Start(){
-        CurrentRespawnTime();
-        champion = (Champion) championStats.unit;
+    private ScriptableChampion champion;
+    private Player player;
+    
+    public LevelManager(Player player, LevelInfo levelInfo){
+        this.levelInfo = levelInfo;
+        this.player = player;
+        championStats = (ChampionStats) player.unitStats;
+        champion = (ScriptableChampion) player.unit;
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
-        StartCoroutine(LevelUpSkill());
-        GetComponent<ScoreManager>().takedownCallback += GainXP; 
+        player.score.takedownCallback += GainXP; 
     }
 
     /*
     *   GainXPTester - Add xp to the champions total. Used for testing with a key input.
     *   @param gained - float of the amount of xp to add.
     */
-    private void GainXPTester(float gained){
+    public void GainXPTester(float gained){
         currentXP += gained;
-        if(currentXP >= requiredXP && level != maxLevel){
-            LevelUp();
+        if(level != levelInfo.maxLevel){
+            if(currentXP >= levelInfo.requiredXP[level])
+                LevelUp();
         }
-        uiManager.UpdateExperienceBar(currentXP, requiredXP);
+        if(level != levelInfo.maxLevel)
+            UIManager.instance.UpdateExperienceBar(currentXP, levelInfo.requiredXP[level], player.playerUI);
+        else{
+            UIManager.instance.UpdateExperienceBar(currentXP, currentXP, player.playerUI);
+        }
     }
 
     /*
@@ -65,15 +56,19 @@ public class LevelManager : MonoBehaviour
     */
     private void GainXP(GameObject killed){
         float gained;
-        if(killed.GetComponent<UnitStats>().unit is Champion)
-            gained = championKillXP[killed.GetComponent<LevelManager>().level - 1];
+        if(killed.GetComponent<Unit>() is Player)
+            gained = levelInfo.championKillXP[killed.GetComponent<Player>().levelManager.level - 1];
         else
             gained = 30f;
         currentXP += gained;
-        if(currentXP >= requiredXP && level != maxLevel){
+        if(currentXP >= levelInfo.requiredXP[level - 1] && level != levelInfo.maxLevel){
             LevelUp();
         }
-        uiManager.UpdateExperienceBar(currentXP, requiredXP);
+        if(level != levelInfo.maxLevel)
+            UIManager.instance.UpdateExperienceBar(currentXP, levelInfo.requiredXP[level], player.playerUI);
+        else{
+            UIManager.instance.UpdateExperienceBar(currentXP, currentXP, player.playerUI);
+        }
     }
 
     /*
@@ -81,27 +76,27 @@ public class LevelManager : MonoBehaviour
     *
     */
     private void LevelUp(){
+        // Keep any overflow xp for the next.
+        currentXP = currentXP - levelInfo.requiredXP[level];
         // Increase level and required amount for the next level.
         level++;
-        uiManager.UpdateLevelText(level);
-        // Keep any overflow xp for the next.
-        currentXP = currentXP - requiredXP;
-        requiredXP += 100.0f;
+        UIManager.instance.UpdateLevelText(level, player.playerUI, player.playerBar);
+        //requiredXP += 100.0f;
         gainAmount += 100.0f;
         // Give the champion another skill level up point and start the coroutine to allow them to level spells if not already running.
         spellLevelPoints += 1;
         newLevel = true;
-        if(spellLevelPoints == 1){
-            StartCoroutine(LevelUpSkill());
-        }
         // Increase the champions base stats.
         IncreaseChampionStats();
-        CurrentRespawnTime();
+        //CurrentRespawnTime();
         championStats.UpdateAttackSpeed();
-        uiManager.UpdateHealthBar();
-        uiManager.UpdateManaBar();
-        uiManager.UpdateExperienceBar(currentXP, requiredXP);
-        uiManager.UpdateAllStats();
+        UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
+        UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+        UIManager.instance.UpdateAllStats(championStats, player.playerUI);
+
+        //uiManager.UpdateHealthBar();
+        //uiManager.UpdateManaBar();
+        //uiManager.UpdateAllStats();
     }
 
     /*
@@ -150,50 +145,56 @@ public class LevelManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    /*private void Update()
     {
         if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
             if(Input.GetKeyDown(KeyCode.K))
                 GainXPTester(gainAmount);
         }
-    }
+    }*/
 
     /*
     *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
     */
-    private IEnumerator LevelUpSkill(){
-        uiManager.ShiftStatusEffects(new Vector2(xShift, yShift));
-        // Use all skill points before stopping.
-        while(spellLevelPoints != 0){
-            // If a level up or skill point was used since the last UI update then update the UI.
-            if(newLevel){
-                uiManager.SetSkillLevelUpActive(spellLevels, level, true);
-                newLevel = false;
-            }
-            if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
-                // If first spell level up key bind pressed and it is not at max level then level it.
-                if(Input.GetKey(KeyCode.LeftControl)){
-                    if(Input.GetKeyDown(KeyCode.Q))
-                        SpellLevelUpRequest("Spell_1", "basic");
-                // If second spell level up key bind pressed and it is not at max level then level it.
-                    if(Input.GetKeyDown(KeyCode.W))
-                        SpellLevelUpRequest("Spell_2", "basic");
-                // If third spell level up key bind pressed and it is not at max level then level it.
-                    if(Input.GetKeyDown(KeyCode.E))
-                        SpellLevelUpRequest("Spell_3", "basic");
-                // If fourth spell level up key bind pressed and it is not at max level then level it.
-                    if(Input.GetKeyDown(KeyCode.R))
-                        SpellLevelUpRequest("Spell_4", "ultimate");
-                }
-            }
-            // Skill level up available animation.
-            uiManager.SkillLevelUpGradient();
-            yield return null;
+    public void LevelUpSkill(){
+        if(!skillLevelUpUIActive)
+            ShiftLevelUpUIUp();
+        // If a level up or skill point was used since the last UI update then update the UI.
+        if(newLevel){
+            UIManager.instance.SetSkillLevelUpActive(spellLevels, level, true, player.playerUI);
+            skillLevelUpUIActive = true;
+            newLevel = false;
         }
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == player.gameObject){
+            // If first spell level up key bind pressed and it is not at max level then level it.
+            if(Input.GetKey(KeyCode.LeftControl)){
+                if(Input.GetKeyDown(KeyCode.Q))
+                    SpellLevelUpRequest("Spell_1", "basic");
+                // If second spell level up key bind pressed and it is not at max level then level it.
+                else if(Input.GetKeyDown(KeyCode.W))
+                    SpellLevelUpRequest("Spell_2", "basic");
+                // If third spell level up key bind pressed and it is not at max level then level it.
+                else if(Input.GetKeyDown(KeyCode.E))
+                    SpellLevelUpRequest("Spell_3", "basic");
+                // If fourth spell level up key bind pressed and it is not at max level then level it.
+                else if(Input.GetKeyDown(KeyCode.R))
+                    SpellLevelUpRequest("Spell_4", "ultimate");
+            }
+        }
+        // Skill level up available animation.
+        UIManager.instance.SkillLevelUpGradient(player.playerUI);
+    }
+
+    private void ShiftLevelUpUIUp(){
+        UIManager.instance.ShiftStatusEffects(new Vector2(levelInfo.xShift, levelInfo.yShift), player.playerUI);
+    }
+
+    public void DeactivateSkillLevelUpUI(){
+        skillLevelUpUIActive = false;
         // Disable skill level up UI.
-        uiManager.SetSkillLevelUpActive(spellLevels, level, false);
+        UIManager.instance.SetSkillLevelUpActive(spellLevels, level, false, player.playerUI);
         // Shift effects UI back.
-        uiManager.ShiftStatusEffects(new Vector2(-xShift, -yShift));
+        UIManager.instance.ShiftStatusEffects(new Vector2(-(levelInfo.xShift), -(levelInfo.yShift)), player.playerUI);
     }
 
     /*
@@ -204,12 +205,12 @@ public class LevelManager : MonoBehaviour
     private void SpellLevelUpRequest(string spell, string type){
         // Basic ability.
         if(type == "basic"){
-            if(spellLevels[spell] != maxSpellLevel)
+            if(spellLevels[spell] != levelInfo.maxSpellLevel)
                 SpellLevelUp(spell);
         }
         // Ultimate ability.
         else{
-            if(spellLevels[spell] != maxUltLevel){
+            if(spellLevels[spell] != levelInfo.maxUltLevel){
                 int spell_4_level = spellLevels["Spell_4"];
                 // Allow one point in fourth spell (ultimate) at level 6-10, two points at 11-15, and three points at 16-18.
                 if((spell_4_level < 1 && level > 5) || (spell_4_level < 2 && level > 10) || (spell_4_level < 3 && level > 15))
@@ -228,15 +229,17 @@ public class LevelManager : MonoBehaviour
         newLevel = true;
         // If the spell wasn't level 1 yet then take of the spell unlearned cover.
         if(spellLevels[spell] == 1)
-            uiManager.SpellLearned(spell);
+            UIManager.instance.SpellLearned(spell, player.playerUI);
         else
-            uiManager.SpellLeveled(spell, spellLevels[spell]);
+            UIManager.instance.SpellLeveled(spell, spellLevels[spell], player.playerUI);
     }
 
     /*
-    *   CurrentRespawnTime - Calculates the current respawn time based on the players level.
+    *   RespawnTime - Calculates the respawn time based on the players level.
+    *   @return float - Time to wait before respawning this player.
     */
-    private void CurrentRespawnTime(){
+    public float RespawnTime(){
+        float respawnTime;
         if(level < 7){
             respawnTime = (level * 2f) + 4f;
         }
@@ -246,5 +249,6 @@ public class LevelManager : MonoBehaviour
         else{
             respawnTime = (level * 2.5f) + 7.5f;
         }
+        return respawnTime;
     }
 }

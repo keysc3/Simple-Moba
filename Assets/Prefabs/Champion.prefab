@@ -14,18 +14,11 @@ GameObject:
   - component: {fileID: 3751159416856542718}
   - component: {fileID: 1259280961064540059}
   - component: {fileID: 8555274344643138580}
+  - component: {fileID: 4280575506826881327}
   - component: {fileID: 1421787264644147416}
   - component: {fileID: 5932148292249239579}
-  - component: {fileID: 7537349318683734438}
-  - component: {fileID: 2017069902188150047}
-  - component: {fileID: 2879644698382645441}
-  - component: {fileID: 8496406171268358466}
-  - component: {fileID: 750664812343880983}
-  - component: {fileID: 5949693481427950739}
-  - component: {fileID: 1108656103872275700}
-  - component: {fileID: -6407682122250772637}
-  - component: {fileID: -3963185242520391866}
   - component: {fileID: -4468221765342084069}
+  - component: {fileID: 8624274334401153067}
   m_Layer: 0
   m_Name: Champion
   m_TagString: Untagged
@@ -150,6 +143,82 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 0
+--- !u!114 &4280575506826881327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921830857179254351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abb3b696d6c4064ca5849dafe41291a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <unit>k__BackingField: {fileID: 0}
+  <unitStats>k__BackingField:
+    <currentHealth>k__BackingField: 0
+    <maxHealth>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <magicDamage>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <physicalDamage>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <HP5>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <armor>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <magicResist>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <speed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <autoRange>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <autoWindUp>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <attackSpeed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <attackProjectileSpeed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+    <bonusAttackSpeed>k__BackingField:
+      baseValue: 0
+      modifiers: []
+  <statusEffects>k__BackingField:
+    <statusEffects>k__BackingField: []
+    highestActiveCCValue: 0
+  <navMeshAgent>k__BackingField: {fileID: 0}
+  <isDead>k__BackingField: 0
+  <damageTracker>k__BackingField:
+    <damageReceived>k__BackingField: []
+  <score>k__BackingField:
+    <kills>k__BackingField: 0
+    <assists>k__BackingField: 0
+    <deaths>k__BackingField: 0
+    <cs>k__BackingField: 0
+  <levelManager>k__BackingField:
+    <level>k__BackingField: 0
+    levelInfo: {fileID: 0}
+    currentXP: 0
+    gainAmount: 0
+    <spellLevelPoints>k__BackingField: 0
+    <skillLevelUpUIActive>k__BackingField: 0
+  dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
+  levelInfo: {fileID: 11400000, guid: 03943da5035aae247961edafce916db1, type: 2}
+  <playerUIPrefab>k__BackingField: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &1421787264644147416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,176 +243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d181b9514f5b27c4e8bfc9f399d0ccba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7537349318683734438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca4ea97b00d11f04e9ad65931488dea5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2017069902188150047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79736f83d4f6713408686f464edb94ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2879644698382645441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc735500a74f8d34598f77882f523118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <isDead>k__BackingField: 0
-  <currentHealth>k__BackingField: 0
-  <displayCurrentHealth>k__BackingField: 0
-  <maxHealth>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <magicDamage>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <physicalDamage>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <HP5>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <armor>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <magicResist>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <speed>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <autoRange>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <autoWindUp>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <attackSpeed>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <attackProjectileSpeed>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <bonusAttackSpeed>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <unit>k__BackingField: {fileID: 0}
-  <currentMana>k__BackingField: 0
-  <displayCurrentMana>k__BackingField: 0
-  <maxMana>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <MP5>k__BackingField:
-    baseValue: 0
-    modifiers: []
-  <haste>k__BackingField:
-    baseValue: 0
-    modifiers: []
---- !u!114 &8496406171268358466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec815bb3550bed24fa53c521c43e3ade, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
---- !u!114 &750664812343880983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4613455c364ce614494837dccf0a87e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentXP: 0
-  requiredXP: 280
-  gainAmount: 100
-  maxSpellLevel: 5
-  maxUltLevel: 3
---- !u!114 &5949693481427950739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22008ede27cefc34a8ac5d1bd42a8730, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1108656103872275700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a55ebeaaafa71c54c80e30fe8c5cdfbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effectNames: []
---- !u!114 &-6407682122250772637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f3780f163ea1404bb8e4d4c5ad2a39a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  championUI: {fileID: 0}
-  playerBar: {fileID: 1774551540932771883, guid: b35871c264e664a4391ddfcce933b2ab, type: 3}
-  statusEffectPrefab: {fileID: 355054382995843608, guid: c2056e5ccb088694998bcab8b037ef3a, type: 3}
---- !u!114 &-3963185242520391866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921830857179254351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6713d2ece75ad742aa67c55268660a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageReceived: []
 --- !u!114 &-4468221765342084069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,3 +256,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackProjectile: {fileID: 0}
+--- !u!114 &8624274334401153067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921830857179254351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f1bba863ab4cf438e0ced9e40efa4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -13,6 +13,7 @@ public class BahriAbilityHit : MonoBehaviour
 
     private List<GameObject> spell_1_enemiesHit = new List<GameObject>();
     private List<GameObject> spell_2_enemiesHit = new List<GameObject>();
+    private Player player;
     private ChampionStats championStats;
     private ChampionAbilities bahriAbilities;
     private Bahri bahri;
@@ -20,23 +21,16 @@ public class BahriAbilityHit : MonoBehaviour
 
     // Called when the script instance is being loaded.
     private void Awake(){
-        championStats = GetComponent<ChampionStats>();
+        player = GetComponent<Player>();
         bahriAbilities = GetComponent<BahriAbilities>();
-        levelManager = GetComponent<LevelManager>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        bahri = (Bahri) championStats.unit;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        // For testing charm effect.
-        if(Input.GetKeyDown(KeyCode.Z) && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
-            GetComponent<StatusEffectManager>().AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject.transform.Find("/Champions/Red Bahri").gameObject, gameObject));
+        levelManager = player.levelManager;
+        championStats = (ChampionStats) player.unitStats;
+        bahri = (Bahri) player.unit;
     }
 
     /*
@@ -52,10 +46,10 @@ public class BahriAbilityHit : MonoBehaviour
             damageValue = bahri.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage;
             // Magic damage on first part then true damage on return.
             if(!isReturning){
-                enemy.GetComponent<UnitStats>().TakeDamage(damageValue, "magic", gameObject, false);
+                enemy.GetComponent<Unit>().TakeDamage(damageValue, "magic", gameObject, false);
             }
             else{
-                enemy.GetComponent<UnitStats>().TakeDamage(damageValue, "true", gameObject, false);
+                enemy.GetComponent<Unit>().TakeDamage(damageValue, "true", gameObject, false);
             }
             spell_1_enemiesHit.Add(enemy);
         }
@@ -72,7 +66,7 @@ public class BahriAbilityHit : MonoBehaviour
         if(spell_2_enemiesHit.Contains(enemy)){
             finalDamage = Mathf.Round(finalDamage * bahri.spell_2_multiplier);
         }
-        enemy.GetComponent<UnitStats>().TakeDamage(finalDamage, "magic", gameObject, false);
+        enemy.GetComponent<Unit>().TakeDamage(finalDamage, "magic", gameObject, false);
         spell_2_enemiesHit.Add(enemy);
     }
 
@@ -83,8 +77,9 @@ public class BahriAbilityHit : MonoBehaviour
     public void Spell_3_Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
         // Add the charm effect to the hit GameObject.
-        enemy.GetComponent<StatusEffectManager>().AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
-        enemy.GetComponent<UnitStats>().TakeDamage(bahri.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);
+        Unit enemyUnit = enemy.GetComponent<Unit>();
+        enemyUnit.statusEffects.AddEffect(charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
+        enemyUnit.TakeDamage(bahri.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);
     }
 
     /*
@@ -93,18 +88,9 @@ public class BahriAbilityHit : MonoBehaviour
     */
     public void Spell_4_Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
-        enemy.GetComponent<UnitStats>().TakeDamage(bahri.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
+        enemy.GetComponent<Unit>().TakeDamage(bahri.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
     }
-
-    /*
-    *   AutoAttack - Deals auto attacks damage to the enemy hit.
-    *   @param enemy - GameObject of the enemy hit.
-    */
-    public void AutoAttack(GameObject enemy){
-        float physicalDamage = championStats.physicalDamage.GetValue();
-        enemy.GetComponent<UnitStats>().TakeDamage(physicalDamage, "physical", gameObject, false);
-    }
-
+    
     /*
     *   SpellResetEnemiesHit - Resets a spells enemies hit list.
     *   @param spell - String of which spells list needs to be reset.

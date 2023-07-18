@@ -13,19 +13,21 @@ public class BilliaAbilityHit : MonoBehaviour
     private ChampionStats championStats;
     private BilliaAbilities billiaAbilities;
     private Billia billia;
+    private Player player;
     private LevelManager levelManager;
 
     // Called when the script instance is being loaded.
     private void Awake(){
-        championStats = GetComponent<ChampionStats>();
+        player = GetComponent<Player>();
         billiaAbilities = GetComponent<BilliaAbilities>();
-        levelManager = GetComponent<LevelManager>();
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        billia = (Billia) championStats.unit;
+        levelManager = player.levelManager;
+        championStats = (ChampionStats) player.unitStats;
+        billia = (Billia) player.unit;
     }
 
     /*
@@ -36,11 +38,12 @@ public class BilliaAbilityHit : MonoBehaviour
     public void Spell_1_Hit(GameObject enemy, string radius){
         billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
+        Unit enemyUnit = enemy.GetComponent<Unit>();
         if(radius == "inner")
-            enemy.GetComponent<UnitStats>().TakeDamage(billia.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage, "magic", gameObject, false);   
+            enemyUnit.TakeDamage(billia.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage, "magic", gameObject, false);   
         else{
-            enemy.GetComponent<UnitStats>().TakeDamage(billia.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage, "magic", gameObject, false);
-            enemy.GetComponent<UnitStats>().TakeDamage(billia.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage, "true", gameObject, false);
+            enemyUnit.TakeDamage(billia.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage, "magic", gameObject, false);
+            enemyUnit.TakeDamage(billia.spell1BaseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage, "true", gameObject, false);
         }
     }
 
@@ -53,9 +56,9 @@ public class BilliaAbilityHit : MonoBehaviour
         billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
         if(radius == "inner")
-            enemy.GetComponent<UnitStats>().TakeDamage((billia.spell2BaseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage) * 2f, "magic", gameObject, false);   
+            enemy.GetComponent<Unit>().TakeDamage((billia.spell2BaseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage) * 2f, "magic", gameObject, false);   
         else
-            enemy.GetComponent<UnitStats>().TakeDamage(billia.spell2BaseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage, "magic", gameObject, false);
+            enemy.GetComponent<Unit>().TakeDamage(billia.spell2BaseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage, "magic", gameObject, false);
     }
 
     /*
@@ -65,8 +68,9 @@ public class BilliaAbilityHit : MonoBehaviour
     public void Spell_3_Hit(GameObject enemy){
         billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
-        enemy.GetComponent<StatusEffectManager>().AddEffect(slowEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
-        enemy.GetComponent<UnitStats>().TakeDamage(billia.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);   
+        Unit enemyUnit = enemy.GetComponent<Unit>();
+        enemyUnit.statusEffects.AddEffect(slowEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
+        enemyUnit.TakeDamage(billia.spell3BaseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);   
     }
 
     /*
@@ -77,15 +81,17 @@ public class BilliaAbilityHit : MonoBehaviour
     public void Spell_4_SleepProc(GameObject enemy, bool isDot){
         // Dots do not proc the sleep.
         if(!isDot){
-            if(enemy.GetComponent<StatusEffectManager>().CheckForEffectWithSource(billiaAbilities.sleep, gameObject)){
+            Unit enemyUnit = enemy.GetComponent<Unit>();
+            if(enemyUnit.statusEffects.CheckForEffectWithSource(billiaAbilities.sleep, gameObject)){
                 float magicDamage = championStats.magicDamage.GetValue();
                 // Remove sleep, deal damage and remove function from delegate.
-                enemy.GetComponent<StatusEffectManager>().RemoveEffect(billiaAbilities.sleep, gameObject);
-                enemy.GetComponent<UnitStats>().bonusDamage -= Spell_4_SleepProc;
-                enemy.GetComponent<UnitStats>().TakeDamage(billia.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
+                enemyUnit.statusEffects.RemoveEffect(billiaAbilities.sleep, gameObject);
+                enemyUnit.bonusDamage -= Spell_4_SleepProc;
+                enemyUnit.TakeDamage(billia.spell4BaseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
             }
+            // If effect fell off before damage was dealt, remove the bonus damage method.
             else{
-                enemy.GetComponent<UnitStats>().bonusDamage -= Spell_4_SleepProc;
+                enemyUnit.bonusDamage -= Spell_4_SleepProc;
             }
         }
     }

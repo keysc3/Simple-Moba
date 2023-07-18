@@ -16,6 +16,7 @@ public class BahriAbilities : ChampionAbilities
     [SerializeField] private GameObject attack;
     [field: SerializeField] public ScriptableSpeedBonus spell_2_SpeedBonus { get; private set; }
     [field: SerializeField] public ScriptableSpell spell4 { get; private set; }
+    [field: SerializeField] public ScriptableSpell passivePreset { get; private set; }
 
     private float spell_4_timer;
     private float spell_4_duration;
@@ -24,23 +25,26 @@ public class BahriAbilities : ChampionAbilities
     private int passiveStacks;
     private BahriAbilityHit bahriAbilityHit;
     private Bahri bahri;
-    private ScoreManager scoreManager;
+    private Spell passive;
+    //private ScoreManager scoreManager;
     private Spell spell4Effect = null;
 
     // Called when the script instance is being loaded.
     protected override void Awake(){
         base.Awake();
         bahriAbilityHit = GetComponent<BahriAbilityHit>();
-        scoreManager = GetComponent<ScoreManager>();
     }
 
     // Start is called before the first frame update
-    private void Start(){
-        bahri = (Bahri) championStats.unit;
-        scoreManager.takedownCallback += Passive;
-        scoreManager.takedownCallback += Spell_4_Takedown;
+    protected override void Start(){
+        base.Start();
+        bahri = (Bahri) player.unit;
+        player.score.takedownCallback += Passive;
+        player.score.takedownCallback += Spell_4_Takedown;
         spell4Casting = false;
         passiveStacks = 0;
+        passive = (Spell) passivePreset.InitializeEffect(0, gameObject, gameObject);
+        player.statusEffects.AddEffect(passive);
     }
 
     // Update is called once per frame
@@ -57,7 +61,7 @@ public class BahriAbilities : ChampionAbilities
         Debug.Log("Takedown; use passive");
         float healAmount;
         // Heal off champion kill
-        if(killed.GetComponent<UnitStats>().unit is Champion){
+        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
             healAmount = ((90f / 17f) * (float)(levelManager.level - 1)) + 75f;
             championStats.SetHealth(championStats.currentHealth + healAmount + championStats.magicDamage.GetValue());
             Debug.Log("Healed " + healAmount + " health from champion kill.");
@@ -65,6 +69,7 @@ public class BahriAbilities : ChampionAbilities
         // Heal off minion/monster kills if at 9 stacks.
         else{
             passiveStacks += 1;
+            passive.UpdateStacks(passiveStacks);
             if(passiveStacks == 9){
                 healAmount = ((60f / 17f) * (float)(levelManager.level - 1)) + 35f;
                 championStats.SetHealth(championStats.currentHealth + healAmount + championStats.magicDamage.GetValue());
@@ -107,9 +112,9 @@ public class BahriAbilities : ChampionAbilities
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject)Instantiate(Orb, transform.position, Quaternion.identity);
         SpellObjectCreated(orb);
-        orb.GetComponent<Spell1Trigger>().bahriAbilityHit = bahriAbilityHit;
-        orb.GetComponent<Spell1Trigger>().bahri = gameObject;
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
+        spell1Trigger.SetBahriAbilityHit(bahriAbilityHit);
+        spell1Trigger.SetBahri(gameObject); 
         // Set initial return values.
         bool returning = false;
         float returnSpeed = bahri.spell_1_minSpeed;
@@ -124,7 +129,7 @@ public class BahriAbilities : ChampionAbilities
                 else{
                     // Set return bools.
                     returning = true;
-                    spell1Trigger.isReturning = true;
+                    spell1Trigger.SetIsReturning(true);
                     bahriAbilityHit.SpellResetEnemiesHit("1");
                 }
             }
@@ -155,13 +160,15 @@ public class BahriAbilities : ChampionAbilities
             float angle = 0.0f;
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
-                GameObject spell = (GameObject)Instantiate(Spell_2_object, spell_2_parent.transform.position, Quaternion.identity);
-                spell.GetComponent<Spell2Trigger>().bahriAbilityHit = bahriAbilityHit;
-                spell.transform.SetParent(spell_2_parent.transform);
-                spell.transform.localPosition = new Vector3(1,0,1).normalized * bahri.spell_2_magnitude;
-                spell.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
+                GameObject spell2 = (GameObject)Instantiate(Spell_2_object, spell_2_parent.transform.position, Quaternion.identity);
+                Spell2Trigger spell2Trigger = spell2.GetComponent<Spell2Trigger>();
+                spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
+                spell2Trigger.SetSpellCast(2);
+                spell2.transform.SetParent(spell_2_parent.transform);
+                spell2.transform.localPosition = new Vector3(1,0,1).normalized * bahri.spell_2_magnitude;
+                spell2.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
                 angle += 120.0f;
-                SpellObjectCreated(spell);
+                SpellObjectCreated(spell2);
             }
             // Start the coroutines for animating the spell and dealing with its effects.
             StartCoroutine(Spell_2_Move(spell_2_parent));
@@ -205,10 +212,11 @@ public class BahriAbilities : ChampionAbilities
                     if(hitColliders.Length > 0){
                         // Check each enemy hit for closest to the GameObject.
                         foreach(Collider enemy in hitColliders){
+                            Unit enemyUnit = enemy.gameObject.GetComponent<Unit>();
                             // Only want to target alive units.
-                            if(!enemy.gameObject.GetComponent<UnitStats>().isDead && enemy.gameObject != gameObject){
+                            if(!enemyUnit.isDead && enemy.gameObject != gameObject){
                                 // If a player is currently under spell 3 effects, prioritize that player.
-                                if(enemy.gameObject.GetComponent<StatusEffectManager>().CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
+                                if(enemyUnit.statusEffects.CheckForEffectWithSource(bahriAbilityHit.charmEffect, gameObject)){
                                     target = enemy.gameObject;
                                     break;
                                 }
@@ -232,13 +240,12 @@ public class BahriAbilities : ChampionAbilities
                     if(target != null){
                         StartCoroutine(Spell_2_Target(child.gameObject, target));
                         Spell2Trigger spell2Trigger = child.gameObject.GetComponent<Spell2Trigger>();
-                        spell2Trigger.target = target;
-                        spell2Trigger.spellCast = 2;
+                        spell2Trigger.SetTarget(target);
                         child.parent = null;
                     }
                 }
             }
-            uiManager.SetSpellActiveDuration(2, bahri.spell_2_duration, timer);
+            UIManager.instance.SetSpellActiveDuration(2, bahri.spell_2_duration, timer, player.playerUI);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -246,7 +253,7 @@ public class BahriAbilities : ChampionAbilities
         if(spell_2_parent)
             Destroy(spell_2_parent);
         bahriAbilityHit.SpellResetEnemiesHit("2");
-        uiManager.SetSpellDurationOver(2);
+        UIManager.instance.SetSpellDurationOver(2, player.playerUI);
         StartCoroutine(Spell_Cd_Timer(bahri.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
     }
 
@@ -275,7 +282,7 @@ public class BahriAbilities : ChampionAbilities
         // Create and add a new speed bonus effect.
         SpeedBonus speedBonus = (SpeedBonus) spell_2_SpeedBonus.InitializeEffect(spellLevel, gameObject, gameObject);
         speedBonus.SetBonusPercent(bahri.spell_2_msBoost);
-        GetComponent<StatusEffectManager>().AddEffect(speedBonus);
+        player.statusEffects.AddEffect(speedBonus);
         // While speed boost is still active.
         while (timer < spell_2_SpeedBonus.duration[spellLevel]){
             // Calculate the fraction of the speed boosts duration that has passed.
@@ -326,8 +333,9 @@ public class BahriAbilities : ChampionAbilities
         // Create spell 3 GameObject and set its necessary variables.
         GameObject spell_3_object = (GameObject)Instantiate(Spell_3_object, transform.position, Quaternion.identity);
         SpellObjectCreated(spell_3_object);
-        spell_3_object.GetComponent<Spell3Trigger>().bahriAbilityHit = bahriAbilityHit;
-        spell_3_object.GetComponent<Spell3Trigger>().bahri = gameObject;
+        Spell3Trigger spell3Trigger = spell_3_object.GetComponent<Spell3Trigger>();
+        spell3Trigger.SetBahriAbilityHit(bahriAbilityHit);
+        spell3Trigger.SetBahri(gameObject);
         // While the spell object still exists.
         while(spell_3_object){
             // If target location has not been reached then move the object towards the target location.
@@ -359,7 +367,7 @@ public class BahriAbilities : ChampionAbilities
     */
     private IEnumerator Spell_4_Start(){
         spell4Effect = (Spell) spell4.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, gameObject);
-        GetComponent<StatusEffectManager>().AddEffect(spell4Effect);
+        player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = bahri.spell_4_duration;
         float lastCastTimer = 0.0f;
@@ -371,7 +379,7 @@ public class BahriAbilities : ChampionAbilities
         // While the spells duration has not expired.
         while(spell_4_timer < spell_4_duration){
             // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
-            if(Input.GetKeyDown(KeyCode.R) && !isCasting && spell_4_chargesLeft > 0.0f && !isCd && !championStats.isDead){
+            if(Input.GetKeyDown(KeyCode.R) && !isCasting && spell_4_chargesLeft > 0.0f && !isCd && !player.isDead){
                 Spell_4_Move();
                 isCd = true;
                 StartCoroutine(Spell_Cd_Timer(1.0f, (myBool => isCd = myBool), "Spell_4"));
@@ -379,23 +387,23 @@ public class BahriAbilities : ChampionAbilities
                 spell_4_chargesLeft -= 1.0f;
                 spell4Effect.UpdateStacks((int)(spell_4_chargesLeft));
             }
-            uiManager.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer);
+            UIManager.instance.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer, player.playerUI);
             if(spell_4_chargesLeft == 0)
-                uiManager.SetSpellCoverActive(4, true);
+                UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
             spell_4_timer += Time.deltaTime;
             lastCastTimer += Time.deltaTime;
             yield return null;
         }
         // Reset charges and start spell cooldown timer.
         spell4Casting = false;
-        uiManager.SetSpellDurationOver(4);
+        UIManager.instance.SetSpellDurationOver(4, player.playerUI);
         StartCoroutine(Spell_Cd_Timer(bahri.spell4BaseCd[levelManager.spellLevels["Spell_4"]-1], (myBool => spell_4_onCd = myBool), "Spell_4"));
     }
 
     private void Spell_4_Takedown(GameObject killed){
-        if(killed.GetComponent<UnitStats>().unit is Champion){
+        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
             if(spell_4_chargesLeft < bahri.spell_4_charges && spell4Casting){
-                uiManager.SetSpellCoverActive(4, false);
+                UIManager.instance.SetSpellCoverActive(4, false, player.playerUI);
                 spell_4_chargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;
@@ -453,12 +461,12 @@ public class BahriAbilities : ChampionAbilities
         navMeshAgent.ResetPath();
         navMeshAgent.enabled = false;
         // While not at target position or not dead.
-        while (transform.position != targetPosition && !championStats.isDead){
+        while (transform.position != targetPosition && !player.isDead){
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, newSpeed * Time.deltaTime);
             yield return null;
         }
         // Only fire end of dash projectiles if still alive.
-        if(!championStats.isDead)
+        if(!player.isDead)
             Spell_4_Missiles();
         navMeshAgent.enabled = true;
         isCasting = false;
@@ -476,7 +484,7 @@ public class BahriAbilities : ChampionAbilities
         if(hitColliders.Length > 0){
             foreach(Collider collider in hitColliders){
                 // If the target is alive.
-                if(!collider.gameObject.GetComponent<UnitStats>().isDead && collider.gameObject != gameObject){
+                if(!collider.gameObject.GetComponent<Unit>().isDead && collider.gameObject != gameObject){
                     // If three targets have already been found.
                     if(targets.Count > 2){
                         // Set the farthest enemy as first in the targets found list.
@@ -509,10 +517,10 @@ public class BahriAbilities : ChampionAbilities
                 // Create missile and set necessary variables
                 GameObject missile = (GameObject)Instantiate(Spell_2_object, transform.position, Quaternion.identity);
                 SpellObjectCreated(missile);
-                missile.GetComponent<Spell2Trigger>().bahriAbilityHit = bahriAbilityHit;
                 Spell2Trigger spell2Trigger = missile.GetComponent<Spell2Trigger>();
-                spell2Trigger.target = target;
-                spell2Trigger.spellCast = 4;
+                spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
+                spell2Trigger.SetTarget(target);
+                spell2Trigger.SetSpellCast(4);
                 // Use the same animation as spell two to send the missiles to their target.
                 StartCoroutine(Spell_2_Target(missile, target));
             }

@@ -11,16 +11,9 @@ public class MinionStats : UnitStats
 {
     //public Minion minion;
 
-    public string team;
+    [field: SerializeField] public string team { get; private set; }
 
-    protected override void Awake(){
-        base.Awake();
-        team = ((Minion) unit).team;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        displayCurrentHealth = currentHealth;
+    public MinionStats(ScriptableMinion minion) : base(minion){
+        team = minion.team;
     }
 }

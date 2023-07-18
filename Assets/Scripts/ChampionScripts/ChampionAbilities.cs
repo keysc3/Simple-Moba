@@ -21,9 +21,9 @@ public abstract class ChampionAbilities : MonoBehaviour
     protected bool spell_4_onCd = false;
     protected List<GameObject> activeSpellObjects = new List<GameObject>(); 
     protected NavMeshAgent navMeshAgent;
-    protected UIManager uiManager;
     protected LevelManager levelManager;
     protected ChampionStats championStats;
+    protected Player player;
 
     private Collider myCollider;
     private Camera mainCamera;
@@ -33,11 +33,14 @@ public abstract class ChampionAbilities : MonoBehaviour
     protected virtual void Awake(){
         isCasting = false;
         mainCamera = Camera.main;
-        uiManager = GetComponent<UIManager>();
+        player = GetComponent<Player>();
         myCollider = GetComponent<Collider>();
-        levelManager = GetComponent<LevelManager>();
-        championStats = GetComponent<ChampionStats>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+
+    protected virtual void Start(){
+        championStats = (ChampionStats) player.unitStats;
+        levelManager = player.levelManager;
     }
 
     /*
@@ -140,10 +143,10 @@ public abstract class ChampionAbilities : MonoBehaviour
         while(spell_timer <= spell_cd){
             //Debug.Log(spell_timer);
             spell_timer += Time.deltaTime;
-            uiManager.UpdateCooldown(spell, spell_cd - spell_timer, spell_cd);
+            UIManager.instance.UpdateCooldown(spell, spell_cd - spell_timer, spell_cd, player.playerUI);
             yield return null;
         }
-        uiManager.UpdateCooldown(spell, 0, spell_cd);
+        UIManager.instance.UpdateCooldown(spell, 0, spell_cd, player.playerUI);
         myResult(false);
     }
 

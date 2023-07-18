@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2941db867af6341b314b7f85077c56, type: 3}
+  m_Name: RedRangedMinion
+  m_EditorClassIdentifier: 
+  <name>k__BackingField: RedRangedMinion
+  <icon>k__BackingField: {fileID: 0}
+  <baseHealth>k__BackingField: 50
+  <magicDamage>k__BackingField: 0
+  <physicalDamage>k__BackingField: 5
+  <speed>k__BackingField: 3.5
+  <HP5>k__BackingField: 0
+  <armor>k__BackingField: 0
+  <magicResist>k__BackingField: 0
+  <rangeType>k__BackingField: ranged
+  <autoRange>k__BackingField: 6
+  <autoWindUp>k__BackingField: 0.2
+  <attackSpeed>k__BackingField: 0.3
+  <attackProjectileSpeed>k__BackingField: 6
+  <team>k__BackingField: red

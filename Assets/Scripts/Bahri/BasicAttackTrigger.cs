@@ -9,15 +9,15 @@ using UnityEngine;
 */
 public class BasicAttackTrigger : MonoBehaviour
 {
-    public GameObject target = null;
-    public BasicAttack basicAttack;
+    public GameObject target { get; private set; } = null;
+    public BasicAttack basicAttack { get; private set; }
 
     // Update is called once per frame
     private void Update()
     {
         // Destroy the attack object if the target dies.
         if(target != null){
-            if(target.GetComponent<UnitStats>().isDead){
+            if(target.GetComponent<Unit>().isDead){
                 Destroy(gameObject);
             }
         }
@@ -30,5 +30,21 @@ public class BasicAttackTrigger : MonoBehaviour
             basicAttack.AttackHit(other.gameObject);
             Destroy(gameObject);
         }
+    }
+
+    /*
+    *   SetTarget - Sets the target for this GameObject.
+    *   @param target - GameObject to set the target to.
+    */
+    public void SetTarget(GameObject target){
+        this.target = target;
+    }
+
+    /*
+    *   BasicAttack - Sets the basicAttack script reference.
+    *   @param basicAttack - basicAttack script reference.
+    */
+    public void SetBasicAttack(BasicAttack basicAttack){
+        this.basicAttack = basicAttack;
     }
 }

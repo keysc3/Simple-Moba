@@ -11,9 +11,9 @@ public class BilliaAbilities : ChampionAbilities
 {
     [field: SerializeField] public ScriptableSleep sleep { get; private set; }
     [field: SerializeField] public ScriptableSpeedBonus spell_1_passiveSpeedBonus { get; private set; }
-    public GameObject spell1Visual;
-    public GameObject spell2Visual;
-    public GameObject drowsyVisual;
+    [field: SerializeField] public GameObject spell1Visual { get; private set; }
+    [field: SerializeField] public GameObject spell2Visual { get; private set; }
+    [field: SerializeField] public GameObject drowsyVisual { get; private set; }
 
     [SerializeField] private int spell_1_passiveStacks;
     [SerializeField] private float p1_y_offset;
@@ -42,14 +42,15 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-       billia = (Billia) championStats.unit;
-       spell_1_passiveStacks = 0;
+        base.Start();
+        billia = (Billia) player.unit;
+        spell_1_passiveStacks = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if(levelManager.spellLevels["Spell_4"] > 0){
             canUseSpell_4 = CanUseSpell_4();
@@ -61,7 +62,7 @@ public class BilliaAbilities : ChampionAbilities
     *   @param enemy - GameObject of the unit to apply the passive to.
     */
     public void Passive(GameObject enemy){
-        enemy.GetComponent<StatusEffectManager>().AddEffect(passiveDot.InitializeEffect(30f, 0, gameObject, enemy));
+        enemy.GetComponent<Unit>().statusEffects.AddEffect(passiveDot.InitializeEffect(30f, 0, gameObject, enemy));
         if(!passiveApplied.Contains(enemy)){
             passiveApplied.Add(enemy);
             StartCoroutine(PassiveHeal(enemy));
@@ -74,18 +75,17 @@ public class BilliaAbilities : ChampionAbilities
     */
     private IEnumerator PassiveHeal(GameObject enemy){
         // Check to make sure the dot is still on the unit.
-        StatusEffectManager statusEffectManager = enemy.GetComponent<StatusEffectManager>();
-        UnitStats unitStats = enemy.GetComponent<UnitStats>();
-        while(statusEffectManager.CheckForEffectWithSource(passiveDot, gameObject)){
+        Unit unit = enemy.GetComponent<Unit>();
+        while(unit.statusEffects.CheckForEffectWithSource(passiveDot, gameObject)){
             // Heal the champion amount if unit is a champion.
-            if(unitStats.unit is Champion){
+            if(unit.unit is ScriptableChampion){
                 Debug.Log("Billia passive found on: " + enemy.name);
                 float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration[0];
                 championStats.SetHealth(championStats.currentHealth + healAmount);
                 Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
             }
-            else if(unitStats.unit is Monster){
-                if(((Monster) unitStats.unit).size == "large"){
+            else if(unit.unit is ScriptableMonster){
+                if(((ScriptableMonster) unit.unit).size == "large"){
                     Debug.Log("Billia passive found on: " + enemy.name);
                     float healAmount = (39f + ((15f / 17f) * (float)(levelManager.level - 1)))/passiveDot.duration[0];
                     championStats.SetHealth(championStats.currentHealth + healAmount);
@@ -165,12 +165,12 @@ public class BilliaAbilities : ChampionAbilities
     */
     private void Spell_1_PassiveProc(){
         //spell_1_lastStackTime = Time.time;
-        if(spell_1_passiveStacks < billia.spell_1_passiveMaxStacks){
+        if(levelManager.spellLevels["Spell_1"] > 0 && spell_1_passiveStacks < billia.spell_1_passiveMaxStacks){
             // Create a new speed bonus with the 
             float bonusPercent = billia.spell_1_passiveSpeed[levelManager.spellLevels["Spell_1"]-1];
             SpeedBonus speedBonus = (SpeedBonus) spell_1_passiveSpeedBonus.InitializeEffect(levelManager.spellLevels["Spell_1"]-1, gameObject, gameObject);
             speedBonus.SetBonusPercent(bonusPercent);
-            GetComponent<StatusEffectManager>().AddEffect(speedBonus);
+            player.statusEffects.AddEffect(speedBonus);
             spell_1_passiveEffectTracker.Add(speedBonus);
             spell_1_passiveStacks += 1;
             //float amountIncrease = championStats.speed.GetValue() * bonusPercent;
@@ -228,33 +228,6 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
-    *   Spell_1_PassiveRunning - Controls logic for whether the passive is still running or not.
-    */
-    /*private IEnumerator Spell_1_PassiveRunning(){
-        spell_1_passiveRunning = true;
-        // While the time since last stack hasn't reached the time until stack dropping.
-        while(Time.time - spell_1_lastStackTime < billia.spell_1_passiveSpeedDuration){
-            yield return null;
-        }
-        spell_1_passiveRunning = false;
-        // Initiate stack fall off coroutine.
-        StartCoroutine(Spell_1_PassiveDropping());
-    }*/
-
-    /*
-    *   Spell_1_PassiveDropping - Drops spell 1 passive stacks one at a time.
-    */
-    /*private IEnumerator Spell_1_PassiveDropping(){
-        // While spell 1 passive has stopped running drop a stack every iteration.
-        while(!spell_1_passiveRunning && spell_1_passiveStacks > 0){
-            navMeshAgent.speed = navMeshAgent.speed - spell_1_passiveTracker[spell_1_passiveStacks - 1];
-            spell_1_passiveTracker.RemoveAt(spell_1_passiveTracker.Count - 1);
-            spell_1_passiveStacks -= 1;
-            yield return new WaitForSeconds(billia.spell_1_passiveExpireDuration);
-        }
-    }*/
-
-    /*
     *   Spell_1_Visual - Visual hitbox indicator for Billia's first spell.
     *   @return GameObject - Created visual hitbox GameObject.
     */
@@ -308,8 +281,7 @@ public class BilliaAbilities : ChampionAbilities
             StartCoroutine(CastTime(billia.spell_2_castTime, false));
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
-            // Apply the dash.
-            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
+            StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(billia.spell1BaseMana[levelManager.spellLevels["Spell_2"]-1]);
             spell_2_onCd = true;
@@ -330,33 +302,49 @@ public class BilliaAbilities : ChampionAbilities
     }
 
     /*
-    *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
-    *   @param targetPosition - Vector3 of the position to move Billia to.
+    *   Spell_2_Cast - Handles cast time and dash initialization of Spell 2.
+    *   @param billiaTargetPosition - Vector3 of the position to move Billia to.
+    *   @param targetPosition - Vecto3 of the center of the spell.
     */
-    private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
-            // Disable pathing.
-            navMeshAgent.ResetPath();
-            navMeshAgent.isStopped = true;
-            // Get dash speed since dash duration is a fixed time.
-            float dashSpeed = (targetPosition - transform.position).magnitude/billia.spell_2_dashTime; 
-            float timer = 0.0f;
-            // While still dashing.
-            while(timer < billia.spell_2_dashTime){
-                // Move towards target position.
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            // Apply last tick dash and enable pathing.
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
-            navMeshAgent.isStopped = false;
-            Spell_2_Cast(spellTargetPosition);
+    private IEnumerator Spell_2_Cast(Vector3 billiaTargetPosition, Vector3 targetPosition){
+        while(isCasting)
+            yield return null;
+        // Apply the dash.
+        StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
     }
 
     /*
-    *   Spell_2_Cast - Casts Billia's second spell.
+    *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
+    *   @param targetPosition - Vector3 of the position to move Billia to.
+    *   @param spellTargetPosition - Vector3 of the center of the spell.
     */
-    private void Spell_2_Cast(Vector3 targetPosition){
+    private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
+        isCasting = true;
+        // Disable pathing.
+        navMeshAgent.ResetPath();
+        navMeshAgent.isStopped = true;
+        // Get dash speed since dash duration is a fixed time.
+        float dashSpeed = (targetPosition - transform.position).magnitude/billia.spell_2_dashTime; 
+        float timer = 0.0f;
+        // While still dashing.
+        while(timer < billia.spell_2_dashTime){
+            // Move towards target position.
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        // Apply last tick dash and enable pathing.
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+        navMeshAgent.isStopped = false;
+        isCasting = false;
+        Spell_2_Finished(spellTargetPosition);
+    }
+
+    /*
+    *   Spell_2_Finished - Handles spell cd and hitbox checking when the spell 2 is finished animating.
+    *   @param targetPosition - Vector3 of the center of the spell.
+    */
+    private void Spell_2_Finished(Vector3 targetPosition){
         StartCoroutine(Spell_Cd_Timer(billia.spell2BaseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => spell_2_onCd = myBool), "Spell_2"));
         // Set method to use if a hit.
         spellHit = billiaAbilityHit.Spell_2_Hit;
@@ -422,7 +410,7 @@ public class BilliaAbilities : ChampionAbilities
                 targetPosition = transform.position + (targetPosition.normalized * billia.spell_3_maxLobMagnitude);
             else
                 targetPosition = transform.position + (targetDirection - transform.position);
-            StartCoroutine(Spell_3_Cast(targetPosition));
+            StartCoroutine(Spell_3_Cast(targetPosition, targetPosition - transform.position));
             // Use mana.
             championStats.UseMana(billia.spell3BaseMana[levelManager.spellLevels["Spell_3"]-1]);
             spell_3_onCd = true;
@@ -433,30 +421,32 @@ public class BilliaAbilities : ChampionAbilities
     *   Spell_3_Cast - Casts Billia's third ability after the cast time.
     *   @param targetPosition - Vector3 of where the seed is to be lobbed.
     */
-    private IEnumerator Spell_3_Cast(Vector3 targetPosition){
+    private IEnumerator Spell_3_Cast(Vector3 targetPosition, Vector3 targetDirection){
         // Wait for cast time.
         while(isCasting)
             yield return null;
         StartCoroutine(Spell_Cd_Timer(billia.spell3BaseCd[levelManager.spellLevels["Spell_3"]-1], (myBool => spell_3_onCd = myBool), "Spell_3"));
-        StartCoroutine(Spell_3_Lob(targetPosition));
+        StartCoroutine(Spell_3_Lob(targetPosition, targetDirection));
     }
-
+    
     /*
     *   Spell_3_Lob - Lobs the seed at the target location over a set time using a Quadratic Bezier Curve.
     *   @param targetPosition - Vector3 of the target position for the seed to land.
     */
-    private IEnumerator Spell_3_Lob(Vector3 targetPosition){
+    private IEnumerator Spell_3_Lob(Vector3 targetPosition, Vector3 targetDirection){
         // Create spell object.
-        GameObject spell_3_seed = (GameObject)Instantiate(seed, targetPosition, Quaternion.identity);
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().billiaAbilities = this;
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().SetCaster(gameObject);
+        GameObject spell_3_seed = (GameObject)Instantiate(seed, transform.position, Quaternion.identity);
+        BilliaSpell3Trigger billiaSpell3Trigger = spell_3_seed.GetComponent<BilliaSpell3Trigger>();
+        billiaSpell3Trigger.SetBilliaAbilitiesScript(this);
+        billiaSpell3Trigger.SetCaster(gameObject);
         // Set p0.
         Vector3 p0 = transform.position;
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
         Vector3 p1 = transform.position;
         p1.y = p1.y + p1_y_offset;
-        Vector3 dir = (targetPosition - transform.position).normalized;
-        float mag = (transform.position - targetPosition).magnitude;
+        Vector3 dir = targetDirection.normalized;
+        float mag = targetDirection.magnitude;
+        //float mag = targetDirection.normalized;
         p1.x = p1.x + (dir.x * (mag/2f));
         p1.z = p1.z + (dir.z * (mag/2f));
         // Set p2. p2 y is a value directly above the ground.
@@ -477,20 +467,18 @@ public class BilliaAbilities : ChampionAbilities
         // Set the seeds final point.
         Vector3 lastPoint = QuadraticBezierCurvePoint(1, p0, p1, p2);
         spell_3_seed.transform.position = lastPoint;
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().hasLanded = true;
+        billiaSpell3Trigger.SetHasLanded(true);
         // Start the seeds rolling.
-        StartCoroutine(Spell_3_Move(targetPosition, spell_3_seed));
+        StartCoroutine(Spell_3_Move(targetDirection.normalized, spell_3_seed, billiaSpell3Trigger));
     }
 
     /*
     *   Spell_3_Move - Instantiates the seed and checks for collision on lob landing. If no landing collision the seed rolls in the 
     *   target forward direction until a collision.
-    *   @param targetPosition - Vector3 of the lobbed seeds landing position.
+    *   @param targetDirection - Vector3 of the lobbed seeds direction to roll.
     */
-    private IEnumerator Spell_3_Move(Vector3 targetPosition, GameObject spell_3_seed){
-        // Direction to roll.
-        Vector3 targetDirection =  (targetPosition - transform.position).normalized;
-        spell_3_seed.GetComponent<BilliaSpell3Trigger>().forwardDirection = targetDirection;
+    private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject spell_3_seed, BilliaSpell3Trigger billiaSpell3Trigger){
+        billiaSpell3Trigger.SetForwardDirection(targetDirection);
         // Set inital seed position.
         //spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
         // Look at roll direction.
@@ -524,8 +512,10 @@ public class BilliaAbilities : ChampionAbilities
     */
 
     public void Spell_3_ConeHitbox(GameObject spell_3_seed, GameObject initialHit, Vector3 forwardDirection){
+        bool passiveStack = false;
         if(initialHit.tag == "Enemy"){
             billiaAbilityHit.Spell_3_Hit(initialHit);
+            passiveStack = true;
         }
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
@@ -538,9 +528,12 @@ public class BilliaAbilities : ChampionAbilities
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
                 if(Vector3.Angle(forwardDirection, directionToHit) < billia.spell_3_seedConeAngle/2){
                     billiaAbilityHit.Spell_3_Hit(collider.gameObject);
+                    passiveStack = true;
                 }
             }
         }
+        if(passiveStack)
+            Spell_1_PassiveProc();
     }
 
     /*
@@ -551,7 +544,7 @@ public class BilliaAbilities : ChampionAbilities
     *   @param p1 - Vector3 of the second control point (connecting point).
     *   @param p2 - Vector 3 of the third control point (end point).
     */
-    public Vector3 QuadraticBezierCurvePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2){
+    private Vector3 QuadraticBezierCurvePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2){
         // p = ((1-t)^2 * P0) + (2(1-t)t * P1) + (t^2 * P2)
         float coefficient = 1 - t;
         float alpha = Mathf.Pow(coefficient, 2f);
@@ -614,16 +607,19 @@ public class BilliaAbilities : ChampionAbilities
     */
     private void Spell_4_Drowsy(List<GameObject> applyDrowsy){
         foreach(GameObject enemy in applyDrowsy){
-            if(enemy.GetComponent<UnitStats>().unit is Champion){
+            Unit enemyUnit = enemy.GetComponent<Unit>();
+            if(enemyUnit is Player){
+                // Add drowsy to enemy player and update the bonus damage delegate.
                 Drowsy newDrowsy = (Drowsy) drowsy.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, enemy);
-                enemy.GetComponent<StatusEffectManager>().AddEffect(newDrowsy);
-                enemy.GetComponent<UnitStats>().bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+                enemyUnit.statusEffects.AddEffect(newDrowsy);
+                enemyUnit.bonusDamage += billiaAbilityHit.Spell_4_SleepProc;
+                // Animate the drowsy effect.
                 GameObject drowsyObject = (GameObject)Instantiate(drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
-                visualScript.drowsyDuration = newDrowsy.effectDuration;
-                visualScript.drowsy = drowsy;
-                visualScript.source = gameObject;
+                visualScript.SetDrowsyDuration(newDrowsy.effectDuration);
+                visualScript.SetDrowsy(drowsy);
+                visualScript.SetSource(gameObject);
             }
         }
     }
@@ -646,13 +642,11 @@ public class BilliaAbilities : ChampionAbilities
     private List<GameObject> GetChampionsWithPassive(){
         List<GameObject> passiveAppliedChamps = new List<GameObject>();
         // Get all StatusEffectManagers.
-        StatusEffectManager[] effectScripts = FindObjectsOfType<StatusEffectManager>();
-        for (int i = 0; i < effectScripts.Length; i++){
+        Player[] playerScripts = FindObjectsOfType<Player>();
+        for (int i = 0; i < playerScripts.Length; i++){
             // If it is a champion and has the Billia dot then add it to the list.
-            if(effectScripts[i].unitStats.unit is Champion){
-                if(effectScripts[i].CheckForEffectByName(passiveDot, passiveDot.name)){
-                    passiveAppliedChamps.Add(effectScripts[i].gameObject);
-                }
+            if(playerScripts[i].statusEffects.CheckForEffectByName(passiveDot, passiveDot.name)){
+                passiveAppliedChamps.Add(playerScripts[i].gameObject);
             }
         }
         return passiveAppliedChamps;
@@ -661,9 +655,9 @@ public class BilliaAbilities : ChampionAbilities
     // LateUpdate is called after all Update functions have been called
     private void LateUpdate(){
         if(canUseSpell_4 && !spell_4_onCd)
-            uiManager.SetSpellCoverActive(4, false);
+            UIManager.instance.SetSpellCoverActive(4, false, player.playerUI);
         else
-            uiManager.SetSpellCoverActive(4, true);
+            UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
         RemoveSpell_1_PassiveStack();
     }
 

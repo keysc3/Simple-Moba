@@ -10,9 +10,9 @@ using UnityEngine;
 public abstract class ScriptableEffect : ScriptableObject
 {
     [field: SerializeField] public List<float> duration { get; private set; } = new List<float>();
-    public bool isStackable = false;
-    public int ccValue;
-    public bool isBuff;
-    public Sprite sprite;
+    [field: SerializeField] public bool isStackable { get; private set; } = false;
+    [field: SerializeField] public int ccValue { get; protected set; }
+    [field: SerializeField] public bool isBuff { get; private set; }
+    [field: SerializeField] public Sprite sprite { get; private set; }
 
 }

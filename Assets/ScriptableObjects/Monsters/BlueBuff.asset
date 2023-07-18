@@ -12,18 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7ae123ba82f6f41a00869443cb316d, type: 3}
   m_Name: BlueBuff
   m_EditorClassIdentifier: 
-  name: New Unit
-  icon: {fileID: 0}
-  baseHealth: 200
-  magicDamage: 0
-  physicalDamage: 5
-  speed: 3.5
-  HP5: 0
-  armor: 3
-  magicResist: 3
-  autoRange: 2
-  autoWindUp: 0.2
-  attackSpeed: 0.3
-  attackProjectileSpeed: 3
-  patienceAmount: 100
-  patienceRange: 5
+  <name>k__BackingField: BlueBuff
+  <icon>k__BackingField: {fileID: 0}
+  <baseHealth>k__BackingField: 200
+  <magicDamage>k__BackingField: 0
+  <physicalDamage>k__BackingField: 5
+  <speed>k__BackingField: 3.5
+  <HP5>k__BackingField: 0
+  <armor>k__BackingField: 3
+  <magicResist>k__BackingField: 3
+  <rangeType>k__BackingField: melee
+  <autoRange>k__BackingField: 2
+  <autoWindUp>k__BackingField: 0.2
+  <attackSpeed>k__BackingField: 0.3
+  <attackProjectileSpeed>k__BackingField: 3
+  <patienceAmount>k__BackingField: 100
+  <patienceRange>k__BackingField: 5
+  <isParent>k__BackingField: 1
+  <respawnTime>k__BackingField: 0
+  <size>k__BackingField: large

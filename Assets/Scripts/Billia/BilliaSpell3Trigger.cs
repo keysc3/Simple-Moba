@@ -9,9 +9,9 @@ using UnityEngine;
 */
 public class BilliaSpell3Trigger : MonoBehaviour
 {
-    public Vector3 forwardDirection;
-    public BilliaAbilities billiaAbilities;
-    public bool hasLanded;
+    public Vector3 forwardDirection { get; private set; }
+    public BilliaAbilities billiaAbilities { get; private set; }
+    public bool hasLanded { get; private set; }
     public GameObject casted { get; private set; }
     private bool hit = false;
 
@@ -36,5 +36,29 @@ public class BilliaSpell3Trigger : MonoBehaviour
     */
     public void SetCaster(GameObject casted){
         this.casted = casted;
+    }
+
+    /*
+    *   SetForwardDirection - Sets the forward direction of the seed.
+    *   @param forwardDirection - Vector3 of the seeds forward direction.
+    */
+    public void SetForwardDirection(Vector3 forwardDirection){
+        this.forwardDirection = forwardDirection;
+    }
+
+    /*
+    *   SetBilliaAbilitiesScript - Sets the BilliaAbilities script.
+    *   @param billiaAbilities - BilliaAbilities script to use.
+    */
+    public void SetBilliaAbilitiesScript(BilliaAbilities billiaAbilities){
+        this.billiaAbilities = billiaAbilities;
+    }
+
+    /*
+    *   SetHasLanded - Sets the hasLanded bool
+    *   @param hasLanded - bool to set hasLanded to.
+    */
+    public void SetHasLanded(bool hasLanded){
+        this.hasLanded = hasLanded;
     }
 }

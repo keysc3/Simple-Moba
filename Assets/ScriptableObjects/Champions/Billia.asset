@@ -12,126 +12,126 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15956ea9dc5cf2c4fba0cd0bcdf17122, type: 3}
   m_Name: Billia
   m_EditorClassIdentifier: 
-  name: Billia
-  icon: {fileID: 21300000, guid: 98245bfc88e04134cb766799b4320cb4, type: 3}
-  baseHealth: 100
-  magicDamage: 4
-  physicalDamage: 3
-  speed: 3.5
-  HP5: 10
-  armor: 0
-  magicResist: 0
-  rangeType: melee
-  autoRange: 2
-  autoWindUp: 0.14
-  attackSpeed: 0.63
-  attackProjectileSpeed: 0
-  passive_sprite: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
-  spell_1_sprite: {fileID: 21300000, guid: a575cdccf5aa38c4b8118aaf1cd601c2, type: 3}
-  spell_2_sprite: {fileID: 21300000, guid: 9ba580c375543b040a6837e76f8ac46d, type: 3}
-  spell_3_sprite: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
-  spell_4_sprite: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
-  baseMana: 50
-  MP5: 10
-  physicalDamageGrowth: 3.1
-  healthGrowth: 105
-  manaGrowth: 50
-  HP5Growth: 0.55
-  MP5Growth: 0.95
-  armorGrowth: 5.2
-  magicResistGrowth: 1.55
-  attackSpeedGrowth: 2.7
-  spell1BaseDamage:
+  <name>k__BackingField: Billia
+  <icon>k__BackingField: {fileID: 21300000, guid: 98245bfc88e04134cb766799b4320cb4, type: 3}
+  <baseHealth>k__BackingField: 100
+  <magicDamage>k__BackingField: 4
+  <physicalDamage>k__BackingField: 3
+  <speed>k__BackingField: 3.5
+  <HP5>k__BackingField: 10
+  <armor>k__BackingField: 0
+  <magicResist>k__BackingField: 0
+  <rangeType>k__BackingField: melee
+  <autoRange>k__BackingField: 2
+  <autoWindUp>k__BackingField: 0.14
+  <attackSpeed>k__BackingField: 0.63
+  <attackProjectileSpeed>k__BackingField: 0
+  <passive_sprite>k__BackingField: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
+  <spell_1_sprite>k__BackingField: {fileID: 21300000, guid: a575cdccf5aa38c4b8118aaf1cd601c2, type: 3}
+  <spell_2_sprite>k__BackingField: {fileID: 21300000, guid: 9ba580c375543b040a6837e76f8ac46d, type: 3}
+  <spell_3_sprite>k__BackingField: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
+  <spell_4_sprite>k__BackingField: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
+  <baseMana>k__BackingField: 50
+  <MP5>k__BackingField: 10
+  <physicalDamageGrowth>k__BackingField: 3.1
+  <healthGrowth>k__BackingField: 105
+  <manaGrowth>k__BackingField: 50
+  <HP5Growth>k__BackingField: 0.55
+  <MP5Growth>k__BackingField: 0.95
+  <armorGrowth>k__BackingField: 5.2
+  <magicResistGrowth>k__BackingField: 1.55
+  <attackSpeedGrowth>k__BackingField: 2.7
+  <spell1BaseDamage>k__BackingField:
   - 1
   - 2
   - 3
   - 4
   - 5
-  spell1BaseCd:
+  <spell1BaseCd>k__BackingField:
   - 5
   - 4
   - 3
   - 2
   - 1
-  spell1BaseMana:
+  <spell1BaseMana>k__BackingField:
   - 2
   - 3
   - 4
   - 5
   - 6
-  spell2BaseDamage:
+  <spell2BaseDamage>k__BackingField:
   - 1
   - 2
   - 3
   - 4
   - 5
-  spell2BaseCd:
+  <spell2BaseCd>k__BackingField:
   - 5
   - 4
   - 3
   - 2
   - 1
-  spell2BaseMana:
+  <spell2BaseMana>k__BackingField:
   - 1
   - 2
   - 3
   - 4
   - 5
-  spell3BaseDamage:
+  <spell3BaseDamage>k__BackingField:
   - 1
   - 2
   - 3
   - 4
   - 5
-  spell3BaseCd:
+  <spell3BaseCd>k__BackingField:
   - 5
   - 4
   - 3
   - 2
   - 1
-  spell3BaseMana:
+  <spell3BaseMana>k__BackingField:
   - 1
   - 2
   - 3
   - 4
   - 5
-  spell4BaseDamage:
+  <spell4BaseDamage>k__BackingField:
   - 1
   - 2
   - 3
-  spell4BaseCd:
+  <spell4BaseCd>k__BackingField:
   - 3
   - 2
   - 1
-  spell4BaseMana:
+  <spell4BaseMana>k__BackingField:
   - 1
   - 2
   - 3
-  spell_1_castTime: 0.25
-  spell_2_castTime: 0
-  spell_3_castTime: 0.4
-  spell_4_castTime: 0
-  spell_1_passiveSpeedDuration: 6.5
-  spell_1_passiveExpireDuration: 1.5
-  spell_1_passiveMaxStacks: 4
-  spell_1_passiveSpeed:
+  <spell_1_castTime>k__BackingField: 0.25
+  <spell_2_castTime>k__BackingField: 0
+  <spell_3_castTime>k__BackingField: 0.4
+  <spell_4_castTime>k__BackingField: 0
+  <spell_1_passiveSpeedDuration>k__BackingField: 6.5
+  <spell_1_passiveExpireDuration>k__BackingField: 1.5
+  <spell_1_passiveMaxStacks>k__BackingField: 4
+  <spell_1_passiveSpeed>k__BackingField:
   - 0.03
   - 0.04
   - 0.05
   - 0.06
   - 0.07
-  spell_1_innerRadius: 3
-  spell_1_outerRadius: 5
-  spell_2_maxMagnitude: 4
-  spell_2_dashOffset: 1.8
-  spell_2_innerRadius: 0.6
-  spell_2_outerRadius: 2.5
-  spell_2_dashTime: 0.759
-  spell_3_maxLobMagnitude: 3.5
-  spell_3_lobTime: 0.5
-  spell_3_seedSpeed: 5
-  spell_3_seedRotation: 270
-  spell_3_lobLandHitbox: 1.2
-  spell_3_seedConeAngle: 90
-  spell_3_seedConeRadius: 3
-  spell_4_travelTime: 0.3
+  <spell_1_innerRadius>k__BackingField: 3
+  <spell_1_outerRadius>k__BackingField: 5
+  <spell_2_maxMagnitude>k__BackingField: 4
+  <spell_2_dashOffset>k__BackingField: 1.8
+  <spell_2_innerRadius>k__BackingField: 0.6
+  <spell_2_outerRadius>k__BackingField: 2.5
+  <spell_2_dashTime>k__BackingField: 0.759
+  <spell_3_maxLobMagnitude>k__BackingField: 3.5
+  <spell_3_lobTime>k__BackingField: 0.5
+  <spell_3_seedSpeed>k__BackingField: 5
+  <spell_3_seedRotation>k__BackingField: 270
+  <spell_3_lobLandHitbox>k__BackingField: 1.2
+  <spell_3_seedConeAngle>k__BackingField: 90
+  <spell_3_seedConeRadius>k__BackingField: 3
+  <spell_4_travelTime>k__BackingField: 0.3

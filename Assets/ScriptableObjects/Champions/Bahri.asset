@@ -12,124 +12,124 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08bc8e82b307b8a47806e5905568ec69, type: 3}
   m_Name: Bahri
   m_EditorClassIdentifier: 
-  name: Bahri
-  icon: {fileID: 21300000, guid: dcd0655e17ffe824ca6693a54297152f, type: 3}
-  baseHealth: 100
-  magicDamage: 4
-  physicalDamage: 3
-  speed: 3.5
-  HP5: 10
-  armor: 0
-  magicResist: 0
-  rangeType: ranged
-  autoRange: 6
-  autoWindUp: 0.3
-  attackSpeed: 0.67
-  attackProjectileSpeed: 12
-  passive_sprite: {fileID: 21300000, guid: 32f0dd3c71af3d44fae717a62e0b08b6, type: 3}
-  spell_1_sprite: {fileID: 21300000, guid: 639a632daaf33ac46881eb06a8488a62, type: 3}
-  spell_2_sprite: {fileID: 21300000, guid: 09bdec57986ea5e448d17f4fbab14968, type: 3}
-  spell_3_sprite: {fileID: 21300000, guid: b47ab3f27b63d6f44b5818e3c6155395, type: 3}
-  spell_4_sprite: {fileID: 21300000, guid: dcdc6d014cbc1534a8252bb25183e5b6, type: 3}
-  baseMana: 50
-  MP5: 10
-  physicalDamageGrowth: 3
-  healthGrowth: 96
-  manaGrowth: 25
-  HP5Growth: 0.6
-  MP5Growth: 0.8
-  armorGrowth: 4.7
-  magicResistGrowth: 1.3
-  attackSpeedGrowth: 2
-  spell1BaseDamage:
+  <name>k__BackingField: Bahri
+  <icon>k__BackingField: {fileID: 21300000, guid: dcd0655e17ffe824ca6693a54297152f, type: 3}
+  <baseHealth>k__BackingField: 100
+  <magicDamage>k__BackingField: 4
+  <physicalDamage>k__BackingField: 3
+  <speed>k__BackingField: 3.5
+  <HP5>k__BackingField: 10
+  <armor>k__BackingField: 0
+  <magicResist>k__BackingField: 0
+  <rangeType>k__BackingField: ranged
+  <autoRange>k__BackingField: 6
+  <autoWindUp>k__BackingField: 0.3
+  <attackSpeed>k__BackingField: 0.67
+  <attackProjectileSpeed>k__BackingField: 12
+  <passive_sprite>k__BackingField: {fileID: 21300000, guid: 32f0dd3c71af3d44fae717a62e0b08b6, type: 3}
+  <spell_1_sprite>k__BackingField: {fileID: 21300000, guid: 639a632daaf33ac46881eb06a8488a62, type: 3}
+  <spell_2_sprite>k__BackingField: {fileID: 21300000, guid: 09bdec57986ea5e448d17f4fbab14968, type: 3}
+  <spell_3_sprite>k__BackingField: {fileID: 21300000, guid: b47ab3f27b63d6f44b5818e3c6155395, type: 3}
+  <spell_4_sprite>k__BackingField: {fileID: 21300000, guid: dcdc6d014cbc1534a8252bb25183e5b6, type: 3}
+  <baseMana>k__BackingField: 50
+  <MP5>k__BackingField: 10
+  <physicalDamageGrowth>k__BackingField: 3
+  <healthGrowth>k__BackingField: 96
+  <manaGrowth>k__BackingField: 25
+  <HP5Growth>k__BackingField: 0.6
+  <MP5Growth>k__BackingField: 0.8
+  <armorGrowth>k__BackingField: 4.7
+  <magicResistGrowth>k__BackingField: 1.3
+  <attackSpeedGrowth>k__BackingField: 2
+  <spell1BaseDamage>k__BackingField:
   - 4
   - 5
   - 6
   - 7
   - 8
-  spell1BaseCd:
-  - 5
-  - 4
-  - 3
-  - 2
-  - 1
-  spell1BaseMana:
-  - 6
-  - 7
-  - 8
-  - 9
-  - 10
-  spell2BaseDamage:
-  - 4
-  - 5
-  - 6
-  - 7
-  - 8
-  spell2BaseCd:
+  <spell1BaseCd>k__BackingField:
   - 5
   - 4
   - 3
   - 2
   - 1
-  spell2BaseMana:
+  <spell1BaseMana>k__BackingField:
   - 6
   - 7
   - 8
   - 9
   - 10
-  spell3BaseDamage:
+  <spell2BaseDamage>k__BackingField:
+  - 4
   - 5
   - 6
   - 7
   - 8
-  - 9
-  spell3BaseCd:
+  <spell2BaseCd>k__BackingField:
   - 5
   - 4
   - 3
   - 2
   - 1
-  spell3BaseMana:
+  <spell2BaseMana>k__BackingField:
   - 6
   - 7
   - 8
   - 9
   - 10
-  spell4BaseDamage:
-  - 4
+  <spell3BaseDamage>k__BackingField:
   - 5
-  - 6
-  spell4BaseCd:
-  - 5
-  - 4
-  - 3
-  spell4BaseMana:
   - 6
   - 7
   - 8
-  spell_1_castTime: 0.25
-  spell_2_castTime: 0
-  spell_3_castTime: 0.25
-  spell_4_castTime: 0
-  spell_1_magnitude: 7
-  spell_1_speed: 10
-  spell_1_minSpeed: 0.4
-  spell_1_maxSpeed: 16
-  spell_1_accel: 13
-  spell_2_magnitude: 1
-  spell_2_rotationSpeed: 75
-  spell_2_heightOffset: 0.5
-  spell_2_duration: 10
-  spell_2_msBoost: 0.4
-  spell_2_radius: 6.5
-  spell_2_speed: 9
-  spell_2_multiplier: 0.3
-  spell_3_magnitude: 8.5
-  spell_3_speed: 10
-  spell_3_speedMultiplier: 0.65
-  spell_4_maxMagnitude: 3.5
-  spell_4_speed: 8
-  spell_4_radius: 6.5
-  spell_4_charges: 3
-  spell_4_duration: 15
-  spell_4_takedownDurationIncrease: 10
+  - 9
+  <spell3BaseCd>k__BackingField:
+  - 5
+  - 4
+  - 3
+  - 2
+  - 1
+  <spell3BaseMana>k__BackingField:
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  <spell4BaseDamage>k__BackingField:
+  - 4
+  - 5
+  - 6
+  <spell4BaseCd>k__BackingField:
+  - 5
+  - 4
+  - 3
+  <spell4BaseMana>k__BackingField:
+  - 6
+  - 7
+  - 8
+  <spell_1_castTime>k__BackingField: 0.25
+  <spell_2_castTime>k__BackingField: 0
+  <spell_3_castTime>k__BackingField: 0.25
+  <spell_4_castTime>k__BackingField: 0
+  <spell_1_magnitude>k__BackingField: 7
+  <spell_1_speed>k__BackingField: 10
+  <spell_1_minSpeed>k__BackingField: 0.4
+  <spell_1_maxSpeed>k__BackingField: 16
+  <spell_1_accel>k__BackingField: 13
+  <spell_2_magnitude>k__BackingField: 1
+  <spell_2_rotationSpeed>k__BackingField: 75
+  <spell_2_heightOffset>k__BackingField: 0.5
+  <spell_2_duration>k__BackingField: 10
+  <spell_2_msBoost>k__BackingField: 0.4
+  <spell_2_radius>k__BackingField: 6.5
+  <spell_2_speed>k__BackingField: 9
+  <spell_2_multiplier>k__BackingField: 0.3
+  <spell_3_magnitude>k__BackingField: 8.5
+  <spell_3_speed>k__BackingField: 10
+  <spell_3_speedMultiplier>k__BackingField: 0.65
+  <spell_4_maxMagnitude>k__BackingField: 3.5
+  <spell_4_speed>k__BackingField: 8
+  <spell_4_radius>k__BackingField: 6.5
+  <spell_4_charges>k__BackingField: 3
+  <spell_4_duration>k__BackingField: 15
+  <spell_4_takedownDurationIncrease>k__BackingField: 10

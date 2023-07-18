@@ -9,40 +9,40 @@ using UnityEngine;
 */
 [System.Serializable]
 [CreateAssetMenu(fileName = "New Bahri", menuName = "Unit/Champion/Bahri")]
-public class Bahri : Champion
+public class Bahri : ScriptableChampion
 {
     #region "Spell_1"
-    public float spell_1_magnitude;
-    public float spell_1_speed;
-    public float spell_1_minSpeed;
-    public float spell_1_maxSpeed;
-    public float spell_1_accel;
+    [field: SerializeField] public float spell_1_magnitude { get; private set; }
+    [field: SerializeField] public float spell_1_speed { get; private set; }
+    [field: SerializeField] public float spell_1_minSpeed { get; private set; }
+    [field: SerializeField] public float spell_1_maxSpeed { get; private set; }
+    [field: SerializeField] public float spell_1_accel { get; private set; }
     #endregion
 
     #region "Spell_2"
-    public float spell_2_magnitude;
-    public float spell_2_rotationSpeed;
-    public float spell_2_heightOffset;
-    public float spell_2_duration;
-    public float spell_2_msBoost;
-    public float spell_2_radius;
-    public float spell_2_speed;
-    public float spell_2_multiplier;
+    [field: SerializeField] public float spell_2_magnitude { get; private set; }
+    [field: SerializeField] public float spell_2_rotationSpeed { get; private set; }
+    [field: SerializeField] public float spell_2_heightOffset { get; private set; }
+    [field: SerializeField] public float spell_2_duration { get; private set; }
+    [field: SerializeField] public float spell_2_msBoost { get; private set; }
+    [field: SerializeField] public float spell_2_radius { get; private set; }
+    [field: SerializeField] public float spell_2_speed { get; private set; }
+    [field: SerializeField] public float spell_2_multiplier { get; private set; }
     #endregion
 
     #region "Spell_3"
-    public float spell_3_magnitude;
-    public float spell_3_speed;
-    public float spell_3_speedMultiplier;
+    [field: SerializeField] public float spell_3_magnitude { get; private set; }
+    [field: SerializeField] public float spell_3_speed { get; private set; }
+    [field: SerializeField] public float spell_3_speedMultiplier { get; private set; }
     #endregion
 
     #region "Spell_4"
-    public float spell_4_maxMagnitude;
-    public float spell_4_speed;
-    public float spell_4_radius;
-    public float spell_4_charges;
-    public float spell_4_duration;
-    public float spell_4_takedownDurationIncrease;
+    [field: SerializeField] public float spell_4_maxMagnitude { get; private set; }
+    [field: SerializeField] public float spell_4_speed { get; private set; }
+    [field: SerializeField] public float spell_4_radius { get; private set; }
+    [field: SerializeField] public float spell_4_charges { get; private set; }
+    [field: SerializeField] public float spell_4_duration { get; private set; }
+    [field: SerializeField] public float spell_4_takedownDurationIncrease { get; private set; }
     #endregion
 
 }

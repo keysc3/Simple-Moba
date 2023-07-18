@@ -19,6 +19,18 @@ PrefabInstance:
       propertyPath: <unit>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: unit
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: <unit>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
+    - target: {fileID: 4280575506826881327, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+      propertyPath: <playerUIPrefab>k__BackingField
+      value: 
+      objectReference: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
     - target: {fileID: 6584509455410724894, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -63,7 +75,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1108656103872275700, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+    - {fileID: 5949693481427950739, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+    - {fileID: 2879644698382645441, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
+    - {fileID: 7537349318683734438, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
 --- !u!1 &5980474150250256565 stripped
 GameObject:
@@ -84,9 +100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <sleep>k__BackingField: {fileID: 11400000, guid: cd143d3d6b7ea2f4a9cc87675b7e8f21, type: 2}
   <spell_1_passiveSpeedBonus>k__BackingField: {fileID: 11400000, guid: 6325edf91b28df249848b2818ae6ba23, type: 2}
-  spell1Visual: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}
-  spell2Visual: {fileID: 2809299097425876486, guid: d0a19b033a1664247bf7d4d5591b1784, type: 3}
-  drowsyVisual: {fileID: 4242376865509565499, guid: a8c53cc55b1f4d14da2bc6922b75ddcf, type: 3}
+  <spell1Visual>k__BackingField: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}
+  <spell2Visual>k__BackingField: {fileID: 2809299097425876486, guid: d0a19b033a1664247bf7d4d5591b1784, type: 3}
+  <drowsyVisual>k__BackingField: {fileID: 4242376865509565499, guid: a8c53cc55b1f4d14da2bc6922b75ddcf, type: 3}
   spell_1_passiveStacks: 0
   p1_y_offset: 3
   p2_y: 0.85
@@ -107,3 +123,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <slowEffect>k__BackingField: {fileID: 11400000, guid: 1033d164f757ea5489657bdefbbf368e, type: 2}
+--- !u!114 &1423022294647915119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5980474150250256565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f47262ce278cc4696868123cf38913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

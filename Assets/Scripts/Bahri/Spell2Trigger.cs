@@ -9,17 +9,23 @@ using UnityEngine;
 */
 public class Spell2Trigger : MonoBehaviour
 {
-    public int spellCast;
-    public GameObject target = null;
-    public BahriAbilityHit bahriAbilityHit;
+    public int spellCast { get; private set; }
+    public GameObject target { get; private set; } = null;
+    public BahriAbilityHit bahriAbilityHit { get; private set; }
+
+    private Unit targetUnit = null;
 
     // Update is called once per frame
     private void Update()
     {
         // Destroy GameObject if target dies.
         if(target != null){
-            if(target.GetComponent<UnitStats>().isDead){
-                Destroy(gameObject);
+            // Cache Unit component so it isn't being accessed every frame once a target is found.
+            if(targetUnit == null)
+                targetUnit = target.GetComponent<Unit>();
+            else{
+                if(targetUnit.isDead)
+                    Destroy(gameObject);
             }
         }
     }
@@ -34,5 +40,29 @@ public class Spell2Trigger : MonoBehaviour
                 bahriAbilityHit.Spell_4_Hit(other.gameObject);
             Destroy(gameObject);
         }
+    }
+
+    /*
+    *   SetSpellCast - Sets the spell that cast this.
+    *   @param spellCast - int of the spell number.
+    */
+    public void SetSpellCast(int spellCast){
+        this.spellCast = spellCast;
+    }
+
+    /*
+    *   SetTarget - Sets the target for this GameObject.
+    *   @param target - GameObject to set the target to.
+    */
+    public void SetTarget(GameObject target){
+        this.target = target;
+    }
+
+    /*
+    *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
+    *   @param bahriAbilityHit - BahriAbilityHit script reference.
+    */
+    public void SetBahriAbilityHit(BahriAbilityHit bahriAbilityHit){
+        this.bahriAbilityHit = bahriAbilityHit;
     }
 }

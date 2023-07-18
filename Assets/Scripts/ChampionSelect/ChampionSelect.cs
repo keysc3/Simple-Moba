@@ -13,8 +13,8 @@ using UnityEngine.SceneManagement;
 public class ChampionSelect : MonoBehaviour
 {
 
-    private Champion currentChampion;
-    [SerializeField] private List<Champion> champions;
+    private ScriptableChampion currentChampion;
+    [SerializeField] private List<ScriptableChampion> champions;
     [SerializeField] private GameObject buttonPrefab;
     private float width;
     private Vector2 currentPos = Vector2.zero;
@@ -31,7 +31,7 @@ public class ChampionSelect : MonoBehaviour
     {
         int size = champions.Count;
         currentPos.x = currentPos.x - (width * (size - 1));
-        foreach(Champion champ in champions){
+        foreach(ScriptableChampion champ in champions){
             // Create and setup a new champion button.
             GameObject button = (GameObject) Instantiate(buttonPrefab, Vector2.zero, Quaternion.identity);
             button.transform.SetParent(transform.GetChild(0));
@@ -68,7 +68,7 @@ public class ChampionSelect : MonoBehaviour
     *   @param c2 - Second Champion to compare.
     *   @return int - int representing the result of the comparison.
     */
-    private int CompareByName(Champion c1, Champion c2){
+    private int CompareByName(ScriptableChampion c1, ScriptableChampion c2){
         return c1.name.CompareTo(c2.name);
     }
 }

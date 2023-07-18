@@ -16,7 +16,7 @@ MonoBehaviour:
   - 2
   - 2.25
   - 2.5
-  isStackable: 0
-  ccValue: 2
-  isBuff: 0
-  sprite: {fileID: 21300000, guid: d7b4c6c2ff6ef794e8165d368df2fbd1, type: 3}
+  <isStackable>k__BackingField: 0
+  <ccValue>k__BackingField: 2
+  <isBuff>k__BackingField: 0
+  <sprite>k__BackingField: {fileID: 21300000, guid: d7b4c6c2ff6ef794e8165d368df2fbd1, type: 3}

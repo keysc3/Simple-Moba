@@ -43,14 +43,14 @@ public class ActiveChampion : MonoBehaviour
                 champions[i].GetComponent<PlayerSpellInput>().enabled = false;
                 champions[i].tag = "Enemy"; 
                 champions[i].layer = LayerMask.NameToLayer("Enemy");
-                champions[i].GetComponent<UIManager>().SetChampionUIActive(false);
+                UIManager.instance.SetChampionUIActive(false, champions[i].GetComponent<Player>().playerUI);
             }
             else{
                 champions[i].GetComponent<PlayerController>().enabled = true;
                 champions[i].GetComponent<PlayerSpellInput>().enabled = true;
                 champions[i].tag = "Player";
                 champions[i].layer = LayerMask.NameToLayer("Default");
-                champions[i].GetComponent<UIManager>().SetChampionUIActive(true);
+                UIManager.instance.SetChampionUIActive(true, champions[i].GetComponent<Player>().playerUI);
                 cameraMovement.targetObject = champions[i].transform;
             }
         }
