@@ -16,6 +16,7 @@ public class BahriAbilities : ChampionAbilities
     [SerializeField] private GameObject attack;
     [field: SerializeField] public ScriptableSpeedBonus spell_2_SpeedBonus { get; private set; }
     [field: SerializeField] public ScriptableSpell spell4 { get; private set; }
+    [field: SerializeField] public ScriptableSpell passivePreset { get; private set; }
 
     private float spell_4_timer;
     private float spell_4_duration;
@@ -24,6 +25,7 @@ public class BahriAbilities : ChampionAbilities
     private int passiveStacks;
     private BahriAbilityHit bahriAbilityHit;
     private Bahri bahri;
+    private Spell passive;
     //private ScoreManager scoreManager;
     private Spell spell4Effect = null;
 
@@ -41,6 +43,8 @@ public class BahriAbilities : ChampionAbilities
         player.score.takedownCallback += Spell_4_Takedown;
         spell4Casting = false;
         passiveStacks = 0;
+        passive = (Spell) passivePreset.InitializeEffect(0, gameObject, gameObject);
+        player.statusEffects.AddEffect(passive);
     }
 
     // Update is called once per frame
@@ -65,6 +69,7 @@ public class BahriAbilities : ChampionAbilities
         // Heal off minion/monster kills if at 9 stacks.
         else{
             passiveStacks += 1;
+            passive.UpdateStacks(passiveStacks);
             if(passiveStacks == 9){
                 healAmount = ((60f / 17f) * (float)(levelManager.level - 1)) + 35f;
                 championStats.SetHealth(championStats.currentHealth + healAmount + championStats.magicDamage.GetValue());

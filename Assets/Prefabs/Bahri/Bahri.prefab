@@ -142,3 +142,4 @@ MonoBehaviour:
   attack: {fileID: 1606231681406296317, guid: 18b60daf1c0410f45b0e2ebfb9f3acee, type: 3}
   <spell_2_SpeedBonus>k__BackingField: {fileID: 11400000, guid: 89530c92161c28e45b6544ecfabb8553, type: 2}
   <spell4>k__BackingField: {fileID: 11400000, guid: 4736469b3c8781d4f88ddd2de1be352b, type: 2}
+  <passivePreset>k__BackingField: {fileID: 11400000, guid: 38162760bc234394fa3dcbf602c44df3, type: 2}

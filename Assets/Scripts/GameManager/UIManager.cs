@@ -502,10 +502,12 @@ public class UIManager : MonoBehaviour
             if(statusEffects.GetEffectsByType(effect.effectType.GetType()).Count > 1)
                 return;
         //Instantiate status effect prefab.
-        GameObject myEffect = (GameObject)Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
+        GameObject myEffect = (GameObject) Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
         myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         myEffect.name = effect.effectType.name;
         myEffect.transform.GetChild(1).GetComponent<Image>().sprite = effect.effectType.sprite;
+        if(effect.effectDuration == -1f)
+            myEffect.transform.GetChild(2).gameObject.SetActive(false);
         // Set color and position of the UI element.
         if(effect.effectType.isBuff){
             myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.blue;
@@ -570,6 +572,8 @@ public class UIManager : MonoBehaviour
         while(statusEffects.statusEffects.Contains(effect)){
                 if(effect.effectType is ScriptableSpell){
                     effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ((Spell)effect).stacks.ToString();
+                    if(effect.effectDuration == -1f)
+                        yield return null;
                     /*if(((Spell)effect).stacks > 0){
                         // Set stack text active.
                         effectUI.transform.GetChild(3).gameObject.SetActive(true);

@@ -56,13 +56,16 @@ public abstract class Effect
     public virtual void TimerTick(float delta){
         if(isActivated)
             EffectTick();
-        Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
-        if(effectTimer <= effectDuration){
-            effectTimer += delta;
-        }
-        else{
-            Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
-            isFinished = true;
+        // Persistent effects have duration -1.
+        if(effectDuration != -1f){
+            if(effectTimer <= effectDuration){
+                Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
+                effectTimer += delta;
+            }
+            else{
+                Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
+                isFinished = true;
+            }
         }
     }
 
