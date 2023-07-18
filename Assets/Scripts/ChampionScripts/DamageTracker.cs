@@ -41,7 +41,7 @@ public class DamageTracker
 
     /*
     *   CheckForAssists - Checks if there are any eligible GameObjects to receive an assist.
-    *   @return List<GameObject> - List of GameObjects containing any damage dealers to this GameObejct in the last 10s.
+    *   @return List<GameObject> - List of GameObjects containing any damage dealers to this GameObject in the last 10s.
     */
     public List<GameObject> CheckForAssists(){
         List<GameObject> assist = new List<GameObject>();
