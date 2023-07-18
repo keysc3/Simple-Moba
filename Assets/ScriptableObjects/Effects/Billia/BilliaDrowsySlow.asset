@@ -16,10 +16,10 @@ MonoBehaviour:
   - 1.5
   - 1.5
   - 1.5
-  isStackable: 0
-  ccValue: 0
-  isBuff: 0
-  sprite: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
+  <isStackable>k__BackingField: 0
+  <ccValue>k__BackingField: 0
+  <isBuff>k__BackingField: 0
+  <sprite>k__BackingField: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
   <slowPercent>k__BackingField:
   - 0.1
   - 0.1

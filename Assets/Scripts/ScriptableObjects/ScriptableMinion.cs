@@ -10,5 +10,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Minion", menuName = "Unit/Minion")]
 public class ScriptableMinion : ScriptableUnit
 {
-    public string team;
+    [field: SerializeField] public string team { get; private set; }
 }

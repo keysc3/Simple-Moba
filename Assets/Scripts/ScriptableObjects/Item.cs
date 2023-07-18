@@ -8,15 +8,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
 {
-    new public string name = "New Item";
-    public Sprite icon = null;
+    [field: SerializeField] new public string name { get; private set; } = "New Item";
+    [field: SerializeField] public Sprite icon { get; private set; } = null;
 
-    public float magicDamage;
-    public float physicalDamage;
-    public float health;
-    public float mana;
-    public float speed;
-    public float magicResist;
-    public float armor;
-    public float attackSpeed;
+    [field: SerializeField] public float magicDamage { get; private set; }
+    [field: SerializeField] public float physicalDamage { get; private set; }
+    [field: SerializeField] public float health { get; private set; }
+    [field: SerializeField] public float mana { get; private set; }
+    [field: SerializeField] public float speed { get; private set; }
+    [field: SerializeField] public float magicResist { get; private set; }
+    [field: SerializeField] public float armor { get; private set; }
+    [field: SerializeField] public float attackSpeed { get; private set; }
 }

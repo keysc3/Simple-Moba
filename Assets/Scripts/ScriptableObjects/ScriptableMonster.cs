@@ -10,10 +10,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Monster", menuName = "Unit/Monster")]
 public class ScriptableMonster : ScriptableUnit
 {
-    public float patienceAmount;
-    public float patienceRange;
-    public bool isParent;
-    public float respawnTime;
-    public string size;
-
+    [field: SerializeField] public float patienceAmount { get; private set; }
+    [field: SerializeField] public float patienceRange { get; private set; }
+    [field: SerializeField] public bool isParent { get; private set; }
+    [field: SerializeField] public float respawnTime { get; private set; }
+    [field: SerializeField] public string size { get; private set; }
 }

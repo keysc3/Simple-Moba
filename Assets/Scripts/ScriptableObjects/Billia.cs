@@ -11,33 +11,33 @@ using UnityEngine;
 public class Billia : ScriptableChampion
 {
     #region "Spell_1"
-    public float spell_1_passiveSpeedDuration;
-    public float spell_1_passiveExpireDuration;
-    public int spell_1_passiveMaxStacks;
-    public List<float> spell_1_passiveSpeed;
-    public float spell_1_innerRadius;
-    public float spell_1_outerRadius;
+    [field: SerializeField] public float spell_1_passiveSpeedDuration { get; private set; } 
+    [field: SerializeField] public float spell_1_passiveExpireDuration { get; private set; }
+    [field: SerializeField] public int spell_1_passiveMaxStacks { get; private set; }
+    [field: SerializeField] public List<float> spell_1_passiveSpeed { get; private set; }
+    [field: SerializeField] public float spell_1_innerRadius { get; private set; }
+    [field: SerializeField] public float spell_1_outerRadius { get; private set; }
     #endregion
 
     #region "Spell_2"
-    public float spell_2_maxMagnitude;
-    public float spell_2_dashOffset;
-    public float spell_2_innerRadius;
-    public float spell_2_outerRadius;
-    public float spell_2_dashTime;
+    [field: SerializeField] public float spell_2_maxMagnitude { get; private set; }
+    [field: SerializeField] public float spell_2_dashOffset { get; private set; }
+    [field: SerializeField] public float spell_2_innerRadius { get; private set; }
+    [field: SerializeField] public float spell_2_outerRadius { get; private set; }
+    [field: SerializeField] public float spell_2_dashTime { get; private set; }
     #endregion
 
     #region "Spell_3"
-    public float spell_3_maxLobMagnitude;
-    public float spell_3_lobTime;
-    public float spell_3_seedSpeed;
-    public float spell_3_seedRotation;
-    public float spell_3_lobLandHitbox;
-    public float spell_3_seedConeAngle;
-    public float spell_3_seedConeRadius;
+    [field: SerializeField] public float spell_3_maxLobMagnitude { get; private set; }
+    [field: SerializeField] public float spell_3_lobTime { get; private set; }
+    [field: SerializeField] public float spell_3_seedSpeed { get; private set; }
+    [field: SerializeField] public float spell_3_seedRotation { get; private set; }
+    [field: SerializeField] public float spell_3_lobLandHitbox { get; private set; }
+    [field: SerializeField] public float spell_3_seedConeAngle { get; private set; }
+    [field: SerializeField] public float spell_3_seedConeRadius { get; private set; }
     #endregion
 
     #region "Spell_4"
-    public float spell_4_travelTime;
+    [field: SerializeField] public float spell_4_travelTime { get; private set; }
     #endregion
 }

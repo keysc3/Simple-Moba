@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 205f1fef8527806429549e97af62de22, type: 3}
-  m_Name: Pickaxe
+  m_Name: BlastingWand
   m_EditorClassIdentifier: 
-  <name>k__BackingField: Pickaxe
-  <icon>k__BackingField: {fileID: 21300000, guid: dbb3011c722f0db4491aa2745e535b1e, type: 3}
-  <magicDamage>k__BackingField: 0
-  <physicalDamage>k__BackingField: 15
+  <name>k__BackingField: Blasting Wand
+  <icon>k__BackingField: {fileID: 21300000, guid: 6e4e46962c36aa24686010f6b26ad062, type: 3}
+  <magicDamage>k__BackingField: 5
+  <physicalDamage>k__BackingField: 0
   <health>k__BackingField: 0
   <mana>k__BackingField: 0
   <speed>k__BackingField: 0
   <magicResist>k__BackingField: 0
   <armor>k__BackingField: 0
-  <attackSpeed>k__BackingField: 25
+  <attackSpeed>k__BackingField: 0
