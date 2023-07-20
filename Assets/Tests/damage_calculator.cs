@@ -48,4 +48,21 @@ public class damage_calculator : ScriptableObject
         // Assert
         Assert.AreEqual(70f, finalDamage);
     }
+
+    [Test]
+    public void sets_truedamage_to_81_from_81()
+    {
+        // Arrange
+        UnitStats from = new UnitStats(unit1);
+        UnitStats to = new UnitStats(unit2);
+        string damageType = "true";
+        float incomingDamage = 81f;
+
+        // Act
+        float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
+        finalDamage = Mathf.Round(finalDamage);
+
+        // Assert
+        Assert.AreEqual(81f, finalDamage);
+    }
 }
