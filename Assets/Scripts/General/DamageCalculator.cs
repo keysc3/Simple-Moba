@@ -25,6 +25,10 @@ public static class DamageCalculator
             finalDamage = MitigateMagicDamage(incomingDamage, to);
         else if(damageType == "physical")
             finalDamage = MitigatePhysicalDamage(incomingDamage, to);
+        else if(damageType == "true")
+            return finalDamage;
+        else
+            return 0f;
         return finalDamage;
     }
 
