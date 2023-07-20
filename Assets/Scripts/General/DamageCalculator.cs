@@ -18,6 +18,8 @@ public static class DamageCalculator
     *   @param to - GameObject the damage is going to.
     */
     public static float CalculateDamage(float incomingDamage, string damageType, UnitStats from, UnitStats to){
+        if(incomingDamage <= 0f)
+            return 0f;
         float finalDamage = incomingDamage;
         if(damageType == "magic")
             finalDamage = MitigateMagicDamage(incomingDamage, to);
