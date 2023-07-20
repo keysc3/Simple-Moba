@@ -57,7 +57,19 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to purchase.
     */
     private void PurchaseItem(int itemNumber){
-        ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<Player>().inventory.AddItem(allItems[itemNumber-1]);
+        Player player = ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<Player>();
+        Item addItem = allItems[itemNumber-1];
+        int itemSlot = player.inventory.AddItem(addItem);
+        if(itemSlot != -1){
+            ChampionStats championStats = (ChampionStats) player.unitStats;
+            championStats.AddItemStats(addItem);
+            if(!player.isDead){
+                UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
+                UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+            }
+            UIManager.instance.AddItem(itemSlot, addItem.icon, player.playerUI);
+            UIManager.instance.UpdateAllStats(championStats, player.playerUI);
+        }
     }
 
     /*
@@ -65,6 +77,15 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to sell.
     */
     private void SellItem(int itemSlot){
-        ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<Player>().inventory.RemoveItem(itemSlot);
+        Player player = ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<Player>();
+        Item removeItem = player.inventory.RemoveItem(itemSlot);
+        if(removeItem != null){
+            ChampionStats championStats = (ChampionStats) player.unitStats;
+            championStats.RemoveItemStats(removeItem);
+            UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
+            UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+            UIManager.instance.RemoveItem(itemSlot, player.playerUI);
+            UIManager.instance.UpdateAllStats(championStats, player.playerUI);
+        }
     }
 }
