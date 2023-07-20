@@ -12,7 +12,7 @@ public class damage_calculator : ScriptableObject
 
     // A Test behaves as an ordinary method
     [Test]
-    public void sets_damage_to_65_from_80_with_23__magicResist()
+    public void sets_damage_to_65_from_80_with_23_magicResist()
     {
         // Arrange
         float magicResist = 23f;
@@ -30,4 +30,22 @@ public class damage_calculator : ScriptableObject
         Assert.AreEqual(65f, finalDamage);
     }
 
+    [Test]
+    public void sets_damage_to_70_from_121_with_72_armor()
+    {
+        // Arrange
+        float armor = 72f;
+        UnitStats from = new UnitStats(unit1);
+        UnitStats to = new UnitStats(unit2);
+        to.armor.SetBaseValue(armor);
+        float incomingDamage = 121f;
+        string damageType = "physical";
+
+        // Act
+        float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
+        finalDamage = Mathf.Round(finalDamage);
+
+        // Assert
+        Assert.AreEqual(70f, finalDamage);
+    }
 }
