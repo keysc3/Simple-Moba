@@ -12,7 +12,7 @@ public class damage_calculator : ScriptableObject
 
     // A Test behaves as an ordinary method
     [Test]
-    public void sets_damage_to_65_from_80_with_23_magicResist()
+    public void sets_magicdamage_to_65_from_80_with_23_magicResist()
     {
         // Arrange
         float magicResist = 23f;
@@ -31,7 +31,7 @@ public class damage_calculator : ScriptableObject
     }
 
     [Test]
-    public void sets_damage_to_70_from_121_with_72_armor()
+    public void sets_physicaldamage_to_70_from_121_with_72_armor()
     {
         // Arrange
         float armor = 72f;
