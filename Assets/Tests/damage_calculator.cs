@@ -12,7 +12,7 @@ public class damage_calculator : ScriptableObject
 
     // A Test behaves as an ordinary method
     [Test]
-    public void sets_magicdamage_to_65_from_80_with_23_magicResist()
+    public void sets_magic_damage_to_65_from_80_with_23_magic_resist()
     {
         // Arrange
         float magicResist = 23f;
@@ -31,7 +31,7 @@ public class damage_calculator : ScriptableObject
     }
 
     [Test]
-    public void sets_physicaldamage_to_70_from_121_with_72_armor()
+    public void sets_physical_damage_to_70_from_121_with_72_armor()
     {
         // Arrange
         float armor = 72f;
@@ -50,7 +50,7 @@ public class damage_calculator : ScriptableObject
     }
 
     [Test]
-    public void sets_truedamage_to_81_from_81()
+    public void sets_true_damage_to_81_from_81()
     {
         // Arrange
         UnitStats from = new UnitStats(unit1);
@@ -74,6 +74,22 @@ public class damage_calculator : ScriptableObject
         UnitStats to = new UnitStats(unit2);
         string damageType = "true";
         float incomingDamage = -(2f);
+
+        // Act
+        float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
+
+        // Assert
+        Assert.AreEqual(0f, finalDamage);
+    }
+
+    [Test]
+    public void sets_damage_to_0_from_invalid_damage_type()
+    {
+        // Arrange
+        UnitStats from = new UnitStats(unit1);
+        UnitStats to = new UnitStats(unit2);
+        string damageType = "goofball";
+        float incomingDamage = 50f;
 
         // Act
         float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
