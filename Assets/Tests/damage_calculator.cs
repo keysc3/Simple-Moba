@@ -65,4 +65,20 @@ public class damage_calculator : ScriptableObject
         // Assert
         Assert.AreEqual(81f, finalDamage);
     }
+
+    [Test]
+    public void sets_damage_to_0_from_negative_damage()
+    {
+        // Arrange
+        UnitStats from = new UnitStats(unit1);
+        UnitStats to = new UnitStats(unit2);
+        string damageType = "true";
+        float incomingDamage = -(2f);
+
+        // Act
+        float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
+
+        // Assert
+        Assert.AreEqual(0f, finalDamage);
+    }
 }
