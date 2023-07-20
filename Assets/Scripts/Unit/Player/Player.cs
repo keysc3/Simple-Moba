@@ -42,7 +42,7 @@ public class Player : Unit, IRespawnable
         rend = GetComponent<Renderer>();
         //damageTracker = GetComponent<DamageTracker>();
         damageTracker = new DamageTracker();
-        inventory = new Inventory(this);
+        inventory = new Inventory();
         score = new Score();
         levelManager = new LevelManager(this, levelInfo);
         playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);

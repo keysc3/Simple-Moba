@@ -11,13 +11,6 @@ public class Inventory {
 
     private int space = 6;
     private Dictionary<int, Item> myItems = new Dictionary<int, Item>();
-    private ChampionStats championStats;
-    private Player player;
-
-    public Inventory(Player player){
-        this.player = player;
-        this.championStats = (ChampionStats) player.unitStats;
-    }
 
     /*
     *   AddItem - Adds an item to the champions inventory and calls the inventory changed handler.
