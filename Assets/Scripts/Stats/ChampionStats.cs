@@ -44,4 +44,56 @@ public class ChampionStats : UnitStats
     public void ResetMana(){
         currentMana = maxMana.GetValue();
     }
+
+    /*
+    *   AddItemStats - Add an items stats to the champions stats.
+    *   @param item - Item whose stats to add.
+    */
+    public void AddItemStats(Item item){
+        if(item != null){
+            // Bought an item so add the items stats.
+            magicDamage.AddModifier(item.magicDamage);
+            physicalDamage.AddModifier(item.physicalDamage);
+            // Increase current health by items health amount.
+            if(item.health != 0){
+                maxHealth.AddModifier(item.health);
+                SetHealth(currentHealth + item.health);
+            }
+            // Increase current mana by items mana amount.
+            if(item.mana != 0){
+                maxMana.AddModifier(item.mana);
+                SetMana(currentMana + item.mana);
+            }
+            speed.AddModifier(item.speed);
+            bonusAttackSpeed.AddModifier(item.attackSpeed);
+            UpdateAttackSpeed();
+        }
+    }
+
+    /*
+    *   RemoveItemStats - Remove an items stats from the champions stats.
+    *   @param item - Item whose stats to remove.
+    */
+    public void RemoveItemStats(Item item){
+        if(item != null){
+            // Selling an item so remove the items stats.
+            magicDamage.RemoveModifier(item.magicDamage);
+            physicalDamage.RemoveModifier(item.physicalDamage);
+            //If the items hp hasn't been used yet, remove the amount that hasn't been used from current health.
+            if(item.health != 0){
+                if(currentHealth > (maxHealth.GetValue() - item.health))
+                    SetHealth(currentHealth - (item.health - (maxHealth.GetValue() - currentHealth))); 
+                maxHealth.RemoveModifier(item.health);
+            }
+            //If the items mana hasn't been used yet, remove the amount that hasn't been used from the current mana.
+            if(item.mana != 0){
+                if(currentMana > (maxMana.GetValue() - item.mana))
+                    SetMana(currentMana - (item.mana - (maxMana.GetValue() - currentMana)));
+                maxMana.RemoveModifier(item.mana);
+            }
+            speed.RemoveModifier(item.speed);
+            bonusAttackSpeed.RemoveModifier(item.attackSpeed);
+            UpdateAttackSpeed();
+        }
+    }
 }
