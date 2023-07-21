@@ -7,7 +7,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class Spell : Effect
+public class PersonalSpell : Effect
 {
     public int stacks { get; private set; }
     /*
@@ -17,7 +17,7 @@ public class Spell : Effect
     *   @param unitCasted - GameObject of the unit that casted the spell.
     *   @param unitEffected - GameObject of the unit that the spell is affecting.
     */
-    public Spell(ScriptableSpell spellEffect, float duration, int stacks, GameObject unitCasted, GameObject unitEffected) : base(spellEffect, duration, unitCasted, unitEffected){
+    public PersonalSpell(ScriptablePersonalSpell spellEffect, float duration, int stacks, GameObject unitCasted, GameObject unitEffected) : base(spellEffect, duration, unitCasted, unitEffected){
         this.stacks = stacks;
     }
 

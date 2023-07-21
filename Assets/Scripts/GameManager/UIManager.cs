@@ -570,8 +570,8 @@ public class UIManager : MonoBehaviour
         Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
-                if(effect.effectType is ScriptableSpell){
-                    effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ((Spell)effect).stacks.ToString();
+                if(effect.effectType is ScriptablePersonalSpell){
+                    effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ((PersonalSpell)effect).stacks.ToString();
                     if(effect.effectDuration == -1f)
                         yield return null;
                     /*if(((Spell)effect).stacks > 0){

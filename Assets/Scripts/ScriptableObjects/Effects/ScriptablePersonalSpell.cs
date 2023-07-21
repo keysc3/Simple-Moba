@@ -7,8 +7,8 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[CreateAssetMenu(menuName = "Effects/Spell")]
-public class ScriptableSpell : ScriptableEffect
+[CreateAssetMenu(menuName = "Effects/Personal Spell")]
+public class ScriptablePersonalSpell : ScriptableEffect
 {
     //[field: SerializeField] public float duration { get; private set; }
     [field: SerializeField] public int stacks { get; private set; }
@@ -20,6 +20,6 @@ public class ScriptableSpell : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
         ccValue = 0;
-        return new Spell(this, duration[spellLevel], stacks, unitCasted, unitEffected);
+        return new PersonalSpell(this, duration[spellLevel], stacks, unitCasted, unitEffected);
     }
 }

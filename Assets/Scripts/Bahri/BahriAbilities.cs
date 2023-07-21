@@ -15,8 +15,8 @@ public class BahriAbilities : ChampionAbilities
     [SerializeField] private GameObject Spell_3_object;
     [SerializeField] private GameObject attack;
     [field: SerializeField] public ScriptableSpeedBonus spell_2_SpeedBonus { get; private set; }
-    [field: SerializeField] public ScriptableSpell spell4 { get; private set; }
-    [field: SerializeField] public ScriptableSpell passivePreset { get; private set; }
+    [field: SerializeField] public ScriptablePersonalSpell spell4 { get; private set; }
+    [field: SerializeField] public ScriptablePersonalSpell passivePreset { get; private set; }
 
     private float spell_4_timer;
     private float spell_4_duration;
@@ -25,9 +25,9 @@ public class BahriAbilities : ChampionAbilities
     private int passiveStacks;
     private BahriAbilityHit bahriAbilityHit;
     private Bahri bahri;
-    private Spell passive;
+    private PersonalSpell passive;
     //private ScoreManager scoreManager;
-    private Spell spell4Effect = null;
+    private PersonalSpell spell4Effect = null;
 
     // Called when the script instance is being loaded.
     protected override void Awake(){
@@ -43,7 +43,7 @@ public class BahriAbilities : ChampionAbilities
         player.score.takedownCallback += Spell_4_Takedown;
         spell4Casting = false;
         passiveStacks = 0;
-        passive = (Spell) passivePreset.InitializeEffect(0, gameObject, gameObject);
+        passive = (PersonalSpell) passivePreset.InitializeEffect(0, gameObject, gameObject);
         player.statusEffects.AddEffect(passive);
     }
 
@@ -366,7 +366,7 @@ public class BahriAbilities : ChampionAbilities
     *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
     */
     private IEnumerator Spell_4_Start(){
-        spell4Effect = (Spell) spell4.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, gameObject);
+        spell4Effect = (PersonalSpell) spell4.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, gameObject);
         player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = bahri.spell_4_duration;
