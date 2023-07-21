@@ -16,7 +16,7 @@ public class Spell3Trigger : MonoBehaviour
 
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
-        // If the GamObject hits an enemy call the spell collision handler.
+        // If the GameObject hits an enemy call the spell collision handler.
         // hit variable is to avoid two units getting charmed if the charm hits two objects on the same physics update.
         if(other.gameObject.tag == "Enemy" &&  other.gameObject != bahri && !hit){
             bahriAbilityHit.Spell_3_Hit(other.gameObject);
