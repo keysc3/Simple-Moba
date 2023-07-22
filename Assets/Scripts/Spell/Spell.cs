@@ -14,6 +14,7 @@ public abstract class Spell
     [SerializeField] protected ChampionStats championStats;
     [SerializeField] protected Player player;
     protected ChampionSpells championSpells;
+    protected GameObject gameObject;
 
     private Collider myCollider;
     private Camera mainCamera;
@@ -26,6 +27,7 @@ public abstract class Spell
         navMeshAgent = championSpells.gameObject.GetComponent<NavMeshAgent>();
         championStats = (ChampionStats) player.unitStats;
         levelManager = player.levelManager;
+        this.gameObject = championSpells.gameObject;
     }
 
     public abstract void Cast();

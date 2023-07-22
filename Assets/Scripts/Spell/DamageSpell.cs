@@ -9,7 +9,7 @@ public abstract class DamageSpell : Spell
 
     }
 
-    public delegate void SpellHitCallback(); 
+    public delegate void SpellHitCallback(GameObject hit); 
     public SpellHitCallback spellHitCallback;
 
     public abstract void Hit();

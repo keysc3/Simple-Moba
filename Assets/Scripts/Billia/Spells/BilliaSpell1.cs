@@ -10,18 +10,19 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     }
 
     public override void Cast(){
-        spellHitCallback?.Invoke();
         Debug.Log("Spell1");
         Hit();
     }
 
     public override void Hit(){
+        GameObject hitObject = gameObject;
+        spellHitCallback?.Invoke(hitObject);
         Debug.Log("Spell1Hit");
-        AddPassiveStack();
+        AddPassiveStack(hitObject);
         championSpells.StartCoroutine(TestCoroutine());
     }
 
-    public void AddPassiveStack(){
+    public void AddPassiveStack(GameObject hit){
         Debug.Log("Spell1PassiveStack");
     }
 

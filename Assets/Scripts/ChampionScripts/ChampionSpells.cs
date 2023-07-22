@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class ChampionSpells : MonoBehaviour
 {
+    [SerializeField] protected SpellData passiveData;
+    [SerializeField] protected SpellData spell1Data;
+    [SerializeField] protected SpellData spell2Data;
+    [SerializeField] protected SpellData spell3Data;
+    [SerializeField] protected SpellData spell4Data;
+
     public Spell passive;
     public Spell spell1;
     public Spell spell2;

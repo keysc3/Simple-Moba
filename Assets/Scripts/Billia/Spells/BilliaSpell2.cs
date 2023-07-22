@@ -9,12 +9,13 @@ public class BilliaSpell2 : DamageSpell
     }
 
     public override void Cast(){
-        spellHitCallback?.Invoke();
         Debug.Log("Spell2");
         Hit();
     }
 
     public override void Hit(){
+        GameObject hitObject = null;
+        spellHitCallback?.Invoke(hitObject);
         Debug.Log("Spell2Hit");
     }
 }

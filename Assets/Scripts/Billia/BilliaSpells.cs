@@ -7,7 +7,7 @@ public class BilliaSpells : ChampionSpells
     // Start is called before the first frame update
     void Start()
     {
-        passive = new BilliaPassive(this);
+        passive = new BilliaPassive(this, passiveData);
         spell1 = new BilliaSpell1(this);
         spell2 = new BilliaSpell2(this);
         spell3 = new BilliaSpell3(this);
