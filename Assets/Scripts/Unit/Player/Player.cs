@@ -29,6 +29,7 @@ public class Player : Unit, IRespawnable
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
+    public bool isCasting { get; private set; } = false;
 
 
     /*
@@ -169,5 +170,9 @@ public class Player : Unit, IRespawnable
         }
         UIManager.instance.UpdateDeathTimer(0f, playerUI);
         Respawn();
+    }
+
+    public void SetIsCasting(bool isCasting){
+        this.isCasting = isCasting;
     }
 }
