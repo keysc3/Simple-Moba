@@ -1626,7 +1626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   passiveData: {fileID: 11400000, guid: b7dcd60c48fa661418f2f24cb481d370, type: 2}
-  spell1Data: {fileID: 0}
+  spell1Data: {fileID: 11400000, guid: edd59005514ddc64eabccd42a2830c6d, type: 2}
   spell2Data: {fileID: 0}
   spell3Data: {fileID: 0}
   spell4Data: {fileID: 0}

@@ -8,7 +8,7 @@ public class BilliaSpells : ChampionSpells
     void Start()
     {
         passive = new BilliaPassive(this, passiveData);
-        spell1 = new BilliaSpell1(this);
+        spell1 = new BilliaSpell1(this, spell1Data);
         spell2 = new BilliaSpell2(this);
         spell3 = new BilliaSpell3(this);
         spell4 = new BilliaSpell4(this);
