@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d57a6c45951653f419f2d7440f7382cf, type: 3}
+  m_Name: BilliaSpell4
+  m_EditorClassIdentifier: 
+  <sprite>k__BackingField: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
+  <castTime>k__BackingField: 0.4
+  <baseDamage>k__BackingField:
+  - 1
+  - 2
+  - 3
+  <baseCd>k__BackingField:
+  - 5
+  - 4
+  - 3
+  <baseMana>k__BackingField:
+  - 5
+  - 6
+  - 7
+  <sleepSprite>k__BackingField: {fileID: 21300000, guid: d7b4c6c2ff6ef794e8165d368df2fbd1, type: 3}
+  <drowsy>k__BackingField: {fileID: 11400000, guid: 6015dfa17d3526c43ac79f45d1cb2ff8, type: 2}
+  <drowsyVisual>k__BackingField: {fileID: 4242376865509565499, guid: a8c53cc55b1f4d14da2bc6922b75ddcf, type: 3}
+  <travelTime>k__BackingField: 0.3

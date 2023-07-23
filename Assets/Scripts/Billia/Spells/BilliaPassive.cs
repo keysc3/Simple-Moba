@@ -32,9 +32,6 @@ public class BilliaPassive : Spell, IHasCallback
     *   @param enemy - GameObject the dot is applied to and the passive healing is coming from.
     */
     private IEnumerator PassiveHeal(GameObject enemy){
-        if(levelManager.spellLevels["Spell_4"] > 0 && passiveApplied.Count > 1){
-            UIManager.instance.SetSpellCoverActive(4, false, player.playerUI);
-        }
         // Check to make sure the dot is still on the unit.
         Unit unit = enemy.GetComponent<Unit>();
         while(unit.statusEffects.CheckForEffectWithSource(passiveData.passiveDot, gameObject)){
@@ -54,9 +51,6 @@ public class BilliaPassive : Spell, IHasCallback
                 }
             }
             yield return new WaitForSeconds(passiveData.passiveDot.tickRate);
-        }
-        if(levelManager.spellLevels["Spell_4"] > 0 && passiveApplied.Count < 1){
-            UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
         }
         passiveApplied.Remove(enemy);
     }
