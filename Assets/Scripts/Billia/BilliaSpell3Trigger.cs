@@ -10,22 +10,28 @@ using UnityEngine;
 public class BilliaSpell3Trigger : MonoBehaviour
 {
     public Vector3 forwardDirection { get; private set; }
-    public BilliaAbilities billiaAbilities { get; private set; }
-    public bool hasLanded { get; private set; }
+    public BilliaSpell3 billiaSpell3 { get; private set; }
+    //public bool hasLanded { get; private set; }
     public GameObject casted { get; private set; }
     private bool hit = false;
+    private int groundLayer;
+    private int projectileLayer;
+
+    private void Awake(){
+        this.enabled = false;
+        groundLayer = LayerMask.NameToLayer("Ground");
+        projectileLayer = LayerMask.NameToLayer("Projectile");
+    }
 
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
-        int groundLayer = LayerMask.NameToLayer("Ground");
-        int projectileLayer = LayerMask.NameToLayer("Projectile");
         // If a unit is hit.
-        if(other.gameObject.layer != groundLayer && other.gameObject.layer != projectileLayer && !hit && other.gameObject != gameObject && hasLanded){
+        if(other.gameObject.layer != groundLayer && other.gameObject.layer != projectileLayer && !hit && other.gameObject != gameObject && this.enabled == true){
             // Avoid same frame multi hits.
             hit = true;
             Debug.Log("Hit on roll: " + other.gameObject.name);
             // Check for hits in a cone in the roll direction.
-            billiaAbilities.Spell_3_ConeHitbox(gameObject, other.gameObject, forwardDirection);
+            billiaSpell3.Spell_3_ConeHitbox(gameObject, other.gameObject, forwardDirection);
             Destroy(gameObject);
         }
     }
@@ -50,15 +56,7 @@ public class BilliaSpell3Trigger : MonoBehaviour
     *   SetBilliaAbilitiesScript - Sets the BilliaAbilities script.
     *   @param billiaAbilities - BilliaAbilities script to use.
     */
-    public void SetBilliaAbilitiesScript(BilliaAbilities billiaAbilities){
-        this.billiaAbilities = billiaAbilities;
-    }
-
-    /*
-    *   SetHasLanded - Sets the hasLanded bool
-    *   @param hasLanded - bool to set hasLanded to.
-    */
-    public void SetHasLanded(bool hasLanded){
-        this.hasLanded = hasLanded;
+    public void SetBilliaSpell3Script(BilliaSpell3 billiaSpell3){
+        this.billiaSpell3 = billiaSpell3;
     }
 }

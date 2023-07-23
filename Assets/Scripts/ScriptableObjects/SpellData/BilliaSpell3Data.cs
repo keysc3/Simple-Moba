@@ -6,6 +6,7 @@ using UnityEngine;
 public class BilliaSpell3Data : SpellData
 {
     [field: SerializeField] public GameObject visualPrefab { get; private set; }
+    [field: SerializeField] public ScriptableSlow slowEffect { get; private set; }
     [field: SerializeField] public float maxLobMagnitude { get; private set; }
     [field: SerializeField] public float lobTime { get; private set; }
     [field: SerializeField] public float seedSpeed { get; private set; }

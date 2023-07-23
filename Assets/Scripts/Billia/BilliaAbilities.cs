@@ -437,7 +437,7 @@ public class BilliaAbilities : ChampionAbilities
         // Create spell object.
         GameObject spell_3_seed = (GameObject)Instantiate(seed, transform.position, Quaternion.identity);
         BilliaSpell3Trigger billiaSpell3Trigger = spell_3_seed.GetComponent<BilliaSpell3Trigger>();
-        billiaSpell3Trigger.SetBilliaAbilitiesScript(this);
+        //billiaSpell3Trigger.SetBbilliaSpell3Script(this);
         billiaSpell3Trigger.SetCaster(gameObject);
         // Set p0.
         Vector3 p0 = transform.position;
@@ -467,7 +467,7 @@ public class BilliaAbilities : ChampionAbilities
         // Set the seeds final point.
         Vector3 lastPoint = QuadraticBezierCurvePoint(1, p0, p1, p2);
         spell_3_seed.transform.position = lastPoint;
-        billiaSpell3Trigger.SetHasLanded(true);
+        //billiaSpell3Trigger.SetHasLanded(true);
         // Start the seeds rolling.
         StartCoroutine(Spell_3_Move(targetDirection.normalized, spell_3_seed, billiaSpell3Trigger));
     }
