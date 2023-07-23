@@ -8,6 +8,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     private BilliaSpell1Data spell1Data;
     private List<Effect> passiveEffectTracker = new List<Effect>();
     private int passiveStacks;
+    private bool passiveStackReceived = false;
     private string radius;
 
     public BilliaSpell1(ChampionSpells championSpells, SpellData spell1Data) : base(championSpells){
@@ -48,7 +49,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     }
 
     private void HitboxCheck(){
-        bool passiveStack = false;
+        //bool passiveStack = false;
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, spell1Data.outerRadius, enemyMask));
         foreach(Collider collider in outerHit){
@@ -66,12 +67,12 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
                     radius = "outer";
                     Hit(collider.gameObject);
                 }
-                passiveStack = true;
+               // passiveStack = true;
             }
         }
         // If a unit was hit proc the spells passive.
-        if(passiveStack)
-            Spell_1_PassiveProc(gameObject);
+       // if(passiveStack)
+            //Spell_1_PassiveProc(gameObject);
     }
 
     /*
@@ -107,6 +108,9 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     *   Spell_1_PassiveProc - Handles spell 1's passive being activated or refreshed.
     */
     private void Spell_1_PassiveProc(GameObject hit){
+        // If a passive stack was received this frame, don't add another.
+        if(passiveStackReceived)
+            return;
         //spell_1_lastStackTime = Time.time;
         if(levelManager.spellLevels["Spell_1"] > 0 && passiveStacks < spell1Data.passiveMaxStacks){
             // Create a new speed bonus with the 
@@ -116,6 +120,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);
             passiveStacks += 1;
+            passiveStackReceived = true;
         }
         if(passiveStacks > 1){
             ResetSpell_1_PassiveTimers();
@@ -161,6 +166,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
                 passiveStacks -= 1;
             }
         }
+        passiveStackReceived = false;
     }
 
     /*
@@ -185,6 +191,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     */
     public override void Hit(GameObject hit){
         spellHitCallback?.Invoke(hit);
+        Spell_1_PassiveProc(hit);
         float magicDamage = championStats.magicDamage.GetValue();
         Unit enemyUnit = hit.GetComponent<Unit>();
         if(radius == "inner")
