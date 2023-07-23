@@ -14,23 +14,6 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
         this.spell1Data = (BilliaSpell1Data) spell1Data;
     }
 
-    /*public override void Cast(){
-        Debug.Log("Spell1");
-        Hit();
-    }*/
-
-    /*public override void Hit(){
-        GameObject hitObject = gameObject;
-        spellHitCallback?.Invoke(hitObject);
-        Debug.Log("Spell1Hit");
-        AddPassiveStack(hitObject);
-        championSpells.StartCoroutine(TestCoroutine());
-    }*/
-
-    public void AddPassiveStack(GameObject hit){
-        Debug.Log("Spell1PassiveStack");
-    }
-
     /*
     *   Spell_1 - Sets up Billia's first spell. She swirls her weapon in a radius around her. Players hit by the outer portion take bonus damage.
     *   Passive: Gain a stacking speed bonus whenever a unit is hit with any spell, up to 4 stacks.
@@ -57,8 +40,6 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
             yield return null;
         }
         championSpells.StartCoroutine(Spell_Cd_Timer(spell1Data.baseCd[levelManager.spellLevels["Spell_1"]-1], (myBool => onCd = myBool), "Spell_1"));
-        // Set method to call if a hit.
-        //spellHit = billiaAbilityHit.Spell_1_Hit;
         // Hitbox starts from center of Billia.
         HitboxCheck();
         // Animate the ending of the spell.
@@ -74,7 +55,6 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
             Vector3 colliderHitCenter = collider.bounds.center;
             float distToHitboxCenter = (colliderHitCenter - gameObject.transform.position).magnitude;
             if(distToHitboxCenter < spell1Data.outerRadius){
-                // If the casted spell is spell 2 then use edge range for hitbox check.
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < spell1Data.innerRadius){
                     radius = "inner";
@@ -90,7 +70,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
         }
         // If a unit was hit proc the spells passive.
         if(passiveStack)
-            Spell_1_PassiveProc();
+            Spell_1_PassiveProc(gameObject);
     }
 
     /*
@@ -125,7 +105,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     /*
     *   Spell_1_PassiveProc - Handles spell 1's passive being activated or refreshed.
     */
-    private void Spell_1_PassiveProc(){
+    private void Spell_1_PassiveProc(GameObject hit){
         //spell_1_lastStackTime = Time.time;
         if(levelManager.spellLevels["Spell_1"] > 0 && passiveStacks < spell1Data.passiveMaxStacks){
             // Create a new speed bonus with the 
@@ -135,13 +115,6 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);
             passiveStacks += 1;
-            //float amountIncrease = championStats.speed.GetValue() * bonusPercent;
-            //navMeshAgent.speed = navMeshAgent.speed + amountIncrease;
-            //spell_1_passiveTracker.Add(amountIncrease);
-            // If the passive has started dropping stacks or has none, start running it again.
-            /*if(!spell_1_passiveRunning){
-                StartCoroutine(Spell_1_PassiveRunning());
-            }*/
         }
         if(passiveStacks > 1){
             ResetSpell_1_PassiveTimers();
@@ -211,8 +184,6 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     */
     public override void Hit(GameObject hit){
         spellHitCallback?.Invoke(hit);
-        AddPassiveStack(hit);
-        //billiaAbilities.Passive(enemy);
         float magicDamage = championStats.magicDamage.GetValue();
         Unit enemyUnit = hit.GetComponent<Unit>();
         if(radius == "inner")
@@ -226,15 +197,8 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     public void SetupCallbacks(List<Spell> mySpells){
         foreach(Spell newSpell in mySpells){
             if(newSpell is DamageSpell && !(newSpell is BilliaSpell1)){
-                ((DamageSpell) newSpell).spellHitCallback += AddPassiveStack;
+                ((DamageSpell) newSpell).spellHitCallback += Spell_1_PassiveProc;
             }
-        }
-    }
-
-    public IEnumerator TestCoroutine(){
-        while(true){
-            Debug.Log("TestCouroutine running");
-            yield return new WaitForSeconds(2f);
         }
     }
 }
