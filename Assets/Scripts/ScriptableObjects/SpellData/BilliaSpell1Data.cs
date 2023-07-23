@@ -6,6 +6,7 @@ using UnityEngine;
 public class BilliaSpell1Data : SpellData
 {
     [field: SerializeField] public Sprite passiveSprite { get; private set; }
+    [field: SerializeField] public ScriptableSpeedBonus passiveSpeedBonus { get; private set; }
     [field: SerializeField] public GameObject visualPrefab { get; private set; }
     [field: SerializeField] public float initialAlpha { get; private set; } = 60.0f;
     [field: SerializeField] public float finalAlpha { get; private set; } = 160.0f;

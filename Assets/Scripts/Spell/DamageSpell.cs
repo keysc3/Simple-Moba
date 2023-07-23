@@ -12,6 +12,6 @@ public abstract class DamageSpell : Spell
     public delegate void SpellHitCallback(GameObject hit); 
     public SpellHitCallback spellHitCallback;
 
-    public abstract void Hit();
+    public abstract void Hit(GameObject hit);
 
 }
