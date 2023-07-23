@@ -12,6 +12,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
 
     public BilliaSpell1(ChampionSpells championSpells, SpellData spell1Data) : base(championSpells){
         this.spell1Data = (BilliaSpell1Data) spell1Data;
+        championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
     }
 
     /*
