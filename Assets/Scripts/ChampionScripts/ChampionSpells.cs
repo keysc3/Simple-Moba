@@ -15,4 +15,11 @@ public class ChampionSpells : MonoBehaviour
     public Spell spell2;
     public Spell spell3;
     public Spell spell4;
+
+    public delegate void LateUpdateCallback(); 
+    public LateUpdateCallback lateUpdateCallback;
+
+    void LateUpdate(){
+        lateUpdateCallback?.Invoke();
+    }
 }
