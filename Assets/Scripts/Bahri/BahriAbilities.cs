@@ -334,7 +334,7 @@ public class BahriAbilities : ChampionAbilities
         GameObject spell_3_object = (GameObject)Instantiate(Spell_3_object, transform.position, Quaternion.identity);
         SpellObjectCreated(spell_3_object);
         Spell3Trigger spell3Trigger = spell_3_object.GetComponent<Spell3Trigger>();
-        spell3Trigger.SetBahriAbilityHit(bahriAbilityHit);
+        //spell3Trigger.SetBahriAbilityHit(bahriAbilityHit);
         spell3Trigger.SetBahri(gameObject);
         // While the spell object still exists.
         while(spell_3_object){

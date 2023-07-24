@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class Spell3Trigger : MonoBehaviour
 {
-    public BahriAbilityHit bahriAbilityHit { get; private set; }
+    public BahriSpell3 bahriSpell3 { get; private set; }
     public GameObject bahri { get; private set; }
 
     private bool hit = false;
@@ -19,7 +19,7 @@ public class Spell3Trigger : MonoBehaviour
         // If the GameObject hits an enemy call the spell collision handler.
         // hit variable is to avoid two units getting charmed if the charm hits two objects on the same physics update.
         if(other.gameObject.tag == "Enemy" &&  other.gameObject != bahri && !hit){
-            bahriAbilityHit.Spell_3_Hit(other.gameObject);
+            bahriSpell3.Hit(other.gameObject);
             hit = true;
             Destroy(gameObject);
         }
@@ -29,8 +29,8 @@ public class Spell3Trigger : MonoBehaviour
     *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
     *   @param bahriAbilityHit - BahriAbilityHit script reference.
     */
-    public void SetBahriAbilityHit(BahriAbilityHit bahriAbilityHit){
-        this.bahriAbilityHit = bahriAbilityHit;
+    public void SetBahriSpell3(BahriSpell3 bahriSpell3){
+        this.bahriSpell3 = bahriSpell3;
     }
 
     /*
