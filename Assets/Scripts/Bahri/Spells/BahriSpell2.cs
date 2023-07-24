@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BahriSpell2 : DamageSpell
+public class BahriSpell2 : DamageSpell, IDeathCleanUp
 {
     private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
+    public List<GameObject> activeSpellObjects { get; private set; } = new List<GameObject>();
 
     public BahriSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
         this.spellData = (BahriSpell2Data) spellData;
@@ -18,9 +19,8 @@ public class BahriSpell2 : DamageSpell
     public override void Cast(){
         if(!onCd && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_2"]-1]){
             // Create a parent for the spells GameObjects.
-            GameObject spell_2_parent = new GameObject("Spell_2_base");
-            spell_2_parent.tag = "DestroyOnDeath";
-            //SpellObjectCreated(spell_2_parent);
+            GameObject spell_2_parent = new GameObject("Spell_2_Parent");
+            activeSpellObjects.Add(spell_2_parent);
             float angle = 0.0f;
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
@@ -115,6 +115,7 @@ public class BahriSpell2 : DamageSpell
         // Once spell is complete, destroy the parent and start the cooldown timer.
         if(spell_2_parent)
             GameObject.Destroy(spell_2_parent);
+        activeSpellObjects.Remove(spell_2_parent);
         enemiesHit.Clear();
         UIManager.instance.SetSpellDurationOver(2, player.playerUI);
         championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => onCd = myBool), "Spell_2"));
@@ -175,5 +176,9 @@ public class BahriSpell2 : DamageSpell
         }
         enemy.GetComponent<Unit>().TakeDamage(finalDamage, "magic", gameObject, false);
         enemiesHit.Add(enemy);
+    }
+
+    public void OnDeathCleanUp(){
+        activeSpellObjects.Clear();
     }
 }
