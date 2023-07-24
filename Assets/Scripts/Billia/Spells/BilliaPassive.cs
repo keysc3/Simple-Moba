@@ -7,8 +7,8 @@ public class BilliaPassive : Spell, IHasCallback
     private BilliaPassiveData passiveData;
     [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
 
-    public BilliaPassive(ChampionSpells championSpells, SpellData passiveData) : base(championSpells){
-        this.passiveData = (BilliaPassiveData) passiveData;
+    public BilliaPassive(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+        this.passiveData = (BilliaPassiveData) spellData;
     }
 
     public override void Cast(){
