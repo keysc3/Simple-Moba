@@ -110,14 +110,14 @@ public class Player : Unit, IRespawnable
                     assist.GetComponent<Player>().score.Assist();
             }
         }
-        score.Death();
-        UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
     }
 
     /*
     *   Death - Handles the death of a player.
     */
     public override void Death(){
+        score.Death();
+        UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
         // Disable all combat and movement controls.
         playerController.enabled = false; 
         playerSpellInput.enabled = false;
