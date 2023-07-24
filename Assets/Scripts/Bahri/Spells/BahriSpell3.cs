@@ -10,10 +10,6 @@ public class BahriSpell3 : DamageSpell
         this.spellData = (BahriSpell3Data) spellData;
     }
 
-    public override void Hit(GameObject hit){
-
-    }
-
     /*
     *   Spell_3 - Sets up and creates the players third spell GameObject. The spell casts a GameObject in the target direction and 'Charms' the first enemy hit,
     *   disabling their actions and moving them towards Bahri at a decreased move speed.
@@ -61,5 +57,17 @@ public class BahriSpell3 : DamageSpell
             }
             yield return null;
         }
+    }
+
+    /*
+    *   Spell_3_Hit - Deals third spells damage to the enemy hit. Applies a charm effect on target hit.
+    *   @param enemy - GameObject of the enemy hit.
+    */
+    public override void Hit(GameObject enemy){
+        float magicDamage = championStats.magicDamage.GetValue();
+        // Add the charm effect to the hit GameObject.
+        Unit enemyUnit = enemy.GetComponent<Unit>();
+        enemyUnit.statusEffects.AddEffect(spellData.charmEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, enemy));
+        enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);
     }
 }
