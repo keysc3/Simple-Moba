@@ -113,7 +113,7 @@ public class BahriAbilities : ChampionAbilities
         GameObject orb = (GameObject)Instantiate(Orb, transform.position, Quaternion.identity);
         SpellObjectCreated(orb);
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
-        spell1Trigger.SetBahriAbilityHit(bahriAbilityHit);
+        //spell1Trigger.SetBahriAbilityHit(bahriAbilityHit);
         spell1Trigger.SetBahri(gameObject); 
         // Set initial return values.
         bool returning = false;
@@ -129,7 +129,7 @@ public class BahriAbilities : ChampionAbilities
                 else{
                     // Set return bools.
                     returning = true;
-                    spell1Trigger.SetIsReturning(true);
+                    //spell1Trigger.SetIsReturning(true);
                     bahriAbilityHit.SpellResetEnemiesHit("1");
                 }
             }
