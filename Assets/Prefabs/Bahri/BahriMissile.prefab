@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6906369101127838924}
   - component: {fileID: 2530056045219596757}
   m_Layer: 0
-  m_Name: BahriMissiles
+  m_Name: BahriMissile
   m_TagString: DestroyOnDeath
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
