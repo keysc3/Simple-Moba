@@ -30,6 +30,7 @@ MonoBehaviour:
   <spell4>k__BackingField: {fileID: 11400000, guid: 4736469b3c8781d4f88ddd2de1be352b, type: 2}
   <maxMagnitude>k__BackingField: 3.5
   <speed>k__BackingField: 8
+  <missileSpeed>k__BackingField: 10
   <radius>k__BackingField: 6.5
   <charges>k__BackingField: 3
   <duration>k__BackingField: 15

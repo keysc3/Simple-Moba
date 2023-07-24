@@ -208,7 +208,7 @@ public class BahriSpell4 : DamageSpell
     private IEnumerator Spell_4_Target(GameObject missile, GameObject target){
         // While the GameObject still exists move it towards the target.
         while(missile){
-            missile.transform.position = Vector3.MoveTowards(missile.transform.position, target.transform.position, spellData.speed * Time.deltaTime);
+            missile.transform.position = Vector3.MoveTowards(missile.transform.position, target.transform.position, spellData.missileSpeed * Time.deltaTime);
             yield return null;
         }
     }
