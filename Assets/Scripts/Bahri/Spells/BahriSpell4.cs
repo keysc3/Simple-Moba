@@ -15,6 +15,7 @@ public class BahriSpell4 : DamageSpell
 
     public BahriSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
         this.spellData = (BahriSpell4Data) spellData;
+        player.score.takedownCallback += Spell_4_Takedown;
     }
 
     public override void Hit(GameObject hit){
