@@ -29,4 +29,5 @@ MonoBehaviour:
   <sleepSprite>k__BackingField: {fileID: 21300000, guid: d7b4c6c2ff6ef794e8165d368df2fbd1, type: 3}
   <drowsy>k__BackingField: {fileID: 11400000, guid: 6015dfa17d3526c43ac79f45d1cb2ff8, type: 2}
   <drowsyVisual>k__BackingField: {fileID: 4242376865509565499, guid: a8c53cc55b1f4d14da2bc6922b75ddcf, type: 3}
+  <passiveDot>k__BackingField: {fileID: 11400000, guid: 7c48892f3f1b12a499890c1d8bbf1305, type: 2}
   <travelTime>k__BackingField: 0.3

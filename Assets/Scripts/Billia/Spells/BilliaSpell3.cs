@@ -155,7 +155,7 @@ public class BilliaSpell3 : DamageSpell
     *   @param enemy - GameObject of the enemy hit.
     */
     public override void Hit(GameObject hit){
-        spellHitCallback?.Invoke(hit);
+        spellHitCallback?.Invoke(hit, this);
         float magicDamage = championStats.magicDamage.GetValue();
         Unit enemyUnit = hit.GetComponent<Unit>();
         enemyUnit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, hit));

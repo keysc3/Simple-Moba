@@ -167,7 +167,7 @@ public class BilliaSpell2 : DamageSpell
     *   @param radius - string of which radius was hit.
     */
     public override void Hit(GameObject hit){
-        spellHitCallback?.Invoke(hit);
+        spellHitCallback?.Invoke(hit, this);
         float magicDamage = championStats.magicDamage.GetValue();
         if(radius == "inner")
             hit.GetComponent<Unit>().TakeDamage((spellData.baseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage) * 2f, "magic", gameObject, false);   

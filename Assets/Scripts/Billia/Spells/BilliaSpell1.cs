@@ -8,12 +8,13 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     private BilliaSpell1Data spell1Data;
     private List<Effect> passiveEffectTracker = new List<Effect>();
     private int passiveStacks;
-    private bool passiveStackReceived = false;
     private string radius;
+    private List<Spell> passiveStackSpells = new List<Spell>();
 
     public BilliaSpell1(ChampionSpells championSpells, SpellData spell1Data) : base(championSpells){
         this.spell1Data = (BilliaSpell1Data) spell1Data;
         championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
+        championSpells.lateUpdateCallback += ClearPassiveStackSpells;
     }
 
     /*
@@ -107,10 +108,11 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     /*
     *   Spell_1_PassiveProc - Handles spell 1's passive being activated or refreshed.
     */
-    private void Spell_1_PassiveProc(GameObject hit){
+    private void Spell_1_PassiveProc(GameObject hit, Spell spellHit){
         // If a passive stack was received this frame, don't add another.
-        if(passiveStackReceived)
+        if(passiveStackSpells.Contains(spellHit))
             return;
+        passiveStackSpells.Add(spellHit);
         //spell_1_lastStackTime = Time.time;
         if(levelManager.spellLevels["Spell_1"] > 0 && passiveStacks < spell1Data.passiveMaxStacks){
             // Create a new speed bonus with the 
@@ -120,7 +122,6 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);
             passiveStacks += 1;
-            passiveStackReceived = true;
         }
         if(passiveStacks > 1){
             ResetSpell_1_PassiveTimers();
@@ -166,7 +167,10 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
                 passiveStacks -= 1;
             }
         }
-        passiveStackReceived = false;
+    }
+
+    private void ClearPassiveStackSpells(){
+        passiveStackSpells.Clear();
     }
 
     /*
@@ -190,8 +194,8 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     *   @param radius - string of which radius was hit.
     */
     public override void Hit(GameObject hit){
-        spellHitCallback?.Invoke(hit);
-        Spell_1_PassiveProc(hit);
+        spellHitCallback?.Invoke(hit, this);
+        Spell_1_PassiveProc(hit, this);
         float magicDamage = championStats.magicDamage.GetValue();
         Unit enemyUnit = hit.GetComponent<Unit>();
         if(radius == "inner")

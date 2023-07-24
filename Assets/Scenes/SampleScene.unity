@@ -782,6 +782,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: p1_y_offset
       value: 3
       objectReference: {fileID: 0}
@@ -789,6 +793,10 @@ PrefabInstance:
       propertyPath: <spell_1_passiveSpeedBonus>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 6325edf91b28df249848b2818ae6ba23, type: 2}
+    - target: {fileID: 993157157543562803, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1384222467734263524, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -831,6 +839,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1384222467734263524, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875298477662770913, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5980474150250256565, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
@@ -1627,9 +1639,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   passiveData: {fileID: 11400000, guid: b7dcd60c48fa661418f2f24cb481d370, type: 2}
   spell1Data: {fileID: 11400000, guid: edd59005514ddc64eabccd42a2830c6d, type: 2}
-  spell2Data: {fileID: 0}
-  spell3Data: {fileID: 0}
-  spell4Data: {fileID: 0}
+  spell2Data: {fileID: 11400000, guid: f5e41873e15d91f4ba9776c00fff1b0b, type: 2}
+  spell3Data: {fileID: 11400000, guid: a6f6aae9dc9d26b49b083373a6d016c3, type: 2}
+  spell4Data: {fileID: 11400000, guid: a17cdc19a022d3147a5baa14421cf6dd, type: 2}
 --- !u!114 &2129848487
 MonoBehaviour:
   m_ObjectHideFlags: 0

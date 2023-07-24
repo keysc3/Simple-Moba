@@ -19,7 +19,7 @@ public class BilliaPassive : Spell, IHasCallback
     *   Passive - Passive implementation for Billia. Applies a dot to enemies hit by any of Billia's abilities and heals Billia over the duration.
     *   @param enemy - GameObject of the unit to apply the passive to.
     */
-    public void Passive(GameObject hit){
+    public void Passive(GameObject hit, Spell spellHit){
         hit.GetComponent<Unit>().statusEffects.AddEffect(passiveData.passiveDot.InitializeEffect(30f, 0, gameObject, hit));
         if(!passiveApplied.Contains(hit)){
             passiveApplied.Add(hit);
