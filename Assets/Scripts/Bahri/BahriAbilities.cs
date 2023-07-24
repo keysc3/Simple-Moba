@@ -162,8 +162,8 @@ public class BahriAbilities : ChampionAbilities
             for(int i = 0; i < 3; i++){
                 GameObject spell2 = (GameObject)Instantiate(Spell_2_object, spell_2_parent.transform.position, Quaternion.identity);
                 Spell2Trigger spell2Trigger = spell2.GetComponent<Spell2Trigger>();
-                spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
-                spell2Trigger.SetSpellCast(2);
+                //spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
+                //spell2Trigger.SetSpellCast(2);
                 spell2.transform.SetParent(spell_2_parent.transform);
                 spell2.transform.localPosition = new Vector3(1,0,1).normalized * bahri.spell_2_magnitude;
                 spell2.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
@@ -518,9 +518,9 @@ public class BahriAbilities : ChampionAbilities
                 GameObject missile = (GameObject)Instantiate(Spell_2_object, transform.position, Quaternion.identity);
                 SpellObjectCreated(missile);
                 Spell2Trigger spell2Trigger = missile.GetComponent<Spell2Trigger>();
-                spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
+                //spell2Trigger.SetBahriAbilityHit(bahriAbilityHit);
                 spell2Trigger.SetTarget(target);
-                spell2Trigger.SetSpellCast(4);
+                //spell2Trigger.SetSpellCast(4);
                 // Use the same animation as spell two to send the missiles to their target.
                 StartCoroutine(Spell_2_Target(missile, target));
             }

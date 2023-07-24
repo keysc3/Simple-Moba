@@ -6,7 +6,8 @@ using UnityEngine;
 public class BahriSpell2Data : SpellData
 {
     [field: SerializeField] public GameObject missile { get; private set; }
-    [field: SerializeField] public ScriptableSpeedBonus spell_2_SpeedBonus { get; private set; }
+    [field: SerializeField] public ScriptableSpeedBonus speedBonus { get; private set; }
+    [field: SerializeField] public ScriptableCharm charm { get; private set; }
     [field: SerializeField] public float magnitude { get; private set; }
     [field: SerializeField] public float rotationSpeed { get; private set; }
     [field: SerializeField] public float heightOffset { get; private set; }

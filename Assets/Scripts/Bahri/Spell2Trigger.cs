@@ -9,9 +9,8 @@ using UnityEngine;
 */
 public class Spell2Trigger : MonoBehaviour
 {
-    public int spellCast { get; private set; }
     public GameObject target { get; private set; } = null;
-    public BahriAbilityHit bahriAbilityHit { get; private set; }
+    public BahriSpell2 bahriSpell2 { get; private set; }
 
     private Unit targetUnit = null;
 
@@ -34,20 +33,9 @@ public class Spell2Trigger : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         // Call collision handler for whichever spell the GameObject was for if the target was hit.
         if(other.gameObject == target){
-            if(spellCast == 2)
-                bahriAbilityHit.Spell_2_Hit(other.gameObject);
-            else
-                bahriAbilityHit.Spell_4_Hit(other.gameObject);
+            bahriSpell2.Hit(other.gameObject);
             Destroy(gameObject);
         }
-    }
-
-    /*
-    *   SetSpellCast - Sets the spell that cast this.
-    *   @param spellCast - int of the spell number.
-    */
-    public void SetSpellCast(int spellCast){
-        this.spellCast = spellCast;
     }
 
     /*
@@ -62,7 +50,7 @@ public class Spell2Trigger : MonoBehaviour
     *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
     *   @param bahriAbilityHit - BahriAbilityHit script reference.
     */
-    public void SetBahriAbilityHit(BahriAbilityHit bahriAbilityHit){
-        this.bahriAbilityHit = bahriAbilityHit;
+    public void SetBahriSpell2(BahriSpell2 bahriSpell2){
+        this.bahriSpell2 = bahriSpell2;
     }
 }

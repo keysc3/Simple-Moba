@@ -1210,6 +1210,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1331981380}
     m_Modifications:
+    - target: {fileID: 351906215407606799, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 995825280995990538, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1254,6 +1258,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1868568237446347121, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974844111092872396, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5483897106226106971, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_Name
       value: Bahri
@@ -1270,6 +1282,10 @@ PrefabInstance:
       propertyPath: <playerUIPrefab>k__BackingField
       value: 
       objectReference: {fileID: 8842905393809374821, guid: dd70f252af0b6444c9852f20d66b5d10, type: 3}
+    - target: {fileID: 8696489769140771637, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8188202354826576759, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
