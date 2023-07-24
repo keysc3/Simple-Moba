@@ -24,11 +24,8 @@ public class ChampionSpells : MonoBehaviour
     public delegate void LateUpdateCallback(); 
     public LateUpdateCallback lateUpdateCallback;
 
-    void Awake(){
-        mySpells = new List<Spell>(){passive, spell1, spell2, spell3, spell4};
-    }
-
     protected virtual void Start(){
+        mySpells = new List<Spell>(){passive, spell1, spell2, spell3, spell4};
         CallbackSetup();
     }
 
@@ -41,10 +38,17 @@ public class ChampionSpells : MonoBehaviour
     }
 
     protected void CallbackSetup(){
-        List<Spell> mySpells = new List<Spell>(){passive, spell1, spell2, spell3, spell4};
         foreach(Spell newSpell in mySpells){
             if(newSpell is IHasCallback){
                 ((IHasCallback) newSpell).SetupCallbacks(mySpells);
+            }
+        }
+    }
+
+    public void OnDeathSpellCleanUp(){
+        foreach(Spell newSpell in mySpells){
+            if(newSpell is IDeathCleanUp){
+                ((IDeathCleanUp) newSpell).OnDeathCleanUp();
             }
         }
     }

@@ -115,7 +115,6 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
         // Once spell is complete, destroy the parent and start the cooldown timer.
         if(spell_2_parent)
             GameObject.Destroy(spell_2_parent);
-        activeSpellObjects.Remove(spell_2_parent);
         enemiesHit.Clear();
         UIManager.instance.SetSpellDurationOver(2, player.playerUI);
         championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => onCd = myBool), "Spell_2"));
@@ -179,6 +178,12 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
     }
 
     public void OnDeathCleanUp(){
+        // Destroy all spell parent objects.
+        if(activeSpellObjects.Count > 0){
+            for(int i = 0; i < activeSpellObjects.Count; i++){
+                Object.Destroy(activeSpellObjects[i]);
+            }
+        }
         activeSpellObjects.Clear();
     }
 }

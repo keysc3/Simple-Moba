@@ -17,6 +17,7 @@ public class Player : Unit, IRespawnable
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
     private ChampionAbilities championAbilities;
+    private ChampionSpells championSpells;
     //private LevelManager levelManager;
     protected Renderer rend;
     //private DamageTracker damageTracker;
@@ -40,6 +41,7 @@ public class Player : Unit, IRespawnable
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championAbilities = GetComponent<ChampionAbilities>();
+        championSpells = GetComponent<ChampionSpells>();
         rend = GetComponent<Renderer>();
         //damageTracker = GetComponent<DamageTracker>();
         damageTracker = new DamageTracker();
@@ -125,7 +127,7 @@ public class Player : Unit, IRespawnable
         myCollider.enabled = false;
         statusEffects.ResetEffects();
         // Handle champion death clean up.
-        championAbilities.OnDeathCleanUp();
+        championSpells.OnDeathSpellCleanUp();
         rend.material = dead;
         damageTracker.ResetDamageTracker();
         StartCoroutine(RespawnTimer(levelManager.RespawnTime()));
@@ -142,7 +144,7 @@ public class Player : Unit, IRespawnable
             playerSpellInput.enabled = true;
         }
         // Handle any clean up needed before respawn.
-        championAbilities.OnRespawnCleanUp();
+        //championAbilities.OnRespawnCleanUp();
         // Enable collider.
         myCollider.enabled = true;
         // Set currenthp and currentmana to max values.
