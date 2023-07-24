@@ -1089,6 +1089,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 995825280995990538, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
   m_PrefabInstance: {fileID: 1669128585}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1560792617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560792601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06217da7793f26489f5360f879376fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  passiveData: {fileID: 11400000, guid: 7d69f38a1f18a394587bf1083e8ca225, type: 2}
+  spell1Data: {fileID: 11400000, guid: 3620d714736ae284c816944dd9957575, type: 2}
+  spell2Data: {fileID: 11400000, guid: 2291d5583bbcec547a470531000a7528, type: 2}
+  spell3Data: {fileID: 11400000, guid: c2453373a5928d94a862f767f7a8ce1c, type: 2}
+  spell4Data: {fileID: 11400000, guid: 5c09a73194528c34eb73b7120d0216bd, type: 2}
 --- !u!1 &1561246163
 GameObject:
   m_ObjectHideFlags: 0
