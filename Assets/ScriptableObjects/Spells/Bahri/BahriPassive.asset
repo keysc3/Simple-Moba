@@ -12,14 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab1fccd9a96de24cbc714c9ce89c40e, type: 3}
   m_Name: BahriPassive
   m_EditorClassIdentifier: 
-  <sprite>k__BackingField: {fileID: 21300000, guid: dcd0655e17ffe824ca6693a54297152f, type: 3}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 32f0dd3c71af3d44fae717a62e0b08b6, type: 3}
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField: []
   <baseCd>k__BackingField: []
   <baseMana>k__BackingField: []
   <passivePreset>k__BackingField: {fileID: 11400000, guid: 38162760bc234394fa3dcbf602c44df3, type: 2}
-  <magnitude>k__BackingField: 7
-  <speed>k__BackingField: 10
-  <minSpeed>k__BackingField: 0.4
-  <maxSpeed>k__BackingField: 16
-  <accel>k__BackingField: 13
