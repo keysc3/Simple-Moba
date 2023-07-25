@@ -15,10 +15,6 @@ public class BahriPassive : Spell
         player.score.takedownCallback += Passive;
     }
 
-    public override void Cast(){
-        
-    }
-
      /*
     *   Passive - Handles the passive implementation for Bahri.
     *   @param killed - GameObject of the unit that was killed.

@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using System;
 
 [System.Serializable]
-public abstract class Spell
+public class Spell
 {
     //ScriptableSpell spell;
     [SerializeField] protected bool onCd = false;
@@ -32,8 +32,6 @@ public abstract class Spell
         levelManager = player.levelManager;
         this.gameObject = championSpells.gameObject;
     }
-
-    public abstract void Cast();
 
     protected Vector3 GetTargetDirection(){
         RaycastHit hitInfo;

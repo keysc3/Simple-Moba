@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BilliaSpell4 : Spell
+public class BilliaSpell4 : Spell, IHasCast
 {
     private BilliaSpell4Data spellData;
     private bool canUseSpell_4 = false;
@@ -16,7 +16,7 @@ public class BilliaSpell4 : Spell
     /*
     *   Spell_4 - Champions fourth ability method.
     */
-    public override void Cast(){
+    public void Cast(){
         // Only allow cast if a champion has passive on them.
         if(canUseSpell_4){
             if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){

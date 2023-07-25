@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BahriSpell1 : DamageSpell
+public class BahriSpell1 : DamageSpell, IHasCast
 {
 
     private BahriSpell1Data spellData;
@@ -17,7 +17,7 @@ public class BahriSpell1 : DamageSpell
     *   Spell_1 - Sets up and creates Bahri's first spell GameObject. The spell moves from Bahri to the target position at a constant speed, then returns upon reaching
     *   the target location. The return starts slow and speeds up until reaching Bahri and being destroyed.
     */
-    public override void Cast(){
+    public void Cast(){
         if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();

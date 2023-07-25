@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BahriSpell4 : DamageSpell
+public class BahriSpell4 : DamageSpell, IHasCast
 {
     private BahriSpell4Data spellData;
 
@@ -23,7 +23,7 @@ public class BahriSpell4 : DamageSpell
     *   Spell_4 - Sets up and creates the players fourth spell GameObjects. The spell quickly moves Bahri in the target direction and launches projectiles 
     *  spell4Effect at up to three enemies in range upon reaching the dashes end location. The spell lasts a set duration and can be re-casted 2 times with a 1s lockout on re-casting.
     */
-    public override void Cast(){
+    public void Cast(){
         if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             championSpells.StartCoroutine(Spell_4_Start());
             // Use mana and set spell on cooldown.

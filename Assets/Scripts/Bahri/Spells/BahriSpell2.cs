@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BahriSpell2 : DamageSpell, IDeathCleanUp
+public class BahriSpell2 : DamageSpell, IDeathCleanUp, IHasCast
 {
     private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
@@ -16,7 +16,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
     *   Spell_2 - Sets up and creates Bahri's second spell GameObjects. The spell spawns three GameObjects that rotate around Bahri and 
     *   gives a decaying speed boost. Once a spell GameObject has a target it leaves Bahri and chases its target until they die or it collides with them.
     */
-    public override void Cast(){
+    public void Cast(){
         if(!onCd && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");

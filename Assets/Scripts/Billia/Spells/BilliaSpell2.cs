@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BilliaSpell2 : DamageSpell
+public class BilliaSpell2 : DamageSpell, IHasCast
 {
     private BilliaSpell2Data spellData;
     private string radius;
@@ -12,17 +12,11 @@ public class BilliaSpell2 : DamageSpell
         this.spellData = (BilliaSpell2Data) spellData;
     }
 
-    /*public override void Cast(){
-        GameObject hitObject = null;
-        Debug.Log("Spell2");
-        Hit(hitObject);
-    }*/
-
     /*
     *   Spell_2 - Set up Billia's second spell. She dashed an offset distance towards her target location then deals damage in two radius'.
     *   The inner radius deals bonus damage.
     */
-    public override void Cast(){
+    public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
         if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.

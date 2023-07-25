@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BahriSpell3 : DamageSpell
+public class BahriSpell3 : DamageSpell, IHasCast
 {
     private BahriSpell3Data spellData;
 
@@ -14,7 +14,7 @@ public class BahriSpell3 : DamageSpell
     *   Spell_3 - Sets up and creates the players third spell GameObject. The spell casts a GameObject in the target direction and 'Charms' the first enemy hit,
     *   disabling their actions and moving them towards Bahri at a decreased move speed.
     */
-    public override void Cast(){
+    public void Cast(){
         if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();

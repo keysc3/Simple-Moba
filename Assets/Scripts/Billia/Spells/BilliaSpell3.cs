@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BilliaSpell3 : DamageSpell
+public class BilliaSpell3 : DamageSpell, IHasCast
 {
     private BilliaSpell3Data spellData;
     [SerializeField] private float p1_y_offset = 3f;
@@ -16,7 +16,7 @@ public class BilliaSpell3 : DamageSpell
     *   Spell_3 - Champions third ability method. Lobs a seed at a target location. If no initial terrain or unit collision the seed rolls 
     *   until one occurs. Explodes on collision and applies its damage to units within a cone forward of the collision.
     */
-    public override void Cast(){
+    public void Cast(){
         if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));

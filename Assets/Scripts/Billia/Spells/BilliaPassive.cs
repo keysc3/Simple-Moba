@@ -11,10 +11,6 @@ public class BilliaPassive : Spell, IHasCallback
         this.passiveData = (BilliaPassiveData) spellData;
     }
 
-    public override void Cast(){
-        Debug.Log("Passive");
-    }
-
     /*
     *   Passive - Passive implementation for Billia. Applies a dot to enemies hit by any of Billia's abilities and heals Billia over the duration.
     *   @param enemy - GameObject of the unit to apply the passive to.

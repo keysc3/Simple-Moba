@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BilliaSpell1 : DamageSpell, IHasCallback
+public class BilliaSpell1 : DamageSpell, IHasCallback, IHasCast
 {
 
     private BilliaSpell1Data spellData;
@@ -22,7 +22,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
     *   Spell_1 - Sets up Billia's first spell. She swirls her weapon in a radius around her. Players hit by the outer portion take bonus damage.
     *   Passive: Gain a stacking speed bonus whenever a unit is hit with any spell, up to 4 stacks.
     */
-    public override void Cast(){
+    public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
         if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
