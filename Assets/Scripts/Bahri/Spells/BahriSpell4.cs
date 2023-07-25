@@ -12,6 +12,7 @@ public class BahriSpell4 : DamageSpell
     private float spell_4_duration;
     private int spell_4_chargesLeft;
     private bool spell4Casting;
+    private bool canRecast = false;
 
     public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell4Data) spellData;
@@ -31,6 +32,19 @@ public class BahriSpell4 : DamageSpell
         }
     }
 
+    private IEnumerator NextCastCd(float spell_cd, string spell){
+        float spell_timer = 0.0f;
+        //Debug.Log(spell_timer);
+        while(spell_timer <= spell_cd){
+            //Debug.Log(spell_timer);
+            spell_timer += Time.deltaTime;
+            UIManager.instance.UpdateCooldown(spell, spell_cd - spell_timer, spell_cd, player.playerUI);
+            yield return null;
+        }
+        UIManager.instance.UpdateCooldown(spell, 0, spell_cd, player.playerUI);
+        canRecast = true;
+    }
+
     /*
     *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
     */
@@ -39,28 +53,21 @@ public class BahriSpell4 : DamageSpell
         player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = spellData.duration;
-        float lastCastTimer = 0.0f;
-        bool isCd = true;
         spell4Casting = true;
         Spell_4_Move();
-        championSpells.StartCoroutine(Spell_Cd_Timer(1.0f, spellNum));
         spell_4_chargesLeft = spellData.charges - 1;
         // While the spells duration has not expired.
         while(spell_4_timer < spell_4_duration){
             // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
-            if(Input.GetKeyDown(KeyCode.R) && !player.isCasting && spell_4_chargesLeft > 0 && !isCd && !player.isDead){
+            if(Input.GetKeyDown(KeyCode.R) && !player.isCasting && spell_4_chargesLeft > 0 && canRecast && !player.isDead){
                 Spell_4_Move();
-                isCd = true;
-                championSpells.StartCoroutine(Spell_Cd_Timer(1.0f, spellNum));
-                lastCastTimer = 0.0f;
-                spell_4_chargesLeft -= 1;
+                spell_4_chargesLeft--;
                 spell4Effect.UpdateStacks(spell_4_chargesLeft);
             }
             UIManager.instance.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer, player.playerUI);
             if(spell_4_chargesLeft == 0)
                 UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
             spell_4_timer += Time.deltaTime;
-            lastCastTimer += Time.deltaTime;
             yield return null;
         }
         // Reset charges and start spell cooldown timer.
@@ -117,6 +124,7 @@ public class BahriSpell4 : DamageSpell
         }
         // Start coroutines to handle the spells cast time and animation.
         championSpells.StartCoroutine(Spell_4_Speed(targetPosition));
+        canRecast = false;
     }
 
     /*
@@ -139,6 +147,7 @@ public class BahriSpell4 : DamageSpell
             Spell_4_Missiles();
         navMeshAgent.enabled = true;
         player.SetIsCasting(false, this);
+        championSpells.StartCoroutine(NextCastCd(1.0f, spellNum));
     }
 
     /*
