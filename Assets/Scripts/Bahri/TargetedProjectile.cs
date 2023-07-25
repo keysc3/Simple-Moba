@@ -10,8 +10,8 @@ using UnityEngine;
 public class TargetedProjectile : MonoBehaviour
 {
     public GameObject target { get; private set; } = null;
-
     private Unit targetUnit = null;
+    private bool targetSet = false;
 
     public delegate void HitMethod(GameObject hit);
     public HitMethod hit;
@@ -22,12 +22,14 @@ public class TargetedProjectile : MonoBehaviour
         // Destroy GameObject if target dies.
         if(target != null){
             // Cache Unit component so it isn't being accessed every frame once a target is found.
-            if(targetUnit == null)
+            if(targetUnit == null){
+                targetSet = true;
                 targetUnit = target.GetComponent<Unit>();
-            else{
-                if(targetUnit.isDead)
-                    Destroy(gameObject);
             }
+        }
+        else{
+            if(targetSet == true)
+                Destroy(gameObject);
         }
     }
 

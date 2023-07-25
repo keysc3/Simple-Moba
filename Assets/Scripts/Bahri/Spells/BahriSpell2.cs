@@ -127,7 +127,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
     */
     private IEnumerator Spell_2_Target(GameObject spell_2_child, GameObject target){
         // While the GameObject still exists move it towards the target.
-        while(spell_2_child){
+        while(spell_2_child && target){
             spell_2_child.transform.position = Vector3.MoveTowards(spell_2_child.transform.position, target.transform.position, spellData.speed * Time.deltaTime);
             yield return null;
         }
