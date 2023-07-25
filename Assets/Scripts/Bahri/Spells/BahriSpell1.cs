@@ -25,7 +25,7 @@ public class BahriSpell1 : DamageSpell
             Vector3 targetPosition = (targetDirection - gameObject.transform.position).normalized;
             targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
             // Start coroutines to handle the spells cast time and animation.
-            championSpells.StartCoroutine(CastTime(spellData.castTime, false));
+            championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             championSpells.StartCoroutine(Spell_1_Move(targetPosition));
             // Use mana and set spell on cooldown to true.
             championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_1"]-1]);

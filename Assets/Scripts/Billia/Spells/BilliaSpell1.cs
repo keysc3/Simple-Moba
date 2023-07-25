@@ -15,6 +15,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
         this.spell1Data = (BilliaSpell1Data) spell1Data;
         championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
         championSpells.lateUpdateCallback += ClearPassiveStackSpells;
+        canMove = true;
     }
 
     /*
@@ -25,7 +26,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
         // If the spell is off cd, Billia is not casting, and has enough mana.
         if(!onCd && !player.isCasting && championStats.currentMana >= spell1Data.baseMana[levelManager.spellLevels["Spell_1"]-1]){
             // Start cast time then cast the spell.
-            championSpells.StartCoroutine(CastTime(spell1Data.castTime, true));
+            championSpells.StartCoroutine(CastTime(spell1Data.castTime, canMove));
             championSpells.StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
             championStats.UseMana(spell1Data.baseMana[levelManager.spellLevels["Spell_1"]-1]);

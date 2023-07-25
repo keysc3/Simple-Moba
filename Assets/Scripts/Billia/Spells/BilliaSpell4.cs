@@ -10,6 +10,7 @@ public class BilliaSpell4 : Spell
     public BilliaSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
         this.spellData = (BilliaSpell4Data) spellData;
         championSpells.updateCallback += CanUseSpell_4;
+        canMove = true;
     }
 
     /*
@@ -20,7 +21,7 @@ public class BilliaSpell4 : Spell
         if(canUseSpell_4){
             if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]){
                 // Start cast time then cast the spell.
-                championSpells.StartCoroutine(CastTime(spellData.castTime, true));
+                championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
                 championSpells.StartCoroutine(Spell_4_Cast(GetChampionsWithPassive()));
                 // Use mana.
                 championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]);

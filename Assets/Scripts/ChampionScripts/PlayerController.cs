@@ -19,21 +19,23 @@ public class PlayerController : MonoBehaviour
     private Vector3 dest;
     private Vector3 currentTarget;
     public GameObject targetedEnemy { get; private set; } = null;
-    private ChampionAbilities playerAbilities;
+    //private ChampionAbilities playerAbilities;
     private BasicAttack basicAttack;
+    private Player player;
 
     // Called when the script instance is being loaded.
     private void Awake(){
         navMeshAgent = GetComponent<NavMeshAgent>();
         myCollider = GetComponent<Collider>();
-        playerAbilities = GetComponent<ChampionAbilities>();
         basicAttack = GetComponent<BasicAttack>();
         mainCamera = Camera.main;
+        player = GetComponent<Player>();
     }
+
     // Start is called before the first frame update
     private void Start()
     {
-        championStats = (ChampionStats) GetComponent<Player>().unitStats;
+        championStats = (ChampionStats) player.unitStats;
         navMeshAgent.updateRotation = false;
         navMeshAgent.speed = championStats.speed.GetValue();
         attackTime = 1.0f/championStats.attackSpeed.GetValue();
@@ -49,7 +51,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // Stop the players attack windup if casting or moving.
-        if(playerAbilities.isCasting || navMeshAgent.hasPath){
+        if(player.isCasting || navMeshAgent.hasPath){
             basicAttack.SetWindingUp(false);
         }
 
@@ -65,19 +67,19 @@ public class PlayerController : MonoBehaviour
             }
 
             // Stop player if they are at their destination.
-            if(navMeshAgent.hasPath && !playerAbilities.isCasting){
+            if(navMeshAgent.hasPath && !player.isCasting){
                 if(transform.position == navMeshAgent.destination)
                     navMeshAgent.ResetPath();
             }
-
-            // Point players forward at the direction they are cast or moving.
-            if(playerAbilities.isCasting && !playerAbilities.castCanMove)
-                PlayerLookDirection(playerAbilities.mouseOnCast);
-            else if(navMeshAgent.hasPath)
-                PlayerLookDirection(navMeshAgent.steeringTarget);
         }
 
-        if(targetedEnemy != null && !playerAbilities.isCasting){
+        // Point players forward at the direction they are cast or moving.
+        if(player.isCasting && !player.currentCastedSpell.canMove)
+            PlayerLookDirection(player.mouseOnCast);
+        else if(navMeshAgent.hasPath)
+            PlayerLookDirection(navMeshAgent.steeringTarget);
+
+        if(targetedEnemy != null && !player.isCasting){
             if(!targetedEnemy.GetComponent<Unit>().isDead)
                 MovePlayerToEnemy();
             else

@@ -19,7 +19,7 @@ public class BilliaSpell3 : DamageSpell
     public override void Cast(){
         if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_3"]-1]){
             // Start cast time then cast the spell.
-            championSpells.StartCoroutine(CastTime(spellData.castTime, false));
+            championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.

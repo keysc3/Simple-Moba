@@ -8,7 +8,8 @@ using System;
 public abstract class Spell
 {
     //ScriptableSpell spell;
-    [SerializeField] public bool onCd;
+    [SerializeField] public bool onCd = false;
+    [SerializeField] public bool canMove = false;
     [SerializeField] protected NavMeshAgent navMeshAgent;
     [SerializeField] protected LevelManager levelManager;
     [SerializeField] protected ChampionStats championStats;
@@ -39,7 +40,7 @@ public abstract class Spell
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Debug.DrawLine(mainCamera.transform.position, hitInfo.point, Color.red, 20f);
         Vector3 targetDirection = hitInfo.point;
-        //mouseOnCast = targetDirection;
+        player.SetMouseOnCast(targetDirection);
         targetDirection.y = myCollider.bounds.center.y;
         return targetDirection;
     }
@@ -52,7 +53,7 @@ public abstract class Spell
     protected IEnumerator CastTime(float castTime, bool canMove){
         //castCanMove = canMove;
         float timer = 0.0f;
-        player.SetIsCasting(true);
+        player.SetIsCasting(true, this);
         // While still casting spell stop the player.
         while(timer <= castTime){
             if(!canMove){
@@ -62,7 +63,7 @@ public abstract class Spell
             timer += Time.deltaTime;
             yield return null;
         }
-        player.SetIsCasting(false);
+        player.SetIsCasting(false, this);
         navMeshAgent.isStopped = false;
     }
 

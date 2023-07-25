@@ -16,7 +16,7 @@ public class Player : Unit, IRespawnable
     [field: SerializeField] public LevelManager levelManager { get; private set; }
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
-    private ChampionAbilities championAbilities;
+    //private ChampionAbilities championAbilities;
     private ChampionSpells championSpells;
     //private LevelManager levelManager;
     protected Renderer rend;
@@ -30,7 +30,9 @@ public class Player : Unit, IRespawnable
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
-    public bool isCasting { get; private set; } = false;
+    public bool isCasting { get; private set; }
+    public Vector3 mouseOnCast { get; private set; }
+    public Spell currentCastedSpell { get; private set; }
 
 
     /*
@@ -40,7 +42,7 @@ public class Player : Unit, IRespawnable
         unitStats = new ChampionStats((ScriptableChampion)unit);
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
-        championAbilities = GetComponent<ChampionAbilities>();
+        //championAbilities = GetComponent<ChampionAbilities>();
         championSpells = GetComponent<ChampionSpells>();
         rend = GetComponent<Renderer>();
         //damageTracker = GetComponent<DamageTracker>();
@@ -174,7 +176,15 @@ public class Player : Unit, IRespawnable
         Respawn();
     }
 
-    public void SetIsCasting(bool isCasting){
+    public void SetIsCasting(bool isCasting, Spell currentCastedSpell){
         this.isCasting = isCasting;
+        if(!isCasting)
+            this.currentCastedSpell = null;
+        else
+            this.currentCastedSpell = currentCastedSpell;
+    }
+    
+    public void SetMouseOnCast(Vector3 mouseOnCast){
+        this.mouseOnCast = mouseOnCast;
     }
 }

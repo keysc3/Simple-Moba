@@ -54,7 +54,7 @@ public class BilliaSpell2 : DamageSpell
             Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - gameObject.transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
-            championSpells.StartCoroutine(CastTime(spellData.castTime, false));
+            championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
             championSpells.StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
@@ -95,7 +95,7 @@ public class BilliaSpell2 : DamageSpell
     *   @param spellTargetPosition - Vector3 of the center of the spell.
     */
     private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
-        player.SetIsCasting(true);
+        player.SetIsCasting(true, this);
         // Disable pathing.
         navMeshAgent.ResetPath();
         navMeshAgent.isStopped = true;
@@ -112,7 +112,7 @@ public class BilliaSpell2 : DamageSpell
         // Apply last tick dash and enable pathing.
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, dashSpeed * Time.deltaTime);
         navMeshAgent.isStopped = false;
-        player.SetIsCasting(false);
+        player.SetIsCasting(false, this);
         Spell_2_Finished(spellTargetPosition);
     }
 

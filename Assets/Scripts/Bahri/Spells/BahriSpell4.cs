@@ -23,13 +23,11 @@ public class BahriSpell4 : DamageSpell
     *  spell4Effect at up to three enemies in range upon reaching the dashes end location. The spell lasts a set duration and can be re-casted 2 times with a 1s lockout on re-casting.
     */
     public override void Cast(){
-        if(levelManager.spellLevels["Spell_4"] > 0){
-            if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]){
-                championSpells.StartCoroutine(Spell_4_Start());
-                // Use mana and set spell on cooldown.
-                championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]);
-                onCd = true;
-            }
+        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]){
+            championSpells.StartCoroutine(Spell_4_Start());
+            // Use mana and set spell on cooldown.
+            championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]);
+            onCd = true;
         }
     }
 
@@ -127,7 +125,7 @@ public class BahriSpell4 : DamageSpell
     */
     private IEnumerator Spell_4_Speed(Vector3 targetPosition){
         // Set necessary values and disable navmesh.
-        player.SetIsCasting(true);
+        player.SetIsCasting(true, this);
         float newSpeed = championStats.speed.GetValue() + spellData.speed;
         navMeshAgent.ResetPath();
         navMeshAgent.enabled = false;
@@ -140,7 +138,7 @@ public class BahriSpell4 : DamageSpell
         if(!player.isDead)
             Spell_4_Missiles();
         navMeshAgent.enabled = true;
-        player.SetIsCasting(false);
+        player.SetIsCasting(false, this);
     }
 
     /*
