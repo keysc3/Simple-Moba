@@ -74,7 +74,7 @@ public abstract class Spell
     *   @param spell_cd - float representing the spells cooldown.
     *   @param myResult - Action<bool> method used for returning a value for setting the spell cooldowns onCd value back to false.
     */
-    protected IEnumerator Spell_Cd_Timer(float spell_cd, Action<bool> myResult, string spell){
+    protected IEnumerator Spell_Cd_Timer(float spell_cd, string spell){
         spell_cd = CalculateCooldown(spell_cd, championStats.haste.GetValue());
         float spell_timer = 0.0f;
         //Debug.Log(spell_timer);
@@ -85,7 +85,7 @@ public abstract class Spell
             yield return null;
         }
         UIManager.instance.UpdateCooldown(spell, 0, spell_cd, player.playerUI);
-        myResult(false);
+        onCd = false;
     }
 
     /*
