@@ -17,7 +17,7 @@ public class BilliaSpell3 : DamageSpell
     *   until one occurs. Explodes on collision and applies its damage to units within a cone forward of the collision.
     */
     public override void Cast(){
-        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_3"]-1]){
+        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             // Get the players mouse position on spell cast for spells target direction.
@@ -31,7 +31,7 @@ public class BilliaSpell3 : DamageSpell
                 targetPosition = gameObject.transform.position + (targetDirection - gameObject.transform.position);
             championSpells.StartCoroutine(Spell_3_Cast(targetPosition, targetPosition - gameObject.transform.position));
             // Use mana.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_3"]-1]);
+            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -44,7 +44,7 @@ public class BilliaSpell3 : DamageSpell
         // Wait for cast time.
         while(player.isCasting)
             yield return null;
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels["Spell_3"]-1], (myBool => onCd = myBool), "Spell_3"));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
         championSpells.StartCoroutine(Spell_3_Lob(targetPosition, targetDirection));
     }
     
@@ -158,8 +158,8 @@ public class BilliaSpell3 : DamageSpell
         spellHitCallback?.Invoke(hit, this);
         float magicDamage = championStats.magicDamage.GetValue();
         Unit enemyUnit = hit.GetComponent<Unit>();
-        enemyUnit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(levelManager.spellLevels["Spell_3"]-1, gameObject, hit));
-        enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels["Spell_3"]-1] + magicDamage, "magic", gameObject, false);   
+        enemyUnit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, hit));
+        enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);   
     }
 
     /*

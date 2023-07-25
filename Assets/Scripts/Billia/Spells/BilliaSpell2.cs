@@ -24,7 +24,7 @@ public class BilliaSpell2 : DamageSpell
     */
     public override void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_2"]-1]){
+        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
@@ -59,7 +59,7 @@ public class BilliaSpell2 : DamageSpell
             Spell_2_Visual(targetPosition);
             championSpells.StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
             // Use mana.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_2"]-1]);
+            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -121,7 +121,7 @@ public class BilliaSpell2 : DamageSpell
     *   @param targetPosition - Vector3 of the center of the spell.
     */
     private void Spell_2_Finished(Vector3 targetPosition){
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => onCd = myBool), "Spell_2"));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
         // Hitbox starts from center of calculated target position.
         HitboxCheck(targetPosition);
         Object.Destroy(GameObject.Find("/BilliaSpell_2"));
@@ -170,14 +170,8 @@ public class BilliaSpell2 : DamageSpell
         spellHitCallback?.Invoke(hit, this);
         float magicDamage = championStats.magicDamage.GetValue();
         if(radius == "inner")
-            hit.GetComponent<Unit>().TakeDamage((spellData.baseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage) * 2f, "magic", gameObject, false);   
+            hit.GetComponent<Unit>().TakeDamage((spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage) * 2f, "magic", gameObject, false);   
         else
-            hit.GetComponent<Unit>().TakeDamage(spellData.baseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage, "magic", gameObject, false);
+            hit.GetComponent<Unit>().TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);
     }
-
-    /*public override void Hit(GameObject hit){
-        GameObject hitObject = null;
-        spellHitCallback?.Invoke(hitObject);
-        Debug.Log("Spell2Hit");
-    }*/
 }

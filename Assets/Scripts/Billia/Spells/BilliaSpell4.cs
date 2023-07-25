@@ -19,12 +19,12 @@ public class BilliaSpell4 : Spell
     public override void Cast(){
         // Only allow cast if a champion has passive on them.
         if(canUseSpell_4){
-            if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]){
+            if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
                 // Start cast time then cast the spell.
                 championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
                 championSpells.StartCoroutine(Spell_4_Cast(GetChampionsWithPassive()));
                 // Use mana.
-                championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]);
+                championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
                 onCd = true;
             }
         }
@@ -37,7 +37,7 @@ public class BilliaSpell4 : Spell
     private IEnumerator Spell_4_Cast(List<GameObject> applyDrowsy){
         while(player.isCasting)
             yield return null;
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels["Spell_4"]-1], (myBool => onCd = myBool), "Spell_4"));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
         championSpells.StartCoroutine(Spell_4_Projectile(applyDrowsy));
     }
 
@@ -65,7 +65,7 @@ public class BilliaSpell4 : Spell
             Unit enemyUnit = enemy.GetComponent<Unit>();
             if(enemyUnit is Player){
                 // Add drowsy to enemy player and update the bonus damage delegate.
-                Drowsy newDrowsy = (Drowsy) spellData.drowsy.InitializeEffect(levelManager.spellLevels["Spell_4"]-1, gameObject, enemy);
+                Drowsy newDrowsy = (Drowsy) spellData.drowsy.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, enemy);
                 enemyUnit.statusEffects.AddEffect(newDrowsy);
                 enemyUnit.bonusDamage += Spell_4_SleepProc;
                 // Animate the drowsy effect.
@@ -83,7 +83,7 @@ public class BilliaSpell4 : Spell
     *   CanUseSpell_4 - Checks if any champion has Billia's passive on them, which allows the use of spell 4.
     */
     private void CanUseSpell_4(){
-        if(levelManager.spellLevels["Spell_4"] > 0){
+        if(levelManager.spellLevels[spellNum] > 0){
             List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
             if(passiveAppliedChamps.Count > 0){
                 canUseSpell_4 = true;
@@ -127,7 +127,7 @@ public class BilliaSpell4 : Spell
                 // Remove sleep, deal damage and remove function from delegate.
                 enemyUnit.statusEffects.RemoveEffect(spellData.drowsy.sleep, gameObject);
                 enemyUnit.bonusDamage -= Spell_4_SleepProc;
-                enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
+                enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);
             }
             // If effect fell off before damage was dealt, remove the bonus damage method.
             else{
