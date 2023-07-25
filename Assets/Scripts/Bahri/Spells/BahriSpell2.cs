@@ -25,8 +25,8 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
                 GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, spell_2_parent.transform.position, Quaternion.identity);
-                Spell2Trigger spell2Trigger = missile.GetComponent<Spell2Trigger>();
-                spell2Trigger.SetBahriSpell2(this);
+                TargetedProjectile targetedProjectile = missile.GetComponent<TargetedProjectile>();
+                targetedProjectile.hit = Hit;
                 missile.transform.SetParent(spell_2_parent.transform);
                 missile.transform.localPosition = new Vector3(1,0,1).normalized * spellData.magnitude;
                 missile.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
@@ -102,8 +102,8 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
                     // If a target has been found start the target found animation.
                     if(target != null){
                         championSpells.StartCoroutine(Spell_2_Target(child.gameObject, target));
-                        Spell2Trigger spell2Trigger = child.gameObject.GetComponent<Spell2Trigger>();
-                        spell2Trigger.SetTarget(target);
+                        TargetedProjectile targetedProjectile = child.gameObject.GetComponent<TargetedProjectile>();
+                        targetedProjectile.SetTarget(target);
                         child.parent = null;
                     }
                 }

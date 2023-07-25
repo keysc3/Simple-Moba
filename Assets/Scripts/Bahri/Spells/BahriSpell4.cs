@@ -18,20 +18,18 @@ public class BahriSpell4 : DamageSpell
         player.score.takedownCallback += Spell_4_Takedown;
     }
 
-    public override void Hit(GameObject hit){
-
-    }
-
     /*
     *   Spell_4 - Sets up and creates the players fourth spell GameObjects. The spell quickly moves Bahri in the target direction and launches projectiles 
     *  spell4Effect at up to three enemies in range upon reaching the dashes end location. The spell lasts a set duration and can be re-casted 2 times with a 1s lockout on re-casting.
     */
     public override void Cast(){
-        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]){
-            championSpells.StartCoroutine(Spell_4_Start());
-            // Use mana and set spell on cooldown.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]);
-            onCd = true;
+        if(levelManager.spellLevels["Spell_4"] > 0){
+            if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]){
+                championSpells.StartCoroutine(Spell_4_Start());
+                // Use mana and set spell on cooldown.
+                championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_4"]-1]);
+                onCd = true;
+            }
         }
     }
 
@@ -190,9 +188,9 @@ public class BahriSpell4 : DamageSpell
                 // Create missile and set necessary variables
                 GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
                 //SpellObjectCreated(missile);
-                Spell4Trigger spell4Trigger = missile.GetComponent<Spell4Trigger>();
-                spell4Trigger.SetBahriSpell4(this);
-                spell4Trigger.SetTarget(target);
+                TargetedProjectile targetedProjectile = missile.GetComponent<TargetedProjectile>();
+                targetedProjectile.hit = Hit;
+                targetedProjectile.SetTarget(target);
                 //spell2Trigger.SetSpellCast(4);
                 // Use the same animation as spell two to send the missiles to their target.
                 championSpells.StartCoroutine(Spell_4_Target(missile, target));
@@ -217,7 +215,7 @@ public class BahriSpell4 : DamageSpell
     *   Spell_4_Hit - Deals fourth spells damage to the enemy hit.
     *   @param enemy - GameObject of the enemy hit.
     */
-    public void Spell_4_Hit(GameObject enemy){
+    public override void Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
         enemy.GetComponent<Unit>().TakeDamage(spellData.baseDamage[levelManager.spellLevels["Spell_4"]-1] + magicDamage, "magic", gameObject, false);
     }

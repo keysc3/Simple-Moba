@@ -7,12 +7,14 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class Spell4Trigger : MonoBehaviour
+public class TargetedProjectile : MonoBehaviour
 {
     public GameObject target { get; private set; } = null;
-    public BahriSpell4 bahriSpell4 { get; private set; }
 
     private Unit targetUnit = null;
+
+    public delegate void HitMethod(GameObject hit);
+    public HitMethod hit;
 
     // Update is called once per frame
     private void Update()
@@ -33,7 +35,7 @@ public class Spell4Trigger : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         // Call collision handler for whichever spell the GameObject was for if the target was hit.
         if(other.gameObject == target){
-            bahriSpell4.Hit(other.gameObject);
+            hit?.Invoke(other.gameObject);
             Destroy(gameObject);
         }
     }
@@ -44,13 +46,5 @@ public class Spell4Trigger : MonoBehaviour
     */
     public void SetTarget(GameObject target){
         this.target = target;
-    }
-
-    /*
-    *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
-    *   @param bahriAbilityHit - BahriAbilityHit script reference.
-    */
-    public void SetBahriSpell4(BahriSpell4 bahriSpell4){
-        this.bahriSpell4 = bahriSpell4;
     }
 }
