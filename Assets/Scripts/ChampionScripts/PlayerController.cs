@@ -74,7 +74,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Point players forward at the direction they are cast or moving.
-        if(player.isCasting && !player.currentCastedSpell.canMove)
+        // The player should never be casting something but just to be safe check for null.
+        if(player.isCasting && player.currentCastedSpell != null && !player.currentCastedSpell.canMove)
             PlayerLookDirection(player.mouseOnCast);
         else if(navMeshAgent.hasPath)
             PlayerLookDirection(navMeshAgent.steeringTarget);
