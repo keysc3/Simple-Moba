@@ -12,6 +12,7 @@ public class BahriPassive : Spell
         this.spellData = (BahriPassiveData) spellData;
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
         player.statusEffects.AddEffect(passive);
+        player.score.takedownCallback += Passive;
     }
 
     public override void Cast(){
