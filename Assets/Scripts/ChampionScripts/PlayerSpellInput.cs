@@ -11,19 +11,19 @@ using UnityEngine.AI;
 */
 public class PlayerSpellInput : MonoBehaviour
 {
-    private ChampionAbilities myAbilities;
+    private ChampionSpells championSpells;
     private LevelManager levelManager;
     private Player player;
 
     // Called when the script instance is being loaded.
     private void Awake(){
         player = GetComponent<Player>();
+        championSpells = GetComponent<ChampionSpells>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        myAbilities = GetComponent<ChampionAbilities>();
         levelManager = player.levelManager;
     }
 
@@ -34,7 +34,7 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_1"] > 0)
-                    myAbilities.Spell_1();
+                    championSpells.spell1.Cast();
             }
         }
         // Spell 2
@@ -42,7 +42,7 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_2"] > 0)
-                    myAbilities.Spell_2();
+                    championSpells.spell2.Cast();
             }
         }
         // Spell 3
@@ -50,7 +50,7 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_3"] > 0)
-                    myAbilities.Spell_3();
+                    championSpells.spell3.Cast();
             }
         }
         // Spell 4
@@ -58,7 +58,7 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_4"] > 0)
-                    myAbilities.Spell_4();
+                    championSpells.spell4.Cast();
             }
         }
     }

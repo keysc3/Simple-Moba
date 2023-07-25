@@ -843,7 +843,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1875298477662770913, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5980474150250256565, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_Name
@@ -880,6 +880,8 @@ PrefabInstance:
     - {fileID: 2364200911350425436, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
     - {fileID: 4448451504855873464, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
     - {fileID: 8018105505031408025, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+    - {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+    - {fileID: 993157157543562803, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
 --- !u!1 &963194225
 GameObject:
@@ -1106,19 +1108,6 @@ MonoBehaviour:
   spell2Data: {fileID: 11400000, guid: 2291d5583bbcec547a470531000a7528, type: 2}
   spell3Data: {fileID: 11400000, guid: c2453373a5928d94a862f767f7a8ce1c, type: 2}
   spell4Data: {fileID: 11400000, guid: 5c09a73194528c34eb73b7120d0216bd, type: 2}
---- !u!114 &1560792632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560792601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd20dad9a532962409a7e45b097738ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  championSpells: {fileID: 0}
 --- !u!1 &1561246163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1242,7 +1231,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 351906215407606799, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 995825280995990538, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_RootOrder
@@ -1294,7 +1283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4974844111092872396, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5483897106226106971, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_Name
@@ -1317,7 +1306,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 8188202354826576759, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
 --- !u!1 &1739497618
 GameObject:
@@ -1688,16 +1679,3 @@ MonoBehaviour:
   spell2Data: {fileID: 11400000, guid: f5e41873e15d91f4ba9776c00fff1b0b, type: 2}
   spell3Data: {fileID: 11400000, guid: a6f6aae9dc9d26b49b083373a6d016c3, type: 2}
   spell4Data: {fileID: 11400000, guid: a17cdc19a022d3147a5baa14421cf6dd, type: 2}
---- !u!114 &2129848487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129848471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd20dad9a532962409a7e45b097738ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  championSpells: {fileID: 0}
