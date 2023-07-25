@@ -8,8 +8,9 @@ using System;
 public abstract class Spell
 {
     //ScriptableSpell spell;
-    [SerializeField] public bool onCd = false;
+    [SerializeField] protected bool onCd = false;
     [SerializeField] public bool canMove = false;
+    [SerializeField] protected string spellNum;
     [SerializeField] protected NavMeshAgent navMeshAgent;
     [SerializeField] protected LevelManager levelManager;
     [SerializeField] protected ChampionStats championStats;
@@ -20,8 +21,9 @@ public abstract class Spell
     private Collider myCollider;
     private Camera mainCamera;
     
-    public Spell(ChampionSpells championSpells){
+    public Spell(ChampionSpells championSpells, string spellNum){
         this.championSpells = championSpells;
+        this.spellNum = spellNum;
         mainCamera = Camera.main;
         player = championSpells.gameObject.GetComponent<Player>();
         myCollider = championSpells.gameObject.GetComponent<Collider>();

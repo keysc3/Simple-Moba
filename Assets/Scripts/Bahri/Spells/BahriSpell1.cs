@@ -9,7 +9,7 @@ public class BahriSpell1 : DamageSpell
     private List<GameObject> enemiesHit = new List<GameObject>();
     public bool returning { get; private set; } = false;
 
-    public BahriSpell1(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell1Data) spellData;
     }
 

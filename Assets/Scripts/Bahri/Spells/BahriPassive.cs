@@ -8,7 +8,7 @@ public class BahriPassive : Spell
     private int passiveStacks = 0;
     private PersonalSpell passive;
 
-    public BahriPassive(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriPassiveData) spellData;
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
         player.statusEffects.AddEffect(passive);

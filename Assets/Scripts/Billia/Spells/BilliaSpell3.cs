@@ -8,7 +8,7 @@ public class BilliaSpell3 : DamageSpell
     [SerializeField] private float p1_y_offset = 3f;
     [SerializeField] private float p2_y = 0.85f;
 
-    public BilliaSpell3(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell3Data) spellData;
     }
 

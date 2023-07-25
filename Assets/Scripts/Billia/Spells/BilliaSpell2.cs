@@ -8,7 +8,7 @@ public class BilliaSpell2 : DamageSpell
     private BilliaSpell2Data spellData;
     private string radius;
 
-    public BilliaSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell2Data) spellData;
     }
 

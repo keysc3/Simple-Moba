@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class DamageSpell : Spell
 {
     
-    public DamageSpell(ChampionSpells championSpells) : base(championSpells){
+    public DamageSpell(ChampionSpells championSpells, string spellNum) : base(championSpells, spellNum){
 
     }
 

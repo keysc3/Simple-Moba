@@ -6,7 +6,7 @@ public class BahriSpell3 : DamageSpell
 {
     private BahriSpell3Data spellData;
 
-    public BahriSpell3(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BahriSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell3Data) spellData;
     }
 

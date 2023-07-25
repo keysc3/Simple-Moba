@@ -13,7 +13,7 @@ public class BahriSpell4 : DamageSpell
     private int spell_4_chargesLeft;
     private bool spell4Casting;
 
-    public BahriSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell4Data) spellData;
         player.score.takedownCallback += Spell_4_Takedown;
     }

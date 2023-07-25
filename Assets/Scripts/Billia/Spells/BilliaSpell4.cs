@@ -7,7 +7,7 @@ public class BilliaSpell4 : Spell
     private BilliaSpell4Data spellData;
     private bool canUseSpell_4 = false;
 
-    public BilliaSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BilliaSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell4Data) spellData;
         championSpells.updateCallback += CanUseSpell_4;
         canMove = true;

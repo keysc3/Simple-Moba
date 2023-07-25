@@ -8,7 +8,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
     private List<GameObject> enemiesHit = new List<GameObject>();
     public List<GameObject> activeSpellObjects { get; private set; } = new List<GameObject>();
 
-    public BahriSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells){
+    public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell2Data) spellData;
     }
 
