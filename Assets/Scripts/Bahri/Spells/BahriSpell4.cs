@@ -43,7 +43,7 @@ public class BahriSpell4 : DamageSpell
         bool isCd = true;
         spell4Casting = true;
         Spell_4_Move();
-        championSpells.StartCoroutine(Spell_Cd_Timer(1.0f, (myBool => isCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(1.0f, spellNum));
         spell_4_chargesLeft = spellData.charges - 1;
         // While the spells duration has not expired.
         while(spell_4_timer < spell_4_duration){
@@ -51,7 +51,7 @@ public class BahriSpell4 : DamageSpell
             if(Input.GetKeyDown(KeyCode.R) && !player.isCasting && spell_4_chargesLeft > 0 && !isCd && !player.isDead){
                 Spell_4_Move();
                 isCd = true;
-                championSpells.StartCoroutine(Spell_Cd_Timer(1.0f, (myBool => isCd = myBool), spellNum));
+                championSpells.StartCoroutine(Spell_Cd_Timer(1.0f, spellNum));
                 lastCastTimer = 0.0f;
                 spell_4_chargesLeft -= 1;
                 spell4Effect.UpdateStacks(spell_4_chargesLeft);
@@ -66,7 +66,7 @@ public class BahriSpell4 : DamageSpell
         // Reset charges and start spell cooldown timer.
         spell4Casting = false;
         UIManager.instance.SetSpellDurationOver(4, player.playerUI);
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
     }
 
     private void Spell_4_Takedown(GameObject killed){

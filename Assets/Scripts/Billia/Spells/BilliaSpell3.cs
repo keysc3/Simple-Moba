@@ -44,7 +44,7 @@ public class BilliaSpell3 : DamageSpell
         // Wait for cast time.
         while(player.isCasting)
             yield return null;
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
         championSpells.StartCoroutine(Spell_3_Lob(targetPosition, targetDirection));
     }
     

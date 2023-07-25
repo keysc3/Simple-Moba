@@ -117,7 +117,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
             GameObject.Destroy(spell_2_parent);
         enemiesHit.Clear();
         UIManager.instance.SetSpellDurationOver(2, player.playerUI);
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
     }
 
     /*

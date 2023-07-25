@@ -37,7 +37,7 @@ public class BilliaSpell4 : Spell
     private IEnumerator Spell_4_Cast(List<GameObject> applyDrowsy){
         while(player.isCasting)
             yield return null;
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
         championSpells.StartCoroutine(Spell_4_Projectile(applyDrowsy));
     }
 

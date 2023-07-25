@@ -43,7 +43,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback
         while(player.isCasting){
             yield return null;
         }
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
         // Hitbox starts from center of Billia.
         HitboxCheck();
         // Animate the ending of the spell.

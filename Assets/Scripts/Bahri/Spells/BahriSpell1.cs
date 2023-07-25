@@ -42,7 +42,7 @@ public class BahriSpell1 : DamageSpell
         while(player.isCasting)
             yield return null;
         // Cooldown starts on cast.
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, gameObject.transform.position, Quaternion.identity);
         //SpellObjectCreated(orb);

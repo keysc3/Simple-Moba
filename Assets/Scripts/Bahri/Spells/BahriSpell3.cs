@@ -39,7 +39,7 @@ public class BahriSpell3 : DamageSpell
         while(player.isCasting)
             yield return null;
         // Cooldown stats on cast.
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));  
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));  
         // Create spell 3 GameObject and set its necessary variables.
         GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
         //SpellObjectCreated(spell_3_object);

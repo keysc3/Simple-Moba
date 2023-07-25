@@ -121,7 +121,7 @@ public class BilliaSpell2 : DamageSpell
     *   @param targetPosition - Vector3 of the center of the spell.
     */
     private void Spell_2_Finished(Vector3 targetPosition){
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
         // Hitbox starts from center of calculated target position.
         HitboxCheck(targetPosition);
         Object.Destroy(GameObject.Find("/BilliaSpell_2"));
