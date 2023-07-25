@@ -17,7 +17,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
     *   gives a decaying speed boost. Once a spell GameObject has a target it leaves Bahri and chases its target until they die or it collides with them.
     */
     public override void Cast(){
-        if(!onCd && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_2"]-1]){
+        if(!onCd && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");
             activeSpellObjects.Add(spell_2_parent);
@@ -37,7 +37,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
             championSpells.StartCoroutine(Spell_2_Move(spell_2_parent));
             championSpells.StartCoroutine(Spell_2_Cast(spell_2_parent));
             championSpells.StartCoroutine(Spell_2_Speed());
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_2"]-1]);
+            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -117,7 +117,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
             GameObject.Destroy(spell_2_parent);
         enemiesHit.Clear();
         UIManager.instance.SetSpellDurationOver(2, player.playerUI);
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels["Spell_2"]-1], (myBool => onCd = myBool), "Spell_2"));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
     }
 
     /*
@@ -138,7 +138,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
     */
     private IEnumerator Spell_2_Speed(){
         float timer = 0.0f;
-        int spellLevel = levelManager.spellLevels["Spell_2"]-1;
+        int spellLevel = levelManager.spellLevels[spellNum]-1;
         // Players speed with boost applied.
         //float newSpeed = navMeshAgent.speed + (championStats.speed.GetValue() * bahri.spell_2_msBoost);
         //navMeshAgent.speed = newSpeed;
@@ -168,7 +168,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp
     */
     public override void Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
-        float finalDamage = spellData.baseDamage[levelManager.spellLevels["Spell_2"]-1] + magicDamage;
+        float finalDamage = spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage;
         // Reduce damage of spell if hitting the same target more than once.
         if(enemiesHit.Contains(enemy)){
             finalDamage = Mathf.Round(finalDamage * spellData.multiplier);

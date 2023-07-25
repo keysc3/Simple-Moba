@@ -18,7 +18,7 @@ public class BahriSpell1 : DamageSpell
     *   the target location. The return starts slow and speeds up until reaching Bahri and being destroyed.
     */
     public override void Cast(){
-        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels["Spell_1"]-1]){
+        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
@@ -28,7 +28,7 @@ public class BahriSpell1 : DamageSpell
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             championSpells.StartCoroutine(Spell_1_Move(targetPosition));
             // Use mana and set spell on cooldown to true.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels["Spell_1"]-1]);
+            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -42,7 +42,7 @@ public class BahriSpell1 : DamageSpell
         while(player.isCasting)
             yield return null;
         // Cooldown starts on cast.
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels["Spell_1"]-1], (myBool => onCd = myBool), "Spell_1"));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], (myBool => onCd = myBool), spellNum));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, gameObject.transform.position, Quaternion.identity);
         //SpellObjectCreated(orb);
@@ -89,7 +89,7 @@ public class BahriSpell1 : DamageSpell
         float damageValue = 0;
         // Only want to hit an enemy once per way.
         if(!enemiesHit.Contains(enemy)){
-            damageValue = spellData.baseDamage[levelManager.spellLevels["Spell_1"]-1] + magicDamage;
+            damageValue = spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage;
             // Magic damage on first part then true damage on return.
             if(!returning){
                 enemy.GetComponent<Unit>().TakeDamage(damageValue, "magic", gameObject, false);
