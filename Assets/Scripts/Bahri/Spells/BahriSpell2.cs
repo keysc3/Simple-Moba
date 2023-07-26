@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BahriSpell2 : DamageSpell, IDeathCleanUp, IHasCast
+public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
 {
     private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();

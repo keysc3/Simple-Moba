@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BilliaSpell3 : DamageSpell, IHasCast
+public class BilliaSpell3 : DamageSpell, ICastable
 {
     private BilliaSpell3Data spellData;
     [SerializeField] private float p1_y_offset = 3f;

@@ -34,8 +34,8 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_1"] > 0){
-                    if(championSpells.spell1 is IHasCast)
-                        ((IHasCast)championSpells.spell1).Cast();
+                    if(championSpells.spell1 is ICastable)
+                        ((ICastable)championSpells.spell1).Cast();
                 }
             }
         }
@@ -44,8 +44,8 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_2"] > 0){
-                    if(championSpells.spell2 is IHasCast)
-                        ((IHasCast)championSpells.spell2).Cast();
+                    if(championSpells.spell2 is ICastable)
+                        ((ICastable)championSpells.spell2).Cast();
                 }
             }
         }
@@ -54,8 +54,8 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_3"] > 0){
-                    if(championSpells.spell3 is IHasCast)
-                        ((IHasCast)championSpells.spell3).Cast();
+                    if(championSpells.spell3 is ICastable)
+                        ((ICastable)championSpells.spell3).Cast();
                 }
             }
         }
@@ -64,8 +64,8 @@ public class PlayerSpellInput : MonoBehaviour
             if(!Input.GetKey(KeyCode.LeftControl)){
                 // Only attempt to cast if learned.
                 if(levelManager.spellLevels["Spell_4"] > 0){
-                    if(championSpells.spell4 is IHasCast)
-                        ((IHasCast)championSpells.spell4).Cast();
+                    if(championSpells.spell4 is ICastable)
+                        ((ICastable)championSpells.spell4).Cast();
                 }
             }
         }

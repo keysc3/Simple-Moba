@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BilliaSpell4 : Spell, IHasCast
+public class BilliaSpell4 : Spell, ICastable
 {
     private BilliaSpell4Data spellData;
     private bool canUseSpell_4 = false;

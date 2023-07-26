@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BilliaSpell2 : DamageSpell, IHasCast
+public class BilliaSpell2 : DamageSpell, ICastable
 {
     private BilliaSpell2Data spellData;
     private string radius;

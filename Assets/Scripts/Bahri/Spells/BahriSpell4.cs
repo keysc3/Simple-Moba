@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BahriSpell4 : DamageSpell, IHasCast
+public class BahriSpell4 : DamageSpell, ICastable
 {
     private BahriSpell4Data spellData;
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BilliaSpell1 : DamageSpell, IHasCallback, IHasCast
+public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
 {
 
     private BilliaSpell1Data spellData;
