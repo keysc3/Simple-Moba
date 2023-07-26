@@ -17,7 +17,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     *   gives a decaying speed boost. Once a spell GameObject has a target it leaves Bahri and chases its target until they die or it collides with them.
     */
     public void Cast(){
-        if(!onCd && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");
             activeSpellObjects.Add(spell_2_parent);

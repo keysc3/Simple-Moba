@@ -24,7 +24,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *  spell4Effect at up to three enemies in range upon reaching the dashes end location. The spell lasts a set duration and can be re-casted 2 times with a 1s lockout on re-casting.
     */
     public void Cast(){
-        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             championSpells.StartCoroutine(Spell_4_Start());
             // Use mana and set spell on cooldown.
             championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);

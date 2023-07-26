@@ -71,7 +71,7 @@ public class PlayerSpellInput : MonoBehaviour
 
     private void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
         // Only attempt to cast if learned.
-        if(levelManager.spellLevels[spellPressed.spellNum] > 0){
+        if(levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
             if(spellPressed is ICastable){
                 if(spellPressed is IDisplayable){
                     ((IDisplayable) spellPressed).DisplayCast();
@@ -83,6 +83,9 @@ public class PlayerSpellInput : MonoBehaviour
                     lastSpellPressed = null;
                 }
             }
+        }
+        else{
+            Debug.Log("Can't cast " + spellPressed + " yet!");
         }
     }
 

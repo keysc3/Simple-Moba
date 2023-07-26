@@ -17,7 +17,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   until one occurs. Explodes on collision and applies its damage to units within a cone forward of the collision.
     */
     public void Cast(){
-        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             // Get the players mouse position on spell cast for spells target direction.

@@ -38,7 +38,7 @@ public class BahriSpell1 : DamageSpell, ICastable, IDisplayable
     *   the target location. The return starts slow and speeds up until reaching Bahri and being destroyed.
     */
     public void Cast(){
-        if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.

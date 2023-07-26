@@ -8,7 +8,7 @@ using System;
 public class Spell
 {
     //ScriptableSpell spell;
-    [SerializeField] protected bool onCd = false;
+    [SerializeField] public bool onCd { get; protected set; } = false;
     [SerializeField] public bool canMove = false;
     [SerializeField] public string spellNum { get; private set; }
     [SerializeField] protected NavMeshAgent navMeshAgent;
