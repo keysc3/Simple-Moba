@@ -102,11 +102,12 @@ public class PlayerSpellInput : MonoBehaviour
                     ((ITargetCastable) lastSpellPressed).Cast(hitInfo.collider.gameObject);
             }
             else{
-                if(lastSpellPressed is IDisplayable){
-                    ((IDisplayable) lastSpellPressed).HideCast();
-                }
                 ((ICastable) lastSpellPressed).Cast();
                 lastSpellPressed = null;
+            }
+            
+            if(lastSpellPressed is IDisplayable){
+                ((IDisplayable) lastSpellPressed).HideCast();
             }
         }
     }
