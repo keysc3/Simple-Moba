@@ -16,6 +16,7 @@ public class PlayerSpellInput : MonoBehaviour
     private Player player;
     private KeyCode lastButtonPressed;
     private Spell lastSpellPressed;
+    private Camera mainCamera;
 
     // Called when the script instance is being loaded.
     private void Awake(){
@@ -27,6 +28,7 @@ public class PlayerSpellInput : MonoBehaviour
     private void Start()
     {
         levelManager = player.levelManager;
+        mainCamera = Camera.main;
     }
 
     // Update is called once per frame
