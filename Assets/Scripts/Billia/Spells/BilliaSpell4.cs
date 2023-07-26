@@ -21,6 +21,7 @@ public class BilliaSpell4 : Spell, ICastable
         if(canUseSpell_4){
             if(!onCd && !player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
                 // Start cast time then cast the spell.
+                championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
                 championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
                 championSpells.StartCoroutine(Spell_4_Cast(GetChampionsWithPassive()));
                 // Use mana.
@@ -37,7 +38,6 @@ public class BilliaSpell4 : Spell, ICastable
     private IEnumerator Spell_4_Cast(List<GameObject> applyDrowsy){
         while(player.isCasting)
             yield return null;
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
         championSpells.StartCoroutine(Spell_4_Projectile(applyDrowsy));
     }
 
