@@ -14,6 +14,8 @@ public class PlayerSpellInput : MonoBehaviour
     private ChampionSpells championSpells;
     private LevelManager levelManager;
     private Player player;
+    private KeyCode lastButtonPressed;
+    private Spell lastSpellPressed;
 
     // Called when the script instance is being loaded.
     private void Awake(){
@@ -29,44 +31,73 @@ public class PlayerSpellInput : MonoBehaviour
 
     // Update is called once per frame
     private void Update(){   
+        if(Input.anyKeyDown){
+            if(!Input.GetKeyDown(lastButtonPressed) && !Input.GetMouseButtonDown(0)){
+                if(lastSpellPressed != null && lastSpellPressed is IDisplayable){
+                    if(((IDisplayable) lastSpellPressed).isDisplayed)
+                        ((IDisplayable) lastSpellPressed).HideCast();
+                    lastSpellPressed = null;
+                }
+            }
+        }
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                // Only attempt to cast if learned.
-                if(levelManager.spellLevels["Spell_1"] > 0){
-                    if(championSpells.spell1 is ICastable)
-                        ((ICastable)championSpells.spell1).Cast();
-                }
+                SpellButtonPressed(KeyCode.Q, championSpells.spell1);
             }
         }
         // Spell 2
         if(Input.GetKeyDown(KeyCode.W)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                // Only attempt to cast if learned.
-                if(levelManager.spellLevels["Spell_2"] > 0){
-                    if(championSpells.spell2 is ICastable)
-                        ((ICastable)championSpells.spell2).Cast();
-                }
+                SpellButtonPressed(KeyCode.W, championSpells.spell2);
             }
         }
         // Spell 3
         if(Input.GetKeyDown(KeyCode.E)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                // Only attempt to cast if learned.
-                if(levelManager.spellLevels["Spell_3"] > 0){
-                    if(championSpells.spell3 is ICastable)
-                        ((ICastable)championSpells.spell3).Cast();
-                }
+                SpellButtonPressed(KeyCode.E, championSpells.spell3);
             }
         }
         // Spell 4
         if(Input.GetKeyDown(KeyCode.R)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                // Only attempt to cast if learned.
-                if(levelManager.spellLevels["Spell_4"] > 0){
-                    if(championSpells.spell4 is ICastable)
-                        ((ICastable)championSpells.spell4).Cast();
+                SpellButtonPressed(KeyCode.R, championSpells.spell4);
+            }
+        }
+
+        if(Input.GetMouseButtonDown(0))
+            LeftClick();
+    }
+
+    private void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
+        // Only attempt to cast if learned.
+        if(levelManager.spellLevels[spellPressed.spellNum] > 0){
+            if(spellPressed is ICastable){
+                if(spellPressed is IDisplayable){
+                    ((IDisplayable) spellPressed).DisplayCast();
+                    lastButtonPressed = buttonPressed;
+                    lastSpellPressed = spellPressed;
                 }
+                else{
+                    ((ICastable) spellPressed).Cast();
+                    lastSpellPressed = null;
+                }
+            }
+        }
+    }
+
+    private void LeftClick(){
+        if(lastSpellPressed != null){
+            if(lastSpellPressed is ITargetCastable){
+                // Check for target
+                //((ITargetCastable) lastSpellPressed).Cast(target)
+            }
+            else{
+                if(lastSpellPressed is IDisplayable){
+                    ((IDisplayable) lastSpellPressed).HideCast();
+                }
+                ((ICastable) lastSpellPressed).Cast();
+                lastSpellPressed = null;
             }
         }
     }

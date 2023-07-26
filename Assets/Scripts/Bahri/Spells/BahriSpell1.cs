@@ -2,17 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BahriSpell1 : DamageSpell, ICastable
+public class BahriSpell1 : DamageSpell, ICastable, IDisplayable
 {
 
     private BahriSpell1Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public bool returning { get; private set; } = false;
+    public bool isDisplayed { get; private set; } = false;
 
     public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell1Data) spellData;
     }
 
+
+    public void DisplayCast(){
+        isDisplayed = true;
+        championSpells.StartCoroutine(ShowCast());
+    }
+
+    public void HideCast(){
+        Debug.Log("HIDE");
+        isDisplayed = false;
+    }
+
+    private IEnumerator ShowCast(){
+        while(isDisplayed){
+            Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
+            targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+            Debug.DrawLine(gameObject.transform.position, targetPosition, Color.cyan);
+            yield return null;
+        }
+    }
     /*
     *   Spell_1 - Sets up and creates Bahri's first spell GameObject. The spell moves from Bahri to the target position at a constant speed, then returns upon reaching
     *   the target location. The return starts slow and speeds up until reaching Bahri and being destroyed.

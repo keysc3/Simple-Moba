@@ -10,7 +10,7 @@ public class Spell
     //ScriptableSpell spell;
     [SerializeField] protected bool onCd = false;
     [SerializeField] public bool canMove = false;
-    [SerializeField] protected string spellNum;
+    [SerializeField] public string spellNum { get; private set; }
     [SerializeField] protected NavMeshAgent navMeshAgent;
     [SerializeField] protected LevelManager levelManager;
     [SerializeField] protected ChampionStats championStats;
@@ -18,8 +18,8 @@ public class Spell
     protected ChampionSpells championSpells;
     protected GameObject gameObject;
 
-    private Collider myCollider;
-    private Camera mainCamera;
+    protected Collider myCollider;
+    protected Camera mainCamera;
     
     public Spell(ChampionSpells championSpells, string spellNum){
         this.championSpells = championSpells;
@@ -38,7 +38,6 @@ public class Spell
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         LayerMask groundMask = LayerMask.GetMask("Ground");
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
-        Debug.DrawLine(mainCamera.transform.position, hitInfo.point, Color.red, 20f);
         Vector3 targetDirection = hitInfo.point;
         player.SetMouseOnCast(targetDirection);
         targetDirection.y = myCollider.bounds.center.y;
