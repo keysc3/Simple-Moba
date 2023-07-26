@@ -91,9 +91,13 @@ public class PlayerSpellInput : MonoBehaviour
 
     private void LeftClick(){
         if(lastSpellPressed != null){
+            // Get GameObject the player wants to cast on. 
             if(lastSpellPressed is ITargetCastable){
-                // Check for target
-                //((ITargetCastable) lastSpellPressed).Cast(target)
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitInfo;
+                if(Physics.Raycast(ray, out hitInfo))
+                    // Handle GamObject checking in the spell.
+                    ((ITargetCastable) lastSpellPressed).Cast(hitInfo.collider.gameObject);
             }
             else{
                 if(lastSpellPressed is IDisplayable){
