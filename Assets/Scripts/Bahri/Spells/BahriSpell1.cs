@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BahriSpell1 : DamageSpell, ICastable, IDisplayable
+public class BahriSpell1 : DamageSpell, ICastable
 {
 
     private BahriSpell1Data spellData;

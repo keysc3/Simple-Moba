@@ -35,8 +35,8 @@ public class PlayerSpellInput : MonoBehaviour
     private void Update(){   
         if(Input.anyKeyDown){
             if(!Input.GetKeyDown(lastButtonPressed) && !Input.GetMouseButtonDown(0)){
-                if(lastSpellPressed != null && lastSpellPressed is IDisplayable){
-                    ((IDisplayable) lastSpellPressed).HideCast();
+                if(lastSpellPressed != null && !lastSpellPressed.isQuickCast){
+                    lastSpellPressed.HideCast();
                     lastSpellPressed = null;
                 }
             }
@@ -75,8 +75,7 @@ public class PlayerSpellInput : MonoBehaviour
         if(levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
             if(spellPressed is ICastable){
                 if(!spellPressed.isQuickCast){
-                    if(spellPressed is IDisplayable)
-                        ((IDisplayable) spellPressed).DisplayCast();
+                    spellPressed.DisplayCast();
                     lastButtonPressed = buttonPressed;
                     lastSpellPressed = spellPressed;
                 }
@@ -93,6 +92,9 @@ public class PlayerSpellInput : MonoBehaviour
 
     private void LeftClick(){
         if(lastSpellPressed != null){
+            if(!lastSpellPressed.isQuickCast){
+                lastSpellPressed.HideCast();
+            }
             // Get GameObject the player wants to cast on. 
             if(lastSpellPressed is ITargetCastable){
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -106,9 +108,6 @@ public class PlayerSpellInput : MonoBehaviour
                 lastSpellPressed = null;
             }
             
-            if(lastSpellPressed is IDisplayable){
-                ((IDisplayable) lastSpellPressed).HideCast();
-            }
         }
     }
 }

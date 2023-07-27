@@ -10,6 +10,13 @@ public class BahriSpell3 : DamageSpell, ICastable
         this.spellData = (BahriSpell3Data) spellData;
     }
 
+    protected override void DrawSpell(){
+        Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
+        targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(gameObject.transform.position, targetPosition);
+    }
+
     /*
     *   Spell_3 - Sets up and creates the players third spell GameObject. The spell casts a GameObject in the target direction and 'Charms' the first enemy hit,
     *   disabling their actions and moving them towards Bahri at a decreased move speed.
