@@ -16,6 +16,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
         championSpells.lateUpdateCallback += ClearPassiveStackSpells;
         canMove = true;
+        isQuickCast = true;
     }
 
     /*

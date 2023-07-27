@@ -10,6 +10,7 @@ public class Spell
     //ScriptableSpell spell;
     [SerializeField] public bool onCd { get; protected set; } = false;
     [SerializeField] public bool canMove = false;
+    [SerializeField] public bool isQuickCast = false;
     [SerializeField] public string spellNum { get; private set; }
     [SerializeField] protected NavMeshAgent navMeshAgent;
     [SerializeField] protected LevelManager levelManager;

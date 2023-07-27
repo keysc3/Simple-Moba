@@ -1,15 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
-public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
+public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable, IDisplayable
 {
     private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public List<GameObject> activeSpellObjects { get; private set; } = new List<GameObject>();
+    public bool isDisplayed { get; private set; } = false;
 
     public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell2Data) spellData;
+        isQuickCast = true;
+    }
+
+    public void DisplayCast(){
+        isDisplayed = true;
+        DrawGizmos.instance.drawMethod += DrawSpell;
+    }
+
+    public void HideCast(){
+        Debug.Log("HIDE");
+        DrawGizmos.instance.drawMethod -= DrawSpell;
+        isDisplayed = false;
+    }
+
+    private void DrawSpell(){
+        Handles.color = Color.cyan;
+        Vector3 drawPosition = gameObject.transform.position;
+        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
+        Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.radius + spellData.magnitude, 1f);
     }
 
     /*

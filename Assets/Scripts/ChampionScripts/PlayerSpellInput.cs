@@ -36,8 +36,7 @@ public class PlayerSpellInput : MonoBehaviour
         if(Input.anyKeyDown){
             if(!Input.GetKeyDown(lastButtonPressed) && !Input.GetMouseButtonDown(0)){
                 if(lastSpellPressed != null && lastSpellPressed is IDisplayable){
-                    if(((IDisplayable) lastSpellPressed).isDisplayed)
-                        ((IDisplayable) lastSpellPressed).HideCast();
+                    ((IDisplayable) lastSpellPressed).HideCast();
                     lastSpellPressed = null;
                 }
             }
@@ -75,8 +74,9 @@ public class PlayerSpellInput : MonoBehaviour
         // Only attempt to cast if learned.
         if(levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
             if(spellPressed is ICastable){
-                if(spellPressed is IDisplayable){
-                    ((IDisplayable) spellPressed).DisplayCast();
+                if(!spellPressed.isQuickCast){
+                    if(spellPressed is IDisplayable)
+                        ((IDisplayable) spellPressed).DisplayCast();
                     lastButtonPressed = buttonPressed;
                     lastSpellPressed = spellPressed;
                 }

@@ -11,6 +11,7 @@ public class BilliaSpell4 : Spell, ICastable
         this.spellData = (BilliaSpell4Data) spellData;
         championSpells.updateCallback += CanUseSpell_4;
         canMove = true;
+        isQuickCast = true;
     }
 
     /*

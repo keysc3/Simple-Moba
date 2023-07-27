@@ -8,7 +8,6 @@ public class BahriSpell1 : DamageSpell, ICastable, IDisplayable
     private BahriSpell1Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public bool returning { get; private set; } = false;
-    public bool isDisplayed { get; private set; } = false;
 
     public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell1Data) spellData;
@@ -16,23 +15,21 @@ public class BahriSpell1 : DamageSpell, ICastable, IDisplayable
 
 
     public void DisplayCast(){
-        isDisplayed = true;
-        championSpells.StartCoroutine(ShowCast());
+        DrawGizmos.instance.drawMethod += DrawSpell;
     }
 
     public void HideCast(){
         Debug.Log("HIDE");
-        isDisplayed = false;
+        DrawGizmos.instance.drawMethod -= DrawSpell;
     }
 
-    private IEnumerator ShowCast(){
-        while(isDisplayed){
-            Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
-            targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
-            Debug.DrawLine(gameObject.transform.position, targetPosition, Color.cyan);
-            yield return null;
-        }
+    private void DrawSpell(){
+        Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
+        targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(gameObject.transform.position, targetPosition);
     }
+
     /*
     *   Spell_1 - Sets up and creates Bahri's first spell GameObject. The spell moves from Bahri to the target position at a constant speed, then returns upon reaching
     *   the target location. The return starts slow and speeds up until reaching Bahri and being destroyed.
