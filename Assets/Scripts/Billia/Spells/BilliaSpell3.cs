@@ -28,7 +28,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
             targetPosition = gameObject.transform.position + (targetDirection - gameObject.transform.position);
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.visualPrefab.transform.localScale.x, 1f);
-        Handles.color = Color.cyan;
+        Gizmos.color = Color.cyan;
         Gizmos.DrawLine(targetPosition, targetPosition + ((targetPosition - gameObject.transform.position).normalized * 2f));
     }
 

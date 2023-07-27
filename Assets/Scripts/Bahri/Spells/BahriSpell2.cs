@@ -17,9 +17,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
 
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
-        Vector3 drawPosition = gameObject.transform.position;
-        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
-        Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.radius + spellData.magnitude, 1f);
+        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
     }
 
     /*

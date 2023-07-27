@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 222785774}
   - component: {fileID: 222785776}
   - component: {fileID: 222785777}
+  - component: {fileID: 222785778}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -452,6 +453,18 @@ MonoBehaviour:
   champions:
   - {fileID: 5980474150250256565, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
   - {fileID: 5483897106226106971, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
+--- !u!114 &222785778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222785770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0edf38b64e405345901f7ba643792ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &449569395
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,6 +1121,67 @@ MonoBehaviour:
   spell2Data: {fileID: 11400000, guid: 2291d5583bbcec547a470531000a7528, type: 2}
   spell3Data: {fileID: 11400000, guid: c2453373a5928d94a862f767f7a8ce1c, type: 2}
   spell4Data: {fileID: 11400000, guid: 5c09a73194528c34eb73b7120d0216bd, type: 2}
+  passive:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell1:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell2:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell3:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell4:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  mySpells: []
 --- !u!1 &1561246163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,7 +1412,7 @@ Transform:
   m_GameObject: {fileID: 1739497618}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_LocalScale: {x: 59.5, y: 1, z: 56.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1071137765}
@@ -1679,3 +1753,64 @@ MonoBehaviour:
   spell2Data: {fileID: 11400000, guid: f5e41873e15d91f4ba9776c00fff1b0b, type: 2}
   spell3Data: {fileID: 11400000, guid: a6f6aae9dc9d26b49b083373a6d016c3, type: 2}
   spell4Data: {fileID: 11400000, guid: a17cdc19a022d3147a5baa14421cf6dd, type: 2}
+  passive:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell1:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell2:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell3:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  spell4:
+    canMove: 0
+    isQuickCast: 0
+    navMeshAgent: {fileID: 0}
+    levelManager:
+      <level>k__BackingField: 0
+      <spellLevelPoints>k__BackingField: 0
+      <skillLevelUpUIActive>k__BackingField: 0
+      levelInfo: {fileID: 0}
+      <gainAmount>k__BackingField: 0
+      currentXP: 0
+    player: {fileID: 0}
+  mySpells: []
