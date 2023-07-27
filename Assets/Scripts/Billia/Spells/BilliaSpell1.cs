@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
 {
@@ -17,6 +18,13 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         championSpells.lateUpdateCallback += ClearPassiveStackSpells;
         canMove = true;
         isQuickCast = true;
+    }
+    
+    protected override void DrawSpell(){
+        Handles.color = Color.cyan;
+        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.outerRadius, 1f);
+        Handles.color = Color.red;
+        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.innerRadius, 1f);
     }
 
     /*
