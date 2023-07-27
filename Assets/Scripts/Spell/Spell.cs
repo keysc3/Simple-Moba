@@ -34,6 +34,18 @@ public class Spell
         this.gameObject = championSpells.gameObject;
     }
 
+    public void DisplayCast(){
+        DrawGizmos.instance.drawMethod += DrawSpell;
+    }
+
+    public void HideCast(){
+        DrawGizmos.instance.drawMethod -= DrawSpell;
+    }
+
+    protected virtual void  DrawSpell(){
+        //PlaceHolder
+    }
+
     protected Vector3 GetTargetDirection(){
         RaycastHit hitInfo;
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);

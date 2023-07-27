@@ -15,18 +15,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable, IDisplayable
         isQuickCast = true;
     }
 
-    public void DisplayCast(){
-        isDisplayed = true;
-        DrawGizmos.instance.drawMethod += DrawSpell;
-    }
-
-    public void HideCast(){
-        Debug.Log("HIDE");
-        DrawGizmos.instance.drawMethod -= DrawSpell;
-        isDisplayed = false;
-    }
-
-    private void DrawSpell(){
+    protected override void DrawSpell(){
         Handles.color = Color.cyan;
         Vector3 drawPosition = gameObject.transform.position;
         drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;

@@ -13,17 +13,7 @@ public class BahriSpell1 : DamageSpell, ICastable, IDisplayable
         this.spellData = (BahriSpell1Data) spellData;
     }
 
-
-    public void DisplayCast(){
-        DrawGizmos.instance.drawMethod += DrawSpell;
-    }
-
-    public void HideCast(){
-        Debug.Log("HIDE");
-        DrawGizmos.instance.drawMethod -= DrawSpell;
-    }
-
-    private void DrawSpell(){
+    protected override void DrawSpell(){
         Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
         targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
         Gizmos.color = Color.cyan;
