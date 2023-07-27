@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.AI;
 
 public class BilliaSpell2 : DamageSpell, ICastable
@@ -10,6 +11,28 @@ public class BilliaSpell2 : DamageSpell, ICastable
 
     public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell2Data) spellData;
+    }
+
+    protected override void DrawSpell(){
+        Vector3 targetDirection = GetTargetDirection();
+        // Set the target position to be in the direction of the mouse on cast.
+        Vector3 targetPosition = (targetDirection - gameObject.transform.position);
+        // Set the spell cast position to max range if casted past that value.
+        if(targetPosition.magnitude > spellData.maxMagnitude)
+            targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.maxMagnitude);
+        // Set the spell cast position to the dashOffset if target positions magnitude is less than it.
+        else if(targetPosition.magnitude < spellData.dashOffset)
+            targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.dashOffset);
+        // Set target position to calculated mouse position.
+        else
+            targetPosition = gameObject.transform.position + targetPosition;
+        //targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+        Handles.color = Color.cyan;
+        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.outerRadius, 1f);
+        Handles.color = Color.red;
+        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.innerRadius, 1f);
+        Handles.color = Color.cyan;
+        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.maxMagnitude, 1f);
     }
 
     /*
