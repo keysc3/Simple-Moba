@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 
 public class BahriSpell4 : DamageSpell, ICastable
 {
@@ -17,6 +18,14 @@ public class BahriSpell4 : DamageSpell, ICastable
     public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell4Data) spellData;
         player.score.takedownCallback += Spell_4_Takedown;
+        isQuickCast = true;
+    }
+
+    protected override void DrawSpell(){
+        Handles.color = Color.cyan;
+        Vector3 drawPosition = gameObject.transform.position;
+        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
+        Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.maxMagnitude, 1f);
     }
 
     /*
