@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class BilliaSpell3 : DamageSpell, ICastable
 {
@@ -10,6 +11,25 @@ public class BilliaSpell3 : DamageSpell, ICastable
 
     public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell3Data) spellData;
+    }
+
+    protected override void DrawSpell(){
+        Handles.color = Color.cyan;
+        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
+
+       // Get the players mouse position on spell cast for spells target direction.
+        Vector3 targetDirection = GetTargetDirection();
+        // Set the target position to be in the direction of the mouse on cast.
+        Vector3 targetPosition = (targetDirection - gameObject.transform.position);
+        // Set target to lob seed to to max lob distance if casted at a greater distance.
+        if(targetPosition.magnitude > spellData.maxLobMagnitude)
+            targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
+        else
+            targetPosition = gameObject.transform.position + (targetDirection - gameObject.transform.position);
+        Handles.color = Color.cyan;
+        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.visualPrefab.transform.localScale.x, 1f);
+        Handles.color = Color.cyan;
+        Gizmos.DrawLine(targetPosition, targetPosition + ((targetPosition - gameObject.transform.position).normalized * 2f));
     }
 
      /*
