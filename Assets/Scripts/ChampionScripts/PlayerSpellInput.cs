@@ -38,6 +38,7 @@ public class PlayerSpellInput : MonoBehaviour
                 if(lastSpellPressed != null && !lastSpellPressed.isQuickCast){
                     lastSpellPressed.HideCast();
                     lastSpellPressed = null;
+                    lastButtonPressed = KeyCode.None;
                 }
             }
         }
@@ -75,13 +76,16 @@ public class PlayerSpellInput : MonoBehaviour
         if(levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
             if(spellPressed is ICastable){
                 if(!spellPressed.isQuickCast){
-                    spellPressed.DisplayCast();
-                    lastButtonPressed = buttonPressed;
-                    lastSpellPressed = spellPressed;
+                    if(lastButtonPressed != buttonPressed){
+                        spellPressed.DisplayCast();
+                        lastButtonPressed = buttonPressed;
+                        lastSpellPressed = spellPressed;
+                    }
                 }
                 else{
                     ((ICastable) spellPressed).Cast();
                     lastSpellPressed = null;
+                    lastButtonPressed = KeyCode.None;
                 }
             }
         }
@@ -105,9 +109,9 @@ public class PlayerSpellInput : MonoBehaviour
             }
             else{
                 ((ICastable) lastSpellPressed).Cast();
-                lastSpellPressed = null;
             }
-            
+            lastSpellPressed = null;
+            lastButtonPressed = KeyCode.None;
         }
     }
 }
