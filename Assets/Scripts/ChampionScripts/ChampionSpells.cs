@@ -17,6 +17,7 @@ public class ChampionSpells : MonoBehaviour
     public Spell spell4;
 
     public List<Spell> mySpells;
+    public List<Effect> initializationEffects = new List<Effect>();
 
     public delegate void UpdateCallback(); 
     public UpdateCallback updateCallback;
@@ -24,9 +25,16 @@ public class ChampionSpells : MonoBehaviour
     public delegate void LateUpdateCallback(); 
     public LateUpdateCallback lateUpdateCallback;
 
-    protected virtual void Start(){
+    protected virtual void Awake(){
         mySpells = new List<Spell>(){passive, spell1, spell2, spell3, spell4};
         CallbackSetup();
+    }
+
+    protected virtual void Start(){
+        Player player = GetComponent<Player>();
+        foreach(Effect effect in initializationEffects){
+            player.statusEffects.AddEffect(effect);
+        }
     }
 
     void Update(){

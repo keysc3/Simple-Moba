@@ -11,7 +11,7 @@ public class BahriPassive : Spell
     public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriPassiveData) spellData;
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
-        player.statusEffects.AddEffect(passive);
+        championSpells.initializationEffects.Add(passive);
         player.score.takedownCallback += Passive;
     }
 
