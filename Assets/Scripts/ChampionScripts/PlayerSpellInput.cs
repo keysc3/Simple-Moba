@@ -17,6 +17,7 @@ public class PlayerSpellInput : MonoBehaviour
     private KeyCode lastButtonPressed;
     private Spell lastSpellPressed;
     private Camera mainCamera;
+    public bool buttonClick = false;
 
     // Called when the script instance is being loaded.
     private void Awake(){
@@ -67,13 +68,20 @@ public class PlayerSpellInput : MonoBehaviour
             }
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0)){
             LeftClick();
+        }
     }
 
-    private void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
+    void LateUpdate(){
+        buttonClick = false;
+    }
+
+    public void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
         // Only attempt to cast if learned.
         if(levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
+            if(lastSpellPressed != null)
+                lastSpellPressed.HideCast();
             if(spellPressed is ICastable){
                 if(!spellPressed.isQuickCast){
                     if(lastButtonPressed != buttonPressed){
@@ -95,7 +103,7 @@ public class PlayerSpellInput : MonoBehaviour
     }
 
     private void LeftClick(){
-        if(lastSpellPressed != null){
+        if(lastSpellPressed != null && !buttonClick){
             if(!lastSpellPressed.isQuickCast){
                 lastSpellPressed.HideCast();
             }

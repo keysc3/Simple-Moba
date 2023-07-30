@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     public Spell spell;
     public KeyCode keyCode;
@@ -13,7 +13,7 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Button>().onClick.AddListener(() => ButtonClick());
+        //GetComponent<Button>().onClick.AddListener(() => ButtonClick());
     }
 
     // Update is called once per frame
@@ -30,7 +30,13 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         spell.HideCast();
     }
 
-    private void ButtonClick(){
+    public void OnPointerDown(PointerEventData eventData){
+        playerSpellInput.buttonClick = true;
         playerSpellInput.SpellButtonPressed(keyCode, spell);
     }
+
+    /*private void ButtonClick(){
+        Debug.Log("BUTTON CLICKED");
+        playerSpellInput.SpellButtonPressed(keyCode, spell);
+    }*/
 }
