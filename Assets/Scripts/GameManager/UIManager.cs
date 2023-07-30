@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerBar;
     [SerializeField] private GameObject statusEffectPrefab;
     [SerializeField] private GameObject championUIPrefab;
+    [SerializeField] private GameObject playerUIPrefab;
     private float buffDebuffUIWidth;
     private float xOffset = 2f;
 
@@ -79,6 +80,35 @@ public class UIManager : MonoBehaviour
         newChampionUIRectTransform.offsetMax = new Vector2(0, 0);
         // Set up the players health/mana/xp bar above their GameObject.
         return newChampionUI;
+    }
+
+    public GameObject CreatePlayerUI(GameObject champion, Player player){
+        // Set up the players HUD.
+        GameObject newPlayerUI = (GameObject) Instantiate(playerUIPrefab, playerUIPrefab.transform.position, playerUIPrefab.transform.rotation);
+        newPlayerUI.name = champion.name + "UI";
+        newPlayerUI.transform.SetParent(GameObject.Find("/Canvas").transform);
+        RectTransform newPlayerUIRectTransform = newPlayerUI.GetComponent<RectTransform>();
+        newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
+        newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
+        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").gameObject.GetComponent<Image>().sprite = player.unit.icon;
+        SetupSpellUI(newPlayerUI, champion, player);
+        // Set up the players health/mana/xp bar above their GameObject.
+        return newPlayerUI;
+    }
+
+    public void SetupSpellUI(GameObject playerUI, GameObject champion, Player player){
+        GameObject spellContainer = playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
+        ChampionSpells championSpells = champion.GetComponent<ChampionSpells>();
+        List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
+        for(int i = 0; i < 5; i++){
+            GameObject buttonObj = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").gameObject;
+            SpellButton spellButton = buttonObj.GetComponent<SpellButton>();
+            spellButton.spell = championSpells.mySpells[i];
+            spellButton.keyCode = inputs[i];
+            spellButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
+            spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").gameObject.GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
+            spellButton.spell = championSpells.mySpells[i];
+        }
     }
 
     public GameObject CreatePlayerBar(GameObject champion){

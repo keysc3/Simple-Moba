@@ -18,6 +18,7 @@ public class ChampionSpells : MonoBehaviour
 
     public List<Spell> mySpells;
     public List<Effect> initializationEffects = new List<Effect>();
+    public List<SpellData> mySpellData;
 
     public delegate void UpdateCallback(); 
     public UpdateCallback updateCallback;
@@ -27,6 +28,7 @@ public class ChampionSpells : MonoBehaviour
 
     protected virtual void Awake(){
         mySpells = new List<Spell>(){passive, spell1, spell2, spell3, spell4};
+        mySpellData = new List<SpellData>(){passiveData, spell1Data, spell2Data, spell3Data, spell4Data};
         CallbackSetup();
     }
 
