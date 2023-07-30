@@ -32,8 +32,10 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerDown(PointerEventData eventData){
-        playerSpellInput.buttonClick = true;
-        playerSpellInput.SpellButtonPressed(keyCode, spell);
+        if(spell.spellNum != "Passive"){
+            playerSpellInput.buttonClick = true;
+            playerSpellInput.SpellButtonPressed(keyCode, spell);
+        }
     }
 
     /*private void ButtonClick(){
