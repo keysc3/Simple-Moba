@@ -8,7 +8,6 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public List<GameObject> activeSpellObjects { get; private set; } = new List<GameObject>();
-    public bool isDisplayed { get; private set; } = false;
 
     public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell2Data) spellData;

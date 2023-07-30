@@ -11,6 +11,7 @@ public class Spell
     [SerializeField] public bool onCd { get; protected set; } = false;
     [SerializeField] public bool canMove = false;
     [SerializeField] public bool isQuickCast = false;
+    [SerializeField] public bool isDisplayed = false;
     [SerializeField] public string spellNum { get; private set; }
     [SerializeField] protected NavMeshAgent navMeshAgent;
     [SerializeField] protected LevelManager levelManager;
@@ -35,11 +36,17 @@ public class Spell
     }
 
     public void DisplayCast(){
-        DrawGizmos.instance.drawMethod += DrawSpell;
+        if(!isDisplayed){
+            DrawGizmos.instance.drawMethod += DrawSpell;
+            isDisplayed = true;
+        }
     }
 
     public void HideCast(){
-        DrawGizmos.instance.drawMethod -= DrawSpell;
+        if(isDisplayed){
+            DrawGizmos.instance.drawMethod -= DrawSpell;
+            isDisplayed = false;
+        }
     }
 
     protected virtual void  DrawSpell(){
