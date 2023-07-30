@@ -27,7 +27,8 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerExit(PointerEventData eventData){
-        spell.HideCast();
+        if(playerSpellInput.lastSpellPressed != spell)
+            spell.HideCast();
     }
 
     public void OnPointerDown(PointerEventData eventData){

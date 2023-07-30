@@ -15,7 +15,7 @@ public class PlayerSpellInput : MonoBehaviour
     private LevelManager levelManager;
     private Player player;
     private KeyCode lastButtonPressed;
-    private Spell lastSpellPressed;
+    public Spell lastSpellPressed { get; private set; }
     private Camera mainCamera;
     public bool buttonClick = false;
 
@@ -80,7 +80,7 @@ public class PlayerSpellInput : MonoBehaviour
     public void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
         // Only attempt to cast if learned.
         if(levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
-            if(lastSpellPressed != null)
+            if(lastSpellPressed != null && lastButtonPressed != buttonPressed)
                 lastSpellPressed.HideCast();
             if(spellPressed is ICastable){
                 if(!spellPressed.isQuickCast){
