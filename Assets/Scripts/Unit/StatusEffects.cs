@@ -126,7 +126,10 @@ public class StatusEffects
     *   ResetEffects - Resets all effects currently on the unit.
     */
     public void ResetEffects(){
-        statusEffects.Clear();
+        for(int i = statusEffects.Count - 1; i > -1; i--){
+            if(!(statusEffects[i] is PersonalSpell))
+                statusEffects.RemoveAt(i);
+        }
     }
 
     /*
