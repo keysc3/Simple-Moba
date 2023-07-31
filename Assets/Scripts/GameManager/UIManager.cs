@@ -260,8 +260,8 @@ public class UIManager : MonoBehaviour
     *   @param spell - string of the spell that was learned.
     */
     public void SpellLearned(string spell, GameObject playerUI){
-        Transform spellCD = playerUI.transform.GetChild(0).Find(spell).GetChild(3);
-        spellCD.GetChild(0).gameObject.SetActive(false);
+        Transform spellCover = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Spell/CD/Cover");
+        spellCover.gameObject.SetActive(false);
         SpellLeveled(spell, 1, playerUI);
     }
     
@@ -271,8 +271,8 @@ public class UIManager : MonoBehaviour
     *   @param spellLevel - int of the new level of the spell.
     */
     public void SpellLeveled(string spell, int spellLevel, GameObject playerUI){
-        Transform spellUI = playerUI.transform.GetChild(0).Find(spell);
-        spellUI.GetChild(4).GetChild(spellLevel-1).GetChild(0).gameObject.SetActive(false);
+        Transform spellLevels = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/Levels");
+        spellLevels.Find("Level" + spellLevel + "/Fill").gameObject.SetActive(false);
     }
 
     /*
