@@ -66,7 +66,7 @@ public class UIManager : MonoBehaviour
         RectTransform newPlayerUIRectTransform = newPlayerUI.GetComponent<RectTransform>();
         newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
         newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
-        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").gameObject.GetComponent<Image>().sprite = player.unit.icon;
+        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = player.unit.icon;
         SetupSpellUI(newPlayerUI, champion, player);
         // Set up the players health/mana/xp bar above their GameObject.
         return newPlayerUI;
@@ -82,7 +82,7 @@ public class UIManager : MonoBehaviour
             spellButton.spell = championSpells.mySpells[i];
             spellButton.keyCode = inputs[i];
             spellButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
-            spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").gameObject.GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
+            spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
             spellButton.spell = championSpells.mySpells[i];
         }
     }
@@ -102,7 +102,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateHealthBar(Player player, GameObject championUI, GameObject playerBar){
         Slider health = championUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
-        TMP_Text healthText = health.transform.Find("Value").gameObject.GetComponent<TMP_Text>();
+        TMP_Text healthText = health.transform.Find("Value").GetComponent<TMP_Text>();
         // If the champion is dead.
         if(!player.isDead){
             ChampionStats championStats = (ChampionStats) player.unitStats;
@@ -129,7 +129,7 @@ public class UIManager : MonoBehaviour
         Slider mana = championUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
         float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
-        mana.transform.Find("Value").gameObject.GetComponent<TMP_Text>()
+        mana.transform.Find("Value").GetComponent<TMP_Text>()
         .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
         // Set the fill based on the player mana percent.
         playerBar.transform.GetChild(0).GetChild(2).GetComponent<Slider>().value = manaPercent;
@@ -189,7 +189,7 @@ public class UIManager : MonoBehaviour
         // Set the cooldown panel children to be active.
         ChildrenSetActive(spellCD, true);
 
-        TMP_Text text = spellCD.Find("Value").gameObject.GetComponent<TMP_Text>();
+        TMP_Text text = spellCD.Find("Value").GetComponent<TMP_Text>();
         // If off cooldown.
         if(cooldownLeft == 0f)
             ChildrenSetActive(spellCD, false);
@@ -197,7 +197,7 @@ public class UIManager : MonoBehaviour
             // Update the UI cooldown text and slider.
             text.SetText(Mathf.Ceil(cooldownLeft).ToString());
             float fill = Mathf.Clamp(cooldownLeft/totalCooldown, 0f, 1f);
-            spellCD.Find("Slider").gameObject.GetComponent<Image>().fillAmount = fill;
+            spellCD.Find("Slider").GetComponent<Image>().fillAmount = fill;
         }
     }
 
@@ -237,7 +237,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateHealthRegen(float healthRegen, GameObject playerUI){
         Slider health = playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
-        health.transform.Find("Regen").gameObject.GetComponent<TMP_Text>().SetText("+" + Mathf.Round(healthRegen * 100.0f) * 0.01f);
+        health.transform.Find("Regen").GetComponent<TMP_Text>().SetText("+" + Mathf.Round(healthRegen * 100.0f) * 0.01f);
     }
 
     /*
@@ -264,7 +264,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateManaRegen(float manaRegen, GameObject playerUI){
         Slider mana = playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
-        mana.transform.Find("Regen").gameObject.GetComponent<TMP_Text>().SetText("+" + Mathf.Round(manaRegen * 100.0f) * 0.01f);
+        mana.transform.Find("Regen").GetComponent<TMP_Text>().SetText("+" + Mathf.Round(manaRegen * 100.0f) * 0.01f);
     }
 
     /*
@@ -331,7 +331,7 @@ public class UIManager : MonoBehaviour
         // Set the fill on the active spells slider.
         GameObject spellDurationSlider = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Outline/Slider").gameObject;
         spellDurationSlider.SetActive(true);
-        spellDurationSlider.transform.Find("Fill").gameObject.GetComponent<Image>().fillAmount = fill;
+        spellDurationSlider.transform.Find("Fill").GetComponent<Image>().fillAmount = fill;
     }
     
     /*
@@ -357,7 +357,7 @@ public class UIManager : MonoBehaviour
     *   @param requiredXP float of the total required experience for the players next level.
     */
     public void UpdateExperienceBar(float currentXP, float requiredXP, GameObject playerUI){
-        playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/Experience").gameObject.GetComponent<Slider>().value = Mathf.Round((currentXP/requiredXP) * 100);
+        playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/Experience").GetComponent<Slider>().value = Mathf.Round((currentXP/requiredXP) * 100);
     }
 
     /*
@@ -365,7 +365,7 @@ public class UIManager : MonoBehaviour
     *   @param currentLevel - int of the players current level.
     */
     public void UpdateLevelText(int currentLevel, GameObject playerUI, GameObject playerBar){
-        playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").gameObject.GetComponent<TMP_Text>().SetText(currentLevel.ToString());
+        playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").GetComponent<TMP_Text>().SetText(currentLevel.ToString());
         playerBar.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<TMP_Text>().SetText(currentLevel.ToString());
     }
 
@@ -379,7 +379,7 @@ public class UIManager : MonoBehaviour
         if(!iconCover.activeSelf)
             iconCover.SetActive(true);
         if(timeLeft != 0f){
-            iconCover.transform.Find("DeathTimer").gameObject.GetComponent<TMP_Text>().SetText(Mathf.Ceil(timeLeft).ToString());
+            iconCover.transform.Find("DeathTimer").GetComponent<TMP_Text>().SetText(Mathf.Ceil(timeLeft).ToString());
         }
         else{
             iconCover.SetActive(false); 
@@ -391,7 +391,7 @@ public class UIManager : MonoBehaviour
     *   @param kills - string of the amount of kills to update to.
     */
     public void UpdateKills(string kills, GameObject playerUI){
-        TMP_Text killsText = playerUI.transform.Find("Kills/Value").gameObject.GetComponent<TMP_Text>();
+        TMP_Text killsText = playerUI.transform.Find("Kills/Value").GetComponent<TMP_Text>();
         killsText.SetText(kills);
     }
 
@@ -400,7 +400,7 @@ public class UIManager : MonoBehaviour
     *   @param deaths - string of the amount of deaths to update to.
     */
     public void UpdateDeaths(string deaths, GameObject playerUI){
-        TMP_Text deathsText = playerUI.transform.Find("Deaths/Value").gameObject.GetComponent<TMP_Text>();
+        TMP_Text deathsText = playerUI.transform.Find("Deaths/Value").GetComponent<TMP_Text>();
         deathsText.SetText(deaths);
     }
 
@@ -409,7 +409,7 @@ public class UIManager : MonoBehaviour
     *   @param assists - string of the amount of assists to update to.
     */
     public void UpdateAssists(string assists, GameObject playerUI){
-        TMP_Text assistsText = playerUI.transform.Find("Assists/Value").gameObject.GetComponent<TMP_Text>();
+        TMP_Text assistsText = playerUI.transform.Find("Assists/Value").GetComponent<TMP_Text>();
         assistsText.SetText(assists);
     }
 
@@ -418,7 +418,7 @@ public class UIManager : MonoBehaviour
     *   @param cs - string of the amount of cs to update to.
     */
     public void UpdateCS(string cs, GameObject playerUI){
-        TMP_Text csText = playerUI.transform.Find("CS/Value").gameObject.GetComponent<TMP_Text>();
+        TMP_Text csText = playerUI.transform.Find("CS/Value").GetComponent<TMP_Text>();
         csText.SetText(cs);
     }
 
@@ -485,7 +485,7 @@ public class UIManager : MonoBehaviour
         GameObject myEffect = (GameObject) Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
         myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         myEffect.name = effect.effectType.name;
-        myEffect.transform.Find("InnerContainer/Sprite").gameObject.GetComponent<Image>().sprite = effect.effectType.sprite;
+        myEffect.transform.Find("InnerContainer/Sprite").GetComponent<Image>().sprite = effect.effectType.sprite;
         if(effect.effectDuration == -1f)
             myEffect.transform.Find("InnerContainer/Slider").gameObject.SetActive(false);
         // Set color and position of the UI element.
@@ -659,6 +659,6 @@ public class UIManager : MonoBehaviour
     *   @param shiftAmount - Vector2 of the x and y amounts to shift the UI component.
     */
     public void ShiftStatusEffects(Vector2 shiftAmount, GameObject playerUI){
-        playerUI.transform.Find("Player/StatusEffects").gameObject.GetComponent<RectTransform>().anchoredPosition += shiftAmount;
+        playerUI.transform.Find("Player/StatusEffects").GetComponent<RectTransform>().anchoredPosition += shiftAmount;
     }
 }
