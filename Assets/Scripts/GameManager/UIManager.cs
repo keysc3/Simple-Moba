@@ -429,12 +429,12 @@ public class UIManager : MonoBehaviour
     *   @param timeLeft - float of the time left before respawn.
     */
     public void UpdateDeathTimer(float timeLeft, GameObject playerUI){
-        GameObject iconCover = playerUI.transform.GetChild(4).GetChild(4).gameObject;
+        GameObject iconCover = playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/IconCover").gameObject;
         // Active icon cover if not already activated.
         if(!iconCover.activeSelf)
             iconCover.SetActive(true);
         if(timeLeft != 0f){
-            iconCover.transform.GetChild(0).GetComponent<TMP_Text>().SetText(Mathf.Ceil(timeLeft).ToString());
+            iconCover.transform.Find("DeathTimer").gameObject.GetComponent<TMP_Text>().SetText(Mathf.Ceil(timeLeft).ToString());
         }
         else{
             iconCover.SetActive(false); 
