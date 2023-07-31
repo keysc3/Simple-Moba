@@ -70,6 +70,12 @@ public class UIManager : MonoBehaviour
         UpdateAllStats((ChampionStats) player.unitStats, playerUI);
     }
 
+    public void SetupNewPlayerUI(Player player, GameObject playerUI, GameObject playerBar){
+        UpdateHealthBar(player, playerUI, playerBar);
+        UpdateManaBar((ChampionStats) player.unitStats, playerUI, playerBar);
+        UpdateAllStats((ChampionStats) player.unitStats, playerUI);
+    }
+
     public GameObject CreatePlayerHUD(GameObject champion, GameObject championUI, Player player){
         // Set up the players HUD.
         GameObject newChampionUI = (GameObject) Instantiate(championUI, championUI.transform.position, championUI.transform.rotation);
@@ -125,8 +131,7 @@ public class UIManager : MonoBehaviour
     *   UpdateHealthBar - Updates the health bar UI.
     */
     public void UpdateHealthBar(Player player, GameObject championUI, GameObject playerBar){
-        Transform spellsHPManaUI = championUI.transform.GetChild(0);
-        Slider health = spellsHPManaUI.Find("HealthBar").GetComponent<Slider>();
+        Slider health = championUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
         // If the champion is dead.
         if(!player.isDead){
             ChampionStats championStats = (ChampionStats) player.unitStats;
@@ -152,8 +157,7 @@ public class UIManager : MonoBehaviour
     *   UpdateManaBar - Updates the mana bar UI.
     */
     public void UpdateManaBar(ChampionStats championStats, GameObject championUI, GameObject playerBar){
-        Transform spellsHPManaUI = championUI.transform.GetChild(0);
-        Slider mana = spellsHPManaUI.Find("ManaBar").GetComponent<Slider>();
+        Slider mana = championUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
         float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
         mana.transform.GetChild(2).GetComponent<TMP_Text>()
@@ -175,7 +179,7 @@ public class UIManager : MonoBehaviour
     }
     
     public void UpdateAllStats(ChampionStats championStats, GameObject playerUI){
-        Transform statsContainer = playerUI.transform.GetChild(1).GetChild(0);
+        Transform statsContainer = playerUI.transform.Find("Player/Info/Stats/Container");
         UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue(), statsContainer);
         UpdateStat("Armor", championStats.armor.GetValue(), statsContainer);
         if(championStats.attackSpeed.GetValue() > 2.5f)
@@ -191,9 +195,9 @@ public class UIManager : MonoBehaviour
 
     public void UpdateStat(string statName, float value, Transform statsContainer){
         if(statName != "AttackSpeed")
-            statsContainer.Find(statName).GetChild(1).GetComponent<TMP_Text>().SetText(Mathf.Round(value).ToString());
+            statsContainer.Find(statName).Find("Value").GetComponent<TMP_Text>().SetText(Mathf.Round(value).ToString());
         else
-            statsContainer.Find(statName).GetChild(1).GetComponent<TMP_Text>().SetText((Mathf.Round(value * 100f) * 0.01f).ToString());
+            statsContainer.Find(statName).Find("Value").GetComponent<TMP_Text>().SetText((Mathf.Round(value * 100f) * 0.01f).ToString());
     }
 
     /*
