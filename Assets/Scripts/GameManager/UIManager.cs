@@ -318,9 +318,10 @@ public class UIManager : MonoBehaviour
     *   @param isActive - bool of whether to set the UI elements active or not.
     */
     public void SetSkillLevelUpActive(Dictionary<string, int> spellLevels, int level, bool isActive, GameObject playerUI){
-        Transform spellsHPManaUI = playerUI.transform.GetChild(0);
         // For each spell.
         foreach(KeyValuePair<string, int> spell in spellLevels){
+            string find = spell.Key + "_Container";
+            GameObject spellLevelUpObj = playerUI.transform.Find("Player/Combat/SpellsContainer/" + find + "/LevelUp").gameObject;
             // If the UI should be active.
             if(isActive){
                 // If the kvp is spell 4.
@@ -328,23 +329,23 @@ public class UIManager : MonoBehaviour
                     int spell_4_level = spellLevels["Spell_4"];
                     // If spell 4 can be leveled.
                     if((spell_4_level < 1 && level > 5) || (spell_4_level < 2 && level > 10) || (spell_4_level < 3 && level > 15)){
-                        spellsHPManaUI.GetChild(4).GetChild(0).gameObject.SetActive(true);
+                        spellLevelUpObj.SetActive(true);
                     }
                     else
-                        spellsHPManaUI.Find(spell.Key).transform.GetChild(0).gameObject.SetActive(false);
+                        spellLevelUpObj.SetActive(false);
                 }
                 // If a basic spell then activate its level up available UI if it isn't max spell level.
                 else{
                     if(spell.Value < 5){
-                        spellsHPManaUI.Find(spell.Key).transform.GetChild(0).gameObject.SetActive(true);  
+                        spellLevelUpObj.SetActive(true);  
                     }
                     else{
-                        spellsHPManaUI.Find(spell.Key).transform.GetChild(0).gameObject.SetActive(false);
+                        spellLevelUpObj.SetActive(false);
                     }
                 }
             }
             else{
-                spellsHPManaUI.Find(spell.Key).transform.GetChild(0).gameObject.SetActive(false);  
+                spellLevelUpObj.SetActive(false);  
             }
         }
     }
@@ -356,7 +357,8 @@ public class UIManager : MonoBehaviour
         float value = Time.time;
         // For each spell.
         for(int i = 0; i < 4; i++)
-            playerUI.transform.GetChild(0).GetChild(i+1).GetChild(0).GetChild(0).GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
+            playerUI.transform.Find("Player/Combat/SpellsContainer/Spell_" + (i+1) + "_Container/LevelUp/Background").gameObject.GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
+            //playerUI.transform.GetChild(0).GetChild(i+1).GetChild(0).GetChild(0).GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
     }
 
     /*
