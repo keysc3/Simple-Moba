@@ -23,11 +23,12 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerEnter(PointerEventData eventData){
-        spell.DisplayCast();
+        if(DrawGizmos.instance.drawMethod == null)
+            spell.DisplayCast();
     }
 
     public void OnPointerExit(PointerEventData eventData){
-        if(playerSpellInput.lastSpellPressed != spell)
+        if(playerSpellInput.lastSpellPressed != spell && spell.isDisplayed)
             spell.HideCast();
     }
 
