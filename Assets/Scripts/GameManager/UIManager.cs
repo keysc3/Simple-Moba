@@ -403,8 +403,8 @@ public class UIManager : MonoBehaviour
     *   @param spell - int of the spell to update the UI for.
     *   @param isActive - bool of whether or not to activate the spell cover.
     */
-    public void SetSpellCoverActive(int spell, bool isActive, GameObject playerUI){
-        playerUI.transform.GetChild(0).GetChild(spell).GetChild(3).GetChild(0).gameObject.SetActive(isActive);
+    public void SetSpellCoverActive(string spell, bool isActive, GameObject playerUI){
+        playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Spell/CD/Cover").gameObject.SetActive(isActive);
     }
 
     /*
@@ -413,7 +413,7 @@ public class UIManager : MonoBehaviour
     *   @param requiredXP float of the total required experience for the players next level.
     */
     public void UpdateExperienceBar(float currentXP, float requiredXP, GameObject playerUI){
-        playerUI.transform.GetChild(4).GetChild(3).GetComponent<Slider>().value = Mathf.Round((currentXP/requiredXP) * 100);
+        playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/Experience").gameObject.GetComponent<Slider>().value = Mathf.Round((currentXP/requiredXP) * 100);
     }
 
     /*
@@ -421,7 +421,7 @@ public class UIManager : MonoBehaviour
     *   @param currentLevel - int of the players current level.
     */
     public void UpdateLevelText(int currentLevel, GameObject playerUI, GameObject playerBar){
-        playerUI.transform.GetChild(4).GetChild(5).GetChild(1).GetComponent<TMP_Text>().SetText(currentLevel.ToString());
+        playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").gameObject.GetComponent<TMP_Text>().SetText(currentLevel.ToString());
         playerBar.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<TMP_Text>().SetText(currentLevel.ToString());
     }
 

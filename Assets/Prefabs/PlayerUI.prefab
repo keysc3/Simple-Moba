@@ -1553,6 +1553,7 @@ MonoBehaviour:
   spell:
     canMove: 0
     isQuickCast: 0
+    isDisplayed: 0
     navMeshAgent: {fileID: 0}
     levelManager:
       <level>k__BackingField: 0
@@ -2355,6 +2356,7 @@ MonoBehaviour:
   spell:
     canMove: 0
     isQuickCast: 0
+    isDisplayed: 0
     navMeshAgent: {fileID: 0}
     levelManager:
       <level>k__BackingField: 0
@@ -5489,6 +5491,7 @@ MonoBehaviour:
   spell:
     canMove: 0
     isQuickCast: 0
+    isDisplayed: 0
     navMeshAgent: {fileID: 0}
     levelManager:
       <level>k__BackingField: 0
@@ -5548,7 +5551,7 @@ GameObject:
   - component: {fileID: 8637935653479044539}
   - component: {fileID: 6890713802757166086}
   m_Layer: 5
-  m_Name: LevelText
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8066,6 +8069,7 @@ MonoBehaviour:
   spell:
     canMove: 0
     isQuickCast: 0
+    isDisplayed: 0
     navMeshAgent: {fileID: 0}
     levelManager:
       <level>k__BackingField: 0
@@ -18643,6 +18647,7 @@ MonoBehaviour:
   spell:
     canMove: 0
     isQuickCast: 0
+    isDisplayed: 0
     navMeshAgent: {fileID: 0}
     levelManager:
       <level>k__BackingField: 0

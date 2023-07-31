@@ -75,7 +75,7 @@ public class BahriSpell4 : DamageSpell, ICastable
             }
             UIManager.instance.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer, player.playerUI);
             if(spell_4_chargesLeft == 0)
-                UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
+                UIManager.instance.SetSpellCoverActive(spellNum, true, player.playerUI);
             spell_4_timer += Time.deltaTime;
             yield return null;
         }
@@ -88,7 +88,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     private void Spell_4_Takedown(GameObject killed){
         if(killed.GetComponent<Unit>().unit is ScriptableChampion){
             if(spell_4_chargesLeft < spellData.charges && spell4Casting){
-                UIManager.instance.SetSpellCoverActive(4, false, player.playerUI);
+                UIManager.instance.SetSpellCoverActive(spellNum, false, player.playerUI);
                 spell_4_chargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;

@@ -88,11 +88,11 @@ public class BilliaSpell4 : Spell, ICastable
             List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
             if(passiveAppliedChamps.Count > 0){
                 canUseSpell_4 = true;
-                UIManager.instance.SetSpellCoverActive(4, false, player.playerUI);
+                UIManager.instance.SetSpellCoverActive(spellNum, false, player.playerUI);
             }
             else{
                 canUseSpell_4 = false;
-                UIManager.instance.SetSpellCoverActive(4, true, player.playerUI);
+                UIManager.instance.SetSpellCoverActive(spellNum, true, player.playerUI);
             }
         }
     }
