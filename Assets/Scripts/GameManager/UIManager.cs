@@ -30,44 +30,14 @@ public class UIManager : MonoBehaviour
     // Called when the script instance is being loaded.
     void Awake(){
         instance = this;
-        /*championUI = Instantiate(championUI, championUI.transform.position, championUI.transform.rotation);
-        championUI.name = gameObject.name + "UI";
-        championUI.transform.SetParent(GameObject.Find("/Canvas").transform);
-        championUI.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
-        championUI.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
-        playerBar = Instantiate(playerBar, playerBar.transform.position, playerBar.transform.rotation);
-        playerBar.name = gameObject.name + "PlayerBar";
-        Vector3 playerBarPos = playerBar.GetComponent<RectTransform>().anchoredPosition;
-        playerBar.transform.SetParent(gameObject.transform);
-        playerBar.GetComponent<RectTransform>().anchoredPosition3D = playerBarPos;*/
         defaultBorderColor = new Color(167f/255f, 126f/255f, 69f/255f);
         SetUpGradient();
-        /*spellsHPManaUI = championUI.transform.GetChild(0);
-        statsUI = championUI.transform.GetChild(1);
-        scoreUI = championUI.transform.GetChild(2);
-        itemsUI = championUI.transform.GetChild(3);
-        iconXPUI = championUI.transform.GetChild(4);
-        statusEffectsUI = championUI.transform.GetChild(5);
-        health = spellsHPManaUI.Find("HealthBar").GetComponent<Slider>();
-        mana = spellsHPManaUI.Find("ManaBar").GetComponent<Slider>();*/
-        buffDebuffUIWidth = championUIPrefab.transform.GetChild(5).GetChild(0).GetComponent<RectTransform>().rect.width;
+        buffDebuffUIWidth = playerUIPrefab.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
     }
 
     // Start is called before the first frame update.
     void Start(){
-        //unit = GetComponent<Unit>();
-        //championStats = (ChampionStats) unit.unitStats;
-        /*UpdateHealthBar();
-        UpdateManaBar();
-        SetUpIcons();
-        UpdateAllStats();*/
-    }
 
-    public void SetUpPlayerUI(Player player, GameObject playerUI, GameObject playerBar){
-        UpdateHealthBar(player, playerUI, playerBar);
-        UpdateManaBar((ChampionStats) player.unitStats, playerUI, playerBar);
-        SetUpIcons((ScriptableChampion) player.unit, playerUI);
-        UpdateAllStats((ChampionStats) player.unitStats, playerUI);
     }
 
     public void SetupNewPlayerUI(Player player, GameObject playerUI, GameObject playerBar){
@@ -132,13 +102,13 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateHealthBar(Player player, GameObject championUI, GameObject playerBar){
         Slider health = championUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
+        TMP_Text healthText = health.transform.Find("Value").gameObject.GetComponent<TMP_Text>();
         // If the champion is dead.
         if(!player.isDead){
             ChampionStats championStats = (ChampionStats) player.unitStats;
             // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
             float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
-            health.transform.GetChild(2).GetComponent<TMP_Text>()
-            .SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
+            healthText.SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             // Set the fill based on players health percent.
             playerBar.transform.GetChild(0).GetChild(1).GetComponent<Slider>().value = healthPercent;
             health.value = healthPercent;
@@ -147,8 +117,7 @@ public class UIManager : MonoBehaviour
             // Set players health text and fill to 0.
             ChampionStats championStats = (ChampionStats) player.unitStats;
             playerBar.SetActive(false);
-            health.transform.GetChild(2).GetComponent<TMP_Text>()
-            .SetText(0 + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
+            healthText.SetText(0 + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             health.value = 0;
         }
     }
@@ -160,22 +129,11 @@ public class UIManager : MonoBehaviour
         Slider mana = championUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
         float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
-        mana.transform.GetChild(2).GetComponent<TMP_Text>()
+        mana.transform.Find("Value").gameObject.GetComponent<TMP_Text>()
         .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
         // Set the fill based on the player mana percent.
         playerBar.transform.GetChild(0).GetChild(2).GetComponent<Slider>().value = manaPercent;
         mana.value = manaPercent;
-    }
-
-    void SetUpIcons(ScriptableChampion champ, GameObject championUI){
-        Transform spellsHPManaUI = championUI.transform.GetChild(0);
-        Transform iconXPUI = championUI.transform.GetChild(4);
-        spellsHPManaUI.GetChild(0).GetChild(1).GetComponent<Image>().sprite = champ.passive_sprite;
-        spellsHPManaUI.GetChild(1).GetChild(2).GetComponent<Image>().sprite = champ.spell_1_sprite;
-        spellsHPManaUI.GetChild(2).GetChild(2).GetComponent<Image>().sprite = champ.spell_2_sprite;
-        spellsHPManaUI.GetChild(3).GetChild(2).GetComponent<Image>().sprite = champ.spell_3_sprite;
-        spellsHPManaUI.GetChild(4).GetChild(2).GetComponent<Image>().sprite = champ.spell_4_sprite;
-        iconXPUI.GetChild(2).GetComponent<Image>().sprite = champ.icon;
     }
     
     public void UpdateAllStats(ChampionStats championStats, GameObject playerUI){
@@ -354,9 +312,10 @@ public class UIManager : MonoBehaviour
     public void SkillLevelUpGradient(GameObject playerUI){
         float value = Time.time;
         // For each spell.
-        for(int i = 0; i < 4; i++)
-            playerUI.transform.Find("Player/Combat/SpellsContainer/Spell_" + (i+1) + "_Container/LevelUp/Background").gameObject.GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
-            //playerUI.transform.GetChild(0).GetChild(i+1).GetChild(0).GetChild(0).GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
+        for(int i = 0; i < 4; i++){
+            playerUI.transform.Find("Player/Combat/SpellsContainer/Spell_" + (i+1) + "_Container/LevelUp/Background")
+            .gameObject.GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(value, 1));
+        }
     }
 
     /*
