@@ -483,7 +483,7 @@ public class UIManager : MonoBehaviour
     *   @param itemSprite - sprite of the item.
     */
     public void AddItem(int itemSlot, Sprite itemSprite, GameObject playerUI){
-        GameObject itemImage = playerUI.transform.GetChild(3).GetChild(itemSlot-1).GetChild(0).gameObject;
+        GameObject itemImage = playerUI.transform.Find("Player/Items/ItemsContainer/Item_" + itemSlot + "_Container/Sprite").gameObject;
         itemImage.GetComponent<Image>().sprite = itemSprite;
         itemImage.SetActive(true);
     }
@@ -493,9 +493,9 @@ public class UIManager : MonoBehaviour
     *   @param itemSlot - int of the UI item slot to remove the item from.
     */
     public void RemoveItem(int itemSlot, GameObject playerUI){
-        GameObject itemImage = playerUI.transform.GetChild(3).GetChild(itemSlot-1).GetChild(0).gameObject;
-        itemImage.SetActive(false);
+        GameObject itemImage = playerUI.transform.Find("Player/Items/ItemsContainer/Item_" + itemSlot + "_Container/Sprite").gameObject;
         itemImage.GetComponent<Image>().sprite = null;
+        itemImage.SetActive(false);
     }
 
     /*
