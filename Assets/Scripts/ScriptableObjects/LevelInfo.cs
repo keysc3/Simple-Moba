@@ -11,7 +11,7 @@ public class LevelInfo : ScriptableObject
     public List<float> requiredXP { get; private set; } = new List<float>(){0f, 280f, 380f, 480f, 580f, 680f, 780f, 880f, 980f, 1080f, 
     1180f, 1280f, 1380f, 1480f, 1580f, 1680f, 1780f, 1880f};
     public float xShift { get; private set; } = 0f;
-    public float yShift { get; private set; } = 15f;
+    [field: SerializeField] public float yShift { get; private set; } = 40f;
     public int maxSpellLevel { get; private set; } = 5;
     public int maxUltLevel { get; private set; } = 3;
 }

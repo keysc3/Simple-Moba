@@ -12,7 +12,7 @@ public class LevelManager
 {
     [field: SerializeField] public int level { get; private set; } = 1;
     [field: SerializeField] public int spellLevelPoints { get; private set; } = 1;
-    [field: SerializeField] public bool skillLevelUpUIActive { get; private set; } = false;
+    [field: SerializeField] public bool skillLevelUpUIActive { get; private set; } = true;
     [field: SerializeField] public LevelInfo levelInfo;
     [field: SerializeField] public float gainAmount { get; private set; } = 100f;
     public Dictionary<string, int> spellLevels { get; private set; } = new Dictionary<string, int>();
