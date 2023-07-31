@@ -319,20 +319,6 @@ public class UIManager : MonoBehaviour
     }
 
     /*
-    *   SetSpellInUse - Sets a spells border to white or default color to show if it is active or not.
-    *   @param spell - string of the spell UI to update.
-    *   @param inUse - bool of whether or not the spell is in use.
-    */
-    /*public void SetSpellInUse(string spell, bool inUse, GameObject playerUI){
-        GameObject spellOutline = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Outline/Slider")
-        GameObject spellOutline = playerUI.transform.GetChild(0).Find(spell).transform.GetChild(1).gameObject;
-        if(inUse)
-            spellOutline.GetComponent<Image>().color = Color.white;
-        else
-            spellOutline.GetComponent<Image>().color = defaultBorderColor;
-    }*/
-
-    /*
     *   SetSpellActiveDuration - Animates the border of a spell using a slider to represent the spells active duration left.
     *   @param spell - int of the spell number that is active.
     *   @param duration - float of the total duration of the spell.
@@ -499,16 +485,16 @@ public class UIManager : MonoBehaviour
         GameObject myEffect = (GameObject) Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
         myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         myEffect.name = effect.effectType.name;
-        myEffect.transform.GetChild(1).GetComponent<Image>().sprite = effect.effectType.sprite;
+        myEffect.transform.Find("InnerContainer/Sprite").gameObject.GetComponent<Image>().sprite = effect.effectType.sprite;
         if(effect.effectDuration == -1f)
-            myEffect.transform.GetChild(2).gameObject.SetActive(false);
+            myEffect.transform.Find("InnerContainer/Slider").gameObject.SetActive(false);
         // Set color and position of the UI element.
         if(effect.effectType.isBuff){
-            myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.blue;
+            myEffect.transform.Find("Background").GetComponent<Image>().color = Color.blue;
             SetStatusEffectUIPosition(playerUI.transform.Find("Player/StatusEffects/BuffsContainer"), myEffect, true);
         }
         else{
-            myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.red;
+            myEffect.transform.Find("Background").GetComponent<Image>().color = Color.red;
             SetStatusEffectUIPosition(playerUI.transform.Find("Player/StatusEffects/DebuffsContainer"), myEffect, false);
         }
         // Start effect timer animation coroutine.
@@ -526,7 +512,7 @@ public class UIManager : MonoBehaviour
     */
     public void SetStatusEffectUIPosition(Transform UI, GameObject myEffect, bool isBuff){
         // Set up variables
-        float effectWidth = myEffect.transform.GetChild(0).GetComponent<RectTransform>().rect.width;
+        float effectWidth = myEffect.GetComponent<RectTransform>().rect.width;
         Vector2 offset = Vector2.zero;
         // Set parent.
         myEffect.transform.SetParent(UI);
@@ -561,25 +547,20 @@ public class UIManager : MonoBehaviour
     public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         float elapsedDuration;
         // Get the timer image component.
-        Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
+        Image slider = effectUI.transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        TMP_Text value = null;
+        if(effect.effectType is ScriptablePersonalSpell)
+            value = effectUI.transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
-                if(effect.effectType is ScriptablePersonalSpell){
-                    effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ((PersonalSpell)effect).stacks.ToString();
+                if(value != null){
+                    value.SetText(((PersonalSpell)effect).stacks.ToString());
                     if(effect.effectDuration == -1f)
                         yield return null;
-                    /*if(((Spell)effect).stacks > 0){
-                        // Set stack text active.
-                        effectUI.transform.GetChild(3).gameObject.SetActive(true);
-                        effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = ((Spell)effect).stacks.ToString();
-                    }
-                    else{
-                        effectUI.transform.GetChild(3).gameObject.SetActive(false);
-                    }*/
                 }
                 // Update status effect timer.
                 elapsedDuration = 1f - effect.effectTimer/effect.effectDuration;
-                timer.fillAmount = elapsedDuration;
+                slider.fillAmount = elapsedDuration;
                 yield return null;
         }
         // Update UI positions based on what position the ended effect was in.
@@ -596,7 +577,7 @@ public class UIManager : MonoBehaviour
     */
     public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         // Set stack text active.
-        effectUI.transform.GetChild(3).gameObject.SetActive(true);
+        effectUI.transform.Find("InnerContainer/Value").gameObject.SetActive(true);
         // Setup variables.
         Effect displayEffect = effect;
         int stacks = 0;
@@ -608,7 +589,8 @@ public class UIManager : MonoBehaviour
         // This is necessary for stacks that falloff over time instead of at the same time.
         float reduceAmount = 0f;
         // Get the timer image component.
-        Image timer = effectUI.transform.GetChild(2).GetComponent<Image>();
+        Image slider = effectUI.transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        TMP_Text value = effectUI.transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
             // Get how many stacks the effect has.
@@ -616,7 +598,7 @@ public class UIManager : MonoBehaviour
             // If stacks aren't equal then a stack expired or was added.
             if(stacks != newStacks){
                 // Set the stacks text and get the next expiring stack to display.
-                effectUI.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = newStacks.ToString();
+                value.SetText(newStacks.ToString());
                 displayEffect = statusEffects.GetNextExpiringStack(effect);
                 // If a stack expired.
                 if(newStacks < stacks){
@@ -634,7 +616,7 @@ public class UIManager : MonoBehaviour
             // Update status effect timer.
             // 1 - ((effectTimer - effectTimer at frame of first display)/duration left at frame of first display.
             elapsedDuration = 1f - ((displayEffect.effectTimer - reduceAmount)/duration);
-            timer.fillAmount = elapsedDuration;
+            slider.fillAmount = elapsedDuration;
             stacks = newStacks;
             yield return null;
         }
