@@ -115,7 +115,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
                     }
                 }
             }
-            UIManager.instance.SetSpellActiveDuration(2, spellData.duration, timer, player.playerUI);
+            UIManager.instance.SetSpellActiveDuration(spellNum, spellData.duration, timer, player.playerUI);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -123,7 +123,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
         if(spell_2_parent)
             GameObject.Destroy(spell_2_parent);
         enemiesHit.Clear();
-        UIManager.instance.SetSpellDurationOver(2, player.playerUI);
+        UIManager.instance.SetSpellDurationOver(spellNum, player.playerUI);
         championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
     }
 

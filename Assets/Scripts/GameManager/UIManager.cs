@@ -364,13 +364,14 @@ public class UIManager : MonoBehaviour
     *   @param spell - string of the spell UI to update.
     *   @param inUse - bool of whether or not the spell is in use.
     */
-    public void SetSpellInUse(string spell, bool inUse, GameObject playerUI){
+    /*public void SetSpellInUse(string spell, bool inUse, GameObject playerUI){
+        GameObject spellOutline = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Outline/Slider")
         GameObject spellOutline = playerUI.transform.GetChild(0).Find(spell).transform.GetChild(1).gameObject;
         if(inUse)
             spellOutline.GetComponent<Image>().color = Color.white;
         else
             spellOutline.GetComponent<Image>().color = defaultBorderColor;
-    }
+    }*/
 
     /*
     *   SetSpellActiveDuration - Animates the border of a spell using a slider to represent the spells active duration left.
@@ -378,22 +379,22 @@ public class UIManager : MonoBehaviour
     *   @param duration - float of the total duration of the spell.
     *   @param active - float of the amount of time the spell has been active so far.
     */
-    public void SetSpellActiveDuration(int spell, float duration, float active, GameObject playerUI){
+    public void SetSpellActiveDuration(string spell, float duration, float active, GameObject playerUI){
         // Get value between 0 and 1 representing the percent of the spell duration left.
         float fill = 1.0f - (active/duration);
         fill = Mathf.Clamp(fill, 0f, 1f);
         // Set the fill on the active spells slider.
-        GameObject spellDurationSlider = playerUI.transform.GetChild(0).GetChild(spell).GetChild(1).GetChild(1).gameObject;
+        GameObject spellDurationSlider = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Outline/Slider").gameObject;
         spellDurationSlider.SetActive(true);
-        spellDurationSlider.transform.GetChild(1).GetComponent<Image>().fillAmount = fill;
+        spellDurationSlider.transform.Find("Fill").gameObject.GetComponent<Image>().fillAmount = fill;
     }
     
     /*
     *   SetSpellDurationOver - Set the spells active slider to inactive.
     *   @param spell - int of the spell to deactivate the UI for.
     */
-    public void SetSpellDurationOver(int spell, GameObject playerUI){
-        playerUI.transform.GetChild(0).GetChild(spell).GetChild(1).GetChild(1).gameObject.SetActive(false);
+    public void SetSpellDurationOver(string spell, GameObject playerUI){
+        playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Outline/Slider").gameObject.SetActive(false);
     }
 
     /*

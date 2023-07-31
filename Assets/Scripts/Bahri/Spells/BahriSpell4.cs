@@ -73,7 +73,7 @@ public class BahriSpell4 : DamageSpell, ICastable
                 spell_4_chargesLeft--;
                 spell4Effect.UpdateStacks(spell_4_chargesLeft);
             }
-            UIManager.instance.SetSpellActiveDuration(4, spell_4_duration, spell_4_timer, player.playerUI);
+            UIManager.instance.SetSpellActiveDuration(spellNum, spell_4_duration, spell_4_timer, player.playerUI);
             if(spell_4_chargesLeft == 0)
                 UIManager.instance.SetSpellCoverActive(spellNum, true, player.playerUI);
             spell_4_timer += Time.deltaTime;
@@ -81,7 +81,7 @@ public class BahriSpell4 : DamageSpell, ICastable
         }
         // Reset charges and start spell cooldown timer.
         spell4Casting = false;
-        UIManager.instance.SetSpellDurationOver(4, player.playerUI);
+        UIManager.instance.SetSpellDurationOver(spellNum, player.playerUI);
         championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
     }
 
