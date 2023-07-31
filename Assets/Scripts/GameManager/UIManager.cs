@@ -545,17 +545,17 @@ public class UIManager : MonoBehaviour
         // Set color and position of the UI element.
         if(effect.effectType.isBuff){
             myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.blue;
-            SetStatusEffectUIPosition(playerUI.transform.GetChild(5).GetChild(0), myEffect, true);
+            SetStatusEffectUIPosition(playerUI.transform.Find("Player/StatusEffects/BuffsContainer"), myEffect, true);
         }
         else{
             myEffect.transform.GetChild(0).GetComponent<Image>().color = Color.red;
-            SetStatusEffectUIPosition(playerUI.transform.GetChild(5).GetChild(1), myEffect, false);
+            SetStatusEffectUIPosition(playerUI.transform.Find("Player/StatusEffects/DebuffsContainer"), myEffect, false);
         }
         // Start effect timer animation coroutine.
         if(effect.effectType.isStackable)
-            StartCoroutine(StackableStatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.GetChild(5)));
+            StartCoroutine(StackableStatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.Find("Player/StatusEffects")));
         else
-            StartCoroutine(StatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.GetChild(5)));
+            StartCoroutine(StatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.Find("Player/StatusEffects")));
     }
 
     /*
@@ -698,9 +698,9 @@ public class UIManager : MonoBehaviour
         Transform UI;
         // Get the appropriate UI container.
         if(effect.effectType.isBuff)
-            UI = statusEffectsUI.GetChild(0);
+            UI = statusEffectsUI.Find("BuffsContainer");
         else
-            UI = statusEffectsUI.GetChild(1);
+            UI = statusEffectsUI.Find("DebuffsContainer");
         // Update every status effect UI components position after the one being removed.
         for(int i = index + 1; i < UI.childCount; i++){
             // Store the position to move the next child to.
@@ -717,6 +717,6 @@ public class UIManager : MonoBehaviour
     *   @param shiftAmount - Vector2 of the x and y amounts to shift the UI component.
     */
     public void ShiftStatusEffects(Vector2 shiftAmount, GameObject playerUI){
-        playerUI.transform.GetChild(5).GetComponent<RectTransform>().anchoredPosition += shiftAmount;
+        playerUI.transform.Find("Player/StatusEffects").gameObject.GetComponent<RectTransform>().anchoredPosition += shiftAmount;
     }
 }
