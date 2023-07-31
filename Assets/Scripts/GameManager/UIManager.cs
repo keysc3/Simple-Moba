@@ -227,21 +227,19 @@ public class UIManager : MonoBehaviour
     *   @param totalCooldown - float of the total cooldown duration of the spell.
     */
     public void UpdateCooldown(string spell, float cooldownLeft, float totalCooldown, GameObject playerUI){
-        Transform spellCD = playerUI.transform.GetChild(0).Find(spell).GetChild(3);
+        Transform spellCD = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Spell/CD");
         // Set the cooldown panel children to be active.
-        for(int i = 0; i < 3; i++){
-            spellCD.GetChild(i).gameObject.SetActive(true);
-        }
+        ChildrenSetActive(spellCD, true);
 
-        TMP_Text text = spellCD.GetChild(2).GetComponent<TMP_Text>();
+        TMP_Text text = spellCD.Find("Value").gameObject.GetComponent<TMP_Text>();
         // If off cooldown.
         if(cooldownLeft == 0f)
-            OffCooldown(spellCD);
+            ChildrenSetActive(spellCD, false);
         else{
             // Update the UI cooldown text and slider.
             text.SetText(Mathf.Ceil(cooldownLeft).ToString());
             float fill = Mathf.Clamp(cooldownLeft/totalCooldown, 0f, 1f);
-            spellCD.GetChild(1).GetComponent<Image>().fillAmount = fill;
+            spellCD.Find("Slider").gameObject.GetComponent<Image>().fillAmount = fill;
         }
     }
 
@@ -249,9 +247,9 @@ public class UIManager : MonoBehaviour
     *   OffCooldown - Sets the spells cooldown UI to inactive.
     *   @param OffCooldown - transform of the spell cover to turn off.
     */
-    public void OffCooldown(Transform spellCD){
-        for(int i = 0; i < 3; i++){
-            spellCD.GetChild(i).gameObject.SetActive(false);
+    public void ChildrenSetActive(Transform parent, bool isActive){
+        for(int i = 0; i < parent.childCount; i++){
+            parent.GetChild(i).gameObject.SetActive(isActive);
         }
     }
 
