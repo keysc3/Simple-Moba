@@ -279,7 +279,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateHealthRegen(float healthRegen, GameObject playerUI){
         Slider health = playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
-        health.transform.GetChild(3).GetComponent<TMP_Text>().SetText("+" + Mathf.Round(healthRegen * 100.0f) * 0.01f);
+        health.transform.Find("Regen").gameObject.GetComponent<TMP_Text>().SetText("+" + Mathf.Round(healthRegen * 100.0f) * 0.01f);
     }
 
     /*
@@ -288,7 +288,7 @@ public class UIManager : MonoBehaviour
     */
     public void SetHealthRegenActive(bool isActive, GameObject playerUI){
         Slider health = playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
-        health.transform.GetChild(3).gameObject.SetActive(isActive);
+        health.transform.Find("Regen").gameObject.SetActive(isActive);
     }
 
     /*
@@ -297,7 +297,7 @@ public class UIManager : MonoBehaviour
     */
     public void SetManaRegenActive(bool isActive, GameObject playerUI){
         Slider mana = playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
-        mana.transform.GetChild(3).gameObject.SetActive(isActive);
+        mana.transform.Find("Regen").gameObject.SetActive(isActive);
     }
 
     /*
@@ -306,7 +306,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateManaRegen(float manaRegen, GameObject playerUI){
         Slider mana = playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
-        mana.transform.GetChild(3).GetComponent<TMP_Text>().SetText("+" + Mathf.Round(manaRegen * 100.0f) * 0.01f);
+        mana.transform.Find("Regen").gameObject.GetComponent<TMP_Text>().SetText("+" + Mathf.Round(manaRegen * 100.0f) * 0.01f);
     }
 
     /*
