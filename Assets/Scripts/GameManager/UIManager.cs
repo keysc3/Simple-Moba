@@ -446,7 +446,7 @@ public class UIManager : MonoBehaviour
     *   @param kills - string of the amount of kills to update to.
     */
     public void UpdateKills(string kills, GameObject playerUI){
-        TMP_Text killsText = playerUI.transform.GetChild(2).GetChild(0).GetComponent<TMP_Text>();
+        TMP_Text killsText = playerUI.transform.Find("Kills/Value").gameObject.GetComponent<TMP_Text>();
         killsText.SetText(kills);
     }
 
@@ -455,7 +455,7 @@ public class UIManager : MonoBehaviour
     *   @param deaths - string of the amount of deaths to update to.
     */
     public void UpdateDeaths(string deaths, GameObject playerUI){
-        TMP_Text deathsText = playerUI.transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>();
+        TMP_Text deathsText = playerUI.transform.Find("Deaths/Value").gameObject.GetComponent<TMP_Text>();
         deathsText.SetText(deaths);
     }
 
@@ -464,7 +464,7 @@ public class UIManager : MonoBehaviour
     *   @param assists - string of the amount of assists to update to.
     */
     public void UpdateAssists(string assists, GameObject playerUI){
-        TMP_Text assistsText = playerUI.transform.GetChild(2).GetChild(2).GetComponent<TMP_Text>();
+        TMP_Text assistsText = playerUI.transform.Find("Assists/Value").gameObject.GetComponent<TMP_Text>();
         assistsText.SetText(assists);
     }
 
@@ -473,7 +473,7 @@ public class UIManager : MonoBehaviour
     *   @param cs - string of the amount of cs to update to.
     */
     public void UpdateCS(string cs, GameObject playerUI){
-        TMP_Text csText = playerUI.transform.GetChild(2).GetChild(3).GetComponent<TMP_Text>();
+        TMP_Text csText = playerUI.transform.Find("CS/Value").gameObject.GetComponent<TMP_Text>();
         csText.SetText(cs);
     }
 
