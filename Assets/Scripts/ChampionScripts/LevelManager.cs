@@ -223,7 +223,7 @@ public class LevelManager
     *   SpellLevelUp - Levels up the given spell and updates the UI.
     *   @paream spell - string of the spell to be leveled up.
     */
-    private void SpellLevelUp(string spell){
+    public void SpellLevelUp(string spell){
         spellLevels[spell] = spellLevels[spell] + 1;
         spellLevelPoints -= 1;
         newLevel = true;

@@ -25,6 +25,7 @@ public class Player : Unit, IRespawnable
     [SerializeField] private Material dead;
     [SerializeField] private LevelInfo levelInfo;
     [field: SerializeField] public GameObject playerUIPrefab { get; private set; }
+    public GameObject newPlayerUI { get; private set; }
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
 
@@ -50,14 +51,18 @@ public class Player : Unit, IRespawnable
         inventory = new Inventory();
         score = new Score();
         levelManager = new LevelManager(this, levelInfo);
-        playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
+        /*playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
         playerBar = UIManager.instance.CreatePlayerBar(gameObject);
-        UIManager.instance.SetUpPlayerUI(this, playerUI, playerBar);
+        UIManager.instance.SetUpPlayerUI(this, playerUI, playerBar);*/
     }
 
     // Start is called before the first frame update
     private void Start()
     {
+        playerUI = UIManager.instance.CreatePlayerUI(gameObject, this);
+        //playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
+        playerBar = UIManager.instance.CreatePlayerBar(gameObject);
+        UIManager.instance.SetupNewPlayerUI(this, playerUI, playerBar);
         alive = rend.material;
     }
 

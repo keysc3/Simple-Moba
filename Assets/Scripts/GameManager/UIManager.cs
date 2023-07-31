@@ -84,6 +84,13 @@ public class UIManager : MonoBehaviour
             spellButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
             spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
             spellButton.spell = championSpells.mySpells[i];
+            if(i > 0){
+                GameObject levelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").gameObject;
+                SpellLevelUpButton spellLevelUpButton = levelUpButton.GetComponent<SpellLevelUpButton>();
+                spellLevelUpButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
+                spellLevelUpButton.spell = championSpells.mySpells[i].spellNum;
+                spellLevelUpButton.player = player;
+            }
         }
     }
 
