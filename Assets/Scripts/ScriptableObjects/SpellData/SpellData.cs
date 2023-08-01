@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: ScriptableObject for constant spell data.
+*
+* @author: Colin Keys
+*/
 public class SpellData : ScriptableObject
 {
     [field: SerializeField] public Sprite sprite { get; private set; }

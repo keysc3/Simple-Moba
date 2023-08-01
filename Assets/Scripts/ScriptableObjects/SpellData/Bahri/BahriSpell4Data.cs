@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Extends SpellData for spell specific constant data.
+*
+* @author: Colin Keys
+*/
 [CreateAssetMenu(fileName = "BahriSpell4", menuName = "Spell/Bahri/Spell4")]
 public class BahriSpell4Data : SpellData
 {

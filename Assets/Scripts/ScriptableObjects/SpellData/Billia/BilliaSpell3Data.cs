@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Extends SpellData for spell specific constant data.
+*
+* @author: Colin Keys
+*/
 [CreateAssetMenu(fileName = "BilliaSpell3", menuName = "Spell/Billia/Spell3")]
 public class BilliaSpell3Data : SpellData
 {
