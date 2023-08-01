@@ -117,7 +117,7 @@ public class UIManager : MonoBehaviour
             float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
             healthText.SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             // Set the fill based on players health percent.
-            playerBar.transform.GetChild(0).GetChild(1).GetComponent<Slider>().value = healthPercent;
+            playerBar.transform.Find("PlayerBar/Container/Health").GetComponent<Slider>().value = healthPercent;
             health.value = healthPercent;
         }
         else{
@@ -139,7 +139,7 @@ public class UIManager : MonoBehaviour
         mana.transform.Find("Value").GetComponent<TMP_Text>()
         .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
         // Set the fill based on the player mana percent.
-        playerBar.transform.GetChild(0).GetChild(2).GetComponent<Slider>().value = manaPercent;
+        playerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<Slider>().value = manaPercent;
         mana.value = manaPercent;
     }
     
@@ -373,7 +373,7 @@ public class UIManager : MonoBehaviour
     */
     public void UpdateLevelText(int currentLevel, GameObject playerUI, GameObject playerBar){
         playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").GetComponent<TMP_Text>().SetText(currentLevel.ToString());
-        playerBar.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<TMP_Text>().SetText(currentLevel.ToString());
+        playerBar.transform.Find("PlayerBar/Container/Level/Value").GetComponent<TMP_Text>().SetText(currentLevel.ToString());
     }
 
     /*
