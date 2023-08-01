@@ -2,24 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements Billia's fourth spell. Billia puts a Drowsy on any champion with her passive dot on them. After a set time of Drowsy the 
+* champion gets the Sleep effect. If the champion is woken up from the sleep by non-dot champion damage, they take bonus damage.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell4 : Spell, ICastable
 {
     private BilliaSpell4Data spellData;
-    private bool canUseSpell_4 = false;
+    private bool canUseSpell = false;
 
+    /*
+    *   BilliaSpell4 - Initialize Billia's fourth spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BilliaSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell4Data) spellData;
-        championSpells.updateCallback += CanUseSpell_4;
+        championSpells.updateCallback += CanUseSpell;
         canMove = true;
         isQuickCast = true;
     }
 
     /*
-    *   Spell_4 - Champions fourth ability method.
+    *   Cast - Casts the spell.
     */
     public void Cast(){
         // Only allow cast if a champion has passive on them.
-        if(canUseSpell_4){
+        if(canUseSpell){
             if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
                 // Start cast time then cast the spell.
                 championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
@@ -81,17 +93,17 @@ public class BilliaSpell4 : Spell, ICastable
     }
 
     /*
-    *   CanUseSpell_4 - Checks if any champion has Billia's passive on them, which allows the use of spell 4.
+    *   CanUseSpell - Checks if any champion has Billia's passive on them, which allows the use of this spell.
     */
-    private void CanUseSpell_4(){
+    private void CanUseSpell(){
         if(levelManager.spellLevels[spellNum] > 0){
             List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
             if(passiveAppliedChamps.Count > 0){
-                canUseSpell_4 = true;
+                canUseSpell = true;
                 UIManager.instance.SetSpellCoverActive(spellNum, false, player.playerUI);
             }
             else{
-                canUseSpell_4 = false;
+                canUseSpell = false;
                 UIManager.instance.SetSpellCoverActive(spellNum, true, player.playerUI);
             }
         }

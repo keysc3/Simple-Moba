@@ -11,12 +11,12 @@ public class BilliaSpell3Trigger : MonoBehaviour
 {
     public Vector3 forwardDirection { get; private set; }
     public BilliaSpell3 billiaSpell3 { get; private set; }
-    //public bool hasLanded { get; private set; }
     public GameObject casted { get; private set; }
     private bool hit = false;
     private int groundLayer;
     private int projectileLayer;
 
+    // Called when the script instance is being loaded.
     private void Awake(){
         this.enabled = false;
         groundLayer = LayerMask.NameToLayer("Ground");

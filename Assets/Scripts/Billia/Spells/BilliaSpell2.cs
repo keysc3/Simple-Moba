@@ -4,15 +4,30 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements Billia's second spell. Billia dashes to a target location dealing damage in circle. The damage circle contains an inner circle
+* that deals double damage if a unit is hit by it.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell2 : DamageSpell, ICastable
 {
     private BilliaSpell2Data spellData;
     private string radius;
 
+    /*
+    *   BilliaSpell2 - Initialize Billia's second spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell2Data) spellData;
     }
 
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
     protected override void DrawSpell(){
         Vector3 targetDirection = GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
@@ -36,8 +51,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     }
 
     /*
-    *   Spell_2 - Set up Billia's second spell. She dashed an offset distance towards her target location then deals damage in two radius'.
-    *   The inner radius deals bonus damage.
+    *   Cast - Casts the spell.
     */
     public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
@@ -145,13 +159,8 @@ public class BilliaSpell2 : DamageSpell, ICastable
     }
 
     /*
-    *   DoubleRadiusHitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
-    *   The appropriate spells damage method and radius is used based on the results.
+    *   HitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
     *   @param hitboxCenter - Vector3 of the position of the center of the radius' hitbox.
-    *   @param outerRadius - float of the outer radius value to be used.
-    *   @param innerRadius - float of the inner radius value to be used.
-    *   @param spell - string of the spell that has been casted.
-    *   @param DoubleRadiusHitboxHit - delegate containing the method to call if a spell hit is found.
     */
     private void HitboxCheck(Vector3 hitboxCenter){
         LayerMask enemyMask = LayerMask.GetMask("Enemy");

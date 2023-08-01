@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/*
+* Purpose: Implements Billia's first spell. Billia swings her weapon around her dealing damage in a circle. 
+* The circle contains an inner and outer circle hitbox. The outer circle deals an additional amount of damage as true damage.
+* This spell has a passive: When Billia deals damage with any of her abilities she gains a movement speed stack, capped at a maximum value.
+* The stacks fall off overtime if no stack has been received within a time duration.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
 {
 
@@ -12,6 +20,12 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     private string radius;
     private List<Spell> passiveStackSpells = new List<Spell>();
 
+    /*
+    *   BilliaSpell1 - Initialize Billia's first spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BilliaSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell1Data) spellData;
         championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
@@ -20,6 +34,9 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         isQuickCast = true;
     }
     
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.outerRadius, 1f);
@@ -28,8 +45,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     }
 
     /*
-    *   Spell_1 - Sets up Billia's first spell. She swirls her weapon in a radius around her. Players hit by the outer portion take bonus damage.
-    *   Passive: Gain a stacking speed bonus whenever a unit is hit with any spell, up to 4 stacks.
+    *   Cast - Casts the spell.
     */
     public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
@@ -59,8 +75,11 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         championSpells.StartCoroutine(Spell_1_Animation(visualHitbox, spellData.finalAlpha, spellData.initialAlpha));
     }
 
+    /*
+    *   HitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
+    *   @param hitboxCenter - Vector3 of the position of the center of the radius' hitbox.
+    */
     private void HitboxCheck(){
-        //bool passiveStack = false;
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, spellData.outerRadius, enemyMask));
         foreach(Collider collider in outerHit){
@@ -78,12 +97,8 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
                     radius = "outer";
                     Hit(collider.gameObject);
                 }
-               // passiveStack = true;
             }
         }
-        // If a unit was hit proc the spells passive.
-       // if(passiveStack)
-            //Spell_1_PassiveProc(gameObject);
     }
 
     /*
@@ -123,7 +138,6 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         if(passiveStackSpells.Contains(spellHit))
             return;
         passiveStackSpells.Add(spellHit);
-        //spell_1_lastStackTime = Time.time;
         if(levelManager.spellLevels[spellNum] > 0 && passiveStacks < spellData.passiveMaxStacks){
             // Create a new speed bonus with the 
             float bonusPercent = spellData.passiveSpeed[levelManager.spellLevels[spellNum]-1];
@@ -179,6 +193,10 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         }
     }
 
+    /*
+    * ClearPassiveStackSpells - Clears the list of spells that granted a passive stack the current frame.
+    * Used to make sure only one stack per ability is granted per frame.
+    */
     private void ClearPassiveStackSpells(){
         passiveStackSpells.Clear();
     }
@@ -216,7 +234,12 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         }
     }
 
+    /*
+    *   SetupCallbacks - Sets up the necessary callbacks for the spell.
+    *   @param mySpells - List of Spells to set callbacks.
+    */
     public void SetupCallbacks(List<Spell> mySpells){
+        // If the Spell is a DamageSpell then add this spells passive proc to its spell hit callback.
         foreach(Spell newSpell in mySpells){
             if(newSpell is DamageSpell && !(newSpell is BilliaSpell1)){
                 ((DamageSpell) newSpell).spellHitCallback += Spell_1_PassiveProc;

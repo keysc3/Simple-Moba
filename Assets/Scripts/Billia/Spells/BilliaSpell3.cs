@@ -3,16 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/*
+* Purpose: Implements Billia's third spell. Billia lobs a seed at a target location which then rolls until colliding with a GameObject.
+* Upon collision the seed explodes in a cone in its forward direction. The seeds hitbox on landing is slightly larger than its rolling hitbox.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell3 : DamageSpell, ICastable
 {
     private BilliaSpell3Data spellData;
     [SerializeField] private float p1_y_offset = 3f;
     [SerializeField] private float p2_y = 0.85f;
 
+    /*
+    *   BilliaSpell3 - Initialize Billia's third spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BilliaSpell3Data) spellData;
     }
 
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
@@ -33,8 +48,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     }
 
      /*
-    *   Spell_3 - Champions third ability method. Lobs a seed at a target location. If no initial terrain or unit collision the seed rolls 
-    *   until one occurs. Explodes on collision and applies its damage to units within a cone forward of the collision.
+    *   Cast - Casts the spell.
     */
     public void Cast(){
         if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
@@ -85,7 +99,6 @@ public class BilliaSpell3 : DamageSpell, ICastable
         p1.y = p1.y + p1_y_offset;
         Vector3 dir = targetDirection.normalized;
         float mag = targetDirection.magnitude;
-        //float mag = targetDirection.normalized;
         p1.x = p1.x + (dir.x * (mag/2f));
         p1.z = p1.z + (dir.z * (mag/2f));
         // Set p2. p2 y is a value directly above the ground.
@@ -119,7 +132,6 @@ public class BilliaSpell3 : DamageSpell, ICastable
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.SetForwardDirection(targetDirection);
         // Set inital seed position.
-        //spell_3_seed.transform.position = new Vector3(spell_3_seed.transform.position.x, 0.9f, spell_3_seed.transform.position.z);
         // Look at roll direction.
         seed.transform.LookAt(seed.transform.position + targetDirection);
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
@@ -149,7 +161,6 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   @param spell_3_seed - GameObject of the seed.
     *   @param forwardDirection - Vector3 of the roll direction.
     */
-
     public void Spell_3_ConeHitbox(GameObject seed, GameObject initialHit, Vector3 forwardDirection){
         if(initialHit.tag == "Enemy"){
             Hit(initialHit);

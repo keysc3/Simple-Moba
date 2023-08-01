@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements spells for Billia.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpells : ChampionSpells
 {
-    // Start is called before the first frame update
+    // Called when the script instance is being loaded.
     protected override void Awake()
     {
         passive = new BilliaPassive(this, "Passive", passiveData);
@@ -14,10 +19,4 @@ public class BilliaSpells : ChampionSpells
         spell4 = new BilliaSpell4(this, "Spell_4", spell4Data);
         base.Awake();
     }
-
-    // Update is called once per frame
-    /*void Update()
-    {
-        
-    }*/
 }
