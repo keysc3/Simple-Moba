@@ -2,12 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements Bahri'a passive spell. Bahri gains a stack on minion and monster takedowns. Upon reaching a number of stacks Bahri
+* heals herself an amount and resets the stacks. On Champion takedowns Bahri heals an amount.
+*
+* @author: Colin Keys
+*/
 public class BahriPassive : Spell
 {
     private BahriPassiveData spellData;
     private int passiveStacks = 0;
     private PersonalSpell passive;
 
+    /*
+    *   BahriPassive - Initialize Bahri's passive spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriPassiveData) spellData;
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);

@@ -2,14 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements Bahri'a third spell. Bahri throws out a charm at a target direction. The first unit hit takes damage and gets charmed.
+*
+* @author: Colin Keys
+*/
 public class BahriSpell3 : DamageSpell, ICastable
 {
     private BahriSpell3Data spellData;
 
+    /*
+    *   BahriSpell3 - Initialize Bahri's third spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BahriSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell3Data) spellData;
     }
 
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
     protected override void DrawSpell(){
         Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
         targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
@@ -18,8 +32,7 @@ public class BahriSpell3 : DamageSpell, ICastable
     }
 
     /*
-    *   Spell_3 - Sets up and creates the players third spell GameObject. The spell casts a GameObject in the target direction and 'Charms' the first enemy hit,
-    *   disabling their actions and moving them towards Bahri at a decreased move speed.
+    *   Cast - Casts the spell.
     */
     public void Cast(){
         if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
@@ -49,7 +62,6 @@ public class BahriSpell3 : DamageSpell, ICastable
         championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));  
         // Create spell 3 GameObject and set its necessary variables.
         GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
-        //SpellObjectCreated(spell_3_object);
         Spell3Trigger spell3Trigger = missile.GetComponent<Spell3Trigger>();
         spell3Trigger.SetBahriSpell3(this);
         spell3Trigger.SetBahri(gameObject);
@@ -67,7 +79,7 @@ public class BahriSpell3 : DamageSpell, ICastable
     }
 
     /*
-    *   Spell_3_Hit - Deals third spells damage to the enemy hit. Applies a charm effect on target hit.
+    *   Hit - Deals third spells damage to the enemy hit. Applies a charm effect on target hit.
     *   @param enemy - GameObject of the enemy hit.
     */
     public override void Hit(GameObject enemy){

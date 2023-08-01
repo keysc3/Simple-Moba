@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements spells for Bahri.
+*
+* @author: Colin Keys
+*/
 public class BahriSpells : ChampionSpells
 {
-    // Start is called before the first frame update
+    // Called when the script instance is being loaded.
     protected override void Awake()
     {
         passive = new BahriPassive(this, "Passive", passiveData);

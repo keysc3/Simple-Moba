@@ -3,25 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/*
+* Purpose: Implements Bahri'a second spell. Bahri summons a number of projectiles that orbit her and gains a decaying speed boost.
+* If an enemy unit enters a projectiles target radius it locks onto the unit and deals damage upon reaching it.
+* The projectiles prioritize the a charmed target and then the closest target when multiple units are in its target radius.
+*
+* @author: Colin Keys
+*/
 public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
 {
     private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public List<GameObject> activeSpellObjects { get; private set; } = new List<GameObject>();
 
+    /*
+    *   BahriSpell2 - Initialize Bahri's second spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell2Data) spellData;
         isQuickCast = true;
     }
 
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
     }
 
     /*
-    *   Spell_2 - Sets up and creates Bahri's second spell GameObjects. The spell spawns three GameObjects that rotate around Bahri and 
-    *   gives a decaying speed boost. Once a spell GameObject has a target it leaves Bahri and chases its target until they die or it collides with them.
+    *   Cast - Casts the spell.
     */
     public void Cast(){
         if(championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
@@ -38,7 +53,6 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
                 missile.transform.localPosition = new Vector3(1,0,1).normalized * spellData.magnitude;
                 missile.transform.RotateAround(spell_2_parent.transform.position, Vector3.up, angle);
                 angle += 120.0f;
-                //SpellObjectCreated(missile);
             }
             // Start the coroutines for animating the spell and dealing with its effects.
             championSpells.StartCoroutine(Spell_2_Move(spell_2_parent));
@@ -146,9 +160,6 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     private IEnumerator Spell_2_Speed(){
         float timer = 0.0f;
         int spellLevel = levelManager.spellLevels[spellNum]-1;
-        // Players speed with boost applied.
-        //float newSpeed = navMeshAgent.speed + (championStats.speed.GetValue() * bahri.spell_2_msBoost);
-        //navMeshAgent.speed = newSpeed;
         // Create and add a new speed bonus effect.
         SpeedBonus speedBonus = (SpeedBonus) spellData.speedBonus.InitializeEffect(spellLevel, gameObject, gameObject);
         player.statusEffects.AddEffect(speedBonus);
@@ -159,18 +170,13 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
             // Decay the speed bonus based on time since activated.
             float newBonus = Mathf.SmoothStep(spellData.speedBonus.bonusPercent[spellLevel], 0f, timePassed);
             speedBonus.SetBonusPercent(newBonus);
-            //float step = newSpeed - Mathf.SmoothStep(championStats.speed.GetValue(), newSpeed, timePassed);
-            // Apply the current speed boost.
-            //navMeshAgent.speed =  championStats.speed.GetValue() + step;
             timer += Time.deltaTime;
             yield return null;
         }
-        // Ensure initial speed is reached after speed boost ran out.
-        //navMeshAgent.speed = championStats.speed.GetValue();
     }
 
     /*
-    *   Spell_2_Hit - Deals second spells damage to the enemy hit. Reduced damage on missiles that hit the same target more than once.
+    *   Hit - Deals second spells damage to the enemy hit. Reduced damage on missiles that hit the same target more than once.
     *   @param enemy - GameObject of the enemy hit.
     */
     public override void Hit(GameObject enemy){
@@ -184,6 +190,9 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
         enemiesHit.Add(enemy);
     }
 
+    /*
+    *   OnDeathCleanUp - Handles any clean up this spell needs on Bahri's death.
+    */
     public void OnDeathCleanUp(){
         // Destroy all spell parent objects.
         if(activeSpellObjects.Count > 0){

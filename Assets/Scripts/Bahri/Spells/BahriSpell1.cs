@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements Bahri'a first spell. Bahri throws a damage dealing orb at a target direction that returns after reaching its maximum magnitude.
+* Any unit hit on the initial cast takes magic damage and any unit hit by the return takes true damage.
+* The orb accelerates upon starting its return until reaching Bahri.
+*
+* @author: Colin Keys
+*/
 public class BahriSpell1 : DamageSpell, ICastable
 {
 
@@ -9,10 +16,19 @@ public class BahriSpell1 : DamageSpell, ICastable
     private List<GameObject> enemiesHit = new List<GameObject>();
     public bool returning { get; private set; } = false;
 
+    /*
+    *   BahriSpell1 - Initialize Bahri's first spell.
+    *   @param championSpells - ChampionSpells instance this spell is a part of.
+    *   @param spellNum - string of the spell number this spell is.
+    *   @param spellData - SpellData to use.
+    */
     public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
         this.spellData = (BahriSpell1Data) spellData;
     }
 
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
     protected override void DrawSpell(){
         Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
         targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
@@ -21,8 +37,7 @@ public class BahriSpell1 : DamageSpell, ICastable
     }
 
     /*
-    *   Spell_1 - Sets up and creates Bahri's first spell GameObject. The spell moves from Bahri to the target position at a constant speed, then returns upon reaching
-    *   the target location. The return starts slow and speeds up until reaching Bahri and being destroyed.
+    *   Cast - Casts the spell.
     */
     public void Cast(){
         if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
@@ -52,7 +67,6 @@ public class BahriSpell1 : DamageSpell, ICastable
         championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, gameObject.transform.position, Quaternion.identity);
-        //SpellObjectCreated(orb);
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
         spell1Trigger.SetBahriSpell1(this);
         spell1Trigger.SetBahri(gameObject); 
@@ -87,9 +101,8 @@ public class BahriSpell1 : DamageSpell, ICastable
     }
 
     /*
-    *   Spell_1_Hit - Deals first spells damage to the enemy hit. Magic damage on first part then true damage on return.
+    *   Hit - Deals first spells damage to the enemy hit. Magic damage on first part then true damage on return.
     *   @param enemy - GameObject of the enemy hit.
-    *   @param isReturning - bool for if the orb is returning or not.
     */
     public override void Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();

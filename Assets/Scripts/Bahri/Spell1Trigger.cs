@@ -18,6 +18,7 @@ public class Spell1Trigger : MonoBehaviour
     private Collider unitCollider;
     private SphereCollider orbCollider;
 
+    // Start is called before the first frame update.
     private void Start(){
         unit = bahri.GetComponent<Unit>();
         unitCollider = bahri.GetComponent<Collider>();
