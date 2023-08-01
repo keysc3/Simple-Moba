@@ -234,8 +234,9 @@ public class UIManager : MonoBehaviour
     }
 
     /*
-    *   OffCooldown - Sets the spells cooldown UI to inactive.
-    *   @param OffCooldown - transform of the spell cover to turn off.
+    *   ChildrenSetActive - Sets a parents children to active or not active.
+    *   @param parent - Transform of the parent of the children to iterate over.
+    *   @param isActive - bool to set the children active state to.
     */
     public void ChildrenSetActive(Transform parent, bool isActive){
         for(int i = 0; i < parent.childCount; i++){
@@ -246,6 +247,7 @@ public class UIManager : MonoBehaviour
     /*
     *   SpellLearned - Sets the spell cover for the given spell to inactive.
     *   @param spell - string of the spell that was learned.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SpellLearned(string spell, GameObject playerUI){
         Transform spellCover = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Spell/CD/Cover");
@@ -257,6 +259,7 @@ public class UIManager : MonoBehaviour
     *   SpellLeveled - Updates the UI to show the given spells new level.
     *   @param spell - string of the spell that was leveled.
     *   @param spellLevel - int of the new level of the spell.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SpellLeveled(string spell, int spellLevel, GameObject playerUI){
         Transform spellLevels = playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/Levels");
@@ -266,6 +269,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateHealthRegen - Updates the health regen text UI.
     *   @param healthRegen - float of the value to update the text to.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateHealthRegen(float healthRegen, GameObject playerUI){
         Slider health = playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
@@ -275,6 +279,7 @@ public class UIManager : MonoBehaviour
     /*
     *   SetHealthRegenActive - Updates the health regen UI to be showing or not.
     *   @param isActive - bool of whether to active the UI or not.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SetHealthRegenActive(bool isActive, GameObject playerUI){
         Slider health = playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
@@ -284,6 +289,7 @@ public class UIManager : MonoBehaviour
     /*
     *   SetManaRegenActive - Updates the mana regen UI to be showing or not.
     *   @param isActive - bool of whether to active the UI or not.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SetManaRegenActive(bool isActive, GameObject playerUI){
         Slider mana = playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
@@ -293,6 +299,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateManaRegen - Updates the mana regen text UI.
     *   @param manaRegen - float of the value to update the text to.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateManaRegen(float manaRegen, GameObject playerUI){
         Slider mana = playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
@@ -304,6 +311,7 @@ public class UIManager : MonoBehaviour
     *   @param spellLists - Dictionary of <string, int> pairs representing spell:level.
     *   @param level - int of the players level.
     *   @param isActive - bool of whether to set the UI elements active or not.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SetSkillLevelUpActive(Dictionary<string, int> spellLevels, int level, bool isActive, GameObject playerUI){
         // For each spell.
@@ -339,7 +347,8 @@ public class UIManager : MonoBehaviour
     }
 
     /*
-    * SkillLevelUpGradient - Increments the skill level up available gradient time to animate it pulsing.
+    *   SkillLevelUpGradient - Increments the skill level up available gradient time to animate it pulsing.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SkillLevelUpGradient(GameObject playerUI){
         float value = Time.time;
@@ -355,6 +364,7 @@ public class UIManager : MonoBehaviour
     *   @param spell - int of the spell number that is active.
     *   @param duration - float of the total duration of the spell.
     *   @param active - float of the amount of time the spell has been active so far.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SetSpellActiveDuration(string spell, float duration, float active, GameObject playerUI){
         // Get value between 0 and 1 representing the percent of the spell duration left.
@@ -369,6 +379,7 @@ public class UIManager : MonoBehaviour
     /*
     *   SetSpellDurationOver - Set the spells active slider to inactive.
     *   @param spell - int of the spell to deactivate the UI for.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SetSpellDurationOver(string spell, GameObject playerUI){
         playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Outline/Slider").gameObject.SetActive(false);
@@ -378,6 +389,7 @@ public class UIManager : MonoBehaviour
     *   SetSpellCoverActive - Sets the spells UI cover to active or not.
     *   @param spell - int of the spell to update the UI for.
     *   @param isActive - bool of whether or not to activate the spell cover.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SetSpellCoverActive(string spell, bool isActive, GameObject playerUI){
         playerUI.transform.Find("Player/Combat/SpellsContainer/" + spell + "_Container/SpellContainer/Spell/CD/Cover").gameObject.SetActive(isActive);
@@ -387,6 +399,7 @@ public class UIManager : MonoBehaviour
     *   UpdateExperienceBar - Updates the experience slider to the percent of experience earned towards the next level.
     *   @param currentXP - float of the players current experience.
     *   @param requiredXP float of the total required experience for the players next level.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateExperienceBar(float currentXP, float requiredXP, GameObject playerUI){
         playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/Experience").GetComponent<Slider>().value = Mathf.Round((currentXP/requiredXP) * 100);
@@ -395,6 +408,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateLevelText - Updates the player level UI text.
     *   @param currentLevel - int of the players current level.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateLevelText(int currentLevel, GameObject playerUI, GameObject playerBar){
         playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").GetComponent<TMP_Text>().SetText(currentLevel.ToString());
@@ -404,6 +418,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateDeathTimer - Updates the death timer UI of the player.
     *   @param timeLeft - float of the time left before respawn.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateDeathTimer(float timeLeft, GameObject playerUI){
         GameObject iconCover = playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/IconCover").gameObject;
@@ -421,6 +436,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateKills - Updates the UI text with the players current amount of kills.
     *   @param kills - string of the amount of kills to update to.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateKills(string kills, GameObject playerUI){
         TMP_Text killsText = playerUI.transform.Find("Score/Container/Kills/Value").GetComponent<TMP_Text>();
@@ -430,6 +446,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateDeaths - Updates the UI text with the players current amount of deaths.
     *   @param deaths - string of the amount of deaths to update to.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateDeaths(string deaths, GameObject playerUI){
         TMP_Text deathsText = playerUI.transform.Find("Score/Container/Deaths/Value").GetComponent<TMP_Text>();
@@ -439,6 +456,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateAssists - Updates the UI text with the players current amount of assists.
     *   @param assists - string of the amount of assists to update to.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateAssists(string assists, GameObject playerUI){
         TMP_Text assistsText = playerUI.transform.Find("Score/Container/Assists/Value").GetComponent<TMP_Text>();
@@ -448,6 +466,7 @@ public class UIManager : MonoBehaviour
     /*
     *   UpdateCS - Updates the UI text with the players current amount of cs.
     *   @param cs - string of the amount of cs to update to.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void UpdateCS(string cs, GameObject playerUI){
         TMP_Text csText = playerUI.transform.Find("Score/Container/CS/Value").GetComponent<TMP_Text>();
@@ -458,6 +477,7 @@ public class UIManager : MonoBehaviour
     *   AddItem - Updates the inventory UI with a new item.
     *   @param itemSlot - int of the UI item slot to add the item to.
     *   @param itemSprite - sprite of the item.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void AddItem(int itemSlot, Sprite itemSprite, GameObject playerUI){
         GameObject itemImage = playerUI.transform.Find("Player/Items/ItemsContainer/Item_" + itemSlot + "_Container/Sprite").gameObject;
@@ -468,6 +488,7 @@ public class UIManager : MonoBehaviour
     /*
     *   AddItem - Removes an item from the inventory UI.
     *   @param itemSlot - int of the UI item slot to remove the item from.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void RemoveItem(int itemSlot, GameObject playerUI){
         GameObject itemImage = playerUI.transform.Find("Player/Items/ItemsContainer/Item_" + itemSlot + "_Container/Sprite").gameObject;
@@ -478,6 +499,7 @@ public class UIManager : MonoBehaviour
     /*
     *   SetPlayerBarActive - Sets the player bar UI to active or not.
     *   @param isActive - bool of whether or not to activate the spell cover.
+    *   @param playerBar - GameObject of the player bar being updated.
     */
     public void SetPlayerBarActive(bool isActive, GameObject playerBar){
         playerBar.SetActive(isActive);
@@ -486,6 +508,7 @@ public class UIManager : MonoBehaviour
     /*
     *   SetChampionUIActive - Sets the champion UI to active or not.
     *   @param isActive - bool of whether or not to activate the spell cover.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void SetChampionUIActive(bool isActive, GameObject playerUI){
         playerUI.SetActive(isActive);
@@ -504,6 +527,7 @@ public class UIManager : MonoBehaviour
     *   AddStatusEffectUI - Adds a status effect indicator to the UI. Left side is buffs, right side is debuffs.
     *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for.
     *   @param effect - Effect to add to the UI.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
@@ -689,6 +713,7 @@ public class UIManager : MonoBehaviour
     /*
     *   ShiftStatusEffects - Shifts the status effects UI container a specific amount. Used for overflow and to avoid skill level up UI blocking the status effects UI.
     *   @param shiftAmount - Vector2 of the x and y amounts to shift the UI component.
+    *   @param playerUI - GameObject of the playerUI being updated.
     */
     public void ShiftStatusEffects(Vector2 shiftAmount, GameObject playerUI){
         playerUI.transform.Find("Player/StatusEffects").GetComponent<RectTransform>().anchoredPosition += shiftAmount;
