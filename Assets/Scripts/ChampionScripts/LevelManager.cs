@@ -13,7 +13,7 @@ public class LevelManager
     [field: SerializeField] public int level { get; private set; } = 1;
     [field: SerializeField] public int spellLevelPoints { get; private set; } = 1;
     [field: SerializeField] public bool skillLevelUpUIActive { get; private set; } = true;
-    [field: SerializeField] public LevelInfo levelInfo;
+    [field: SerializeField] public LevelInfo levelInfo { get; private set; }
     [field: SerializeField] public float gainAmount { get; private set; } = 100f;
     public Dictionary<string, int> spellLevels { get; private set; } = new Dictionary<string, int>();
     
@@ -23,6 +23,11 @@ public class LevelManager
     private ScriptableChampion champion;
     private Player player;
     
+    /*
+    *   LevelManager - Initializes a new level manager.
+    *   @param plater - Player this level manager is for.
+    *   @param levelInfo - LevelInfo to use for leveling information/constants.
+    */
     public LevelManager(Player player, LevelInfo levelInfo){
         this.levelInfo = levelInfo;
         this.player = player;
@@ -88,14 +93,10 @@ public class LevelManager
         newLevel = true;
         // Increase the champions base stats.
         IncreaseChampionStats();
-        //CurrentRespawnTime();
         championStats.UpdateAttackSpeed();
         UIManager.instance.UpdateHealthBar(player);
         UIManager.instance.UpdateManaBar(player);
         UIManager.instance.UpdateAllStats(player);
-        //uiManager.UpdateHealthBar();
-        //uiManager.UpdateManaBar();
-        //uiManager.UpdateAllStats();
     }
 
     /*
@@ -143,21 +144,12 @@ public class LevelManager
         return growthStat * (level - 1) * (0.7025f + (0.0175f * (level - 1)));
     }
 
-    // Update is called once per frame
-    /*private void Update()
-    {
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
-            if(Input.GetKeyDown(KeyCode.K))
-                GainXPTester(gainAmount);
-        }
-    }*/
-
     /*
     *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
     */
     public void LevelUpSkill(){
         if(!skillLevelUpUIActive)
-            ShiftLevelUpUIUp();
+            UIManager.instance.ShiftStatusEffects(new Vector2(levelInfo.xShift, levelInfo.yShift), player.playerUI);
         // If a level up or skill point was used since the last UI update then update the UI.
         if(newLevel){
             UIManager.instance.SetSkillLevelUpActive(spellLevels, level, true, player.playerUI);
@@ -184,10 +176,9 @@ public class LevelManager
         UIManager.instance.SkillLevelUpGradient(player.playerUI);
     }
 
-    private void ShiftLevelUpUIUp(){
-        UIManager.instance.ShiftStatusEffects(new Vector2(levelInfo.xShift, levelInfo.yShift), player.playerUI);
-    }
-
+    /*
+    * DeactivateSkillLevelUpUI - Sets the skill level up UI active state to false and shifts the status effects back.
+    */
     public void DeactivateSkillLevelUpUI(){
         skillLevelUpUIActive = false;
         // Disable skill level up UI.

@@ -10,14 +10,9 @@ using UnityEngine;
 [System.Serializable]
 public class DamageTracker
 {
-    [field: SerializeField] public List<Damage> damageReceived { get; private set; }
+    [field: SerializeField] public List<Damage> damageReceived { get; private set; } = new List<Damage>();
     private float resetTime = 15f; 
     private float assistTime = 10.0f;
-    //public float lastDamageReceived;
-
-    public DamageTracker(){
-        damageReceived = new List<Damage>();
-    }
 
     /*
     *   CheckForReset - Checks if the last instance of damage is greater than the reset damage received timer.
@@ -36,7 +31,6 @@ public class DamageTracker
     */
     public void AddDamage(GameObject damageDealer, float damageAmount, string damageType){
         damageReceived.Add(new Damage(damageDealer, damageAmount, damageType));
-        //lastDamageReceived = Time.time;
     }
 
     /*

@@ -10,6 +10,7 @@ using UnityEngine.AI;
 */
 public class PlayerController : MonoBehaviour
 {
+    public GameObject targetedEnemy { get; private set; } = null;
     private float attackTime;
     private Camera mainCamera;
     private ChampionStats championStats;
@@ -18,8 +19,6 @@ public class PlayerController : MonoBehaviour
     private Collider myCollider;
     private Vector3 dest;
     private Vector3 currentTarget;
-    public GameObject targetedEnemy { get; private set; } = null;
-    //private ChampionAbilities playerAbilities;
     private BasicAttack basicAttack;
     private Player player;
 
