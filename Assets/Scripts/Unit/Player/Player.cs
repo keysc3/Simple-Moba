@@ -43,26 +43,20 @@ public class Player : Unit, IRespawnable
         unitStats = new ChampionStats((ScriptableChampion)unit);
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
-        //championAbilities = GetComponent<ChampionAbilities>();
         championSpells = GetComponent<ChampionSpells>();
         rend = GetComponent<Renderer>();
-        //damageTracker = GetComponent<DamageTracker>();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         score = new Score();
         levelManager = new LevelManager(this, levelInfo);
-        /*playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
-        playerBar = UIManager.instance.CreatePlayerBar(gameObject);
-        UIManager.instance.SetUpPlayerUI(this, playerUI, playerBar);*/
     }
 
     // Start is called before the first frame update
     private void Start()
     {
         playerUI = UIManager.instance.CreatePlayerUI(gameObject, this);
-        //playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
         playerBar = UIManager.instance.CreatePlayerBar(gameObject);
-        UIManager.instance.SetupNewPlayerUI(this, playerUI, playerBar);
+        UIManager.instance.SetupPlayerUI(this, playerUI, playerBar);
         alive = rend.material;
     }
 

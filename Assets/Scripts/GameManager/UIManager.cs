@@ -14,9 +14,8 @@ public class UIManager : MonoBehaviour
 
     public static UIManager instance { get; private set; }
 
-    [SerializeField] private GameObject playerBar;
+    [SerializeField] private GameObject playerBarPrefab;
     [SerializeField] private GameObject statusEffectPrefab;
-    [SerializeField] private GameObject championUIPrefab;
     [SerializeField] private GameObject playerUIPrefab;
     private float buffDebuffUIWidth;
     private float xOffset = 2f;
@@ -40,7 +39,7 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void SetupNewPlayerUI(Player player, GameObject playerUI, GameObject playerBar){
+    public void SetupPlayerUI(Player player, GameObject playerUI, GameObject playerBar){
         UpdateHealthBar(player, playerUI, playerBar);
         UpdateManaBar((ChampionStats) player.unitStats, playerUI, playerBar);
         UpdateAllStats((ChampionStats) player.unitStats, playerUI);
@@ -95,7 +94,7 @@ public class UIManager : MonoBehaviour
     }
 
     public GameObject CreatePlayerBar(GameObject champion){
-        GameObject newPlayerBar = (GameObject) Instantiate(playerBar, playerBar.transform.position, playerBar.transform.rotation);
+        GameObject newPlayerBar = (GameObject) Instantiate(playerBarPrefab, playerBarPrefab.transform.position, playerBarPrefab.transform.rotation);
         newPlayerBar.name = champion.name + "PlayerBar";
         RectTransform newPlayerBarRectTransform = newPlayerBar.GetComponent<RectTransform>();
         Vector3 newPlayerBarPos = newPlayerBarRectTransform.anchoredPosition;
