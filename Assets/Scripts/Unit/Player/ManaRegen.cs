@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements mana regeneration for a unit.
+*
+* @author: Colin Keys
+*/
 public class ManaRegen : MonoBehaviour
 {
     private Player player;
@@ -49,7 +54,6 @@ public class ManaRegen : MonoBehaviour
                 // Set mana and only regen every 0.5s.
                 championStats.SetMana(currentMana);
                 UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
-                //uiManager.UpdateManaBar();
                 // Display per 1s on UI.
                 UIManager.instance.UpdateManaRegen(championStats.MP5.GetValue()/5.0f, player.playerUI);
             }

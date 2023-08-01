@@ -14,7 +14,6 @@ public class Damage
     [field: SerializeField] public float amount { get; private set; }
     [field: SerializeField] public float time { get; private set; }
     [field: SerializeField] public string type { get; private set; }
-    //private string spell;
     [field: SerializeField] public GameObject from { get; private set; }
 
     /*

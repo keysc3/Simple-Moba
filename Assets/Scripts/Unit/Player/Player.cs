@@ -14,26 +14,22 @@ public class Player : Unit, IRespawnable
     [field: SerializeField] public Inventory inventory { get; private set; }
     [field: SerializeField] public Score score { get; private set; }
     [field: SerializeField] public LevelManager levelManager { get; private set; }
-    private PlayerController playerController;
-    private PlayerSpellInput playerSpellInput;
-    //private ChampionAbilities championAbilities;
-    private ChampionSpells championSpells;
-    //private LevelManager levelManager;
-    protected Renderer rend;
-    //private DamageTracker damageTracker;
-    private Material alive;
-    [SerializeField] private Material dead;
-    [SerializeField] private LevelInfo levelInfo;
-    [field: SerializeField] public GameObject playerUIPrefab { get; private set; }
-    public GameObject newPlayerUI { get; private set; }
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
-
-    // TODO: handle respawn position somewhere else.
-    private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
     public bool isCasting { get; private set; }
     public Vector3 mouseOnCast { get; private set; }
     public Spell currentCastedSpell { get; private set; }
+
+    [SerializeField] private Material dead;
+    [SerializeField] private LevelInfo levelInfo;
+    private PlayerController playerController;
+    private PlayerSpellInput playerSpellInput;
+    private ChampionSpells championSpells;
+    private Material alive;
+    private Renderer rend;
+
+    // TODO: handle respawn position somewhere else.
+    private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
 
 
     /*
@@ -144,7 +140,7 @@ public class Player : Unit, IRespawnable
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }
-        // Handle any clean up needed before respawn.
+        // TODO: Implement respawn cleanup
         //championAbilities.OnRespawnCleanUp();
         // Enable collider.
         myCollider.enabled = true;
@@ -175,6 +171,11 @@ public class Player : Unit, IRespawnable
         Respawn();
     }
 
+    /*
+    *   SetIsCasting - Sets the players isCasting bool and spell being casted if true.
+    *   @param isCasting - bool for if the player is casting.
+    *   @param currentCastedSpell - Spell being casted.
+    */
     public void SetIsCasting(bool isCasting, Spell currentCastedSpell){
         this.isCasting = isCasting;
         if(!isCasting)
@@ -183,6 +184,10 @@ public class Player : Unit, IRespawnable
             this.currentCastedSpell = currentCastedSpell;
     }
     
+    /*
+    *   SetMouseOnCast - Stores the players mouse position from cast.
+    *   @param mouseOnCast - Vector3 for world coordinates of the mouse on cast.
+    */
     public void SetMouseOnCast(Vector3 mouseOnCast){
         this.mouseOnCast = mouseOnCast;
     }
