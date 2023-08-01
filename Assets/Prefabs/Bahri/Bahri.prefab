@@ -103,6 +103,23 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1921830857179254351, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
   m_PrefabInstance: {fileID: 6246775977090456596}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-1760639917251362305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5483897106226106971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f968c97dd33bc2044ae4c2057808b347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  passiveData: {fileID: 11400000, guid: 7d69f38a1f18a394587bf1083e8ca225, type: 2}
+  spell1Data: {fileID: 11400000, guid: 3620d714736ae284c816944dd9957575, type: 2}
+  spell2Data: {fileID: 11400000, guid: 2291d5583bbcec547a470531000a7528, type: 2}
+  spell3Data: {fileID: 11400000, guid: c2453373a5928d94a862f767f7a8ce1c, type: 2}
+  spell4Data: {fileID: 11400000, guid: 5c09a73194528c34eb73b7120d0216bd, type: 2}
 --- !u!114 &-625293995896609258
 MonoBehaviour:
   m_ObjectHideFlags: 0

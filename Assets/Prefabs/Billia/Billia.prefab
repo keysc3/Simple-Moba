@@ -98,3 +98,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f47262ce278cc4696868123cf38913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6918248215500220602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5980474150250256565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06217da7793f26489f5360f879376fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  passiveData: {fileID: 11400000, guid: b7dcd60c48fa661418f2f24cb481d370, type: 2}
+  spell1Data: {fileID: 11400000, guid: edd59005514ddc64eabccd42a2830c6d, type: 2}
+  spell2Data: {fileID: 11400000, guid: f5e41873e15d91f4ba9776c00fff1b0b, type: 2}
+  spell3Data: {fileID: 11400000, guid: a6f6aae9dc9d26b49b083373a6d016c3, type: 2}
+  spell4Data: {fileID: 11400000, guid: a17cdc19a022d3147a5baa14421cf6dd, type: 2}
