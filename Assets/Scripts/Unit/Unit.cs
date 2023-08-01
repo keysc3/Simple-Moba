@@ -12,7 +12,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
 {
     [field: SerializeField] public ScriptableUnit unit { get; private set; }
     [field: SerializeField] public UnitStats unitStats { get; protected set; }
-    //public Level level;
     [field: SerializeField] public StatusEffects statusEffects { get; private set; }
     [field: SerializeField] public NavMeshAgent navMeshAgent { get; private set; }
     protected Collider myCollider;

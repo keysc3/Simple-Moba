@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Implements a status effects object..
+* Purpose: Implements a status effects object.
 *
 * @author: Colin Keys
 */
@@ -268,7 +268,6 @@ public class StatusEffects
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);
                 SetMostImpairing(GetMostImpairing());
-                //effect.SetIsFinished(true);
                 return;
             }
         }

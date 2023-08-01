@@ -20,7 +20,6 @@ public abstract class Effect
     [field: SerializeField] public float effectTimer { get; private set; } = 0f;
     [field: SerializeField] public float effectDuration { get; private set; }
     [field: SerializeField] public bool isActivated { get; private set; } = false;
-    //private bool isActivated;
 
     /*
     *   Effect - Initialize a new Effect object.
@@ -34,7 +33,6 @@ public abstract class Effect
         effected = unitEffected;
         effectDuration = duration;
         isFinished = false;
-        //isActivated = false;
         effectType = effect;
         effectedCollider = unitEffected.GetComponent<Collider>();
     }

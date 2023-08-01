@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements health regeneration for a unit.
+*
+* @author: Colin Keys
+*/
 public class HealthRegen : MonoBehaviour
 {
     private Player player;
@@ -21,7 +26,7 @@ public class HealthRegen : MonoBehaviour
 
     // Called once per frame.
     private void Update(){
-        // Activate and health regen UI if the player is not full health.
+        // Activate the health regen UI if the player is not full health.
         if(championStats.currentHealth < championStats.maxHealth.GetValue() && !player.isDead){
             UIManager.instance.SetHealthRegenActive(true, player.playerUI);
         }
@@ -49,7 +54,6 @@ public class HealthRegen : MonoBehaviour
                 // Set health and only regen every 0.5s.
                 championStats.SetHealth(currentHealth);
                 UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
-                //uiManager.UpdateHealthBar();
                 // Display per 1s on UI.
                 UIManager.instance.UpdateHealthRegen(championStats.HP5.GetValue()/5.0f, player.playerUI);
             }
