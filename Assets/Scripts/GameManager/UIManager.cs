@@ -86,17 +86,16 @@ public class UIManager : MonoBehaviour
         // Setup spell1-4's spell button.
         for(int i = 0; i < 5; i++){
             SpellButton spellButton = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").GetComponent<SpellButton>();
-            spellButton.spell = championSpells.mySpells[i];
-            spellButton.keyCode = inputs[i];
-            spellButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
+            spellButton.SetSpell(championSpells.mySpells[i]);
+            spellButton.SetKeyCode (inputs[i]);
+            spellButton.SetPlayerSpellInput(champion.GetComponent<PlayerSpellInput>());
             spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
-            spellButton.spell = championSpells.mySpells[i];
             // Setup spell1-4's level up buttons.
             if(i > 0){
                 SpellLevelUpButton spellLevelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").GetComponent<SpellLevelUpButton>();
-                spellLevelUpButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
-                spellLevelUpButton.spell = championSpells.mySpells[i].spellNum;
-                spellLevelUpButton.player = player;
+                spellLevelUpButton.SetPlayerSpellInput(champion.GetComponent<PlayerSpellInput>());
+                spellLevelUpButton.SetSpell(championSpells.mySpells[i].spellNum);
+                spellLevelUpButton.SetPlayer(player);
             }
         }
     }
