@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/*
+* Purpose: Implements a minion unit.
+*
+* @author: Colin Keys
+*/
 public class Minion : Unit
 {
     /*
