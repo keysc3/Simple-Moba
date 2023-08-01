@@ -50,9 +50,10 @@ public class Player : Unit, IRespawnable
     // Start is called before the first frame update
     private void Start()
     {
-        playerUI = UIManager.instance.CreatePlayerUI(gameObject, this);
-        playerBar = UIManager.instance.CreatePlayerBar(gameObject);
-        UIManager.instance.SetupPlayerUI(this, playerUI, playerBar);
+        //playerUI = UIManager.instance.CreatePlayerUI(gameObject, this);
+        //playerBar = UIManager.instance.CreatePlayerBar(gameObject);
+        (playerUI, playerBar) = UIManager.instance.SetupPlayerUI(this);
+        UIManager.instance.InitialValueSetup(this);
         alive = rend.material;
     }
 
@@ -88,7 +89,7 @@ public class Player : Unit, IRespawnable
     public override void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
         base.TakeDamage(incomingDamage, damageType, from, isDot);
         damageTracker.AddDamage(from, incomingDamage, damageType);
-        UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
+        UIManager.instance.UpdateHealthBar(this);
     }
 
     /*
@@ -150,8 +151,8 @@ public class Player : Unit, IRespawnable
         // Set alive values.
         rend.material = alive;
         isDead = false;
-        UIManager.instance.UpdateManaBar((ChampionStats) unitStats, playerUI, playerBar);
-        UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
+        UIManager.instance.UpdateManaBar(this);
+        UIManager.instance.UpdateHealthBar(this);
         UIManager.instance.SetPlayerBarActive(true, playerBar);
         // Move player to respawn location.
         transform.position = respawnPosition;

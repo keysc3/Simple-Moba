@@ -90,10 +90,9 @@ public class LevelManager
         IncreaseChampionStats();
         //CurrentRespawnTime();
         championStats.UpdateAttackSpeed();
-        UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
-        UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
-        UIManager.instance.UpdateAllStats(championStats, player.playerUI);
-
+        UIManager.instance.UpdateHealthBar(player);
+        UIManager.instance.UpdateManaBar(player);
+        UIManager.instance.UpdateAllStats(player);
         //uiManager.UpdateHealthBar();
         //uiManager.UpdateManaBar();
         //uiManager.UpdateAllStats();

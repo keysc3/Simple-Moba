@@ -34,43 +34,51 @@ public class UIManager : MonoBehaviour
         buffDebuffUIWidth = playerUIPrefab.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
     }
 
-    // Start is called before the first frame update.
-    void Start(){
-
+    /*
+    *   SetupPlayerUI - Sets up the player UI by calling the necessary methods.
+    *   @param player - Player the UI is being setup for.
+    *   @return (GameObject, GameObject) - Tuple for returning the intialized player UI and player bar.
+    */
+    public (GameObject, GameObject) SetupPlayerUI(Player player){
+        GameObject playerUI = CreatePlayerUI(player.gameObject, player.unit.icon);
+        SetupSpellUI(playerUI, player.gameObject, player);
+        GameObject playerBar = CreatePlayerBar(player.gameObject);
+        return (playerUI, playerBar);
     }
 
-    public void SetupPlayerUI(Player player, GameObject playerUI, GameObject playerBar){
-        UpdateHealthBar(player, playerUI, playerBar);
-        UpdateManaBar((ChampionStats) player.unitStats, playerUI, playerBar);
-        UpdateAllStats((ChampionStats) player.unitStats, playerUI);
+    /*
+    *   InitialValueSetup - Initializes the players resource and stat UI values.
+    */
+    public void InitialValueSetup(Player player){
+        UpdateHealthBar(player);
+        UpdateManaBar(player);
+        UpdateAllStats(player);
     }
 
-    public GameObject CreatePlayerHUD(GameObject champion, GameObject championUI, Player player){
-        // Set up the players HUD.
-        GameObject newChampionUI = (GameObject) Instantiate(championUI, championUI.transform.position, championUI.transform.rotation);
-        newChampionUI.name = champion.name + "UI";
-        newChampionUI.transform.SetParent(GameObject.Find("/Canvas").transform);
-        RectTransform newChampionUIRectTransform = newChampionUI.GetComponent<RectTransform>();
-        newChampionUIRectTransform.offsetMin = new Vector2(0, 0);
-        newChampionUIRectTransform.offsetMax = new Vector2(0, 0);
-        // Set up the players health/mana/xp bar above their GameObject.
-        return newChampionUI;
-    }
-
-    public GameObject CreatePlayerUI(GameObject champion, Player player){
-        // Set up the players HUD.
+    /*
+    *   CreatePlayerUI - Initializes a new player UI.
+    *   @param champion - GameObject the UI is for.
+    *   @param icon - Sprite of the icon of the unit the UI is for.
+    *   @return GameObject - GameObject of the initialized player UI.
+    */
+    public GameObject CreatePlayerUI(GameObject champion, Sprite icon){
+        // Set up the players UI.
         GameObject newPlayerUI = (GameObject) Instantiate(playerUIPrefab, playerUIPrefab.transform.position, playerUIPrefab.transform.rotation);
         newPlayerUI.name = champion.name + "UI";
         newPlayerUI.transform.SetParent(GameObject.Find("/Canvas").transform);
         RectTransform newPlayerUIRectTransform = newPlayerUI.GetComponent<RectTransform>();
         newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
         newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
-        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = player.unit.icon;
-        SetupSpellUI(newPlayerUI, champion, player);
-        // Set up the players health/mana/xp bar above their GameObject.
+        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = icon;
         return newPlayerUI;
     }
 
+    /*
+    *   SetUpSpellUI - Sets up the spell UIs buttons and icons.
+    *   @param playerUI - GameObject of the player UI to do the spell setup for.
+    *   @param champion - GameObject the UI is for.
+    *   @param player - Player the UI is being setup for.
+    */
     public void SetupSpellUI(GameObject playerUI, GameObject champion, Player player){
         GameObject spellContainer = playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
         ChampionSpells championSpells = champion.GetComponent<ChampionSpells>();
@@ -93,6 +101,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /*
+    *   CreatePlayerBar - Initializes a new player bar.
+    *   @param champion - GameObject the player bar is for.
+    *   @return GameObject - GameObject of the initialized player bar.
+    */
     public GameObject CreatePlayerBar(GameObject champion){
         GameObject newPlayerBar = (GameObject) Instantiate(playerBarPrefab, playerBarPrefab.transform.position, playerBarPrefab.transform.rotation);
         newPlayerBar.name = champion.name + "PlayerBar";
@@ -105,24 +118,24 @@ public class UIManager : MonoBehaviour
 
     /*
     *   UpdateHealthBar - Updates the health bar UI.
+    *   @param player - Player whose health bar is being updated.
     */
-    public void UpdateHealthBar(Player player, GameObject championUI, GameObject playerBar){
-        Slider health = championUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
+    public void UpdateHealthBar(Player player){
+        Slider health = player.playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
         TMP_Text healthText = health.transform.Find("Value").GetComponent<TMP_Text>();
+        ChampionStats championStats = (ChampionStats) player.unitStats;
         // If the champion is dead.
         if(!player.isDead){
-            ChampionStats championStats = (ChampionStats) player.unitStats;
             // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
             float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
             healthText.SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             // Set the fill based on players health percent.
-            playerBar.transform.Find("PlayerBar/Container/Health").GetComponent<Slider>().value = healthPercent;
+            player.playerBar.transform.Find("PlayerBar/Container/Health").GetComponent<Slider>().value = healthPercent;
             health.value = healthPercent;
         }
         else{
             // Set players health text and fill to 0.
-            ChampionStats championStats = (ChampionStats) player.unitStats;
-            playerBar.SetActive(false);
+            player.playerBar.SetActive(false);
             healthText.SetText(0 + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             health.value = 0;
         }
@@ -130,20 +143,27 @@ public class UIManager : MonoBehaviour
 
     /*
     *   UpdateManaBar - Updates the mana bar UI.
+    *   @param player - Player whose health bar is being updated.
     */
-    public void UpdateManaBar(ChampionStats championStats, GameObject championUI, GameObject playerBar){
-        Slider mana = championUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
+    public void UpdateManaBar(Player player){
+        Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
+        ChampionStats championStats = (ChampionStats) player.unitStats;
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
         float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
         mana.transform.Find("Value").GetComponent<TMP_Text>()
         .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
         // Set the fill based on the player mana percent.
-        playerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<Slider>().value = manaPercent;
+        player.playerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<Slider>().value = manaPercent;
         mana.value = manaPercent;
     }
     
-    public void UpdateAllStats(ChampionStats championStats, GameObject playerUI){
-        Transform statsContainer = playerUI.transform.Find("Player/Info/Stats/Container");
+    /*
+    *   UpdateAllStats - Updates all the UI for player stats.
+    *   @param player - Player whose stats are being updated.
+    */
+    public void UpdateAllStats(Player player){
+        Transform statsContainer = player.playerUI.transform.Find("Player/Info/Stats/Container");
+        ChampionStats championStats = (ChampionStats) player.unitStats;
         UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue(), statsContainer);
         UpdateStat("Armor", championStats.armor.GetValue(), statsContainer);
         if(championStats.attackSpeed.GetValue() > 2.5f)
@@ -157,6 +177,12 @@ public class UIManager : MonoBehaviour
         UpdateStat("Speed", championStats.speed.GetValue(), statsContainer);
     }
 
+    /*
+    *   UpdateStat - Updates the UI value for a stat.
+    *   @param statName - string of the stat to update.
+    *   @param value - float of the value to update the UI to.
+    *   @param statsContainer - transform of the stats UI GameObjects parent.
+    */
     public void UpdateStat(string statName, float value, Transform statsContainer){
         if(statName != "AttackSpeed")
             statsContainer.Find(statName).Find("Value").GetComponent<TMP_Text>().SetText(Mathf.Round(value).ToString());

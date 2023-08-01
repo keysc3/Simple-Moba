@@ -53,7 +53,7 @@ public class HealthRegen : MonoBehaviour
                     currentHealth = maxHealth;
                 // Set health and only regen every 0.5s.
                 championStats.SetHealth(currentHealth);
-                UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
+                UIManager.instance.UpdateHealthBar(player);
                 // Display per 1s on UI.
                 UIManager.instance.UpdateHealthRegen(championStats.HP5.GetValue()/5.0f, player.playerUI);
             }

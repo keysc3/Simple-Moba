@@ -53,7 +53,7 @@ public class ManaRegen : MonoBehaviour
                     currentMana = maxMana;
                 // Set mana and only regen every 0.5s.
                 championStats.SetMana(currentMana);
-                UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+                UIManager.instance.UpdateManaBar(player);
                 // Display per 1s on UI.
                 UIManager.instance.UpdateManaRegen(championStats.MP5.GetValue()/5.0f, player.playerUI);
             }
