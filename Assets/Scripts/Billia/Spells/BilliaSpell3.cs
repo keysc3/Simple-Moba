@@ -182,7 +182,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     }
 
     /*
-    *   Spell_3_Hit - Deals third spells damage to the enemy hit. Magic damage with a slow on hit.
+    *   Hit - Deals third spells damage to the enemy hit. Magic damage with a slow on hit.
     *   @param enemy - GameObject of the enemy hit.
     */
     public override void Hit(GameObject hit){

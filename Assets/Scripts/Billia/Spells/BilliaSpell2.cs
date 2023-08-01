@@ -188,7 +188,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     }
 
     /*
-    *   Spell_2_Hit - Deals second spells damage to the enemy hit. Magic damage with inner hit dealing increased magic damage.
+    *   Hit - Deals second spells damage to the enemy hit. Magic damage with inner hit dealing increased magic damage.
     *   @param enemy - GameObject of the enemy hit.
     *   @param radius - string of which radius was hit.
     */

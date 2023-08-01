@@ -217,7 +217,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     }
 
     /*
-    *   Spell_1_Hit - Deals first spells damage to the enemy hit. Magic damage with additional true damage on outer hit.
+    *   Hit - Deals first spells damage to the enemy hit. Magic damage with additional true damage on outer hit.
     *   @param enemy - GameObject of the enemy hit.
     *   @param radius - string of which radius was hit.
     */
