@@ -41,20 +41,13 @@ public class Player : Unit, IRespawnable
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championSpells = GetComponent<ChampionSpells>();
         rend = GetComponent<Renderer>();
+        alive = rend.material;
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         score = new Score();
         levelManager = new LevelManager(this, levelInfo);
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        //playerUI = UIManager.instance.CreatePlayerUI(gameObject, this);
-        //playerBar = UIManager.instance.CreatePlayerBar(gameObject);
         (playerUI, playerBar) = UIManager.instance.SetupPlayerUI(this);
         UIManager.instance.InitialValueSetup(this);
-        alive = rend.material;
     }
 
     // Update is called once per frame

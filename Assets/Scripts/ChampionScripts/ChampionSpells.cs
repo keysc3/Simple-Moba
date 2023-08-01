@@ -31,19 +31,16 @@ public class ChampionSpells : MonoBehaviour
     public delegate void LateUpdateCallback(); 
     public LateUpdateCallback lateUpdateCallback;
 
-    // Called when the script instance is being loaded.
-    protected virtual void Awake(){
+    // Start is called before the first frame update.
+    protected virtual void Start(){
         mySpells = new List<Spell>(){passive, spell1, spell2, spell3, spell4};
         mySpellData = new List<SpellData>(){passiveData, spell1Data, spell2Data, spell3Data, spell4Data};
         CallbackSetup();
-    }
-
-    // Start is called before the first frame update.
-    protected virtual void Start(){
         Player player = GetComponent<Player>();
         foreach(Effect effect in initializationEffects){
             player.statusEffects.AddEffect(effect);
         }
+        UIManager.instance.SetupSpellUI(player);
     }
 
     // Update is called once per frame.

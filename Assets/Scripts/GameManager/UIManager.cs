@@ -41,7 +41,6 @@ public class UIManager : MonoBehaviour
     */
     public (GameObject, GameObject) SetupPlayerUI(Player player){
         GameObject playerUI = CreatePlayerUI(player.gameObject, player.unit.icon);
-        SetupSpellUI(playerUI, player.gameObject, player);
         GameObject playerBar = CreatePlayerBar(player.gameObject);
         return (playerUI, playerBar);
     }
@@ -75,25 +74,23 @@ public class UIManager : MonoBehaviour
 
     /*
     *   SetUpSpellUI - Sets up the spell UIs buttons and icons.
-    *   @param playerUI - GameObject of the player UI to do the spell setup for.
-    *   @param champion - GameObject the UI is for.
     *   @param player - Player the UI is being setup for.
     */
-    public void SetupSpellUI(GameObject playerUI, GameObject champion, Player player){
-        GameObject spellContainer = playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
-        ChampionSpells championSpells = champion.GetComponent<ChampionSpells>();
+    public void SetupSpellUI(Player player){
+        GameObject spellContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
+        ChampionSpells championSpells = player.gameObject.GetComponent<ChampionSpells>();
         List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
         // Setup spell1-4's spell button.
         for(int i = 0; i < 5; i++){
             SpellButton spellButton = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").GetComponent<SpellButton>();
             spellButton.SetSpell(championSpells.mySpells[i]);
             spellButton.SetKeyCode (inputs[i]);
-            spellButton.SetPlayerSpellInput(champion.GetComponent<PlayerSpellInput>());
+            spellButton.SetPlayerSpellInput(player.gameObject.GetComponent<PlayerSpellInput>());
             spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
             // Setup spell1-4's level up buttons.
             if(i > 0){
                 SpellLevelUpButton spellLevelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").GetComponent<SpellLevelUpButton>();
-                spellLevelUpButton.SetPlayerSpellInput(champion.GetComponent<PlayerSpellInput>());
+                spellLevelUpButton.SetPlayerSpellInput(player.gameObject.GetComponent<PlayerSpellInput>());
                 spellLevelUpButton.SetSpell(championSpells.mySpells[i].spellNum);
                 spellLevelUpButton.SetPlayer(player);
             }
