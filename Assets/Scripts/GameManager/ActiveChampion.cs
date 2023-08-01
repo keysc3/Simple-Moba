@@ -56,7 +56,10 @@ public class ActiveChampion : MonoBehaviour
         }
     }
 
-    IEnumerator PickActiveChamp(){
+    /*
+    *   PickActiveChamp - Picks an champion to set as the active champ and begin using.
+    */
+    private IEnumerator PickActiveChamp(){
         Debug.Log("Select active champion.");
         while(true){
             if(Input.GetKeyDown(KeyCode.C)){
