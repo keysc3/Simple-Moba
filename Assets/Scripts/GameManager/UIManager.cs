@@ -75,17 +75,17 @@ public class UIManager : MonoBehaviour
         GameObject spellContainer = playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
         ChampionSpells championSpells = champion.GetComponent<ChampionSpells>();
         List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
+        // Setup spell1-4's spell button.
         for(int i = 0; i < 5; i++){
-            GameObject buttonObj = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").gameObject;
-            SpellButton spellButton = buttonObj.GetComponent<SpellButton>();
+            SpellButton spellButton = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").GetComponent<SpellButton>();
             spellButton.spell = championSpells.mySpells[i];
             spellButton.keyCode = inputs[i];
             spellButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
             spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
             spellButton.spell = championSpells.mySpells[i];
+            // Setup spell1-4's level up buttons.
             if(i > 0){
-                GameObject levelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").gameObject;
-                SpellLevelUpButton spellLevelUpButton = levelUpButton.GetComponent<SpellLevelUpButton>();
+                SpellLevelUpButton spellLevelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").GetComponent<SpellLevelUpButton>();
                 spellLevelUpButton.playerSpellInput = champion.GetComponent<PlayerSpellInput>();
                 spellLevelUpButton.spell = championSpells.mySpells[i].spellNum;
                 spellLevelUpButton.player = player;
