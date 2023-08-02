@@ -56,4 +56,33 @@ public class score
         // Assert
         Assert.AreEqual(2, score.kills);
     }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_1_assist()
+    {
+        // Arrange
+        Score score = new Score();
+
+        // Act
+        score.Assist();
+
+        // Assert
+        Assert.AreEqual(1, score.assists);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_2_assists()
+    {
+        // Arrange
+        Score score = new Score();
+        
+        // Act
+        score.Assist();
+        score.Assist();
+
+        // Assert
+        Assert.AreEqual(2, score.assists);
+    }
 }
