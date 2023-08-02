@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class Inventory {
 
-    private int space = 6;
+    public int space { get; } = 6;
     private Dictionary<int, Item> myItems = new Dictionary<int, Item>();
 
     /*
