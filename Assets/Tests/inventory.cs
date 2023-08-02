@@ -39,7 +39,7 @@ public class inventory
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_more_items_than_max_inventory_size()
+    public void add_more_items_than_max_size()
     {
         // Arrange
         Inventory inventory = new Inventory();
@@ -56,7 +56,7 @@ public class inventory
 
     // A Test behaves as an ordinary method
     [Test]
-    public void remove_item_from_inventory_slot_without_item()
+    public void remove_item_from_slot_without_item()
     {
         // Arrange
         Inventory inventory = new Inventory();
@@ -67,5 +67,24 @@ public class inventory
 
         // Assert
         Assert.AreEqual(null, removedItem);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_item_to_lowest_open_slot_number()
+    {
+        // Arrange
+        Inventory inventory = new Inventory();
+        for(int i = 0; i < inventory.space; i++){
+            inventory.AddItem(ScriptableObject.CreateInstance<Item>());
+        }
+        inventory.RemoveItem(5);
+        inventory.RemoveItem(2);
+
+        // Act
+        int itemSlot = inventory.AddItem(ScriptableObject.CreateInstance<Item>());
+
+        // Assert
+        Assert.AreEqual(2, itemSlot);
     }
 }
