@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Implements a status effects object..
+* Purpose: Implements a status effects object.
 *
 * @author: Colin Keys
 */
@@ -126,7 +126,10 @@ public class StatusEffects
     *   ResetEffects - Resets all effects currently on the unit.
     */
     public void ResetEffects(){
-        statusEffects.Clear();
+        for(int i = statusEffects.Count - 1; i > -1; i--){
+            if(!(statusEffects[i] is PersonalSpell))
+                statusEffects.RemoveAt(i);
+        }
     }
 
     /*
@@ -265,7 +268,6 @@ public class StatusEffects
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);
                 SetMostImpairing(GetMostImpairing());
-                //effect.SetIsFinished(true);
                 return;
             }
         }

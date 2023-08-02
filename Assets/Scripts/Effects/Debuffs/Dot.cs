@@ -44,7 +44,6 @@ public class Dot : Effect
     *   EndEffect - End the dot effect.
     */
     public override void EndEffect(){
-        Debug.Log("Damage dealt from dot: " + totalDealt);
         // Placeholder.
     }
 

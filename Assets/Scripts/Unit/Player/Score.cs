@@ -10,37 +10,44 @@ using UnityEngine;
 [System.Serializable]
 public class Score
 {
-    [field: SerializeField] public int kills { get; private set; }
-    [field: SerializeField] public int assists { get; private set; }
-    [field: SerializeField] public int deaths { get; private set; }
-    [field: SerializeField] public int cs { get; private set; }
+    [field: SerializeField] public int kills { get; private set; } = 0;
+    [field: SerializeField] public int assists { get; private set; } = 0;
+    [field: SerializeField] public int deaths { get; private set; } = 0;
+    [field: SerializeField] public int cs { get; private set; } = 0;
 
     public delegate void Takedown(GameObject killed);
     public event Takedown takedownCallback;
 
-    public Score(){
-        kills = 0;
-        assists = 0;
-        deaths = 0;
-        cs = 0;
-    }
-
+    /*
+    *   ChampionKill - Adds a champion kill.
+    *   @param killed - GameObject of the killed unit.
+    */
     public void ChampionKill(GameObject killed){
         kills += 1;
         takedownCallback?.Invoke(killed);
     }
 
+    /*
+    *   CreepKill - Adds a creep kill.
+    *   @param killed - GameObject of the killed unit.
+    */
     public void CreepKill(GameObject killed){
         cs += 1;
         takedownCallback?.Invoke(killed);
     }
 
-    public void Death(){
-        deaths +=1;
-    }
-
+    /*
+    *   Assist - Adds an assist.
+    */
     public void Assist(){
         assists += 1;
+    }
+
+    /*
+    *   Assist - Adds a death.
+    */
+    public void Death(){
+        deaths +=1;
     }
 
 }

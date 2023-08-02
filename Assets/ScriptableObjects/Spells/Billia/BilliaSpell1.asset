@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4ca475b98ea7440a152898c0896e52, type: 3}
+  m_Name: BilliaSpell1
+  m_EditorClassIdentifier: 
+  <sprite>k__BackingField: {fileID: 21300000, guid: a575cdccf5aa38c4b8118aaf1cd601c2, type: 3}
+  <castTime>k__BackingField: 0.25
+  <baseDamage>k__BackingField:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  <baseCd>k__BackingField:
+  - 5
+  - 4
+  - 3
+  - 2
+  - 1
+  <baseMana>k__BackingField:
+  - 2
+  - 4
+  - 6
+  - 8
+  - 10
+  <passiveSprite>k__BackingField: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
+  <passiveSpeedBonus>k__BackingField: {fileID: 11400000, guid: 6325edf91b28df249848b2818ae6ba23, type: 2}
+  <visualPrefab>k__BackingField: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}
+  <initialAlpha>k__BackingField: 60
+  <finalAlpha>k__BackingField: 160
+  <passiveSpeed>k__BackingField:
+  - 0.03
+  - 0.04
+  - 0.05
+  - 0.06
+  - 0.07
+  <innerRadius>k__BackingField: 3
+  <outerRadius>k__BackingField: 5
+  <passiveSpeedDuration>k__BackingField: 6.5
+  <passiveExpireDuration>k__BackingField: 1.5
+  <passiveMaxStacks>k__BackingField: 4

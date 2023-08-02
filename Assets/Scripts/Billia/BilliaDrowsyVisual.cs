@@ -10,14 +10,13 @@ using UnityEngine.UI;
 */
 public class BilliaDrowsyVisual : MonoBehaviour
 {
-
+    public float drowsyDuration { get; private set; }
+    public ScriptableDrowsy drowsy { get; private set; }
+    public GameObject source { get; private set; }
     private Image drowsyVisual;
     private RectTransform rectTransform;
     private StatusEffects statusEffects;
-    public float drowsyDuration { get; private set; }
-    public GameObject source { get; private set; }
     private float yOffset = 1f;
-    public ScriptableDrowsy drowsy { get; private set; }
 
     // Start is called before the first frame update
     private void Start()

@@ -24,14 +24,8 @@ public class UnitStats
     [field: SerializeField] public Stat attackSpeed { get; private set; }
     [field: SerializeField] public Stat attackProjectileSpeed { get; private set; }
     [field: SerializeField] public Stat bonusAttackSpeed { get; private set; }
-    //[field: SerializeField] public ScriptableUnit unit { get; private set; }
-
-    //private StatusEffectManager statusEffectManager;
-    //private NavMeshAgent navMeshAgent;
 
     public UnitStats(ScriptableUnit unit){
-        // Set player base player values
-        //this.unit = unit;
         magicDamage = new Stat(unit.magicDamage);
         physicalDamage = new Stat(unit.physicalDamage);
         maxHealth = new Stat(unit.baseHealth);
@@ -99,7 +93,6 @@ public class UnitStats
         // Calculate the slow percentage to apply to the units speed.
         foreach(Effect effect in slows){
             if(effect.isActivated){
-                //Debug.Log("champ: " + gameObject.name + "act?: " + effect.isActivated);
                 Slow mySlow = (Slow) effect;
                 slowPercent *= (1f - mySlow.slowPercent);
                 break;

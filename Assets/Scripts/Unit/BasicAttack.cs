@@ -86,17 +86,13 @@ public class BasicAttack : MonoBehaviour
     public IEnumerator BasicAttackWindUp(){
         float timer = 0.0f;
         unitStats.UpdateAttackSpeed();
-        //attackTime = 1.0f/championStats.attackSpeed.GetValue();
         // Wind up time is the time it takes for the player to attack * the percentage of 
         float windUpTime = ((1.0f/unitStats.attackSpeed.GetValue()) * unitStats.autoWindUp.GetValue());
-        //Debug.Log(windUpTime);
         while(playerController.targetedEnemy != null && windingUp){
             if(timer <= windUpTime){
-                // Animate windup
-                //Debug.Log("Winding Up");
+                // TODO: Animate windup
             }
             else{
-                //Debug.Log("Casting Attack");
                 Attack(playerController.targetedEnemy);
                 nextAuto = Time.time + 1.0f/unitStats.attackSpeed.GetValue();
                 Debug.Log("Next auto in: " + 1.0f/unitStats.attackSpeed.GetValue());

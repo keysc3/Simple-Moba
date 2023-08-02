@@ -9,8 +9,7 @@ using UnityEngine;
 */
 public class Spell1Trigger : MonoBehaviour
 {
-    public bool isReturning { get; private set; } = false;
-    public BahriAbilityHit bahriAbilityHit { get; private set; }
+    public BahriSpell1 bahriSpell1 { get; private set; }
     public GameObject bahri { get; private set; }
 
     private Bounds bahriBounds;
@@ -19,6 +18,7 @@ public class Spell1Trigger : MonoBehaviour
     private Collider unitCollider;
     private SphereCollider orbCollider;
 
+    // Start is called before the first frame update.
     private void Start(){
         unit = bahri.GetComponent<Unit>();
         unitCollider = bahri.GetComponent<Collider>();
@@ -33,7 +33,7 @@ public class Spell1Trigger : MonoBehaviour
             bahriBounds = unitCollider.bounds;
         // If bahri is dead destroy the orb when it has returned to Bahri.
         else{
-            if(isReturning){
+            if(bahriSpell1.returning){
                 if(bahriBounds.Contains(orbCollider.bounds.min) && bahriBounds.Contains(orbCollider.bounds.max)){
                     Destroy(gameObject);
                 }
@@ -45,10 +45,10 @@ public class Spell1Trigger : MonoBehaviour
     private void OnTriggerStay(Collider other){
         // Call collision handler if enemy is hit.
         if(other.gameObject.tag == "Enemy" && other.gameObject != bahri){
-            bahriAbilityHit.Spell_1_Hit(other.gameObject, isReturning);
+            bahriSpell1.Hit(other.gameObject);
         }
         //  Destroy GameObject if it has returned to Bahri.
-        if(other.gameObject == bahri && isReturning){
+        if(other.gameObject == bahri && bahriSpell1.returning){
             if(other.bounds.Contains(orbCollider.bounds.min) && other.bounds.Contains(orbCollider.bounds.max)){
                 Destroy(gameObject);
             }
@@ -56,19 +56,11 @@ public class Spell1Trigger : MonoBehaviour
     }
 
     /*
-    *   SetIsReturning - Sets the isReturning bool
-    *   @param isReturning - bool to set isReturning to.
-    */
-    public void SetIsReturning(bool isReturning){
-        this.isReturning = isReturning;
-    }
-
-    /*
     *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
     *   @param bahriAbilityHit - BahriAbilityHit script reference.
     */
-    public void SetBahriAbilityHit(BahriAbilityHit bahriAbilityHit){
-        this.bahriAbilityHit = bahriAbilityHit;
+    public void SetBahriSpell1(BahriSpell1 bahriSpell1){
+        this.bahriSpell1 = bahriSpell1;
     }
 
     /*

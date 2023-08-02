@@ -27,7 +27,6 @@ public class ChampionStats : UnitStats
         currentMana -= cost;
         if(currentMana < 0)
             currentMana = 0;
-        //GetComponent<UIManager>().UpdateManaBar();
     }
 
     /*

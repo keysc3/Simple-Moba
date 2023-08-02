@@ -103,6 +103,23 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1921830857179254351, guid: c210a32a7ed42e24aabeabce9e774a03, type: 3}
   m_PrefabInstance: {fileID: 6246775977090456596}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-1760639917251362305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5483897106226106971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f968c97dd33bc2044ae4c2057808b347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  passiveData: {fileID: 11400000, guid: 7d69f38a1f18a394587bf1083e8ca225, type: 2}
+  spell1Data: {fileID: 11400000, guid: 3620d714736ae284c816944dd9957575, type: 2}
+  spell2Data: {fileID: 11400000, guid: 2291d5583bbcec547a470531000a7528, type: 2}
+  spell3Data: {fileID: 11400000, guid: c2453373a5928d94a862f767f7a8ce1c, type: 2}
+  spell4Data: {fileID: 11400000, guid: 5c09a73194528c34eb73b7120d0216bd, type: 2}
 --- !u!114 &-625293995896609258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,35 +132,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f47262ce278cc4696868123cf38913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1868568237446347121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5483897106226106971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9687a73c3f8d07644800be0374619886, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <charmEffect>k__BackingField: {fileID: 11400000, guid: 5d62630e6c9b2a5469b4c64b5390ab9e, type: 2}
---- !u!114 &8696489769140771637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5483897106226106971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420af1c84a8fefa459d6f9bc26f01f25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Orb: {fileID: 6785074727118801786, guid: a3f9f0a940b1d764682ca6c5bc7237c0, type: 3}
-  Spell_2_object: {fileID: 6906369101127838927, guid: c667042b1cc76b646834dfe06bbd0fb2, type: 3}
-  Spell_3_object: {fileID: 6397520171583126843, guid: 1369f547fb7feb9439c3beaaa6ee5598, type: 3}
-  attack: {fileID: 1606231681406296317, guid: 18b60daf1c0410f45b0e2ebfb9f3acee, type: 3}
-  <spell_2_SpeedBonus>k__BackingField: {fileID: 11400000, guid: 89530c92161c28e45b6544ecfabb8553, type: 2}
-  <spell4>k__BackingField: {fileID: 11400000, guid: 4736469b3c8781d4f88ddd2de1be352b, type: 2}
-  <passivePreset>k__BackingField: {fileID: 11400000, guid: 38162760bc234394fa3dcbf602c44df3, type: 2}

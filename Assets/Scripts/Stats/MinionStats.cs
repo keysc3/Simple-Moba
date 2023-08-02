@@ -9,7 +9,6 @@ using UnityEngine;
 */
 public class MinionStats : UnitStats
 {
-    //public Minion minion;
 
     [field: SerializeField] public string team { get; private set; }
 

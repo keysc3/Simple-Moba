@@ -14,18 +14,19 @@ public class Player : Unit, IRespawnable
     [field: SerializeField] public Inventory inventory { get; private set; }
     [field: SerializeField] public Score score { get; private set; }
     [field: SerializeField] public LevelManager levelManager { get; private set; }
-    private PlayerController playerController;
-    private PlayerSpellInput playerSpellInput;
-    private ChampionAbilities championAbilities;
-    //private LevelManager levelManager;
-    protected Renderer rend;
-    //private DamageTracker damageTracker;
-    private Material alive;
-    [SerializeField] private Material dead;
-    [SerializeField] private LevelInfo levelInfo;
-    [field: SerializeField] public GameObject playerUIPrefab { get; private set; }
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
+    public bool isCasting { get; private set; }
+    public Vector3 mouseOnCast { get; private set; }
+    public Spell currentCastedSpell { get; private set; }
+
+    [SerializeField] private Material dead;
+    [SerializeField] private LevelInfo levelInfo;
+    private PlayerController playerController;
+    private PlayerSpellInput playerSpellInput;
+    private ChampionSpells championSpells;
+    private Material alive;
+    private Renderer rend;
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
@@ -38,22 +39,15 @@ public class Player : Unit, IRespawnable
         unitStats = new ChampionStats((ScriptableChampion)unit);
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
-        championAbilities = GetComponent<ChampionAbilities>();
+        championSpells = GetComponent<ChampionSpells>();
         rend = GetComponent<Renderer>();
-        //damageTracker = GetComponent<DamageTracker>();
+        alive = rend.material;
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         score = new Score();
         levelManager = new LevelManager(this, levelInfo);
-        playerUI = UIManager.instance.CreatePlayerHUD(gameObject, playerUIPrefab, this);
-        playerBar = UIManager.instance.CreatePlayerBar(gameObject);
-        UIManager.instance.SetUpPlayerUI(this, playerUI, playerBar);
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        alive = rend.material;
+        (playerUI, playerBar) = UIManager.instance.SetupPlayerUI(this);
+        UIManager.instance.InitialValueSetup(this);
     }
 
     // Update is called once per frame
@@ -88,7 +82,7 @@ public class Player : Unit, IRespawnable
     public override void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
         base.TakeDamage(incomingDamage, damageType, from, isDot);
         damageTracker.AddDamage(from, incomingDamage, damageType);
-        UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
+        UIManager.instance.UpdateHealthBar(this);
     }
 
     /*
@@ -107,14 +101,14 @@ public class Player : Unit, IRespawnable
                     assist.GetComponent<Player>().score.Assist();
             }
         }
-        score.Death();
-        UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
     }
 
     /*
     *   Death - Handles the death of a player.
     */
     public override void Death(){
+        score.Death();
+        UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
         // Disable all combat and movement controls.
         playerController.enabled = false; 
         playerSpellInput.enabled = false;
@@ -124,7 +118,7 @@ public class Player : Unit, IRespawnable
         myCollider.enabled = false;
         statusEffects.ResetEffects();
         // Handle champion death clean up.
-        championAbilities.OnDeathCleanUp();
+        championSpells.OnDeathSpellCleanUp();
         rend.material = dead;
         damageTracker.ResetDamageTracker();
         StartCoroutine(RespawnTimer(levelManager.RespawnTime()));
@@ -140,8 +134,8 @@ public class Player : Unit, IRespawnable
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }
-        // Handle any clean up needed before respawn.
-        championAbilities.OnRespawnCleanUp();
+        // TODO: Implement respawn cleanup
+        //championAbilities.OnRespawnCleanUp();
         // Enable collider.
         myCollider.enabled = true;
         // Set currenthp and currentmana to max values.
@@ -150,8 +144,8 @@ public class Player : Unit, IRespawnable
         // Set alive values.
         rend.material = alive;
         isDead = false;
-        UIManager.instance.UpdateManaBar((ChampionStats) unitStats, playerUI, playerBar);
-        UIManager.instance.UpdateHealthBar(this, playerUI, playerBar);
+        UIManager.instance.UpdateManaBar(this);
+        UIManager.instance.UpdateHealthBar(this);
         UIManager.instance.SetPlayerBarActive(true, playerBar);
         // Move player to respawn location.
         transform.position = respawnPosition;
@@ -169,5 +163,26 @@ public class Player : Unit, IRespawnable
         }
         UIManager.instance.UpdateDeathTimer(0f, playerUI);
         Respawn();
+    }
+
+    /*
+    *   SetIsCasting - Sets the players isCasting bool and spell being casted if true.
+    *   @param isCasting - bool for if the player is casting.
+    *   @param currentCastedSpell - Spell being casted.
+    */
+    public void SetIsCasting(bool isCasting, Spell currentCastedSpell){
+        this.isCasting = isCasting;
+        if(!isCasting)
+            this.currentCastedSpell = null;
+        else
+            this.currentCastedSpell = currentCastedSpell;
+    }
+    
+    /*
+    *   SetMouseOnCast - Stores the players mouse position from cast.
+    *   @param mouseOnCast - Vector3 for world coordinates of the mouse on cast.
+    */
+    public void SetMouseOnCast(Vector3 mouseOnCast){
+        this.mouseOnCast = mouseOnCast;
     }
 }

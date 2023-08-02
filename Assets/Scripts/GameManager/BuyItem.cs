@@ -61,14 +61,13 @@ public class BuyItem : MonoBehaviour
         Item addItem = allItems[itemNumber-1];
         int itemSlot = player.inventory.AddItem(addItem);
         if(itemSlot != -1){
-            ChampionStats championStats = (ChampionStats) player.unitStats;
-            championStats.AddItemStats(addItem);
+            ((ChampionStats) player.unitStats).AddItemStats(addItem);
             if(!player.isDead){
-                UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
-                UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+                UIManager.instance.UpdateHealthBar(player);
+                UIManager.instance.UpdateManaBar(player);
             }
             UIManager.instance.AddItem(itemSlot, addItem.icon, player.playerUI);
-            UIManager.instance.UpdateAllStats(championStats, player.playerUI);
+            UIManager.instance.UpdateAllStats(player);
         }
     }
 
@@ -80,12 +79,11 @@ public class BuyItem : MonoBehaviour
         Player player = ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion].GetComponent<Player>();
         Item removeItem = player.inventory.RemoveItem(itemSlot);
         if(removeItem != null){
-            ChampionStats championStats = (ChampionStats) player.unitStats;
-            championStats.RemoveItemStats(removeItem);
-            UIManager.instance.UpdateHealthBar(player, player.playerUI, player.playerBar);
-            UIManager.instance.UpdateManaBar(championStats, player.playerUI, player.playerBar);
+            ((ChampionStats) player.unitStats).RemoveItemStats(removeItem);
+            UIManager.instance.UpdateHealthBar(player);
+            UIManager.instance.UpdateManaBar(player);
             UIManager.instance.RemoveItem(itemSlot, player.playerUI);
-            UIManager.instance.UpdateAllStats(championStats, player.playerUI);
+            UIManager.instance.UpdateAllStats(player);
         }
     }
 }
