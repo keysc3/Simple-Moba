@@ -778,38 +778,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1331981380}
     m_Modifications:
-    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: p2_y
-      value: 0.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: bahri
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: p1Offset
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: blueBahri
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: p1_y_offset
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: <spell_1_passiveSpeedBonus>k__BackingField
-      value: 
-      objectReference: {fileID: 11400000, guid: 6325edf91b28df249848b2818ae6ba23, type: 2}
-    - target: {fileID: 993157157543562803, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1384222467734263524, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -854,47 +822,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1875298477662770913, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5980474150250256565, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
       propertyPath: m_Name
       value: Billia
       objectReference: {fileID: 0}
-    - target: {fileID: 6966295948718721084, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 3334bcfd13f053249898895d8250e5a0, type: 2}
-    - target: {fileID: 8018105505031408025, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: championUIPrefab
-      value: 
-      objectReference: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
-    - target: {fileID: 8300969504989003733, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: playerUI
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8300969504989003733, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: playerUIPrefab
-      value: 
-      objectReference: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
-    - target: {fileID: 8300969504989003733, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: <unit>k__BackingField
-      value: 
-      objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
-    - target: {fileID: 8300969504989003733, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-      propertyPath: <playerUIPrefab>k__BackingField
-      value: 
-      objectReference: {fileID: 1035007771402263427, guid: df16eb924d5659548832cc9a6b3f48e7, type: 3}
-    m_RemovedComponents:
-    - {fileID: 5131820632513671694, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-    - {fileID: 1928897181916793449, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-    - {fileID: 8044505279677623867, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-    - {fileID: 2364200911350425436, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-    - {fileID: 4448451504855873464, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-    - {fileID: 8018105505031408025, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-    - {fileID: 583340831700525273, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
-    - {fileID: 993157157543562803, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
 --- !u!1 &963194225
 GameObject:
@@ -1204,90 +1136,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 995825280995990538, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
   m_PrefabInstance: {fileID: 1669128585}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1560792631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1560792601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f968c97dd33bc2044ae4c2057808b347, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  passiveData: {fileID: 11400000, guid: 7d69f38a1f18a394587bf1083e8ca225, type: 2}
-  spell1Data: {fileID: 11400000, guid: 3620d714736ae284c816944dd9957575, type: 2}
-  spell2Data: {fileID: 11400000, guid: 2291d5583bbcec547a470531000a7528, type: 2}
-  spell3Data: {fileID: 11400000, guid: c2453373a5928d94a862f767f7a8ce1c, type: 2}
-  spell4Data: {fileID: 11400000, guid: 5c09a73194528c34eb73b7120d0216bd, type: 2}
-  passive:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell1:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell2:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell3:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell4:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  mySpells: []
-  mySpellData: []
 --- !u!1 &1561246163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,10 +1257,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1331981380}
     m_Modifications:
-    - target: {fileID: 351906215407606799, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 995825280995990538, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1457,38 +1301,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1868568237446347121, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4974844111092872396, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5483897106226106971, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
       propertyPath: m_Name
       value: Bahri
       objectReference: {fileID: 0}
-    - target: {fileID: 7914699324138517819, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-      propertyPath: playerUI
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7914699324138517819, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-      propertyPath: <unit>k__BackingField
-      value: 
-      objectReference: {fileID: 11400000, guid: 9a8035ae09b05f64e87fb76e8842de82, type: 2}
-    - target: {fileID: 7914699324138517819, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-      propertyPath: <playerUIPrefab>k__BackingField
-      value: 
-      objectReference: {fileID: 8842905393809374821, guid: dd70f252af0b6444c9852f20d66b5d10, type: 3}
-    - target: {fileID: 8696489769140771637, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 100c28c1cb2c29440a7bfeafa328d625, type: 3}
 --- !u!1 &1739497618
 GameObject:
@@ -1842,87 +1659,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1384222467734263524, guid: 1f25b7f66cc97a649a771a90ef1deb71, type: 3}
   m_PrefabInstance: {fileID: 878173043}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2129848486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129848471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e06217da7793f26489f5360f879376fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  passiveData: {fileID: 11400000, guid: b7dcd60c48fa661418f2f24cb481d370, type: 2}
-  spell1Data: {fileID: 11400000, guid: edd59005514ddc64eabccd42a2830c6d, type: 2}
-  spell2Data: {fileID: 11400000, guid: f5e41873e15d91f4ba9776c00fff1b0b, type: 2}
-  spell3Data: {fileID: 11400000, guid: a6f6aae9dc9d26b49b083373a6d016c3, type: 2}
-  spell4Data: {fileID: 11400000, guid: a17cdc19a022d3147a5baa14421cf6dd, type: 2}
-  passive:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell1:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell2:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell3:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  spell4:
-    canMove: 0
-    isQuickCast: 0
-    isDisplayed: 0
-    navMeshAgent: {fileID: 0}
-    levelManager:
-      <level>k__BackingField: 0
-      <spellLevelPoints>k__BackingField: 0
-      <skillLevelUpUIActive>k__BackingField: 0
-      levelInfo: {fileID: 0}
-      <gainAmount>k__BackingField: 0
-      currentXP: 0
-    player: {fileID: 0}
-  mySpells: []
-  mySpellData: []
