@@ -85,4 +85,69 @@ public class score
         // Assert
         Assert.AreEqual(2, score.assists);
     }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_1_creep_kill_with_null_takedown_callback()
+    {
+        // Arrange
+        Score score = new Score();
+        GameObject tempObject = new GameObject();
+
+        // Act
+        score.CreepKill(tempObject);
+
+        // Assert
+        Assert.AreEqual(1, score.cs);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_creep_kill_with_takedown_callback_change_gameobject_name()
+    {
+        // Arrange
+        Score score = new Score();
+        GameObject tempObject = new GameObject();
+        tempObject.name = "tempObject";
+        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
+        
+        // Act
+        score.CreepKill(tempObject);
+
+        // Assert
+        Assert.AreEqual("Takedown Callback executed.", tempObject.name);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_2_creep_kills_with_takedown_callback()
+    {
+        // Arrange
+        Score score = new Score();
+        GameObject tempObject = new GameObject();
+        tempObject.name = "tempObject";
+
+        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executetd.";
+        
+        // Act
+        score.CreepKill(tempObject);
+        score.CreepKill(tempObject);
+
+        // Assert
+        Assert.AreEqual(2, score.cs);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_1_death()
+    {
+        // Arrange
+        Score score = new Score();
+
+        // Act
+        score.Death();
+
+        // Assert
+        Assert.AreEqual(1, score.deaths);
+    }
 }
