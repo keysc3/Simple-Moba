@@ -17,11 +17,6 @@ public class StatusEffects
     
     [SerializeField] private int highestActiveCCValue = 0;
     [SerializeField] private Effect mostImpairing;
-    private Unit unit;
-
-    public StatusEffects(Unit unit){
-        this.unit = unit;
-    }
 
     /*
     *   UpdateEffects - Ticks the effects.
@@ -31,9 +26,10 @@ public class StatusEffects
         for(int i = statusEffects.Count - 1; i >= 0; i--){
             // If there is an effect, used here incase the user dies from an effect tick that isn't the last effect.
             if(statusEffects.Count > 0){
+                Effect effectUpdating = statusEffects[i];
                 statusEffects[i].TimerTick(Time.deltaTime);
-                // Avoid any indexing errors if unit dies from the effect tick.
-                if(!unit.isDead){
+                // Check if the effect still exists in the case that the unit died from the effect.
+                if(statusEffects.Contains(effectUpdating)){
                     if(statusEffects[i].isFinished){
                         Effect effect = statusEffects[i];
                         statusEffects[i].EndEffect();
@@ -100,8 +96,11 @@ public class StatusEffects
                 return;
             }
         }
-        if(unit.unit is ScriptableChampion)
-            UIManager.instance.AddStatusEffectUI(this, effect, ((Player) unit).playerUI);
+        Unit unit = (Unit) effect.effected.GetComponent<Unit>();
+        if(unit != null){
+            if(unit.unit is ScriptableChampion)
+                UIManager.instance.AddStatusEffectUI(this, effect, ((Player) unit).playerUI);
+        }
     }
 
     /*
