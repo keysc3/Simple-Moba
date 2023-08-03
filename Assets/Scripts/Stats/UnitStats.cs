@@ -63,10 +63,10 @@ public class UnitStats
     *   UpdateAttackSpeed - Updates a units attack speed.
     */
     public void UpdateAttackSpeed(){
-        float finalAS = attackSpeed.GetBaseValue() * (1 + (bonusAttackSpeed.GetValue()/100));
+        float finalAS = attackSpeed.BaseValue * (1 + (bonusAttackSpeed.GetValue()/100));
         if(finalAS > 2.5f)
             finalAS = 2.5f;
-        float modifier = finalAS - attackSpeed.GetBaseValue();
+        float modifier = finalAS - attackSpeed.BaseValue;
         attackSpeed.ClearModifiers();
         attackSpeed.AddModifier(modifier);
     }

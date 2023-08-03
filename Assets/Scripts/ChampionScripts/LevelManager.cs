@@ -117,7 +117,8 @@ public class LevelManager
         IncreaseBaseStat(championStats.MP5, GrowthAmountCalculation(champion.MP5Growth));
         IncreaseBaseStat(championStats.armor, GrowthAmountCalculation(champion.armorGrowth));
         IncreaseBaseStat(championStats.magicResist, GrowthAmountCalculation(champion.magicResistGrowth));
-        championStats.bonusAttackSpeed.SetBaseValue(GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth));
+        championStats.bonusAttackSpeed.BaseValue = GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth);
+        //championStats.bonusAttackSpeed.SetBaseValue(GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth));
     }
 
     /*
@@ -126,8 +127,8 @@ public class LevelManager
     *   @param growthAmount - float of the amount to increase the base value by.
     */
     private void IncreaseBaseStat(Stat stat, float growthAmount){
-        float newBaseValue = stat.GetBaseValue() + growthAmount;
-        stat.SetBaseValue(newBaseValue);
+        float newBaseValue = stat.BaseValue + growthAmount;
+        stat.BaseValue = newBaseValue;
     }
 
     /*

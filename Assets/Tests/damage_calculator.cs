@@ -18,7 +18,7 @@ public class damage_calculator : ScriptableObject
         float magicResist = 23f;
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
-        to.magicResist.SetBaseValue(magicResist);
+        to.magicResist.BaseValue = magicResist;
         float incomingDamage = 80f;
         string damageType = "magic";
 
@@ -37,7 +37,7 @@ public class damage_calculator : ScriptableObject
         float armor = 72f;
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
-        to.armor.SetBaseValue(armor);
+        to.armor.BaseValue = armor;
         float incomingDamage = 121f;
         string damageType = "physical";
 
