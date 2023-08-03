@@ -7,12 +7,11 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class Stat {
     
-    [field: SerializeField] public float BaseValue { get; set; }
+    public float BaseValue { get; set; }
 
-    [SerializeField] private List<float> modifiers = new List<float>();
+    private List<float> modifiers = new List<float>();
 
     /*
     *   Stat - Initializes a new stat object.
@@ -31,21 +30,6 @@ public class Stat {
             totalValue += modifier;
         return totalValue;
     }
-
-    /*
-    *   GetBaseValue - Gets the base value of the stat.
-    */
-    /*public float GetBaseValue(){
-        return baseValue;
-    }*/
-
-    /*
-    *   SetBaseValue - Sets the base value of the stat to a new value.
-    *   @param newBaseValue - float of the value to change the base value to.
-    */
-    /*public void SetBaseValue(float newBaseValue){
-        baseValue = newBaseValue;
-    }*/
 
     /*
     *   AddModifier - Adds a modifier to the stats modifier list.
