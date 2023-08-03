@@ -32,7 +32,7 @@ public class BilliaSpell4 : Spell, ICastable
     public void Cast(){
         // Only allow cast if a champion has passive on them.
         if(canUseSpell){
-            if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+            if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
                 // Start cast time then cast the spell.
                 championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
                 championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));

@@ -110,7 +110,7 @@ public class LevelManager
         // Increase base mana and current mana by the same amount.
         float manaIncrease = GrowthAmountCalculation(champion.manaGrowth);
         IncreaseBaseStat(championStats.maxMana, manaIncrease);
-        championStats.SetMana(championStats.currentMana + manaIncrease);
+        championStats.CurrentMana = championStats.CurrentMana + manaIncrease;
         // Increase any base stats that have a growth stat.
         IncreaseBaseStat(championStats.physicalDamage, GrowthAmountCalculation(champion.physicalDamageGrowth));
         IncreaseBaseStat(championStats.HP5, GrowthAmountCalculation(champion.HP5Growth));

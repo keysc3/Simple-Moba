@@ -39,7 +39,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");
             activeSpellObjects.Add(spell_2_parent);

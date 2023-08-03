@@ -49,7 +49,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     */
     public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             championSpells.StartCoroutine(Spell_1_Cast(Spell_1_Visual()));

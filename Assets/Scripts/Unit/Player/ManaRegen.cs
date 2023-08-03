@@ -27,7 +27,7 @@ public class ManaRegen : MonoBehaviour
     // Called once per frame.
     private void Update(){
         // Activate mana regen UI if the player is not full mana.
-        if(championStats.currentMana < championStats.maxMana.GetValue() && !player.isDead){
+        if(championStats.CurrentMana < championStats.maxMana.GetValue() && !player.isDead){
             UIManager.instance.SetManaRegenActive(true, player.playerUI);
         }
         else{
@@ -44,7 +44,7 @@ public class ManaRegen : MonoBehaviour
             // 0.5s intervals over 5s = 10 increments.
              manaToRegen = Mathf.Round(championStats.MP5.GetValue()/10.0f);
             float maxMana = championStats.maxMana.GetValue();
-            float currentMana = championStats.currentMana;
+            float currentMana = championStats.CurrentMana;
             // If not at max mana and not dead then regen mana.
             if(currentMana < maxMana && !player.isDead){
                 currentMana += manaToRegen;
@@ -52,7 +52,7 @@ public class ManaRegen : MonoBehaviour
                 if(currentMana > maxMana)
                     currentMana = maxMana;
                 // Set mana and only regen every 0.5s.
-                championStats.SetMana(currentMana);
+                championStats.CurrentMana = currentMana;
                 UIManager.instance.UpdateManaBar(player);
                 // Display per 1s on UI.
                 UIManager.instance.UpdateManaRegen(championStats.MP5.GetValue()/5.0f, player.playerUI);

@@ -51,7 +51,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             // Get the players mouse position on spell cast for spells target direction.

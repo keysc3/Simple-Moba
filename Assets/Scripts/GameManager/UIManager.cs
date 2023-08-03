@@ -145,9 +145,9 @@ public class UIManager : MonoBehaviour
         Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         ChampionStats championStats = (ChampionStats) player.unitStats;
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
-        float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
+        float manaPercent = Mathf.Round((championStats.CurrentMana/championStats.maxMana.GetValue()) * 100);
         mana.transform.Find("Value").GetComponent<TMP_Text>()
-        .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
+        .SetText(Mathf.Ceil(championStats.CurrentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
         // Set the fill based on the player mana percent.
         player.playerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<Slider>().value = manaPercent;
         mana.value = manaPercent;

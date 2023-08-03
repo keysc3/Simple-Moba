@@ -47,7 +47,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             championSpells.StartCoroutine(Spell_4_Start());
             // Use mana and set spell on cooldown.
             championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
