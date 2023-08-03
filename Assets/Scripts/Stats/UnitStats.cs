@@ -18,25 +18,25 @@ public class UnitStats
             return currentHealth;
         } 
         set { 
-            if(value <= maxHealth.GetValue()) 
+            if(value < maxHealth.GetValue()) 
                 currentHealth = value; 
             else
-                ResetHealth();
+                currentHealth = maxHealth.GetValue();
         }
     }
     #endregion
-    [field: SerializeField] public Stat maxHealth { get; private set; }
-    [field: SerializeField] public Stat magicDamage { get; private set; }
-    [field: SerializeField] public Stat physicalDamage { get; private set; }
-    [field: SerializeField] public Stat HP5 { get; private set; }
-    [field: SerializeField] public Stat armor { get; private set; }
-    [field: SerializeField] public Stat magicResist { get; private set; }
-    [field: SerializeField] public Stat speed { get; private set; }
-    [field: SerializeField] public Stat autoRange { get; private set; }
-    [field: SerializeField] public Stat autoWindUp { get; private set; }
-    [field: SerializeField] public Stat attackSpeed { get; private set; }
-    [field: SerializeField] public Stat attackProjectileSpeed { get; private set; }
-    [field: SerializeField] public Stat bonusAttackSpeed { get; private set; }
+    public Stat maxHealth { get; }
+    public Stat magicDamage { get; }
+    public Stat physicalDamage { get; }
+    public Stat HP5 { get; }
+    public Stat armor { get; }
+    public Stat magicResist { get; }
+    public Stat speed { get; }
+    public Stat autoRange { get; }
+    public Stat autoWindUp { get; }
+    public Stat attackSpeed { get; }
+    public Stat attackProjectileSpeed { get; }
+    public Stat bonusAttackSpeed { get; }
 
     public UnitStats(ScriptableUnit unit){
         magicDamage = new Stat(unit.magicDamage);
@@ -53,17 +53,6 @@ public class UnitStats
         bonusAttackSpeed = new Stat(0f);
         currentHealth = maxHealth.GetValue();
     }
-
-    /*
-    *   SetHealth - Set the champions current health value.
-    *   @param value - float of the value to change current health to.
-    */
-    /*public void SetHealth(float value){
-        if(value <= maxHealth.GetValue())
-            currentHealth = value;
-        else
-            ResetHealth();
-    }*/
 
     /*
     *   ResetHealth - Set the champions current health value to the max health value.
