@@ -10,7 +10,7 @@ using UnityEngine;
 public class MinionStats : UnitStats
 {
 
-    [field: SerializeField] public string team { get; private set; }
+    public string team { get; }
 
     public MinionStats(ScriptableMinion minion) : base(minion){
         team = minion.team;
