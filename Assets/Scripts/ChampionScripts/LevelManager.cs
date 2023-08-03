@@ -106,7 +106,7 @@ public class LevelManager
         // Increase base health and current health by the same amount.
         float healthIncrease = GrowthAmountCalculation(champion.healthGrowth);
         IncreaseBaseStat(championStats.maxHealth, healthIncrease);
-        championStats.SetHealth(championStats.currentHealth + healthIncrease);
+        championStats.CurrentHealth = championStats.CurrentHealth + healthIncrease;
         // Increase base mana and current mana by the same amount.
         float manaIncrease = GrowthAmountCalculation(champion.manaGrowth);
         IncreaseBaseStat(championStats.maxMana, manaIncrease);

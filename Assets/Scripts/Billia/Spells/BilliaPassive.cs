@@ -47,14 +47,14 @@ public class BilliaPassive : Spell, IHasCallback
             if(unit.unit is ScriptableChampion){
                 Debug.Log("Billia passive found on: " + enemy.name);
                 float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveData.passiveDot.duration[0];
-                championStats.SetHealth(championStats.currentHealth + healAmount);
+                championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
                 Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
             }
             else if(unit.unit is ScriptableMonster){
                 if(((ScriptableMonster) unit.unit).size == "large"){
                     Debug.Log("Billia passive found on: " + enemy.name);
                     float healAmount = (39f + ((15f / 17f) * (float)(levelManager.level - 1)))/passiveData.passiveDot.duration[0];
-                    championStats.SetHealth(championStats.currentHealth + healAmount);
+                    championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
                     Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
                 }
             }

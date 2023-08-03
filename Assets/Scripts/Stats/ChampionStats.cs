@@ -56,7 +56,7 @@ public class ChampionStats : UnitStats
             // Increase current health by items health amount.
             if(item.health != 0){
                 maxHealth.AddModifier(item.health);
-                SetHealth(currentHealth + item.health);
+                CurrentHealth = CurrentHealth + item.health;
             }
             // Increase current mana by items mana amount.
             if(item.mana != 0){
@@ -80,8 +80,8 @@ public class ChampionStats : UnitStats
             physicalDamage.RemoveModifier(item.physicalDamage);
             //If the items hp hasn't been used yet, remove the amount that hasn't been used from current health.
             if(item.health != 0){
-                if(currentHealth > (maxHealth.GetValue() - item.health))
-                    SetHealth(currentHealth - (item.health - (maxHealth.GetValue() - currentHealth))); 
+                if(CurrentHealth > (maxHealth.GetValue() - item.health))
+                    CurrentHealth = CurrentHealth - (item.health - (maxHealth.GetValue() - CurrentHealth)); 
                 maxHealth.RemoveModifier(item.health);
             }
             //If the items mana hasn't been used yet, remove the amount that hasn't been used from the current mana.

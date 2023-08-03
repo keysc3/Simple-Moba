@@ -10,7 +10,7 @@ using UnityEngine.AI;
 */
 public class Unit : MonoBehaviour, IDamagable, IKillable
 {
-    [field: SerializeField] public ScriptableUnit unit { get; private set; }
+    [field: SerializeField] public ScriptableUnit unit { get;  private set; }
     [field: SerializeField] public UnitStats unitStats { get; protected set; }
     [field: SerializeField] public StatusEffects statusEffects { get; private set; }
     [field: SerializeField] public NavMeshAgent navMeshAgent { get; private set; }
@@ -58,10 +58,10 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
         Unit fromUnit = from.GetComponent<Unit>();
         float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, fromUnit.unitStats, unitStats);
-        unitStats.SetHealth(unitStats.currentHealth - damageToTake);
+        unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
         Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
         // If dead then award a kill and start the death method.
-        if(unitStats.currentHealth <= 0f){
+        if(unitStats.CurrentHealth <= 0f){
             DeathActions(fromUnit);
             Death();
         }

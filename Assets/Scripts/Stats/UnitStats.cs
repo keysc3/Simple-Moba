@@ -11,7 +11,20 @@ using UnityEngine.AI;
 [System.Serializable]
 public class UnitStats
 {
-    [field: SerializeField] public float currentHealth { get; private set; }
+    private float currentHealth;
+    #region "CurrentHealth property"
+    public float CurrentHealth { 
+        get {
+            return currentHealth;
+        } 
+        set { 
+            if(value <= maxHealth.GetValue()) 
+                currentHealth = value; 
+            else
+                ResetHealth();
+        }
+    }
+    #endregion
     [field: SerializeField] public Stat maxHealth { get; private set; }
     [field: SerializeField] public Stat magicDamage { get; private set; }
     [field: SerializeField] public Stat physicalDamage { get; private set; }
@@ -45,12 +58,12 @@ public class UnitStats
     *   SetHealth - Set the champions current health value.
     *   @param value - float of the value to change current health to.
     */
-    public void SetHealth(float value){
+    /*public void SetHealth(float value){
         if(value <= maxHealth.GetValue())
             currentHealth = value;
         else
             ResetHealth();
-    }
+    }*/
 
     /*
     *   ResetHealth - Set the champions current health value to the max health value.

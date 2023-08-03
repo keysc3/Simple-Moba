@@ -123,8 +123,8 @@ public class UIManager : MonoBehaviour
         // If the champion is dead.
         if(!player.isDead){
             // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
-            float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
-            healthText.SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
+            float healthPercent = Mathf.Round((championStats.CurrentHealth/championStats.maxHealth.GetValue()) * 100);
+            healthText.SetText(Mathf.Ceil(championStats.CurrentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             // Set the fill based on players health percent.
             player.playerBar.transform.Find("PlayerBar/Container/Health").GetComponent<Slider>().value = healthPercent;
             health.value = healthPercent;
