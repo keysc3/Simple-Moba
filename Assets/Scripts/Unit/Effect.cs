@@ -13,13 +13,11 @@ public abstract class Effect
     [field: SerializeField] public bool isFinished { get; private set; }
     [field: SerializeField] public ScriptableEffect effectType { get; private set; }
     [field: SerializeField] public GameObject casted { get; private set; } 
-    
-    [field: SerializeField] protected GameObject effected;
-    [field: SerializeField] protected Collider effectedCollider;
-
+    [field: SerializeField] public GameObject effected { get; private set; }
     [field: SerializeField] public float effectTimer { get; private set; } = 0f;
     [field: SerializeField] public float effectDuration { get; private set; }
     [field: SerializeField] public bool isActivated { get; private set; } = false;
+    [field: SerializeField] protected Collider effectedCollider;
 
     /*
     *   Effect - Initialize a new Effect object.

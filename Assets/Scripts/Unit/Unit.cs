@@ -23,7 +23,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     // Called when the script instance is being loaded. 
     protected virtual void Awake(){
         Init();
-        statusEffects = new StatusEffects(this);
+        statusEffects = new StatusEffects();
         navMeshAgent = GetComponent<NavMeshAgent>();
         myCollider = GetComponent<Collider>();
         isDead = false;
