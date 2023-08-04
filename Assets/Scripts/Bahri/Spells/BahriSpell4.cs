@@ -230,7 +230,7 @@ public class BahriSpell4 : DamageSpell, ICastable
                 GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
                 TargetedProjectile targetedProjectile = missile.GetComponent<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
-                targetedProjectile.SetTarget(target);
+                targetedProjectile.target = target;
                 // Use the same animation as spell two to send the missiles to their target.
                 championSpells.StartCoroutine(Spell_4_Target(missile, target));
             }

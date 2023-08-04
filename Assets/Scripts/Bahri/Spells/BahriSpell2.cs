@@ -124,7 +124,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
                     if(target != null){
                         championSpells.StartCoroutine(Spell_2_Target(child.gameObject, target));
                         TargetedProjectile targetedProjectile = child.gameObject.GetComponent<TargetedProjectile>();
-                        targetedProjectile.SetTarget(target);
+                        targetedProjectile.target = target;
                         child.parent = null;
                     }
                 }

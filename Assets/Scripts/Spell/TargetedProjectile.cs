@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class TargetedProjectile : MonoBehaviour
 {
-    public GameObject target { get; private set; } = null;
+    public GameObject target { get; set; } = null;
     private Unit targetUnit = null;
     private bool targetSet = false;
 
@@ -40,13 +40,5 @@ public class TargetedProjectile : MonoBehaviour
             hit?.Invoke(other.gameObject);
             Destroy(gameObject);
         }
-    }
-
-    /*
-    *   SetTarget - Sets the target for this GameObject.
-    *   @param target - GameObject to set the target to.
-    */
-    public void SetTarget(GameObject target){
-        this.target = target;
     }
 }
