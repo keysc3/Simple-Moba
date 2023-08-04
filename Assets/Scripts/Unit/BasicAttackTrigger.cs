@@ -31,20 +31,4 @@ public class BasicAttackTrigger : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    /*
-    *   SetTarget - Sets the target for this GameObject.
-    *   @param target - GameObject to set the target to.
-    */
-    /*public void SetTarget(GameObject target){
-        this.target = target;
-    }*/
-
-    /*
-    *   BasicAttack - Sets the basicAttack script reference.
-    *   @param basicAttack - basicAttack script reference.
-    */
-    /*public void SetBasicAttack(BasicAttack basicAttack){
-        this.basicAttack = basicAttack;
-    }*/
 }
