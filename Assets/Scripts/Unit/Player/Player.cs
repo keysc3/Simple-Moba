@@ -177,25 +177,4 @@ public class Player : Unit, IRespawnable
         UIManager.instance.UpdateDeathTimer(0f, playerUI);
         Respawn();
     }
-
-    /*
-    *   SetIsCasting - Sets the players isCasting bool and spell being casted if true.
-    *   @param isCasting - bool for if the player is casting.
-    *   @param currentCastedSpell - Spell being casted.
-    */
-   /* public void SetIsCasting(bool isCasting, Spell currentCastedSpell){
-        this.isCasting = isCasting;
-        if(!isCasting)
-            this.currentCastedSpell = null;
-        else
-            this.currentCastedSpell = currentCastedSpell;
-    }*/
-    
-    /*
-    *   SetMouseOnCast - Stores the players mouse position from cast.
-    *   @param mouseOnCast - Vector3 for world coordinates of the mouse on cast.
-    */
-    /*public void SetMouseOnCast(Vector3 mouseOnCast){
-        this.mouseOnCast = mouseOnCast;
-    }*/
 }
