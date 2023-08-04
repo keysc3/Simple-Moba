@@ -79,13 +79,14 @@ public class UIManager : MonoBehaviour
     public void SetupSpellUI(Player player){
         GameObject spellContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
         ChampionSpells championSpells = player.gameObject.GetComponent<ChampionSpells>();
+        //TODO: non-hardcoded
         List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
         // Setup spell1-4's spell button.
         for(int i = 0; i < 5; i++){
             SpellButton spellButton = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").GetComponent<SpellButton>();
-            spellButton.SetSpell(championSpells.mySpells[i]);
-            spellButton.SetKeyCode (inputs[i]);
-            spellButton.SetPlayerSpellInput(player.gameObject.GetComponent<PlayerSpellInput>());
+            spellButton.spell = championSpells.mySpells[i];
+            spellButton.keyCode = inputs[i];
+            spellButton.playerSpellInput = player.gameObject.GetComponent<PlayerSpellInput>();
             spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
             // Setup spell1-4's level up buttons.
             if(i > 0){

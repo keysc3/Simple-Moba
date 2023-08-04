@@ -11,9 +11,9 @@ using UnityEngine.EventSystems;
 */
 public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    public Spell spell { get; private set; }
-    public KeyCode keyCode { get; private set; }
-    public PlayerSpellInput playerSpellInput { get; private set; }
+    public Spell spell { get; set; }
+    public KeyCode keyCode { get; set; }
+    public PlayerSpellInput playerSpellInput { get; set; }
 
     /*
     *   OnPointerEnter - Called when the cursor enters the rect area of this button.
@@ -39,29 +39,5 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             playerSpellInput.SetButtonClick(true);
             playerSpellInput.SpellButtonPressed(keyCode, spell);
         }
-    }
-
-    /*
-    *   SetSpell - Sets the spell this button is for.
-    *   @param spell - Spell to set to.
-    */
-    public void SetSpell(Spell spell){
-        this.spell = spell;
-    }
-
-    /*
-    *   SetKeyCode - Sets the KeyCode the spell this button is for uses.
-    *   @param keyCode - KeyCode to set to.
-    */
-    public void SetKeyCode(KeyCode keyCode){
-        this.keyCode = keyCode;
-    }
-
-    /*
-    *   SetPlayerSpellInput - Sets the PlayerSpellInput of this buttons associated GameObject.
-    *   @param playerSpellInput - PlayerSpellInput to set to.
-    */
-    public void SetPlayerSpellInput(PlayerSpellInput playerSpellInput){
-        this.playerSpellInput = playerSpellInput;
     }
 }
