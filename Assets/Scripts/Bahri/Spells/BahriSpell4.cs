@@ -90,7 +90,7 @@ public class BahriSpell4 : DamageSpell, ICastable
             if(Input.GetKeyDown(KeyCode.R) && !player.isCasting && spell_4_chargesLeft > 0 && canRecast && !player.isDead){
                 Spell_4_Move();
                 spell_4_chargesLeft--;
-                spell4Effect.UpdateStacks(spell_4_chargesLeft);
+                spell4Effect.Stacks = spell_4_chargesLeft;
             }
             UIManager.instance.SetSpellActiveDuration(spellNum, spell_4_duration, spell_4_timer, player.playerUI);
             if(spell_4_chargesLeft == 0)
@@ -115,7 +115,7 @@ public class BahriSpell4 : DamageSpell, ICastable
                 spell_4_chargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;
-                spell4Effect.UpdateStacks(spell_4_chargesLeft);
+                spell4Effect.Stacks = spell_4_chargesLeft;
                 spell4Effect.ResetTimer();
                 spell4Effect.effectDuration = spell_4_duration;
             }

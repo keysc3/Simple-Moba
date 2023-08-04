@@ -607,7 +607,7 @@ public class UIManager : MonoBehaviour
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
                 if(value != null){
-                    value.SetText(((PersonalSpell)effect).stacks.ToString());
+                    value.SetText(((PersonalSpell)effect).Stacks.ToString());
                     if(effect.effectDuration == -1f)
                         yield return null;
                 }

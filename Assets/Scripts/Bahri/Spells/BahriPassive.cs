@@ -43,7 +43,7 @@ public class BahriPassive : Spell
         // Heal off minion/monster kills if at 9 stacks.
         else{
             passiveStacks += 1;
-            passive.UpdateStacks(passiveStacks);
+            passive.Stacks = passiveStacks;
             if(passiveStacks == 9){
                 healAmount = ((60f / 17f) * (float)(levelManager.level - 1)) + 35f;
                 championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
