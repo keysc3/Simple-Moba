@@ -68,8 +68,8 @@ public class BahriSpell1 : DamageSpell, ICastable
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, gameObject.transform.position, Quaternion.identity);
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
-        spell1Trigger.SetBahriSpell1(this);
-        spell1Trigger.SetBahri(gameObject); 
+        spell1Trigger.bahriSpell1 = this;
+        spell1Trigger.bahri = gameObject; 
         // Set initial return values.
         returning = false;
         float returnSpeed = spellData.minSpeed;

@@ -9,8 +9,8 @@ using UnityEngine;
 */
 public class Spell1Trigger : MonoBehaviour
 {
-    public BahriSpell1 bahriSpell1 { get; private set; }
-    public GameObject bahri { get; private set; }
+    public BahriSpell1 bahriSpell1 { get; set; }
+    public GameObject bahri { get; set; }
 
     private Bounds bahriBounds;
 
@@ -53,21 +53,5 @@ public class Spell1Trigger : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-    }
-
-    /*
-    *   BahriAbilityHit - Sets the bahriAbilityHit script reference.
-    *   @param bahriAbilityHit - BahriAbilityHit script reference.
-    */
-    public void SetBahriSpell1(BahriSpell1 bahriSpell1){
-        this.bahriSpell1 = bahriSpell1;
-    }
-
-    /*
-    *   SetBahri - Sets the GameObject that casted the spell.
-    *   @param bahri - GameObject of the caster.
-    */
-    public void SetBahri(GameObject bahri){
-        this.bahri = bahri;
     }
 }
