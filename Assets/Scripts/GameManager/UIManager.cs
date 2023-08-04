@@ -90,9 +90,9 @@ public class UIManager : MonoBehaviour
             // Setup spell1-4's level up buttons.
             if(i > 0){
                 SpellLevelUpButton spellLevelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").GetComponent<SpellLevelUpButton>();
-                spellLevelUpButton.SetPlayerSpellInput(player.gameObject.GetComponent<PlayerSpellInput>());
-                spellLevelUpButton.SetSpell(championSpells.mySpells[i].spellNum);
-                spellLevelUpButton.SetPlayer(player);
+                spellLevelUpButton.playerSpellInput = player.gameObject.GetComponent<PlayerSpellInput>();
+                spellLevelUpButton.spell = championSpells.mySpells[i].spellNum;
+                spellLevelUpButton.player = player;
             }
         }
     }
