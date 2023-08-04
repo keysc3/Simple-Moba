@@ -14,7 +14,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
 {
     private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
-    public List<GameObject> activeSpellObjects { get; private set; } = new List<GameObject>();
+    public List<GameObject> activeSpellObjects { get; } = new List<GameObject>();
 
     /*
     *   BahriSpell2 - Initialize Bahri's second spell.
