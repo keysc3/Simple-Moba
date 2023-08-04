@@ -32,7 +32,7 @@ public class LevelManager
         this.levelInfo = levelInfo;
         this.player = player;
         championStats = (ChampionStats) player.unitStats;
-        champion = (ScriptableChampion) player.unit;
+        champion = (ScriptableChampion) player.SUnit;
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         player.score.takedownCallback += GainXP; 

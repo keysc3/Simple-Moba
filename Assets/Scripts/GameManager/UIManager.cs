@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     *   @return (GameObject, GameObject) - Tuple for returning the intialized player UI and player bar.
     */
     public (GameObject, GameObject) SetupPlayerUI(Player player){
-        GameObject playerUI = CreatePlayerUI(player.gameObject, player.unit.icon);
+        GameObject playerUI = CreatePlayerUI(player.gameObject, player.SUnit.icon);
         GameObject playerBar = CreatePlayerBar(player.gameObject);
         return (playerUI, playerBar);
     }

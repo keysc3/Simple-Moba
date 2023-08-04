@@ -98,7 +98,7 @@ public class StatusEffects
         }
         Unit unit = (Unit) effect.effected.GetComponent<Unit>();
         if(unit != null){
-            if(unit.unit is ScriptableChampion)
+            if(unit.SUnit is ScriptableChampion)
                 UIManager.instance.AddStatusEffectUI(this, effect, ((Player) unit).playerUI);
         }
     }

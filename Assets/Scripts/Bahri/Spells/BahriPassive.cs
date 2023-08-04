@@ -35,7 +35,7 @@ public class BahriPassive : Spell
         Debug.Log("Takedown; use passive");
         float healAmount;
         // Heal off champion kill
-        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
+        if(killed.GetComponent<Unit>().SUnit is ScriptableChampion){
             healAmount = ((90f / 17f) * (float)(levelManager.level - 1)) + 75f;
             championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
             Debug.Log("Healed " + healAmount + " health from champion kill.");

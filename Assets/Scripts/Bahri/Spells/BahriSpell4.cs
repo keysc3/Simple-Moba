@@ -109,7 +109,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   @param killed - GameObject the takedown was on.
     */
     private void Spell_4_Takedown(GameObject killed){
-        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
+        if(killed.GetComponent<Unit>().SUnit is ScriptableChampion){
             if(spell_4_chargesLeft < spellData.charges && spell4Casting){
                 UIManager.instance.SetSpellCoverActive(spellNum, false, player.playerUI);
                 spell_4_chargesLeft += 1;

@@ -36,7 +36,7 @@ public class Player : Unit, IRespawnable
     *   Init - Handles setup specific to this child class.
     */
     protected override void Init(){
-        unitStats = new ChampionStats((ScriptableChampion)unit);
+        unitStats = new ChampionStats((ScriptableChampion) SUnit);
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championSpells = GetComponent<ChampionSpells>();

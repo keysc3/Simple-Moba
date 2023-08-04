@@ -32,7 +32,7 @@ public class BasicAttack : MonoBehaviour
     *   @param target - GameObject of the enemy to attack.
     */
     public void Attack(GameObject target){
-        if(unit.unit.rangeType == "melee")
+        if(unit.SUnit.rangeType == "melee")
             MeleeAttack(target);
         else
             RangeAttack(target);

@@ -9,8 +9,13 @@ using UnityEngine.AI;
 * @author: Colin Keys
 */
 public class Unit : MonoBehaviour, IDamagable, IKillable
-{
-    [field: SerializeField] public ScriptableUnit unit { get;  private set; }
+{   
+    [SerializeField] private ScriptableUnit sUnit;
+    #region "SUnit property"
+    public ScriptableUnit SUnit { 
+        get { return sUnit; }
+    }
+    #endregion
     [field: SerializeField] public UnitStats unitStats { get; protected set; }
     [field: SerializeField] public StatusEffects statusEffects { get; private set; }
     [field: SerializeField] public NavMeshAgent navMeshAgent { get; private set; }
@@ -33,7 +38,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     *   Init - Handles setup specific to this parent class.
     */
     protected virtual void Init(){
-        unitStats = new UnitStats(unit);
+        unitStats = new UnitStats(SUnit);
     }
 
     // Update is called once per frame
