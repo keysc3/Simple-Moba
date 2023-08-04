@@ -7,14 +7,13 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class Damage
 {
 
-    [field: SerializeField] public float amount { get; private set; }
-    [field: SerializeField] public float time { get; private set; }
-    [field: SerializeField] public string type { get; private set; }
-    [field: SerializeField] public GameObject from { get; private set; }
+    public float amount { get; }
+    public float time { get;  }
+    public string type { get;  }
+    public GameObject from { get; }
 
     /*
     *   Damage - Damage info object.
