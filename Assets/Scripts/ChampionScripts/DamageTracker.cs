@@ -7,10 +7,9 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class DamageTracker
 {
-    [field: SerializeField] public List<Damage> damageReceived { get; private set; } = new List<Damage>();
+    public List<Damage> damageReceived { get; } = new List<Damage>();
     private float resetTime = 15f; 
     private float assistTime = 10.0f;
 
@@ -18,9 +17,11 @@ public class DamageTracker
     *   CheckForReset - Checks if the last instance of damage is greater than the reset damage received timer.
     */
     public void CheckForReset(float currentTime){
-        // No damage received for 15s, remove all damage tracking.
-        if(currentTime - damageReceived[damageReceived.Count-1].time >= resetTime)
-            ResetDamageTracker();
+        if(damageReceived.Count > 0){
+            // No damage received for 15s, remove all damage tracking.
+            if(currentTime - damageReceived[damageReceived.Count-1].time >= resetTime)
+                ResetDamageTracker();
+        }
     }
 
     /*

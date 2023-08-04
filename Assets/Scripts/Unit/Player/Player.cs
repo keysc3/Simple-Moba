@@ -67,11 +67,9 @@ public class Player : Unit, IRespawnable
     protected override void Update(){
         base.Update();
         // Check if damage tracker needs resetting.
-        if(damageTracker.damageReceived.Count > 0)
-            damageTracker.CheckForReset(Time.time);
+        damageTracker.CheckForReset(Time.time);
         // Check for level up skill input if skill level up available.
         levelManager.LevelUpSkill();
-
         // Test GainXP
         if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
             if(Input.GetKeyDown(KeyCode.K))
