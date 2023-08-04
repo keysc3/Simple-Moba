@@ -70,18 +70,12 @@ public class Player : Unit, IRespawnable
         if(damageTracker.damageReceived.Count > 0)
             damageTracker.CheckForReset(Time.time);
         // Check for level up skill input if skill level up available.
-        if(levelManager.spellLevelPoints > 0){
-            levelManager.LevelUpSkill();
-        }
-        else{
-            // Deactivate skill level up UI if necessary.
-            if(levelManager.skillLevelUpUIActive)
-                levelManager.DeactivateSkillLevelUpUI();
-        }
+        levelManager.LevelUpSkill();
+
         // Test GainXP
         if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
             if(Input.GetKeyDown(KeyCode.K))
-                levelManager.GainXPTester(levelManager.gainAmount);
+                levelManager.GainXPTester();
         }
     }
 
