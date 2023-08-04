@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     {
         // Stop the players attack windup if casting or moving.
         if(player.isCasting || navMeshAgent.hasPath){
-            basicAttack.SetWindingUp(false);
+            basicAttack.windingUp = false;
         }
 
         if(navMeshAgent.enabled){
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
                 targetedEnemy = null;
         }
         else
-            basicAttack.SetWindingUp(false);
+            basicAttack.windingUp = false;
     }
 
     /*
@@ -136,14 +136,14 @@ public class PlayerController : MonoBehaviour
             // If the time since last auto is greater than the next time the player is allowed to auto.
             // Make sure player isn't already winding up an auto.
             if(Time.time > basicAttack.nextAuto && !basicAttack.windingUp){
-                basicAttack.SetWindingUp(true);
+                basicAttack.windingUp = true;
                 StartCoroutine(basicAttack.BasicAttackWindUp());
             }
         }
         else{
             // Stop the auto wind up since the enemy is no longer in range.
             StopCoroutine(basicAttack.BasicAttackWindUp());
-            basicAttack.SetWindingUp(false);
+            basicAttack.windingUp = false;
             // Move the player into range of the target.
             Vector3 enemyDest = targetedEnemy.transform.position;
             enemyDest.y = myCollider.bounds.center.y;
