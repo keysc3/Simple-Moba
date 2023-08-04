@@ -9,21 +9,22 @@ using UnityEngine;
 */
 public class ChampionSpells : MonoBehaviour
 {
-    public Spell passive { get; protected set; }
-    public Spell spell1 { get; protected set; }
-    public Spell spell2 { get; protected set; }
-    public Spell spell3 { get; protected set; }
-    public Spell spell4 { get; protected set; }
-
-    public List<Spell> mySpells { get; protected set; }
-    public List<Effect> initializationEffects { get; protected set; } = new List<Effect>();
-    public List<SpellData> mySpellData { get; protected set; }
-
     [SerializeField] protected SpellData passiveData;
     [SerializeField] protected SpellData spell1Data;
     [SerializeField] protected SpellData spell2Data;
     [SerializeField] protected SpellData spell3Data;
     [SerializeField] protected SpellData spell4Data;
+    
+    protected Spell passive;
+    public Spell spell1 { get; protected set; }
+    public Spell spell2 { get; protected set; }
+    public Spell spell3 { get; protected set; }
+    public Spell spell4 { get; protected set; }
+
+    public List<Spell> mySpells { get; } = new List<Spell>();
+    public List<Effect> initializationEffects { get; } = new List<Effect>();
+    public List<SpellData> mySpellData { get; } = new List<SpellData>();
+
 
     public delegate void UpdateCallback(); 
     public UpdateCallback updateCallback;
@@ -33,8 +34,8 @@ public class ChampionSpells : MonoBehaviour
 
     // Start is called before the first frame update.
     protected virtual void Start(){
-        mySpells = new List<Spell>(){passive, spell1, spell2, spell3, spell4};
-        mySpellData = new List<SpellData>(){passiveData, spell1Data, spell2Data, spell3Data, spell4Data};
+        mySpells.AddRange(new List<Spell>(){passive, spell1, spell2, spell3, spell4});
+        mySpellData.AddRange(new List<SpellData>(){passiveData, spell1Data, spell2Data, spell3Data, spell4Data});
         CallbackSetup();
         Player player = GetComponent<Player>();
         foreach(Effect effect in initializationEffects){
