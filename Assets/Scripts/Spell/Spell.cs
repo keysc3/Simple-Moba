@@ -12,11 +12,11 @@ using System;
 [System.Serializable]
 public class Spell
 {
-    [SerializeField] public bool onCd { get; protected set; } = false;
-    [SerializeField] public bool canMove { get; protected set; } = false;
-    [SerializeField] public bool isQuickCast { get; protected set; } = false;
-    [SerializeField] public bool isDisplayed { get; private set; } = false;
-    [SerializeField] public string spellNum { get; private set; }
+    public bool onCd { get; protected set; } = false;
+    public bool canMove { get; protected set; } = false;
+    public bool isQuickCast { get; protected set; } = false;
+    public bool isDisplayed { get; private set; } = false;
+    public string spellNum { get; }
     protected NavMeshAgent navMeshAgent;
     protected LevelManager levelManager;
     protected ChampionStats championStats;
