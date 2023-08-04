@@ -9,8 +9,8 @@ using UnityEngine;
 */
 public class BasicAttackTrigger : MonoBehaviour
 {
-    public GameObject target { get; private set; } = null;
-    public BasicAttack basicAttack { get; private set; }
+    public GameObject target { get; set; } = null;
+    public BasicAttack basicAttack { get; set; }
 
     // Update is called once per frame
     private void Update()
@@ -36,15 +36,15 @@ public class BasicAttackTrigger : MonoBehaviour
     *   SetTarget - Sets the target for this GameObject.
     *   @param target - GameObject to set the target to.
     */
-    public void SetTarget(GameObject target){
+    /*public void SetTarget(GameObject target){
         this.target = target;
-    }
+    }*/
 
     /*
     *   BasicAttack - Sets the basicAttack script reference.
     *   @param basicAttack - basicAttack script reference.
     */
-    public void SetBasicAttack(BasicAttack basicAttack){
+    /*public void SetBasicAttack(BasicAttack basicAttack){
         this.basicAttack = basicAttack;
-    }
+    }*/
 }
