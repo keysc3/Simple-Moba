@@ -166,6 +166,7 @@ public class Player : Unit, IRespawnable
 
     /*
     *   RespawnTimer - Coroutine for timing a respawn.
+    *   @param respawn - flaot of the respawn time.
     */
     private IEnumerator RespawnTimer(float respawn){
         float timer = 0.0f;
