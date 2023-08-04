@@ -63,8 +63,8 @@ public class BahriSpell3 : DamageSpell, ICastable
         // Create spell 3 GameObject and set its necessary variables.
         GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
         Spell3Trigger spell3Trigger = missile.GetComponent<Spell3Trigger>();
-        spell3Trigger.SetBahriSpell3(this);
-        spell3Trigger.SetBahri(gameObject);
+        spell3Trigger.bahriSpell3 = this;
+        spell3Trigger.bahri = gameObject;
         // While the spell object still exists.
         while(missile){
             // If target location has not been reached then move the object towards the target location.
