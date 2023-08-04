@@ -7,13 +7,12 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class Score
 {
-    [field: SerializeField] public int kills { get; private set; } = 0;
-    [field: SerializeField] public int assists { get; private set; } = 0;
-    [field: SerializeField] public int deaths { get; private set; } = 0;
-    [field: SerializeField] public int cs { get; private set; } = 0;
+    public int kills { get; private set; } = 0;
+    public int assists { get; private set; } = 0;
+    public int deaths { get; private set; } = 0;
+    public int cs { get; private set; } = 0;
 
     public delegate void Takedown(GameObject killed);
     public event Takedown takedownCallback;
