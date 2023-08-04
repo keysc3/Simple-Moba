@@ -18,7 +18,7 @@ public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
     *   OnPointerDown - Called when the mouse is clicked over the button.
     */
     public void OnPointerDown(PointerEventData eventData){
-        playerSpellInput.SetButtonClick(true);
+        playerSpellInput.buttonClick = true;
         player.levelManager.SpellLevelUp(spell);
     }
 }

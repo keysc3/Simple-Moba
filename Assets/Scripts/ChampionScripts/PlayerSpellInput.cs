@@ -13,7 +13,7 @@ using UnityEngine.AI;
 */
 public class PlayerSpellInput : MonoBehaviour
 {
-    public bool buttonClick { get; private set; } = false;
+    public bool buttonClick { get; set; } = false;
     public Spell lastSpellPressed { get; private set; } = null;
     private KeyCode lastButtonPressed = KeyCode.None;
     private ChampionSpells championSpells;
@@ -145,13 +145,5 @@ public class PlayerSpellInput : MonoBehaviour
             lastSpellPressed = null;
             lastButtonPressed = KeyCode.None;
         }
-    }
-
-    /*
-    *   SetButtonClick - Sets the button click bool.
-    *   @param buttonClick - bool to set to.
-    */
-    public void SetButtonClick(bool buttonClick){
-        this.buttonClick = buttonClick;
     }
 }
