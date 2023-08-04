@@ -10,9 +10,9 @@ using UnityEngine.UI;
 */
 public class BilliaDrowsyVisual : MonoBehaviour
 {
-    public float drowsyDuration { get; private set; }
-    public ScriptableDrowsy drowsy { get; private set; }
-    public GameObject source { get; private set; }
+    public float drowsyDuration { get; set; }
+    public ScriptableDrowsy drowsy { get; set; }
+    public GameObject source { get; set; }
     private Image drowsyVisual;
     private RectTransform rectTransform;
     private StatusEffects statusEffects;
@@ -42,29 +42,5 @@ public class BilliaDrowsyVisual : MonoBehaviour
             yield return null;
         }
         Destroy(gameObject);
-    }
-
-    /*
-    *   SetDrowsyDuration - Sets the duration of the Drowsy Effect for animation time.
-    *   @param drowsyDuration - float of the duration of the animation.
-    */
-    public void SetDrowsyDuration(float drowsyDuration){
-        this.drowsyDuration = drowsyDuration;
-    }
-
-    /*
-    *   SetDrowsy - Sets the drowsy object being animated.
-    *   @param drowsy - Scriptable drowsy to animate.
-    */
-    public void SetDrowsy(ScriptableDrowsy drowsy){
-        this.drowsy = drowsy;
-    }
-
-    /*
-    *   SetSource - Sets the drowsy's source GameObject.
-    *   @param source - GameObject of the source.
-    */
-    public void SetSource(GameObject source){
-        this.source = source;
     }
 }
