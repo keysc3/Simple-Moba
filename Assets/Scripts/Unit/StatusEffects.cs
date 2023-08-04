@@ -60,7 +60,7 @@ public class StatusEffects
             if(effect.effectType.ccValue > highestActiveCCValue){
                 // Only deactivate non-zero cc values.
                 if(highestActiveCCValue > 0)
-                    mostImpairing.SetIsActivated(false);
+                    mostImpairing.IsActivated = false;
                 SetMostImpairing(effect);
             }
             else{
@@ -84,7 +84,7 @@ public class StatusEffects
                 SetStrongestSlow((Slow) effect);
             }
             else
-                effect.SetIsActivated(true);
+                effect.IsActivated = true;
         }
         // If the effect is a slow and a child of another effect then do not add it to the UI.
         if(effect is Slow){
@@ -110,9 +110,9 @@ public class StatusEffects
         for(int i = 0; i < statusEffects.Count; i++){
             if(statusEffects[i] is Slow){
                 if(index == i)
-                    statusEffects[i].SetIsActivated(true);
+                    statusEffects[i].IsActivated = true;
                 else
-                    statusEffects[i].SetIsActivated(false);
+                    statusEffects[i].IsActivated = false;
             } 
         }
     }
@@ -246,7 +246,7 @@ public class StatusEffects
     *   @param effect - Effect of the status effect to activate and set.
     */
     private void SetMostImpairing(Effect effect){
-        effect.SetIsActivated(true);
+        effect.IsActivated = true;
         mostImpairing = effect;
         highestActiveCCValue = effect.effectType.ccValue;
     }
@@ -259,7 +259,7 @@ public class StatusEffects
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
         for(int i = 0; i < statusEffects.Count; i++){
             if(effectType.GetType() == statusEffects[i].effectType.GetType() && casted == statusEffects[i].casted){
-                statusEffects[i].SetIsActivated(false);
+                statusEffects[i].IsActivated = false;
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);
                 SetMostImpairing(GetMostImpairing());

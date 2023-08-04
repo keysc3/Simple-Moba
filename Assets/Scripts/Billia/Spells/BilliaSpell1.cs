@@ -178,7 +178,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     private void ChangeSpell_1_PassiveEffect(int index, float baseIncrease){
         passiveEffectTracker[index].ResetTimer();
         float newDuration = spellData.passiveSpeedDuration + baseIncrease;
-        passiveEffectTracker[index].SetDuration(newDuration);
+        passiveEffectTracker[index].effectDuration = newDuration;
     }
 
     /*

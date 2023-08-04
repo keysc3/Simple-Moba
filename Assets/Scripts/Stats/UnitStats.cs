@@ -94,7 +94,7 @@ public class UnitStats
         float slowPercent = 1f;
         // Calculate the slow percentage to apply to the units speed.
         foreach(Effect effect in slows){
-            if(effect.isActivated){
+            if(effect.IsActivated){
                 Slow mySlow = (Slow) effect;
                 slowPercent *= (1f - mySlow.slowPercent);
                 break;

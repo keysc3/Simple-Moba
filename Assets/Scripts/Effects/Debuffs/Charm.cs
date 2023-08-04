@@ -14,6 +14,7 @@ public class Charm : Effect
     private Vector3 currentTarget;
     private NavMeshAgent effectedNavMeshAgent;
     private Unit effectedUnit;
+    private Collider effectedCollider;
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
     
@@ -28,6 +29,7 @@ public class Charm : Effect
         this.spellLevel = spellLevel;
         effectedUnit = effected.GetComponent<Unit>();
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
+        effectedCollider = unitEffected.GetComponent<Collider>();
     }
 
     /*
@@ -35,7 +37,7 @@ public class Charm : Effect
     */
     public override void StartEffect(){
         // If the charmed unit ia a champion disable their controls.
-        if(effectedUnit.unit is ScriptableChampion){
+        if(effectedUnit.SUnit is ScriptableChampion){
             playerController = effected.GetComponent<PlayerController>();
             playerController.enabled = false;
             playerSpellInput = effected.GetComponent<PlayerSpellInput>();
@@ -55,7 +57,7 @@ public class Charm : Effect
         effectedNavMeshAgent.ResetPath();
         
         // Give controls back if charmed is active GameObject.
-        if(effectedUnit.unit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
+        if(effectedUnit.SUnit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }

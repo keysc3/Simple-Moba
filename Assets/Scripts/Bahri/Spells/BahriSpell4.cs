@@ -117,7 +117,7 @@ public class BahriSpell4 : DamageSpell, ICastable
                 spell_4_duration = 10.0f;
                 spell4Effect.UpdateStacks(spell_4_chargesLeft);
                 spell4Effect.ResetTimer();
-                spell4Effect.SetDuration(spell_4_duration);
+                spell4Effect.effectDuration = spell_4_duration;
             }
         }
     }
