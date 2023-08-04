@@ -10,7 +10,7 @@ using UnityEngine;
 public class ActiveChampion : MonoBehaviour
 {
     public int activeChampion { get; set; }
-    public List<GameObject> champions { get; }= new List<GameObject>();
+    [field: SerializeField] public List<GameObject> champions { get; private set; } = new List<GameObject>();
 
     public static ActiveChampion instance { get; private set; }
     public CameraMovement cameraMovement;
