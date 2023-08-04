@@ -9,8 +9,8 @@ using UnityEngine;
 */
 public class ActiveChampion : MonoBehaviour
 {
-    public int activeChampion;
-    public List<GameObject> champions = new List<GameObject>();
+    public int activeChampion { get; set; }
+    public List<GameObject> champions { get; }= new List<GameObject>();
 
     public static ActiveChampion instance { get; private set; }
     public CameraMovement cameraMovement;
