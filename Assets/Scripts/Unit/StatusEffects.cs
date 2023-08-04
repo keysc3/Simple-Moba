@@ -7,16 +7,12 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class StatusEffects
 {
-
-    [field: SerializeField]
-    [field: SerializeReference]
-    public List<Effect> statusEffects { get; private set; } = new List<Effect>();
+    public List<Effect> statusEffects { get; } = new List<Effect>();
     
-    [SerializeField] private int highestActiveCCValue = 0;
-    [SerializeField] private Effect mostImpairing;
+    private int highestActiveCCValue = 0;
+    private Effect mostImpairing;
 
     /*
     *   UpdateEffects - Ticks the effects.
