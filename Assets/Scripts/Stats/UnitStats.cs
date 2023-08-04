@@ -84,10 +84,10 @@ public class UnitStats
         foreach(Effect effect in speedBonuses){
             ScriptableSpeedBonus myBonus = (ScriptableSpeedBonus) effect.effectType;
             if(myBonus.isAdditive){
-                additive += ((SpeedBonus) effect).bonusPercent;
+                additive += ((SpeedBonus) effect).BonusPercent;
             }
             else{
-                multiplicative *= (1f + ((SpeedBonus) effect).bonusPercent);
+                multiplicative *= (1f + ((SpeedBonus) effect).BonusPercent);
             }
         }
         List<Effect> slows = statusEffects.GetEffectsByType(typeof(ScriptableSlow));

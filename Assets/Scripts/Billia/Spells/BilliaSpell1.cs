@@ -142,7 +142,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
             // Create a new speed bonus with the 
             float bonusPercent = spellData.passiveSpeed[levelManager.spellLevels[spellNum]-1];
             SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, gameObject);
-            speedBonus.SetBonusPercent(bonusPercent);
+            speedBonus.BonusPercent = bonusPercent;
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);
             passiveStacks += 1;

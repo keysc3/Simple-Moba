@@ -169,7 +169,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
             float timePassed = timer/spellData.speedBonus.duration[spellLevel];
             // Decay the speed bonus based on time since activated.
             float newBonus = Mathf.SmoothStep(spellData.speedBonus.bonusPercent[spellLevel], 0f, timePassed);
-            speedBonus.SetBonusPercent(newBonus);
+            speedBonus.BonusPercent = newBonus;
             timer += Time.deltaTime;
             yield return null;
         }

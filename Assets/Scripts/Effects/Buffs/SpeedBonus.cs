@@ -5,8 +5,19 @@ using UnityEngine.AI;
 
 public class SpeedBonus : Effect
 {
-    public float bonusPercent { get; private set; }
-    
+    private float bonusPercent;
+    #region "Bonus Property"
+    public float BonusPercent { 
+        get {
+            return bonusPercent;
+        }
+        set {
+            if(value >= 0)
+                bonusPercent = value;
+        }
+    }
+    #endregion
+
     /*
     *   Slow - Initialize a new speed bonus effect.
     *   @param slowEffect - ScriptableSpeedBonus of the speed bonus effect to apply.
@@ -28,13 +39,5 @@ public class SpeedBonus : Effect
     *   EndEffect - End the slow effect.
     */
     public override void EndEffect(){
-    }
-
-    /*
-    *   SetBonusPercent - Sets the bonus percent of the speed bonus.
-    *   @param bonusPercent - float of percent to set the bonus to.
-    */
-    public void SetBonusPercent(float bonusPercent){
-        this.bonusPercent = bonusPercent;
     }
 }
