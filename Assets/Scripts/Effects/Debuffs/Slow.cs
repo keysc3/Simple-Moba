@@ -10,8 +10,19 @@ using UnityEngine.AI;
 */
 public class Slow : Effect
 {
-    public float slowPercent { get; private set; }
-    
+    private float slowPercent;
+    #region "SlowPercent property."
+    public float SlowPercent {
+        get { 
+            return slowPercent;
+        }
+        set {
+            if(value >= 0f && value <= 1f)
+                slowPercent = value;
+        }
+    }
+    #endregion
+
     /*
     *   Slow - Initialize a new slow effect.
     *   @param slowEffect - ScriptableSlow of the slow effect to apply.

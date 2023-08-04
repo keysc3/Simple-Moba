@@ -96,7 +96,7 @@ public class UnitStats
         foreach(Effect effect in slows){
             if(effect.IsActivated){
                 Slow mySlow = (Slow) effect;
-                slowPercent *= (1f - mySlow.slowPercent);
+                slowPercent *= (1f - mySlow.SlowPercent);
                 break;
             }
         }
