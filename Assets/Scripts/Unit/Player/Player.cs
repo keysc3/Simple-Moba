@@ -10,15 +10,28 @@ using UnityEngine.AI;
 */
 public class Player : Unit, IRespawnable
 {
-    [field: SerializeField] public DamageTracker damageTracker { get; private set; }
-    [field: SerializeField] public Inventory inventory { get; private set; }
-    [field: SerializeField] public Score score { get; private set; }
-    [field: SerializeField] public LevelManager levelManager { get; private set; }
+    public DamageTracker damageTracker { get; private set; }
+    public Inventory inventory { get; private set; }
+    public Score score { get; private set; }
+    public LevelManager levelManager { get; private set; }
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
-    public bool isCasting { get; private set; }
-    public Vector3 mouseOnCast { get; private set; }
-    public Spell currentCastedSpell { get; private set; }
+    public Vector3 mouseOnCast { get; set; }
+    public bool isCasting { get; set; }
+    private Spell currentCastedSpell;
+    #region "CurrentCastedSpell property"
+    public Spell CurrentCastedSpell { 
+        get { 
+            return currentCastedSpell; 
+        } 
+        set { 
+            if(!isCasting)
+                currentCastedSpell = null;
+            else
+                currentCastedSpell = value; 
+        }
+    }
+    #endregion
 
     [SerializeField] private Material dead;
     [SerializeField] private LevelInfo levelInfo;
@@ -170,19 +183,19 @@ public class Player : Unit, IRespawnable
     *   @param isCasting - bool for if the player is casting.
     *   @param currentCastedSpell - Spell being casted.
     */
-    public void SetIsCasting(bool isCasting, Spell currentCastedSpell){
+   /* public void SetIsCasting(bool isCasting, Spell currentCastedSpell){
         this.isCasting = isCasting;
         if(!isCasting)
             this.currentCastedSpell = null;
         else
             this.currentCastedSpell = currentCastedSpell;
-    }
+    }*/
     
     /*
     *   SetMouseOnCast - Stores the players mouse position from cast.
     *   @param mouseOnCast - Vector3 for world coordinates of the mouse on cast.
     */
-    public void SetMouseOnCast(Vector3 mouseOnCast){
+    /*public void SetMouseOnCast(Vector3 mouseOnCast){
         this.mouseOnCast = mouseOnCast;
-    }
+    }*/
 }

@@ -165,7 +165,8 @@ public class BahriSpell4 : DamageSpell, ICastable
     */
     private IEnumerator Spell_4_Speed(Vector3 targetPosition){
         // Set necessary values and disable navmesh.
-        player.SetIsCasting(true, this);
+        player.isCasting = true;
+        player.CurrentCastedSpell = this;
         float newSpeed = championStats.speed.GetValue() + spellData.speed;
         navMeshAgent.ResetPath();
         navMeshAgent.enabled = false;
@@ -178,7 +179,8 @@ public class BahriSpell4 : DamageSpell, ICastable
         if(!player.isDead)
             Spell_4_Missiles();
         navMeshAgent.enabled = true;
-        player.SetIsCasting(false, this);
+        player.isCasting = false;
+        player.CurrentCastedSpell = this;
         championSpells.StartCoroutine(NextCastCd(1.0f, spellNum));
     }
 

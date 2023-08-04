@@ -80,7 +80,7 @@ public class Spell
         LayerMask groundMask = LayerMask.GetMask("Ground");
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
-        player.SetMouseOnCast(targetDirection);
+        player.mouseOnCast = targetDirection;
         targetDirection.y = myCollider.bounds.center.y;
         return targetDirection;
     }
@@ -91,7 +91,8 @@ public class Spell
     */
     protected IEnumerator CastTime(float castTime, bool canMove){
         float timer = 0.0f;
-        player.SetIsCasting(true, this);
+        player.isCasting = true;
+        player.CurrentCastedSpell = this;
         // While still casting spell stop the player.
         while(timer <= castTime){
             if(!canMove){
@@ -101,7 +102,8 @@ public class Spell
             timer += Time.deltaTime;
             yield return null;
         }
-        player.SetIsCasting(false, this);
+        player.isCasting = false;
+        player.CurrentCastedSpell = this;
         navMeshAgent.isStopped = false;
     }
 

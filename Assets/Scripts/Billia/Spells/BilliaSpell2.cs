@@ -126,7 +126,8 @@ public class BilliaSpell2 : DamageSpell, ICastable
     *   @param spellTargetPosition - Vector3 of the center of the spell.
     */
     private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
-        player.SetIsCasting(true, this);
+        player.isCasting = true;
+        player.CurrentCastedSpell = this;
         // Disable pathing.
         navMeshAgent.ResetPath();
         navMeshAgent.isStopped = true;
@@ -143,7 +144,8 @@ public class BilliaSpell2 : DamageSpell, ICastable
         // Apply last tick dash and enable pathing.
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, dashSpeed * Time.deltaTime);
         navMeshAgent.isStopped = false;
-        player.SetIsCasting(false, this);
+        player.isCasting = false;
+        player.CurrentCastedSpell = this;
         Spell_2_Finished(spellTargetPosition);
     }
 
