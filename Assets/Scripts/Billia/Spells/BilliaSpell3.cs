@@ -12,8 +12,8 @@ using UnityEditor;
 public class BilliaSpell3 : DamageSpell, ICastable
 {
     private BilliaSpell3Data spellData;
-    [SerializeField] private float p1_y_offset = 3f;
-    [SerializeField] private float p2_y = 0.85f;
+    private float p1_y_offset = 3f;
+    private float p2_y = 0.85f;
 
     /*
     *   BilliaSpell3 - Initialize Billia's third spell.

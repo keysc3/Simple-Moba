@@ -10,7 +10,7 @@ using UnityEngine;
 public class BilliaPassive : Spell, IHasCallback
 {
     private BilliaPassiveData passiveData;
-    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
+    private List<GameObject> passiveApplied = new List<GameObject>();
 
     /*
     *   BilliaPassive - Initialize Billia's passive spell.
