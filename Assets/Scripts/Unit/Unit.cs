@@ -16,11 +16,11 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
         get { return sUnit; }
     }
     #endregion
-    [field: SerializeField] public UnitStats unitStats { get; protected set; }
-    [field: SerializeField] public StatusEffects statusEffects { get; private set; }
-    [field: SerializeField] public NavMeshAgent navMeshAgent { get; private set; }
+    public bool isDead { get; set; }
+    public UnitStats unitStats { get; protected set; }
+    public StatusEffects statusEffects { get; private set; }
+    protected NavMeshAgent navMeshAgent;
     protected Collider myCollider;
-    [field: SerializeField] public bool isDead { get; protected set; }
 
     public delegate void BonusDamage(GameObject toDamage, bool isDot); 
     public BonusDamage bonusDamage;
@@ -74,14 +74,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
         else{
             bonusDamage?.Invoke(gameObject, isDot);
         }
-    }
-
-    /*
-    *   SetDeathStatus - Sets the isDead property of the Unit.
-    *   @param dead - bool to set isDead to.
-    */
-    public void SetDeathStatus(bool dead){
-        isDead = dead;
     }
 
     /*
