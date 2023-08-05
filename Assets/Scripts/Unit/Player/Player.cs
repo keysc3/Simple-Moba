@@ -16,8 +16,8 @@ public class Player : Unit, IRespawnable
     public LevelManager levelManager { get; private set; }
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
-    public Vector3 mouseOnCast { get; set; }
-    public bool isCasting { get; set; }
+    public Vector3 mouseOnCast;
+    public bool isCasting = false;
     private Spell currentCastedSpell;
     #region "CurrentCastedSpell property"
     public Spell CurrentCastedSpell { 
