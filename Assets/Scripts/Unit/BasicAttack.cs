@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class BasicAttack : MonoBehaviour
 {
-    public bool windingUp { get; set; } = false;
+    public bool windingUp = false;
     public float nextAuto { get; private set; } = 0.0f;
 
     [SerializeField] private GameObject attackProjectile;
@@ -103,12 +103,4 @@ public class BasicAttack : MonoBehaviour
         }
         windingUp = false;
     }
-
-    /*
-    *   SetWindingUp - Sets the winding up bool.
-    *   @param isWindingUp - bool of whether or not to set winding up to true or false.
-    */
-    /*public void SetWindingUp(bool isWindingUp){
-        windingUp = isWindingUp;
-    }*/
 }
