@@ -71,7 +71,7 @@ public class BasicAttack : MonoBehaviour
         // Create attack GameObject and set necessary variables.
         GameObject projectile = (GameObject)Instantiate(attackProjectile, transform.position, Quaternion.identity);
         BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
-        basicAttackTrigger.target = target;
+        basicAttackTrigger.Target = target;
         basicAttackTrigger.basicAttack = this;
         // While the attack still exists animate it.
         while(projectile){

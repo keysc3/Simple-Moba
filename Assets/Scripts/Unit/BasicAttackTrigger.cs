@@ -9,8 +9,19 @@ using UnityEngine;
 */
 public class BasicAttackTrigger : MonoBehaviour
 {
-    public GameObject target { get; set; } = null;
-    public BasicAttack basicAttack { get; set; }
+    public BasicAttack basicAttack;
+    private GameObject target = null;
+    #region "Target property"
+    public GameObject Target {
+        get { 
+            return target;
+        }
+        set {
+            if((value.GetComponent<Unit>() as Unit) != null)
+            target = value;
+        }
+    }
+    #endregion
 
     // Update is called once per frame
     private void Update()
