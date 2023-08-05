@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
         get { return sUnit; }
     }
     #endregion
-    public bool isDead { get; set; }
+    public bool isDead { get; protected set; }
     public UnitStats unitStats { get; protected set; }
     public StatusEffects statusEffects { get; private set; }
     protected NavMeshAgent navMeshAgent;
