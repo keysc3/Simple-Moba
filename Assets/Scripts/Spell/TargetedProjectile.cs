@@ -9,7 +9,21 @@ using UnityEngine;
 */
 public class TargetedProjectile : MonoBehaviour
 {
-    public GameObject target { get; set; } = null;
+    private GameObject target = null;
+    #region "Target property"
+    public GameObject Target {
+        get { 
+            return target;
+        }
+        set {
+            if((value.GetComponent<Unit>() as Unit) != null){
+                target = value;
+                targetSet = true;
+                targetUnit = target.GetComponent<Unit>();
+            }
+        }
+    }
+    #endregion
     private Unit targetUnit = null;
     private bool targetSet = false;
 
@@ -20,16 +34,8 @@ public class TargetedProjectile : MonoBehaviour
     private void Update()
     {
         // Destroy GameObject if target dies.
-        if(target != null){
-            // Cache Unit component so it isn't being accessed every frame once a target is found.
-            if(targetUnit == null){
-                targetSet = true;
-                targetUnit = target.GetComponent<Unit>();
-            }
-        }
-        else{
-            if(targetSet == true)
-                Destroy(gameObject);
+        if((targetUnit == null || targetUnit.isDead) && targetSet == true){
+            Destroy(gameObject);
         }
     }
 
