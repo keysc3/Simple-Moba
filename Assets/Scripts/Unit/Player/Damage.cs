@@ -11,8 +11,8 @@ public class Damage
 {
 
     public float amount { get; }
-    public float time { get;  }
-    public string type { get;  }
+    public float time { get; }
+    public string type { get; }
     public GameObject from { get; }
 
     /*
