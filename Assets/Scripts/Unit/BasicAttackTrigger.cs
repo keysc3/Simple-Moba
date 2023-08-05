@@ -10,6 +10,7 @@ using UnityEngine;
 public class BasicAttackTrigger : MonoBehaviour
 {
     public BasicAttack basicAttack;
+    private Unit targetUnit;
     private GameObject target = null;
     #region "Target property"
     public GameObject Target {
@@ -17,8 +18,10 @@ public class BasicAttackTrigger : MonoBehaviour
             return target;
         }
         set {
-            if((value.GetComponent<Unit>() as Unit) != null)
-            target = value;
+            if((value.GetComponent<Unit>() as Unit) != null){
+                target = value;
+                targetUnit = value.GetComponent<Unit>();
+            }
         }
     }
     #endregion
@@ -26,11 +29,9 @@ public class BasicAttackTrigger : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        // Destroy the attack object if the target dies.
-        if(target != null){
-            if(target.GetComponent<Unit>().isDead){
-                Destroy(gameObject);
-            }
+        // Destroy the attack object if the target dies or is destroyed.
+        if(targetUnit == null || targetUnit.isDead){
+            Destroy(gameObject);
         }
     }
 
