@@ -201,11 +201,11 @@ public class StatusEffects
         List<Effect> myEffects = GetEffectsByName(effect.effectType.name);
         // Set default values.
         Effect nextExipiring = myEffects[0];
-        float timeTillExpired = myEffects[0].effectDuration - myEffects[0].effectTimer;
+        float timeTillExpired = myEffects[0].EffectDuration - myEffects[0].effectTimer;
         if(myEffects.Count > 1){
             for(int i = 1; i < myEffects.Count; i++){
                 // If duration left is less than the current timeTillExpired then set the new next expiring.
-                float check = myEffects[i].effectDuration - myEffects[i].effectTimer;
+                float check = myEffects[i].EffectDuration - myEffects[i].effectTimer;
                 if(check < timeTillExpired){
                     timeTillExpired = check;
                     nextExipiring = myEffects[i];

@@ -539,7 +539,7 @@ public class UIManager : MonoBehaviour
         myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         myEffect.name = effect.effectType.name;
         myEffect.transform.Find("InnerContainer/Sprite").GetComponent<Image>().sprite = effect.effectType.sprite;
-        if(effect.effectDuration == -1f)
+        if(effect.EffectDuration == -1f)
             myEffect.transform.Find("InnerContainer/Slider").gameObject.SetActive(false);
         // Set color and position of the UI element.
         if(effect.effectType.isBuff){
@@ -608,11 +608,11 @@ public class UIManager : MonoBehaviour
         while(statusEffects.statusEffects.Contains(effect)){
                 if(value != null){
                     value.SetText(((PersonalSpell)effect).Stacks.ToString());
-                    if(effect.effectDuration == -1f)
+                    if(effect.EffectDuration == -1f)
                         yield return null;
                 }
                 // Update status effect timer.
-                elapsedDuration = 1f - effect.effectTimer/effect.effectDuration;
+                elapsedDuration = 1f - effect.effectTimer/effect.EffectDuration;
                 slider.fillAmount = elapsedDuration;
                 yield return null;
         }
@@ -656,13 +656,13 @@ public class UIManager : MonoBehaviour
                 // If a stack expired.
                 if(newStacks < stacks){
                     // Get the duration left on the next expiring stack.
-                    duration = displayEffect.effectDuration - displayEffect.effectTimer;
+                    duration = displayEffect.EffectDuration - displayEffect.effectTimer;
                     // Get the stacks active time.
                     reduceAmount = displayEffect.effectTimer;
                 }
                 // If a new stack was added use the regular duration.
                 else{
-                    duration = displayEffect.effectDuration;
+                    duration = displayEffect.EffectDuration;
                     reduceAmount = 0f;
                 }
             }

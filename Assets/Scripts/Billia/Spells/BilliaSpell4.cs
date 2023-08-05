@@ -85,7 +85,7 @@ public class BilliaSpell4 : Spell, ICastable
                 GameObject drowsyObject = (GameObject) Object.Instantiate(spellData.drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
-                visualScript.drowsyDuration = newDrowsy.effectDuration;
+                visualScript.drowsyDuration = newDrowsy.EffectDuration;
                 visualScript.drowsy = spellData.drowsy;
                 visualScript.source = gameObject;
             }

@@ -14,7 +14,18 @@ public abstract class Effect
     public GameObject casted { get; private set; } 
     public GameObject effected { get; }
     public float effectTimer { get; private set; } = 0f;
-    public float effectDuration { get; set; }
+    protected float effectDuration;
+    #region "EffectDuration property"
+    public float EffectDuration { 
+        get {
+            return effectDuration;
+        } 
+        set {
+            if(value == -1f && value >= 0f)
+                effectDuration = value;
+        }
+    }
+    #endregion
     private bool isActivated;
     #region "IsActivated property"
     public bool IsActivated { 
