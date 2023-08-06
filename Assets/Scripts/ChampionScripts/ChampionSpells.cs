@@ -15,11 +15,31 @@ public class ChampionSpells : MonoBehaviour
     [SerializeField] protected SpellData spell3Data;
     [SerializeField] protected SpellData spell4Data;
     
-    protected Spell passive;
-    public Spell spell1 { get; protected set; }
-    public Spell spell2 { get; protected set; }
-    public Spell spell3 { get; protected set; }
-    public Spell spell4 { get; protected set; }
+    private Spell passive;
+    public Spell Passive {
+        get => passive;
+        set => SetSpell(value, ref passive);
+    }
+    private Spell spell1;
+    public Spell Spell1 {
+        get => spell1;
+        set => SetSpell(value, ref spell1);
+    }
+    private Spell spell2;
+    public Spell Spell2 {
+        get => spell2;
+        set => SetSpell(value, ref spell2);
+    }
+    private Spell spell3;
+    public Spell Spell3 {
+        get => spell3;
+        set => SetSpell(value, ref spell3);
+    }
+    private Spell spell4;
+    public Spell Spell4 {
+        get => spell4;
+        set => SetSpell(value, ref spell4);
+    }
 
     public List<Spell> mySpells { get; } = new List<Spell>();
     public List<Effect> initializationEffects { get; } = new List<Effect>();
@@ -34,7 +54,6 @@ public class ChampionSpells : MonoBehaviour
 
     // Start is called before the first frame update.
     protected virtual void Start(){
-        mySpells.AddRange(new List<Spell>(){passive, spell1, spell2, spell3, spell4});
         mySpellData.AddRange(new List<SpellData>(){passiveData, spell1Data, spell2Data, spell3Data, spell4Data});
         CallbackSetup();
         Player player = GetComponent<Player>();
@@ -74,5 +93,19 @@ public class ChampionSpells : MonoBehaviour
                 ((IDeathCleanUp) newSpell).OnDeathCleanUp();
             }
         }
+    }
+
+    /*
+    *   SetSpell - Sets a spell.
+    *   @param value - Spell object being used.
+    *   @param toSet - Spell variable being set.
+    */
+    private void SetSpell(Spell value, ref Spell toSet){
+        int index = mySpells.FindIndex(spell => spell.spellNum == value.spellNum);
+        if(index == -1)
+            mySpells.Add(value);
+        else
+            mySpells[index] = value;
+        toSet = value;
     }
 }
