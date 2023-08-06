@@ -10,9 +10,9 @@ using UnityEngine.UI;
 */
 public class BilliaDrowsyVisual : MonoBehaviour
 {
-    public float drowsyDuration { get; set; }
-    public ScriptableDrowsy drowsy { get; set; }
-    public GameObject source { get; set; }
+    public float drowsyDuration;
+    public ScriptableDrowsy drowsy;
+    public GameObject source;
     private Image drowsyVisual;
     private RectTransform rectTransform;
     private StatusEffects statusEffects;

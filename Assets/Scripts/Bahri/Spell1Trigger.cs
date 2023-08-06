@@ -9,8 +9,8 @@ using UnityEngine;
 */
 public class Spell1Trigger : MonoBehaviour
 {
-    public BahriSpell1 bahriSpell1 { get; set; }
-    public GameObject bahri { get; set; }
+    public BahriSpell1 bahriSpell1;
+    public GameObject bahri;
 
     private Bounds bahriBounds;
 

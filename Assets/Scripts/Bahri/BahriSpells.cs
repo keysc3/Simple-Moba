@@ -12,13 +12,11 @@ public class BahriSpells : ChampionSpells
     // Start is called before the first frame update.
     protected override void Start()
     {
-        
-        
         Passive = new BahriPassive(this, "Passive", passiveData);
         Spell1 = new BahriSpell1(this, "Spell_1", spell1Data);
         Spell2 = new BahriSpell2(this, "Spell_2", spell2Data);
         Spell3 = new BahriSpell3(this, "Spell_3", spell3Data);
-        Spell4 = new BahriSpell4(this, "Spell_4",spell4Data);
+        Spell4 = new BahriSpell4(this, "Spell_4", spell4Data);
         base.Start();
     }
 }
