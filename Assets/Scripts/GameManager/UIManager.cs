@@ -72,16 +72,24 @@ public class UIManager : MonoBehaviour
         return newPlayerUI;
     }
 
+    /*
+    *   SetupSpellButtons - Setup for the a spells button click and level up button click.
+    *   @param player - Player the spell is for.
+    *   @param newSpell - Spell to set the buttons for.
+    */
     public void SetupSpellButtons(Player player, Spell newSpell){
+        // Spell button
         Transform spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer");
         SpellButton spellButton = spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
         spellButton.spell = newSpell;
+        //TODO: Change this to not be hardcoded using a proper keybind/input system?
         List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
         List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"};
         int index = spellNames.FindIndex(name => name == newSpell.spellNum);
         if(index != -1)
             spellButton.keyCode = inputs[index];
         spellButton.playerSpellInput = player.gameObject.GetComponent<PlayerSpellInput>();
+        // Spell level up button.
         spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
         if(newSpell.spellNum != "Passive"){
             SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(newSpell.spellNum + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
