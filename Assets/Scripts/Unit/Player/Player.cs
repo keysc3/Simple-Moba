@@ -19,20 +19,10 @@ public class Player : Unit, IRespawnable
     public Vector3 mouseOnCast;
     public bool isCasting = false;
     private Spell currentCastedSpell;
-    #region "CurrentCastedSpell property"
     public Spell CurrentCastedSpell { 
-        get { 
-            return currentCastedSpell; 
-        } 
-        set { 
-            if(!isCasting)
-                currentCastedSpell = null;
-            else
-                currentCastedSpell = value; 
-        }
+        get  => currentCastedSpell; 
+        set => currentCastedSpell = !isCasting ? null : value;
     }
-    #endregion
-
     [SerializeField] private Material dead;
     [SerializeField] private LevelInfo levelInfo;
     private PlayerController playerController;
