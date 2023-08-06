@@ -9,13 +9,14 @@ using UnityEngine.AI;
 * @author: Colin Keys
 */
 public class Unit : MonoBehaviour, IDamagable, IKillable
-{
-    [field: SerializeField] public ScriptableUnit unit { get; private set; }
-    [field: SerializeField] public UnitStats unitStats { get; protected set; }
-    [field: SerializeField] public StatusEffects statusEffects { get; private set; }
-    [field: SerializeField] public NavMeshAgent navMeshAgent { get; private set; }
+{   
+    [SerializeField] private ScriptableUnit sUnit;
+    public ScriptableUnit SUnit { get => sUnit; }
+    public bool isDead { get; protected set; }
+    public UnitStats unitStats { get; protected set; }
+    public StatusEffects statusEffects { get; private set; }
+    protected NavMeshAgent navMeshAgent;
     protected Collider myCollider;
-    [field: SerializeField] public bool isDead { get; protected set; }
 
     public delegate void BonusDamage(GameObject toDamage, bool isDot); 
     public BonusDamage bonusDamage;
@@ -33,7 +34,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     *   Init - Handles setup specific to this parent class.
     */
     protected virtual void Init(){
-        unitStats = new UnitStats(unit);
+        unitStats = new UnitStats(SUnit);
     }
 
     // Update is called once per frame
@@ -44,8 +45,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
 
     // Called after all Update functions.
     private void LateUpdate(){
-        float finalMS = unitStats.CalculateMoveSpeed(statusEffects);
-        navMeshAgent.speed = finalMS;
+        navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
     }
 
     /*
@@ -58,10 +58,10 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     public virtual void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot){
         Unit fromUnit = from.GetComponent<Unit>();
         float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, fromUnit.unitStats, unitStats);
-        unitStats.SetHealth(unitStats.currentHealth - damageToTake);
+        unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
         Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
         // If dead then award a kill and start the death method.
-        if(unitStats.currentHealth <= 0f){
+        if(unitStats.CurrentHealth <= 0f){
             DeathActions(fromUnit);
             Death();
         }
@@ -69,14 +69,6 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
         else{
             bonusDamage?.Invoke(gameObject, isDot);
         }
-    }
-
-    /*
-    *   SetDeathStatus - Sets the isDead property of the Unit.
-    *   @param dead - bool to set isDead to.
-    */
-    public void SetDeathStatus(bool dead){
-        isDead = dead;
     }
 
     /*

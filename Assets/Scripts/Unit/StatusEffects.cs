@@ -7,16 +7,12 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class StatusEffects
 {
-
-    [field: SerializeField]
-    [field: SerializeReference]
-    public List<Effect> statusEffects { get; private set; } = new List<Effect>();
+    public List<Effect> statusEffects { get; } = new List<Effect>();
     
-    [SerializeField] private int highestActiveCCValue = 0;
-    [SerializeField] private Effect mostImpairing;
+    private int highestActiveCCValue = 0;
+    private Effect mostImpairing;
 
     /*
     *   UpdateEffects - Ticks the effects.
@@ -64,7 +60,7 @@ public class StatusEffects
             if(effect.effectType.ccValue > highestActiveCCValue){
                 // Only deactivate non-zero cc values.
                 if(highestActiveCCValue > 0)
-                    mostImpairing.SetIsActivated(false);
+                    mostImpairing.IsActivated = false;
                 SetMostImpairing(effect);
             }
             else{
@@ -88,7 +84,7 @@ public class StatusEffects
                 SetStrongestSlow((Slow) effect);
             }
             else
-                effect.SetIsActivated(true);
+                effect.IsActivated = true;
         }
         // If the effect is a slow and a child of another effect then do not add it to the UI.
         if(effect is Slow){
@@ -98,7 +94,7 @@ public class StatusEffects
         }
         Unit unit = (Unit) effect.effected.GetComponent<Unit>();
         if(unit != null){
-            if(unit.unit is ScriptableChampion)
+            if(unit.SUnit is ScriptableChampion)
                 UIManager.instance.AddStatusEffectUI(this, effect, ((Player) unit).playerUI);
         }
     }
@@ -114,9 +110,9 @@ public class StatusEffects
         for(int i = 0; i < statusEffects.Count; i++){
             if(statusEffects[i] is Slow){
                 if(index == i)
-                    statusEffects[i].SetIsActivated(true);
+                    statusEffects[i].IsActivated = true;
                 else
-                    statusEffects[i].SetIsActivated(false);
+                    statusEffects[i].IsActivated = false;
             } 
         }
     }
@@ -205,11 +201,11 @@ public class StatusEffects
         List<Effect> myEffects = GetEffectsByName(effect.effectType.name);
         // Set default values.
         Effect nextExipiring = myEffects[0];
-        float timeTillExpired = myEffects[0].effectDuration - myEffects[0].effectTimer;
+        float timeTillExpired = myEffects[0].EffectDuration - myEffects[0].effectTimer;
         if(myEffects.Count > 1){
             for(int i = 1; i < myEffects.Count; i++){
                 // If duration left is less than the current timeTillExpired then set the new next expiring.
-                float check = myEffects[i].effectDuration - myEffects[i].effectTimer;
+                float check = myEffects[i].EffectDuration - myEffects[i].effectTimer;
                 if(check < timeTillExpired){
                     timeTillExpired = check;
                     nextExipiring = myEffects[i];
@@ -250,7 +246,7 @@ public class StatusEffects
     *   @param effect - Effect of the status effect to activate and set.
     */
     private void SetMostImpairing(Effect effect){
-        effect.SetIsActivated(true);
+        effect.IsActivated = true;
         mostImpairing = effect;
         highestActiveCCValue = effect.effectType.ccValue;
     }
@@ -263,7 +259,7 @@ public class StatusEffects
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
         for(int i = 0; i < statusEffects.Count; i++){
             if(effectType.GetType() == statusEffects[i].effectType.GetType() && casted == statusEffects[i].casted){
-                statusEffects[i].SetIsActivated(false);
+                statusEffects[i].IsActivated = false;
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);
                 SetMostImpairing(GetMostImpairing());

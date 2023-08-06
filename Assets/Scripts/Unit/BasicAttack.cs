@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class BasicAttack : MonoBehaviour
 {
-    public bool windingUp { get; private set; } = false;
+    public bool windingUp = false;
     public float nextAuto { get; private set; } = 0.0f;
 
     [SerializeField] private GameObject attackProjectile;
@@ -32,7 +32,7 @@ public class BasicAttack : MonoBehaviour
     *   @param target - GameObject of the enemy to attack.
     */
     public void Attack(GameObject target){
-        if(unit.unit.rangeType == "melee")
+        if(unit.SUnit.rangeType == "melee")
             MeleeAttack(target);
         else
             RangeAttack(target);
@@ -71,8 +71,8 @@ public class BasicAttack : MonoBehaviour
         // Create attack GameObject and set necessary variables.
         GameObject projectile = (GameObject)Instantiate(attackProjectile, transform.position, Quaternion.identity);
         BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
-        basicAttackTrigger.SetTarget(target);
-        basicAttackTrigger.SetBasicAttack(this);
+        basicAttackTrigger.Target = target;
+        basicAttackTrigger.basicAttack = this;
         // While the attack still exists animate it.
         while(projectile){
             projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.transform.position, unitStats.attackProjectileSpeed.GetValue() * Time.deltaTime);
@@ -102,13 +102,5 @@ public class BasicAttack : MonoBehaviour
             yield return null;
         }
         windingUp = false;
-    }
-
-    /*
-    *   SetWindingUp - Sets the winding up bool.
-    *   @param isWindingUp - bool of whether or not to set winding up to true or false.
-    */
-    public void SetWindingUp(bool isWindingUp){
-        windingUp = isWindingUp;
     }
 }

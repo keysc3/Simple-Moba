@@ -18,7 +18,7 @@ public class GameSetup : MonoBehaviour
         if(GameController.instance.currentChampion != null){
             GameObject myChamp = (GameObject) Instantiate(GameController.instance.currentChampion, spawnPos, Quaternion.identity);     
             ActiveChampion.instance.champions.Add(myChamp);
-            ActiveChampion.instance.activeChampion = ActiveChampion.instance.champions.Count-1;
+            ActiveChampion.instance.ActiveChamp = ActiveChampion.instance.champions.Count-1;
             ActiveChampion.instance.SetActiveChamp();
         }
     }

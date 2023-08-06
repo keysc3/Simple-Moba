@@ -12,7 +12,7 @@ using UnityEditor;
 */
 public class BahriSpell4 : DamageSpell, ICastable
 {
-    private BahriSpell4Data spellData;
+    new private BahriSpell4Data spellData;
 
     private PersonalSpell spell4Effect = null;
     private float spell_4_timer;
@@ -27,7 +27,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell4Data) spellData;
         player.score.takedownCallback += Spell_4_Takedown;
         isQuickCast = true;
@@ -47,7 +47,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             championSpells.StartCoroutine(Spell_4_Start());
             // Use mana and set spell on cooldown.
             championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
@@ -90,7 +90,7 @@ public class BahriSpell4 : DamageSpell, ICastable
             if(Input.GetKeyDown(KeyCode.R) && !player.isCasting && spell_4_chargesLeft > 0 && canRecast && !player.isDead){
                 Spell_4_Move();
                 spell_4_chargesLeft--;
-                spell4Effect.UpdateStacks(spell_4_chargesLeft);
+                spell4Effect.Stacks = spell_4_chargesLeft;
             }
             UIManager.instance.SetSpellActiveDuration(spellNum, spell_4_duration, spell_4_timer, player.playerUI);
             if(spell_4_chargesLeft == 0)
@@ -109,15 +109,15 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   @param killed - GameObject the takedown was on.
     */
     private void Spell_4_Takedown(GameObject killed){
-        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
+        if(killed.GetComponent<Unit>().SUnit is ScriptableChampion){
             if(spell_4_chargesLeft < spellData.charges && spell4Casting){
                 UIManager.instance.SetSpellCoverActive(spellNum, false, player.playerUI);
                 spell_4_chargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;
-                spell4Effect.UpdateStacks(spell_4_chargesLeft);
+                spell4Effect.Stacks = spell_4_chargesLeft;
                 spell4Effect.ResetTimer();
-                spell4Effect.SetDuration(spell_4_duration);
+                spell4Effect.EffectDuration = spell_4_duration;
             }
         }
     }
@@ -165,7 +165,8 @@ public class BahriSpell4 : DamageSpell, ICastable
     */
     private IEnumerator Spell_4_Speed(Vector3 targetPosition){
         // Set necessary values and disable navmesh.
-        player.SetIsCasting(true, this);
+        player.isCasting = true;
+        player.CurrentCastedSpell = this;
         float newSpeed = championStats.speed.GetValue() + spellData.speed;
         navMeshAgent.ResetPath();
         navMeshAgent.enabled = false;
@@ -178,7 +179,8 @@ public class BahriSpell4 : DamageSpell, ICastable
         if(!player.isDead)
             Spell_4_Missiles();
         navMeshAgent.enabled = true;
-        player.SetIsCasting(false, this);
+        player.isCasting = false;
+        player.CurrentCastedSpell = this;
         championSpells.StartCoroutine(NextCastCd(1.0f, spellNum));
     }
 
@@ -228,7 +230,7 @@ public class BahriSpell4 : DamageSpell, ICastable
                 GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
                 TargetedProjectile targetedProjectile = missile.GetComponent<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
-                targetedProjectile.SetTarget(target);
+                targetedProjectile.Target = target;
                 // Use the same animation as spell two to send the missiles to their target.
                 championSpells.StartCoroutine(Spell_4_Target(missile, target));
             }

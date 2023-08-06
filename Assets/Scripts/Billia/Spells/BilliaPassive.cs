@@ -10,7 +10,7 @@ using UnityEngine;
 public class BilliaPassive : Spell, IHasCallback
 {
     private BilliaPassiveData passiveData;
-    [SerializeField] private List<GameObject> passiveApplied = new List<GameObject>();
+    private List<GameObject> passiveApplied = new List<GameObject>();
 
     /*
     *   BilliaPassive - Initialize Billia's passive spell.
@@ -18,7 +18,7 @@ public class BilliaPassive : Spell, IHasCallback
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.passiveData = (BilliaPassiveData) spellData;
     }
 
@@ -44,17 +44,17 @@ public class BilliaPassive : Spell, IHasCallback
         Unit unit = enemy.GetComponent<Unit>();
         while(unit.statusEffects.CheckForEffectWithSource(passiveData.passiveDot, gameObject)){
             // Heal the champion amount if unit is a champion.
-            if(unit.unit is ScriptableChampion){
+            if(unit.SUnit is ScriptableChampion){
                 Debug.Log("Billia passive found on: " + enemy.name);
                 float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveData.passiveDot.duration[0];
-                championStats.SetHealth(championStats.currentHealth + healAmount);
+                championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
                 Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
             }
-            else if(unit.unit is ScriptableMonster){
-                if(((ScriptableMonster) unit.unit).size == "large"){
+            else if(unit.SUnit is ScriptableMonster){
+                if(((ScriptableMonster) unit.SUnit).size == "large"){
                     Debug.Log("Billia passive found on: " + enemy.name);
                     float healAmount = (39f + ((15f / 17f) * (float)(levelManager.level - 1)))/passiveData.passiveDot.duration[0];
-                    championStats.SetHealth(championStats.currentHealth + healAmount);
+                    championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
                     Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
                 }
             }

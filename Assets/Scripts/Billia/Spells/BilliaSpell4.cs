@@ -10,7 +10,7 @@ using UnityEngine;
 */
 public class BilliaSpell4 : Spell, ICastable
 {
-    private BilliaSpell4Data spellData;
+    new private BilliaSpell4Data spellData;
     private bool canUseSpell = false;
 
     /*
@@ -19,7 +19,7 @@ public class BilliaSpell4 : Spell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell4Data) spellData;
         championSpells.updateCallback += CanUseSpell;
         canMove = true;
@@ -32,7 +32,7 @@ public class BilliaSpell4 : Spell, ICastable
     public void Cast(){
         // Only allow cast if a champion has passive on them.
         if(canUseSpell){
-            if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+            if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
                 // Start cast time then cast the spell.
                 championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
                 championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
@@ -85,9 +85,9 @@ public class BilliaSpell4 : Spell, ICastable
                 GameObject drowsyObject = (GameObject) Object.Instantiate(spellData.drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
-                visualScript.SetDrowsyDuration(newDrowsy.effectDuration);
-                visualScript.SetDrowsy(spellData.drowsy);
-                visualScript.SetSource(gameObject);
+                visualScript.drowsyDuration = newDrowsy.EffectDuration;
+                visualScript.drowsy = spellData.drowsy;
+                visualScript.source = gameObject;
             }
         }
     }

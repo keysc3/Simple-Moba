@@ -10,15 +10,15 @@ using UnityEngine;
 [System.Serializable]
 public class LevelManager
 {
-    [field: SerializeField] public int level { get; private set; } = 1;
-    [field: SerializeField] public int spellLevelPoints { get; private set; } = 1;
-    [field: SerializeField] public bool skillLevelUpUIActive { get; private set; } = true;
-    [field: SerializeField] public LevelInfo levelInfo { get; private set; }
-    [field: SerializeField] public float gainAmount { get; private set; } = 100f;
-    public Dictionary<string, int> spellLevels { get; private set; } = new Dictionary<string, int>();
-    
-    [SerializeField] private float currentXP;
+    public int level { get; private set; } = 1;
+    public Dictionary<string, int> spellLevels { get; } = new Dictionary<string, int>();
+
+    private int spellLevelPoints = 1;
+    private bool skillLevelUpUIActive = true;
+    private float gainAmount = 100f;
+    private float currentXP = 0f;
     private bool newLevel = true;
+    private LevelInfo levelInfo;
     private ChampionStats championStats;
     private ScriptableChampion champion;
     private Player player;
@@ -32,7 +32,7 @@ public class LevelManager
         this.levelInfo = levelInfo;
         this.player = player;
         championStats = (ChampionStats) player.unitStats;
-        champion = (ScriptableChampion) player.unit;
+        champion = (ScriptableChampion) player.SUnit;
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         player.score.takedownCallback += GainXP; 
@@ -42,8 +42,8 @@ public class LevelManager
     *   GainXPTester - Add xp to the champions total. Used for testing with a key input.
     *   @param gained - float of the amount of xp to add.
     */
-    public void GainXPTester(float gained){
-        currentXP += gained;
+    public void GainXPTester(){
+        currentXP += gainAmount;
         if(level != levelInfo.maxLevel){
             if(currentXP >= levelInfo.requiredXP[level])
                 LevelUp();
@@ -106,18 +106,19 @@ public class LevelManager
         // Increase base health and current health by the same amount.
         float healthIncrease = GrowthAmountCalculation(champion.healthGrowth);
         IncreaseBaseStat(championStats.maxHealth, healthIncrease);
-        championStats.SetHealth(championStats.currentHealth + healthIncrease);
+        championStats.CurrentHealth = championStats.CurrentHealth + healthIncrease;
         // Increase base mana and current mana by the same amount.
         float manaIncrease = GrowthAmountCalculation(champion.manaGrowth);
         IncreaseBaseStat(championStats.maxMana, manaIncrease);
-        championStats.SetMana(championStats.currentMana + manaIncrease);
+        championStats.CurrentMana = championStats.CurrentMana + manaIncrease;
         // Increase any base stats that have a growth stat.
         IncreaseBaseStat(championStats.physicalDamage, GrowthAmountCalculation(champion.physicalDamageGrowth));
         IncreaseBaseStat(championStats.HP5, GrowthAmountCalculation(champion.HP5Growth));
         IncreaseBaseStat(championStats.MP5, GrowthAmountCalculation(champion.MP5Growth));
         IncreaseBaseStat(championStats.armor, GrowthAmountCalculation(champion.armorGrowth));
         IncreaseBaseStat(championStats.magicResist, GrowthAmountCalculation(champion.magicResistGrowth));
-        championStats.bonusAttackSpeed.SetBaseValue(GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth));
+        championStats.bonusAttackSpeed.BaseValue = GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth);
+        //championStats.bonusAttackSpeed.SetBaseValue(GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth));
     }
 
     /*
@@ -126,8 +127,8 @@ public class LevelManager
     *   @param growthAmount - float of the amount to increase the base value by.
     */
     private void IncreaseBaseStat(Stat stat, float growthAmount){
-        float newBaseValue = stat.GetBaseValue() + growthAmount;
-        stat.SetBaseValue(newBaseValue);
+        float newBaseValue = stat.BaseValue + growthAmount;
+        stat.BaseValue = newBaseValue;
     }
 
     /*
@@ -148,32 +149,40 @@ public class LevelManager
     *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
     */
     public void LevelUpSkill(){
-        if(!skillLevelUpUIActive)
-            UIManager.instance.ShiftStatusEffects(new Vector2(levelInfo.xShift, levelInfo.yShift), player.playerUI);
-        // If a level up or skill point was used since the last UI update then update the UI.
-        if(newLevel){
-            UIManager.instance.SetSkillLevelUpActive(spellLevels, level, true, player.playerUI);
-            skillLevelUpUIActive = true;
-            newLevel = false;
-        }
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == player.gameObject){
-            // If first spell level up key bind pressed and it is not at max level then level it.
-            if(Input.GetKey(KeyCode.LeftControl)){
-                if(Input.GetKeyDown(KeyCode.Q))
-                    SpellLevelUpRequest("Spell_1", "basic");
-                // If second spell level up key bind pressed and it is not at max level then level it.
-                else if(Input.GetKeyDown(KeyCode.W))
-                    SpellLevelUpRequest("Spell_2", "basic");
-                // If third spell level up key bind pressed and it is not at max level then level it.
-                else if(Input.GetKeyDown(KeyCode.E))
-                    SpellLevelUpRequest("Spell_3", "basic");
-                // If fourth spell level up key bind pressed and it is not at max level then level it.
-                else if(Input.GetKeyDown(KeyCode.R))
-                    SpellLevelUpRequest("Spell_4", "ultimate");
+        // Check for level up skill input if skill level up available.
+        if(spellLevelPoints > 0){
+            if(!skillLevelUpUIActive)
+                UIManager.instance.ShiftStatusEffects(new Vector2(levelInfo.xShift, levelInfo.yShift), player.playerUI);
+            // If a level up or skill point was used since the last UI update then update the UI.
+            if(newLevel){
+                UIManager.instance.SetSkillLevelUpActive(spellLevels, level, true, player.playerUI);
+                skillLevelUpUIActive = true;
+                newLevel = false;
             }
+            if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == player.gameObject){
+                // If first spell level up key bind pressed and it is not at max level then level it.
+                if(Input.GetKey(KeyCode.LeftControl)){
+                    if(Input.GetKeyDown(KeyCode.Q))
+                        SpellLevelUpRequest("Spell_1", "basic");
+                    // If second spell level up key bind pressed and it is not at max level then level it.
+                    else if(Input.GetKeyDown(KeyCode.W))
+                        SpellLevelUpRequest("Spell_2", "basic");
+                    // If third spell level up key bind pressed and it is not at max level then level it.
+                    else if(Input.GetKeyDown(KeyCode.E))
+                        SpellLevelUpRequest("Spell_3", "basic");
+                    // If fourth spell level up key bind pressed and it is not at max level then level it.
+                    else if(Input.GetKeyDown(KeyCode.R))
+                        SpellLevelUpRequest("Spell_4", "ultimate");
+                }
+            }
+            // Skill level up available animation.
+            UIManager.instance.SkillLevelUpGradient(player.playerUI);
         }
-        // Skill level up available animation.
-        UIManager.instance.SkillLevelUpGradient(player.playerUI);
+        else{
+            // Deactivate skill level up UI if necessary.
+            if(skillLevelUpUIActive)
+                DeactivateSkillLevelUpUI();
+        }
     }
 
     /*

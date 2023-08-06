@@ -10,7 +10,7 @@ using UnityEngine;
 */
 public class BahriPassive : Spell
 {
-    private BahriPassiveData spellData;
+    new private BahriPassiveData spellData;
     private int passiveStacks = 0;
     private PersonalSpell passive;
 
@@ -20,7 +20,7 @@ public class BahriPassive : Spell
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriPassiveData) spellData;
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
         championSpells.initializationEffects.Add(passive);
@@ -35,18 +35,18 @@ public class BahriPassive : Spell
         Debug.Log("Takedown; use passive");
         float healAmount;
         // Heal off champion kill
-        if(killed.GetComponent<Unit>().unit is ScriptableChampion){
+        if(killed.GetComponent<Unit>().SUnit is ScriptableChampion){
             healAmount = ((90f / 17f) * (float)(levelManager.level - 1)) + 75f;
-            championStats.SetHealth(championStats.currentHealth + healAmount + championStats.magicDamage.GetValue());
+            championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
             Debug.Log("Healed " + healAmount + " health from champion kill.");
         }
         // Heal off minion/monster kills if at 9 stacks.
         else{
             passiveStacks += 1;
-            passive.UpdateStacks(passiveStacks);
+            passive.Stacks = passiveStacks;
             if(passiveStacks == 9){
                 healAmount = ((60f / 17f) * (float)(levelManager.level - 1)) + 35f;
-                championStats.SetHealth(championStats.currentHealth + healAmount + championStats.magicDamage.GetValue());
+                championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
                 passiveStacks = 0;
                 Debug.Log("Healed " + healAmount + " health from minion/monster kill.");
             }

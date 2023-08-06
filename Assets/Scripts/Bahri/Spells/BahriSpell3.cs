@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class BahriSpell3 : DamageSpell, ICastable
 {
-    private BahriSpell3Data spellData;
+    new private BahriSpell3Data spellData;
 
     /*
     *   BahriSpell3 - Initialize Bahri's third spell.
@@ -17,7 +17,7 @@ public class BahriSpell3 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell3Data) spellData;
     }
 
@@ -35,7 +35,7 @@ public class BahriSpell3 : DamageSpell, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
@@ -63,8 +63,8 @@ public class BahriSpell3 : DamageSpell, ICastable
         // Create spell 3 GameObject and set its necessary variables.
         GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
         Spell3Trigger spell3Trigger = missile.GetComponent<Spell3Trigger>();
-        spell3Trigger.SetBahriSpell3(this);
-        spell3Trigger.SetBahri(gameObject);
+        spell3Trigger.bahriSpell3 = this;
+        spell3Trigger.bahri = gameObject;
         // While the spell object still exists.
         while(missile){
             // If target location has not been reached then move the object towards the target location.

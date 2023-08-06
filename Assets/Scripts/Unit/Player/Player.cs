@@ -10,20 +10,23 @@ using UnityEngine.AI;
 */
 public class Player : Unit, IRespawnable
 {
-    [field: SerializeField] public DamageTracker damageTracker { get; private set; }
-    [field: SerializeField] public Inventory inventory { get; private set; }
-    [field: SerializeField] public Score score { get; private set; }
-    [field: SerializeField] public LevelManager levelManager { get; private set; }
+    public DamageTracker damageTracker { get; private set; }
+    public Inventory inventory { get; private set; }
+    public Score score { get; private set; }
+    public LevelManager levelManager { get; private set; }
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
-    public bool isCasting { get; private set; }
-    public Vector3 mouseOnCast { get; private set; }
-    public Spell currentCastedSpell { get; private set; }
-
+    public Vector3 mouseOnCast;
+    public bool isCasting = false;
+    private Spell currentCastedSpell;
+    public Spell CurrentCastedSpell { 
+        get  => currentCastedSpell; 
+        set => currentCastedSpell = !isCasting ? null : value;
+    }
     [SerializeField] private Material dead;
     [SerializeField] private LevelInfo levelInfo;
     private PlayerController playerController;
-    private PlayerSpellInput playerSpellInput;
+    public PlayerSpellInput playerSpellInput { get; private set; }
     private ChampionSpells championSpells;
     private Material alive;
     private Renderer rend;
@@ -36,7 +39,7 @@ public class Player : Unit, IRespawnable
     *   Init - Handles setup specific to this child class.
     */
     protected override void Init(){
-        unitStats = new ChampionStats((ScriptableChampion)unit);
+        unitStats = new ChampionStats((ScriptableChampion) SUnit);
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championSpells = GetComponent<ChampionSpells>();
@@ -54,21 +57,13 @@ public class Player : Unit, IRespawnable
     protected override void Update(){
         base.Update();
         // Check if damage tracker needs resetting.
-        if(damageTracker.damageReceived.Count > 0)
-            damageTracker.CheckForReset(Time.time);
+        damageTracker.CheckForReset(Time.time);
         // Check for level up skill input if skill level up available.
-        if(levelManager.spellLevelPoints > 0){
-            levelManager.LevelUpSkill();
-        }
-        else{
-            // Deactivate skill level up UI if necessary.
-            if(levelManager.skillLevelUpUIActive)
-                levelManager.DeactivateSkillLevelUpUI();
-        }
+        levelManager.LevelUpSkill();
         // Test GainXP
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
             if(Input.GetKeyDown(KeyCode.K))
-                levelManager.GainXPTester(levelManager.gainAmount);
+                levelManager.GainXPTester();
         }
     }
 
@@ -130,7 +125,7 @@ public class Player : Unit, IRespawnable
     public void Respawn(){
         navMeshAgent.enabled = true;
         // If active champion then enable controls.
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }
@@ -153,6 +148,7 @@ public class Player : Unit, IRespawnable
 
     /*
     *   RespawnTimer - Coroutine for timing a respawn.
+    *   @param respawn - flaot of the respawn time.
     */
     private IEnumerator RespawnTimer(float respawn){
         float timer = 0.0f;
@@ -163,26 +159,5 @@ public class Player : Unit, IRespawnable
         }
         UIManager.instance.UpdateDeathTimer(0f, playerUI);
         Respawn();
-    }
-
-    /*
-    *   SetIsCasting - Sets the players isCasting bool and spell being casted if true.
-    *   @param isCasting - bool for if the player is casting.
-    *   @param currentCastedSpell - Spell being casted.
-    */
-    public void SetIsCasting(bool isCasting, Spell currentCastedSpell){
-        this.isCasting = isCasting;
-        if(!isCasting)
-            this.currentCastedSpell = null;
-        else
-            this.currentCastedSpell = currentCastedSpell;
-    }
-    
-    /*
-    *   SetMouseOnCast - Stores the players mouse position from cast.
-    *   @param mouseOnCast - Vector3 for world coordinates of the mouse on cast.
-    */
-    public void SetMouseOnCast(Vector3 mouseOnCast){
-        this.mouseOnCast = mouseOnCast;
     }
 }

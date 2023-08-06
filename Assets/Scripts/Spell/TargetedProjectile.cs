@@ -9,7 +9,17 @@ using UnityEngine;
 */
 public class TargetedProjectile : MonoBehaviour
 {
-    public GameObject target { get; private set; } = null;
+    private GameObject target = null;
+    public GameObject Target {
+        get => target;
+        set {
+            if((value.GetComponent<Unit>() as Unit) != null){
+                target = value;
+                targetSet = true;
+                targetUnit = target.GetComponent<Unit>();
+            }
+        }
+    }
     private Unit targetUnit = null;
     private bool targetSet = false;
 
@@ -20,16 +30,8 @@ public class TargetedProjectile : MonoBehaviour
     private void Update()
     {
         // Destroy GameObject if target dies.
-        if(target != null){
-            // Cache Unit component so it isn't being accessed every frame once a target is found.
-            if(targetUnit == null){
-                targetSet = true;
-                targetUnit = target.GetComponent<Unit>();
-            }
-        }
-        else{
-            if(targetSet == true)
-                Destroy(gameObject);
+        if((targetUnit == null || targetUnit.isDead) && targetSet == true){
+            Destroy(gameObject);
         }
     }
 
@@ -40,13 +42,5 @@ public class TargetedProjectile : MonoBehaviour
             hit?.Invoke(other.gameObject);
             Destroy(gameObject);
         }
-    }
-
-    /*
-    *   SetTarget - Sets the target for this GameObject.
-    *   @param target - GameObject to set the target to.
-    */
-    public void SetTarget(GameObject target){
-        this.target = target;
     }
 }

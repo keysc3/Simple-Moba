@@ -7,44 +7,34 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class Stat {
     
-    [SerializeField] private float baseValue;
-
-    [SerializeField] private List<float> modifiers = new List<float>();
+    private float baseValue = 0f;
+    public float BaseValue { 
+        get => baseValue;
+        set {
+            if(value > 0f)
+                baseValue = value;
+        }
+    }
+    private List<float> modifiers = new List<float>();
 
     /*
     *   Stat - Initializes a new stat object.
     *   @param value - float of the stats base value.
     */
     public Stat(float value){
-        baseValue = value;
+        BaseValue = value;
     }
     
     /*
     *   GetValue - Gets the current value of the stat.
     */
     public float GetValue(){
-        float totalValue = baseValue;
+        float totalValue = BaseValue;
         foreach(float modifier in modifiers)
             totalValue += modifier;
         return totalValue;
-    }
-
-    /*
-    *   GetBaseValue - Gets the base value of the stat.
-    */
-    public float GetBaseValue(){
-        return baseValue;
-    }
-
-    /*
-    *   SetBaseValue - Sets the base value of the stat to a new value.
-    *   @param newBaseValue - float of the value to change the base value to.
-    */
-    public void SetBaseValue(float newBaseValue){
-        baseValue = newBaseValue;
     }
 
     /*

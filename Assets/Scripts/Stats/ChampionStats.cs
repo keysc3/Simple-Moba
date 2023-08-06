@@ -7,11 +7,19 @@ using UnityEngine;
 */
 public class ChampionStats : UnitStats
 {
-    [field: SerializeField] public float currentMana { get; private set; }
-    [field: SerializeField] public Stat maxMana { get; private set; }
-    [field: SerializeField] public Stat MP5 { get; private set; }
-    [field: SerializeField] public Stat haste { get; private set; }
+    private float currentMana;
+    public float CurrentMana {
+        get => currentMana;
+        set => currentMana = value < maxMana.GetValue() ? value : maxMana.GetValue();
+    }
+    public Stat maxMana { get; }
+    public Stat MP5 { get; }
+    public Stat haste { get; }
 
+    /*
+    *   ChampionStat - Creates a champion stats object.
+    *   champion - ScriptableChampion to intialize with. 
+    */
     public ChampionStats(ScriptableChampion champion) : base(champion){
         MP5 = new Stat(((ScriptableChampion) champion).MP5);
         maxMana = new Stat(((ScriptableChampion) champion).baseMana);
@@ -27,14 +35,6 @@ public class ChampionStats : UnitStats
         currentMana -= cost;
         if(currentMana < 0)
             currentMana = 0;
-    }
-
-    /*
-    *   SetMana - Set the champions current mana value.
-    *   @param value - float of the value to change current mana to.
-    */
-    public void SetMana(float value){
-        currentMana = value;
     }
 
     /*
@@ -56,12 +56,12 @@ public class ChampionStats : UnitStats
             // Increase current health by items health amount.
             if(item.health != 0){
                 maxHealth.AddModifier(item.health);
-                SetHealth(currentHealth + item.health);
+                CurrentHealth = CurrentHealth + item.health;
             }
             // Increase current mana by items mana amount.
             if(item.mana != 0){
                 maxMana.AddModifier(item.mana);
-                SetMana(currentMana + item.mana);
+                currentMana = currentMana + item.mana;
             }
             speed.AddModifier(item.speed);
             bonusAttackSpeed.AddModifier(item.attackSpeed);
@@ -80,14 +80,14 @@ public class ChampionStats : UnitStats
             physicalDamage.RemoveModifier(item.physicalDamage);
             //If the items hp hasn't been used yet, remove the amount that hasn't been used from current health.
             if(item.health != 0){
-                if(currentHealth > (maxHealth.GetValue() - item.health))
-                    SetHealth(currentHealth - (item.health - (maxHealth.GetValue() - currentHealth))); 
+                if(CurrentHealth > (maxHealth.GetValue() - item.health))
+                    CurrentHealth = CurrentHealth - (item.health - (maxHealth.GetValue() - CurrentHealth)); 
                 maxHealth.RemoveModifier(item.health);
             }
             //If the items mana hasn't been used yet, remove the amount that hasn't been used from the current mana.
             if(item.mana != 0){
                 if(currentMana > (maxMana.GetValue() - item.mana))
-                    SetMana(currentMana - (item.mana - (maxMana.GetValue() - currentMana)));
+                    currentMana = currentMana - (item.mana - (maxMana.GetValue() - currentMana));
                 maxMana.RemoveModifier(item.mana);
             }
             speed.RemoveModifier(item.speed);

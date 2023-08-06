@@ -45,7 +45,7 @@ public class Sleep : Effect
         // Reset the path
         effectedNavMeshAgent.ResetPath();
         // Give controls back if slept is active GameObject.
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == effected){
             playerSpellInput.enabled = true;
             playerSpellInput.enabled = true;
         }

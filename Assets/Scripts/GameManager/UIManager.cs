@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     *   @return (GameObject, GameObject) - Tuple for returning the intialized player UI and player bar.
     */
     public (GameObject, GameObject) SetupPlayerUI(Player player){
-        GameObject playerUI = CreatePlayerUI(player.gameObject, player.unit.icon);
+        GameObject playerUI = CreatePlayerUI(player.gameObject, player.SUnit.icon);
         GameObject playerBar = CreatePlayerBar(player.gameObject);
         return (playerUI, playerBar);
     }
@@ -73,27 +73,28 @@ public class UIManager : MonoBehaviour
     }
 
     /*
-    *   SetUpSpellUI - Sets up the spell UIs buttons and icons.
-    *   @param player - Player the UI is being setup for.
+    *   SetupSpellButtons - Setup for the a spells button click and level up button click.
+    *   @param player - Player the spell is for.
+    *   @param newSpell - Spell to set the buttons for.
     */
-    public void SetupSpellUI(Player player){
-        GameObject spellContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
-        ChampionSpells championSpells = player.gameObject.GetComponent<ChampionSpells>();
+    public void SetupSpellButtons(Player player, Spell newSpell){
+        // Spell button
+        Transform spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer");
+        SpellButton spellButton = spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
+        spellButton.spell = newSpell;
+        //TODO: Change this to not be hardcoded using a proper keybind/input system?
         List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
-        // Setup spell1-4's spell button.
-        for(int i = 0; i < 5; i++){
-            SpellButton spellButton = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").GetComponent<SpellButton>();
-            spellButton.SetSpell(championSpells.mySpells[i]);
-            spellButton.SetKeyCode (inputs[i]);
-            spellButton.SetPlayerSpellInput(player.gameObject.GetComponent<PlayerSpellInput>());
-            spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
-            // Setup spell1-4's level up buttons.
-            if(i > 0){
-                SpellLevelUpButton spellLevelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").GetComponent<SpellLevelUpButton>();
-                spellLevelUpButton.SetPlayerSpellInput(player.gameObject.GetComponent<PlayerSpellInput>());
-                spellLevelUpButton.SetSpell(championSpells.mySpells[i].spellNum);
-                spellLevelUpButton.SetPlayer(player);
-            }
+        List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"};
+        int index = spellNames.FindIndex(name => name == newSpell.spellNum);
+        if(index != -1)
+            spellButton.keyCode = inputs[index];
+        spellButton.playerSpellInput = player.gameObject.GetComponent<PlayerSpellInput>();
+        // Spell level up button.
+        spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
+        if(newSpell.spellNum != "Passive"){
+            SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(newSpell.spellNum + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
+            spellLevelUpButton.spell = newSpell.spellNum;
+            spellLevelUpButton.player = player;
         }
     }
 
@@ -123,8 +124,8 @@ public class UIManager : MonoBehaviour
         // If the champion is dead.
         if(!player.isDead){
             // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
-            float healthPercent = Mathf.Round((championStats.currentHealth/championStats.maxHealth.GetValue()) * 100);
-            healthText.SetText(Mathf.Ceil(championStats.currentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
+            float healthPercent = Mathf.Round((championStats.CurrentHealth/championStats.maxHealth.GetValue()) * 100);
+            healthText.SetText(Mathf.Ceil(championStats.CurrentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             // Set the fill based on players health percent.
             player.playerBar.transform.Find("PlayerBar/Container/Health").GetComponent<Slider>().value = healthPercent;
             health.value = healthPercent;
@@ -145,9 +146,9 @@ public class UIManager : MonoBehaviour
         Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         ChampionStats championStats = (ChampionStats) player.unitStats;
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
-        float manaPercent = Mathf.Round((championStats.currentMana/championStats.maxMana.GetValue()) * 100);
+        float manaPercent = Mathf.Round((championStats.CurrentMana/championStats.maxMana.GetValue()) * 100);
         mana.transform.Find("Value").GetComponent<TMP_Text>()
-        .SetText(Mathf.Ceil(championStats.currentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
+        .SetText(Mathf.Ceil(championStats.CurrentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
         // Set the fill based on the player mana percent.
         player.playerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<Slider>().value = manaPercent;
         mana.value = manaPercent;
@@ -514,7 +515,7 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.M)){
-            if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
+            if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject)
                 gameObject.GetComponent<Player>().TakeDamage(10, "magic", gameObject, false);
         }
     }
@@ -538,7 +539,7 @@ public class UIManager : MonoBehaviour
         myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         myEffect.name = effect.effectType.name;
         myEffect.transform.Find("InnerContainer/Sprite").GetComponent<Image>().sprite = effect.effectType.sprite;
-        if(effect.effectDuration == -1f)
+        if(effect.EffectDuration == -1f)
             myEffect.transform.Find("InnerContainer/Slider").gameObject.SetActive(false);
         // Set color and position of the UI element.
         if(effect.effectType.isBuff){
@@ -606,12 +607,12 @@ public class UIManager : MonoBehaviour
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
                 if(value != null){
-                    value.SetText(((PersonalSpell)effect).stacks.ToString());
-                    if(effect.effectDuration == -1f)
+                    value.SetText(((PersonalSpell)effect).Stacks.ToString());
+                    if(effect.EffectDuration == -1f)
                         yield return null;
                 }
                 // Update status effect timer.
-                elapsedDuration = 1f - effect.effectTimer/effect.effectDuration;
+                elapsedDuration = 1f - effect.effectTimer/effect.EffectDuration;
                 slider.fillAmount = elapsedDuration;
                 yield return null;
         }
@@ -655,13 +656,13 @@ public class UIManager : MonoBehaviour
                 // If a stack expired.
                 if(newStacks < stacks){
                     // Get the duration left on the next expiring stack.
-                    duration = displayEffect.effectDuration - displayEffect.effectTimer;
+                    duration = displayEffect.EffectDuration - displayEffect.effectTimer;
                     // Get the stacks active time.
                     reduceAmount = displayEffect.effectTimer;
                 }
                 // If a new stack was added use the regular duration.
                 else{
-                    duration = displayEffect.effectDuration;
+                    duration = displayEffect.EffectDuration;
                     reduceAmount = 0f;
                 }
             }

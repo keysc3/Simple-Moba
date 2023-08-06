@@ -14,7 +14,7 @@ using UnityEditor;
 public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
 {
 
-    private BilliaSpell1Data spellData;
+    new private BilliaSpell1Data spellData;
     private List<Effect> passiveEffectTracker = new List<Effect>();
     private int passiveStacks;
     private string radius;
@@ -26,7 +26,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell1Data) spellData;
         championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
         championSpells.lateUpdateCallback += ClearPassiveStackSpells;
@@ -49,7 +49,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     */
     public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             championSpells.StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
@@ -142,7 +142,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
             // Create a new speed bonus with the 
             float bonusPercent = spellData.passiveSpeed[levelManager.spellLevels[spellNum]-1];
             SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, gameObject);
-            speedBonus.SetBonusPercent(bonusPercent);
+            speedBonus.BonusPercent = bonusPercent;
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);
             passiveStacks += 1;
@@ -178,7 +178,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     private void ChangeSpell_1_PassiveEffect(int index, float baseIncrease){
         passiveEffectTracker[index].ResetTimer();
         float newDuration = spellData.passiveSpeedDuration + baseIncrease;
-        passiveEffectTracker[index].SetDuration(newDuration);
+        passiveEffectTracker[index].EffectDuration = newDuration;
     }
 
     /*

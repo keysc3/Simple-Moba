@@ -9,8 +9,15 @@ using UnityEngine;
 */
 public class ActiveChampion : MonoBehaviour
 {
-    public int activeChampion;
-    public List<GameObject> champions = new List<GameObject>();
+    private int activeChamp;
+    public int ActiveChamp { 
+        get => activeChamp;
+        set {
+            if(value <= champions.Count - 1)
+                activeChamp = value;
+        }
+    }
+    [field: SerializeField] public List<GameObject> champions { get; private set; } = new List<GameObject>();
 
     public static ActiveChampion instance { get; private set; }
     public CameraMovement cameraMovement;
@@ -38,7 +45,7 @@ public class ActiveChampion : MonoBehaviour
 
     public void SetActiveChamp(){
         for(int i = 0; i < champions.Count; i++){
-            if(i != activeChampion){
+            if(i != activeChamp){
                 champions[i].GetComponent<PlayerController>().enabled = false;
                 champions[i].GetComponent<PlayerSpellInput>().enabled = false;
                 champions[i].tag = "Enemy"; 
@@ -63,28 +70,28 @@ public class ActiveChampion : MonoBehaviour
         Debug.Log("Select active champion.");
         while(true){
             if(Input.GetKeyDown(KeyCode.C)){
-                activeChampion = 0;
+                ActiveChamp = 0;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.V)){
-                activeChampion = 1;
+                ActiveChamp = 1;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.B)){
-                activeChampion = 2;
+                ActiveChamp = 2;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.N)){
-                activeChampion = 3;
+                ActiveChamp = 3;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.M)){
-                activeChampion = 4;
+                ActiveChamp = 4;
                 break;
             }
             yield return null;
         }
-        Debug.Log(champions[activeChampion].name + " was chosen.");
+        Debug.Log(champions[activeChamp].name + " was chosen.");
         SetActiveChamp();
     }
 }

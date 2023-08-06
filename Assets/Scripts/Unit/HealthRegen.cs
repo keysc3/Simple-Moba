@@ -27,7 +27,7 @@ public class HealthRegen : MonoBehaviour
     // Called once per frame.
     private void Update(){
         // Activate the health regen UI if the player is not full health.
-        if(championStats.currentHealth < championStats.maxHealth.GetValue() && !player.isDead){
+        if(championStats.CurrentHealth < championStats.maxHealth.GetValue() && !player.isDead){
             UIManager.instance.SetHealthRegenActive(true, player.playerUI);
         }
         else{
@@ -44,7 +44,7 @@ public class HealthRegen : MonoBehaviour
             // 0.5s intervals over 5s = 10 increments.
             healthToRegen = Mathf.Round(championStats.HP5.GetValue()/10.0f);
             float maxHealth = championStats.maxHealth.GetValue();
-            float currentHealth = championStats.currentHealth;
+            float currentHealth = championStats.CurrentHealth;
             // If not at max mana and not dead then regen health.
             if(currentHealth < maxHealth && !player.isDead){
                 currentHealth += healthToRegen;
@@ -52,7 +52,7 @@ public class HealthRegen : MonoBehaviour
                 if(currentHealth > maxHealth)
                     currentHealth = maxHealth;
                 // Set health and only regen every 0.5s.
-                championStats.SetHealth(currentHealth);
+                championStats.CurrentHealth = currentHealth;
                 UIManager.instance.UpdateHealthBar(player);
                 // Display per 1s on UI.
                 UIManager.instance.UpdateHealthRegen(championStats.HP5.GetValue()/5.0f, player.playerUI);

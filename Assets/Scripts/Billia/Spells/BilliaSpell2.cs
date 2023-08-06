@@ -12,7 +12,7 @@ using UnityEngine.AI;
 */
 public class BilliaSpell2 : DamageSpell, ICastable
 {
-    private BilliaSpell2Data spellData;
+    new private BilliaSpell2Data spellData;
     private string radius;
 
     /*
@@ -21,7 +21,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell2Data) spellData;
     }
 
@@ -55,7 +55,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     */
     public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
@@ -126,7 +126,8 @@ public class BilliaSpell2 : DamageSpell, ICastable
     *   @param spellTargetPosition - Vector3 of the center of the spell.
     */
     private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
-        player.SetIsCasting(true, this);
+        player.isCasting = true;
+        player.CurrentCastedSpell = this;
         // Disable pathing.
         navMeshAgent.ResetPath();
         navMeshAgent.isStopped = true;
@@ -143,7 +144,8 @@ public class BilliaSpell2 : DamageSpell, ICastable
         // Apply last tick dash and enable pathing.
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, dashSpeed * Time.deltaTime);
         navMeshAgent.isStopped = false;
-        player.SetIsCasting(false, this);
+        player.isCasting = false;
+        player.CurrentCastedSpell = this;
         Spell_2_Finished(spellTargetPosition);
     }
 

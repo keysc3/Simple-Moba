@@ -13,7 +13,7 @@ using UnityEngine.AI;
 */
 public class PlayerSpellInput : MonoBehaviour
 {
-    public bool buttonClick { get; private set; } = false;
+    public bool buttonClick = false;
     public Spell lastSpellPressed { get; private set; } = null;
     private KeyCode lastButtonPressed = KeyCode.None;
     private ChampionSpells championSpells;
@@ -51,25 +51,25 @@ public class PlayerSpellInput : MonoBehaviour
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.Q, championSpells.spell1);
+                SpellButtonPressed(KeyCode.Q, championSpells.Spell1);
             }
         }
         // Spell 2
         if(Input.GetKeyDown(KeyCode.W)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.W, championSpells.spell2);
+                SpellButtonPressed(KeyCode.W, championSpells.Spell2);
             }
         }
         // Spell 3
         if(Input.GetKeyDown(KeyCode.E)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.E, championSpells.spell3);
+                SpellButtonPressed(KeyCode.E, championSpells.Spell3);
             }
         }
         // Spell 4
         if(Input.GetKeyDown(KeyCode.R)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.R, championSpells.spell4);
+                SpellButtonPressed(KeyCode.R, championSpells.Spell4);
             }
         }
         // Left click
@@ -145,13 +145,5 @@ public class PlayerSpellInput : MonoBehaviour
             lastSpellPressed = null;
             lastButtonPressed = KeyCode.None;
         }
-    }
-
-    /*
-    *   SetButtonClick - Sets the button click bool.
-    *   @param buttonClick - bool to set to.
-    */
-    public void SetButtonClick(bool buttonClick){
-        this.buttonClick = buttonClick;
     }
 }

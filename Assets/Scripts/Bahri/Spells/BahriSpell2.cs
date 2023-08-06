@@ -12,9 +12,9 @@ using UnityEditor;
 */
 public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
 {
-    private BahriSpell2Data spellData;
+    new private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
-    public List<GameObject> activeSpellObjects { get; private set; } = new List<GameObject>();
+    public List<GameObject> activeSpellObjects { get; } = new List<GameObject>();
 
     /*
     *   BahriSpell2 - Initialize Bahri's second spell.
@@ -22,7 +22,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell2Data) spellData;
         isQuickCast = true;
     }
@@ -39,7 +39,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");
             activeSpellObjects.Add(spell_2_parent);
@@ -124,7 +124,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
                     if(target != null){
                         championSpells.StartCoroutine(Spell_2_Target(child.gameObject, target));
                         TargetedProjectile targetedProjectile = child.gameObject.GetComponent<TargetedProjectile>();
-                        targetedProjectile.SetTarget(target);
+                        targetedProjectile.Target = target;
                         child.parent = null;
                     }
                 }
@@ -169,7 +169,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
             float timePassed = timer/spellData.speedBonus.duration[spellLevel];
             // Decay the speed bonus based on time since activated.
             float newBonus = Mathf.SmoothStep(spellData.speedBonus.bonusPercent[spellLevel], 0f, timePassed);
-            speedBonus.SetBonusPercent(newBonus);
+            speedBonus.BonusPercent = newBonus;
             timer += Time.deltaTime;
             yield return null;
         }

@@ -9,7 +9,12 @@ using UnityEngine;
 */
 public class PersonalSpell : Effect
 {
-    public int stacks { get; private set; }
+    private int stacks;
+    public int Stacks { 
+        get => stacks;
+        set => stacks = value >= 0 ? value : 0;
+    }
+    
     /*
     *   Spell- Initialize a new spell effect.
     *   @param spellEffect - ScriptableSpell of the spell effect to apply.
@@ -31,9 +36,5 @@ public class PersonalSpell : Effect
     *   EndEffect - End the spell effect.
     */
     public override void EndEffect(){
-    }
-
-    public void UpdateStacks(int newStacks){
-        stacks = newStacks;
     }
 }

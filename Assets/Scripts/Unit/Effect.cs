@@ -7,17 +7,34 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public abstract class Effect
 {
-    [field: SerializeField] public bool isFinished { get; private set; }
-    [field: SerializeField] public ScriptableEffect effectType { get; private set; }
-    [field: SerializeField] public GameObject casted { get; private set; } 
-    [field: SerializeField] public GameObject effected { get; private set; }
-    [field: SerializeField] public float effectTimer { get; private set; } = 0f;
-    [field: SerializeField] public float effectDuration { get; private set; }
-    [field: SerializeField] public bool isActivated { get; private set; } = false;
-    [field: SerializeField] protected Collider effectedCollider;
+    public bool isFinished { get; private set; }
+    public ScriptableEffect effectType { get; }
+    public GameObject casted { get; private set; } 
+    public GameObject effected { get; }
+    public float effectTimer { get; private set; } = 0f;
+    protected float effectDuration;
+    public float EffectDuration { 
+        get => effectDuration;
+        set {
+            if(value == -1f && value >= 0f)
+                effectDuration = value;
+        }
+    }
+    private bool isActivated;
+    public bool IsActivated { 
+        get => isActivated;
+        set {
+            if(value != isActivated){
+                isActivated = value;
+                if(value == false)
+                    EndEffect();
+                else
+                    StartEffect();
+            }
+        }
+    }
 
     /*
     *   Effect - Initialize a new Effect object.
@@ -32,7 +49,6 @@ public abstract class Effect
         effectDuration = duration;
         isFinished = false;
         effectType = effect;
-        effectedCollider = unitEffected.GetComponent<Collider>();
     }
 
     /*
@@ -87,33 +103,5 @@ public abstract class Effect
     */
     public void ResetTimer(){
         effectTimer = 0.0f;
-    }
-
-    /*
-    *   SetDuration - Sets the effects duration
-    */
-    public void SetDuration(float effectDuration){
-        this.effectDuration = effectDuration;
-    }
-    /*
-    *   SetIsActivated - Sets the effect to start or stop.
-    *   @param isActivated - bool of whether to activate or deactivate the effect.
-    */
-    public void SetIsActivated(bool isActivated){
-        if(this.isActivated != isActivated){
-            this.isActivated = isActivated;
-            if(isActivated == false)
-                EndEffect();
-            else
-                StartEffect();
-        }
-    }
-
-    /*
-    *   SetIsFinished - Set the effects finished bool.
-    *   @param isFinished - bool to set the effects finished bool to.
-    */
-    public void SetIsFinished(bool isFinished){
-        this.isFinished = isFinished;
     }
 }

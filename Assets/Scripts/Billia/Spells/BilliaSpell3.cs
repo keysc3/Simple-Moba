@@ -11,9 +11,9 @@ using UnityEditor;
 */
 public class BilliaSpell3 : DamageSpell, ICastable
 {
-    private BilliaSpell3Data spellData;
-    [SerializeField] private float p1_y_offset = 3f;
-    [SerializeField] private float p2_y = 0.85f;
+    new private BilliaSpell3Data spellData;
+    private float p1_y_offset = 3f;
+    private float p2_y = 0.85f;
 
     /*
     *   BilliaSpell3 - Initialize Billia's third spell.
@@ -21,7 +21,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell3Data) spellData;
     }
 
@@ -51,7 +51,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             // Get the players mouse position on spell cast for spells target direction.
@@ -90,8 +90,8 @@ public class BilliaSpell3 : DamageSpell, ICastable
         // Create spell object.
         GameObject seed = (GameObject) GameObject.Instantiate(spellData.visualPrefab, gameObject.transform.position, Quaternion.identity);
         BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponent<BilliaSpell3Trigger>();
-        billiaSpell3Trigger.SetBilliaSpell3Script(this);
-        billiaSpell3Trigger.SetCaster(gameObject);
+        billiaSpell3Trigger.billiaSpell3 = this;
+        billiaSpell3Trigger.casted = gameObject;
         // Set p0.
         Vector3 p0 = gameObject.transform.position;
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
@@ -130,7 +130,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   @param targetDirection - Vector3 of the lobbed seeds direction to roll.
     */
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
-        billiaSpell3Trigger.SetForwardDirection(targetDirection);
+        billiaSpell3Trigger.forwardDirection = targetDirection;
         // Set inital seed position.
         // Look at roll direction.
         seed.transform.LookAt(seed.transform.position + targetDirection);

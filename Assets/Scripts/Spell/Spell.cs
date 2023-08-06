@@ -12,11 +12,12 @@ using System;
 [System.Serializable]
 public class Spell
 {
-    [SerializeField] public bool onCd { get; protected set; } = false;
-    [SerializeField] public bool canMove { get; protected set; } = false;
-    [SerializeField] public bool isQuickCast { get; protected set; } = false;
-    [SerializeField] public bool isDisplayed { get; private set; } = false;
-    [SerializeField] public string spellNum { get; private set; }
+    public bool onCd { get; protected set; } = false;
+    public bool canMove { get; protected set; } = false;
+    public bool isQuickCast { get; protected set; } = false;
+    public bool isDisplayed { get; private set; } = false;
+    public string spellNum { get; }
+    public SpellData spellData { get; }
     protected NavMeshAgent navMeshAgent;
     protected LevelManager levelManager;
     protected ChampionStats championStats;
@@ -31,10 +32,11 @@ public class Spell
     *   @param championSpells - ChampionSpells instance this spell is a part of.
     *   @param spellNum - string of the spell number this spell is.
     */
-    public Spell(ChampionSpells championSpells, string spellNum){
+    public Spell(ChampionSpells championSpells, string spellNum, SpellData spellData){
         this.championSpells = championSpells;
         this.spellNum = spellNum;
         this.gameObject = championSpells.gameObject;
+        this.spellData = spellData;
         mainCamera = Camera.main;
         player = championSpells.gameObject.GetComponent<Player>();
         myCollider = championSpells.gameObject.GetComponent<Collider>();
@@ -80,7 +82,7 @@ public class Spell
         LayerMask groundMask = LayerMask.GetMask("Ground");
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
-        player.SetMouseOnCast(targetDirection);
+        player.mouseOnCast = targetDirection;
         targetDirection.y = myCollider.bounds.center.y;
         return targetDirection;
     }
@@ -91,7 +93,8 @@ public class Spell
     */
     protected IEnumerator CastTime(float castTime, bool canMove){
         float timer = 0.0f;
-        player.SetIsCasting(true, this);
+        player.isCasting = true;
+        player.CurrentCastedSpell = this;
         // While still casting spell stop the player.
         while(timer <= castTime){
             if(!canMove){
@@ -101,7 +104,8 @@ public class Spell
             timer += Time.deltaTime;
             yield return null;
         }
-        player.SetIsCasting(false, this);
+        player.isCasting = false;
+        player.CurrentCastedSpell = this;
         navMeshAgent.isStopped = false;
     }
 

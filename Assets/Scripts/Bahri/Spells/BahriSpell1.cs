@@ -12,7 +12,7 @@ using UnityEngine;
 public class BahriSpell1 : DamageSpell, ICastable
 {
 
-    private BahriSpell1Data spellData;
+    new private BahriSpell1Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public bool returning { get; private set; } = false;
 
@@ -22,7 +22,7 @@ public class BahriSpell1 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell1Data) spellData;
     }
 
@@ -40,7 +40,7 @@ public class BahriSpell1 : DamageSpell, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.currentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
@@ -68,8 +68,8 @@ public class BahriSpell1 : DamageSpell, ICastable
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, gameObject.transform.position, Quaternion.identity);
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
-        spell1Trigger.SetBahriSpell1(this);
-        spell1Trigger.SetBahri(gameObject); 
+        spell1Trigger.bahriSpell1 = this;
+        spell1Trigger.bahri = gameObject; 
         // Set initial return values.
         returning = false;
         float returnSpeed = spellData.minSpeed;
