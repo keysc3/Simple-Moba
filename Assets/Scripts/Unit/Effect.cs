@@ -17,9 +17,7 @@ public abstract class Effect
     protected float effectDuration;
     #region "EffectDuration property"
     public float EffectDuration { 
-        get {
-            return effectDuration;
-        } 
+        get => effectDuration;
         set {
             if(value == -1f && value >= 0f)
                 effectDuration = value;
@@ -29,9 +27,7 @@ public abstract class Effect
     private bool isActivated;
     #region "IsActivated property"
     public bool IsActivated { 
-        get {
-            return isActivated;
-        }
+        get => isActivated;
         set {
             if(value != isActivated){
                 isActivated = value;
