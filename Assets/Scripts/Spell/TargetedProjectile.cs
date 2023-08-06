@@ -10,11 +10,8 @@ using UnityEngine;
 public class TargetedProjectile : MonoBehaviour
 {
     private GameObject target = null;
-    #region "Target property"
     public GameObject Target {
-        get { 
-            return target;
-        }
+        get => target;
         set {
             if((value.GetComponent<Unit>() as Unit) != null){
                 target = value;
@@ -23,7 +20,6 @@ public class TargetedProjectile : MonoBehaviour
             }
         }
     }
-    #endregion
     private Unit targetUnit = null;
     private bool targetSet = false;
 

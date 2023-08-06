@@ -10,15 +10,21 @@ using UnityEngine.EventSystems;
 */
 public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
 {
-    public Player player { get; set; }
+    public Player player;
+    public Player Player {
+        get => player;
+        set {
+            if(value.playerSpellInput != null)
+                player = value; 
+        }
+    }
     public string spell { get; set; }
-    public PlayerSpellInput playerSpellInput { get; set; }
 
     /*
     *   OnPointerDown - Called when the mouse is clicked over the button.
     */
     public void OnPointerDown(PointerEventData eventData){
-        playerSpellInput.buttonClick = true;
+        player.playerSpellInput.buttonClick = true;
         player.levelManager.SpellLevelUp(spell);
     }
 }

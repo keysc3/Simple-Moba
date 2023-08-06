@@ -26,7 +26,7 @@ public class Player : Unit, IRespawnable
     [SerializeField] private Material dead;
     [SerializeField] private LevelInfo levelInfo;
     private PlayerController playerController;
-    private PlayerSpellInput playerSpellInput;
+    public PlayerSpellInput playerSpellInput { get; private set; }
     private ChampionSpells championSpells;
     private Material alive;
     private Renderer rend;

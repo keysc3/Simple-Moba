@@ -11,9 +11,10 @@ using UnityEngine.EventSystems;
 */
 public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    public Spell spell { get; set; }
-    public KeyCode keyCode { get; set; }
-    public PlayerSpellInput playerSpellInput { get; set; }
+    //TODO? could change to properties with validation on spell and keycode based on constant values.
+    public Spell spell;
+    public KeyCode keyCode;
+    public PlayerSpellInput playerSpellInput;
 
     /*
     *   OnPointerEnter - Called when the cursor enters the rect area of this button.
