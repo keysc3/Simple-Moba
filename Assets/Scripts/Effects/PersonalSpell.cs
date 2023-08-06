@@ -10,20 +10,11 @@ using UnityEngine;
 public class PersonalSpell : Effect
 {
     private int stacks;
-    #region "Stacks property"
     public int Stacks { 
-        get { 
-            return stacks;
-        } 
-        set {
-            if(value >= 0)
-                stacks = value;
-            else
-                stacks = 0;
-        }
+        get => stacks;
+        set => stacks = value >= 0 ? value : 0;
     }
-    #endregion
-
+    
     /*
     *   Spell- Initialize a new spell effect.
     *   @param spellEffect - ScriptableSpell of the spell effect to apply.

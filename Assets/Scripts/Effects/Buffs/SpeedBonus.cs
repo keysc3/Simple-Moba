@@ -6,17 +6,13 @@ using UnityEngine.AI;
 public class SpeedBonus : Effect
 {
     private float bonusPercent;
-    #region "Bonus Property"
     public float BonusPercent { 
-        get {
-            return bonusPercent;
-        }
+        get => bonusPercent;
         set {
             if(value >= 0)
                 bonusPercent = value;
         }
     }
-    #endregion
 
     /*
     *   Slow - Initialize a new speed bonus effect.

@@ -11,17 +11,13 @@ using UnityEngine.AI;
 public class Slow : Effect
 {
     private float slowPercent;
-    #region "SlowPercent property."
     public float SlowPercent {
-        get { 
-            return slowPercent;
-        }
+        get => slowPercent;
         set {
             if(value >= 0f && value <= 1f)
                 slowPercent = value;
         }
     }
-    #endregion
 
     /*
     *   Slow - Initialize a new slow effect.
