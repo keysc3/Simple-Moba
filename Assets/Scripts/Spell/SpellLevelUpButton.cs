@@ -18,7 +18,8 @@ public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
                 player = value; 
         }
     }
-    public string spell { get; set; }
+    //TODO validate spell against spell string constants.
+    public string spell;
 
     /*
     *   OnPointerDown - Called when the mouse is clicked over the button.

@@ -12,7 +12,6 @@ public class BasicAttackTrigger : MonoBehaviour
     public BasicAttack basicAttack;
     private Unit targetUnit;
     private GameObject target = null;
-    #region "Target property"
     public GameObject Target {
         get => target;
         set {
@@ -22,7 +21,6 @@ public class BasicAttackTrigger : MonoBehaviour
             }
         }
     }
-    #endregion
 
     // Update is called once per frame
     private void Update()

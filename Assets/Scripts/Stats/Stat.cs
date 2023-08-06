@@ -10,7 +10,6 @@ using UnityEngine;
 public class Stat {
     
     private float baseValue = 0f;
-    #region "BaseValue property"
     public float BaseValue { 
         get => baseValue;
         set {
@@ -18,7 +17,6 @@ public class Stat {
                 baseValue = value;
         }
     }
-    #endregion
     private List<float> modifiers = new List<float>();
 
     /*

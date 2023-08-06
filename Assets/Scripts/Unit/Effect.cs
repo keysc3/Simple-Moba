@@ -15,7 +15,6 @@ public abstract class Effect
     public GameObject effected { get; }
     public float effectTimer { get; private set; } = 0f;
     protected float effectDuration;
-    #region "EffectDuration property"
     public float EffectDuration { 
         get => effectDuration;
         set {
@@ -23,9 +22,7 @@ public abstract class Effect
                 effectDuration = value;
         }
     }
-    #endregion
     private bool isActivated;
-    #region "IsActivated property"
     public bool IsActivated { 
         get => isActivated;
         set {
@@ -38,7 +35,6 @@ public abstract class Effect
             }
         }
     }
-    #endregion
 
     /*
     *   Effect - Initialize a new Effect object.
