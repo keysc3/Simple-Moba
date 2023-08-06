@@ -61,7 +61,7 @@ public class Player : Unit, IRespawnable
         // Check for level up skill input if skill level up available.
         levelManager.LevelUpSkill();
         // Test GainXP
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
             if(Input.GetKeyDown(KeyCode.K))
                 levelManager.GainXPTester();
         }
@@ -125,7 +125,7 @@ public class Player : Unit, IRespawnable
     public void Respawn(){
         navMeshAgent.enabled = true;
         // If active champion then enable controls.
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject){
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }

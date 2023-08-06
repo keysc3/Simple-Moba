@@ -159,7 +159,7 @@ public class LevelManager
                 skillLevelUpUIActive = true;
                 newLevel = false;
             }
-            if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == player.gameObject){
+            if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == player.gameObject){
                 // If first spell level up key bind pressed and it is not at max level then level it.
                 if(Input.GetKey(KeyCode.LeftControl)){
                     if(Input.GetKeyDown(KeyCode.Q))

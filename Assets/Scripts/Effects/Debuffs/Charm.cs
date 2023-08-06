@@ -57,7 +57,7 @@ public class Charm : Effect
         effectedNavMeshAgent.ResetPath();
         
         // Give controls back if charmed is active GameObject.
-        if(effectedUnit.SUnit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == effected){
+        if(effectedUnit.SUnit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == effected){
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }

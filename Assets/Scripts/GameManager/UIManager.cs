@@ -514,7 +514,7 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.M)){
-            if(ActiveChampion.instance.champions[ActiveChampion.instance.activeChampion] == gameObject)
+            if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject)
                 gameObject.GetComponent<Player>().TakeDamage(10, "magic", gameObject, false);
         }
     }
