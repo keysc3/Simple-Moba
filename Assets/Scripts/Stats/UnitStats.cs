@@ -12,19 +12,10 @@ using UnityEngine.AI;
 public class UnitStats
 {
     private float currentHealth;
-    #region "CurrentHealth property"
     public float CurrentHealth { 
-        get {
-            return currentHealth;
-        } 
-        set { 
-            if(value < maxHealth.GetValue()) 
-                currentHealth = value; 
-            else
-                currentHealth = maxHealth.GetValue();
-        }
+        get => currentHealth;
+        set => currentHealth = value < maxHealth.GetValue() ? value : maxHealth.GetValue(); 
     }
-    #endregion
     public Stat maxHealth { get; }
     public Stat magicDamage { get; }
     public Stat physicalDamage { get; }

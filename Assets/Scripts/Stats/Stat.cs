@@ -12,10 +12,8 @@ public class Stat {
     private float baseValue = 0f;
     #region "BaseValue property"
     public float BaseValue { 
-        get {
-            return baseValue;
-        } 
-        set{
+        get => baseValue;
+        set {
             if(value > 0f)
                 baseValue = value;
         }

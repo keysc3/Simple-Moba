@@ -8,19 +8,10 @@ using UnityEngine;
 public class ChampionStats : UnitStats
 {
     private float currentMana;
-    #region "CurrentMana property"
     public float CurrentMana {
-        get {
-            return currentMana;
-        } 
-        set { 
-            if(value < maxMana.GetValue()) 
-                currentMana = value; 
-            else
-                currentMana = maxMana.GetValue();
-        }
+        get => currentMana;
+        set => currentMana = value < maxMana.GetValue() ? value : maxMana.GetValue();
     }
-    #endregion
     public Stat maxMana { get; }
     public Stat MP5 { get; }
     public Stat haste { get; }
