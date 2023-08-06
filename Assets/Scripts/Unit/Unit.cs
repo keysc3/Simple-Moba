@@ -11,11 +11,7 @@ using UnityEngine.AI;
 public class Unit : MonoBehaviour, IDamagable, IKillable
 {   
     [SerializeField] private ScriptableUnit sUnit;
-    #region "SUnit property"
-    public ScriptableUnit SUnit { 
-        get { return sUnit; }
-    }
-    #endregion
+    public ScriptableUnit SUnit { get => sUnit; }
     public bool isDead { get; protected set; }
     public UnitStats unitStats { get; protected set; }
     public StatusEffects statusEffects { get; private set; }
@@ -49,8 +45,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
 
     // Called after all Update functions.
     private void LateUpdate(){
-        float finalMS = unitStats.CalculateMoveSpeed(statusEffects);
-        navMeshAgent.speed = finalMS;
+        navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
     }
 
     /*
