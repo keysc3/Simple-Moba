@@ -18,7 +18,7 @@ public abstract class Effect
     public float EffectDuration { 
         get => effectDuration;
         set {
-            if(value == -1f && value >= 0f)
+            if(value == -1f || value >= 0f)
                 effectDuration = value;
         }
     }
