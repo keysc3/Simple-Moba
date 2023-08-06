@@ -14,7 +14,7 @@ using UnityEditor;
 public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
 {
 
-    private BilliaSpell1Data spellData;
+    new private BilliaSpell1Data spellData;
     private List<Effect> passiveEffectTracker = new List<Effect>();
     private int passiveStacks;
     private string radius;
@@ -26,7 +26,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell1Data) spellData;
         championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
         championSpells.lateUpdateCallback += ClearPassiveStackSpells;

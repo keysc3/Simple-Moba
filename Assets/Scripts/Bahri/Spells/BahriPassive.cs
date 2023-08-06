@@ -10,7 +10,7 @@ using UnityEngine;
 */
 public class BahriPassive : Spell
 {
-    private BahriPassiveData spellData;
+    new private BahriPassiveData spellData;
     private int passiveStacks = 0;
     private PersonalSpell passive;
 
@@ -20,7 +20,7 @@ public class BahriPassive : Spell
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriPassiveData) spellData;
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
         championSpells.initializationEffects.Add(passive);

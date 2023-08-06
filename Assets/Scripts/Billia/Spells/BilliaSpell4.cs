@@ -10,7 +10,7 @@ using UnityEngine;
 */
 public class BilliaSpell4 : Spell, ICastable
 {
-    private BilliaSpell4Data spellData;
+    new private BilliaSpell4Data spellData;
     private bool canUseSpell = false;
 
     /*
@@ -19,7 +19,7 @@ public class BilliaSpell4 : Spell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell4Data) spellData;
         championSpells.updateCallback += CanUseSpell;
         canMove = true;

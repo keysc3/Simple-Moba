@@ -17,6 +17,7 @@ public class Spell
     public bool isQuickCast { get; protected set; } = false;
     public bool isDisplayed { get; private set; } = false;
     public string spellNum { get; }
+    public SpellData spellData { get; }
     protected NavMeshAgent navMeshAgent;
     protected LevelManager levelManager;
     protected ChampionStats championStats;
@@ -31,10 +32,11 @@ public class Spell
     *   @param championSpells - ChampionSpells instance this spell is a part of.
     *   @param spellNum - string of the spell number this spell is.
     */
-    public Spell(ChampionSpells championSpells, string spellNum){
+    public Spell(ChampionSpells championSpells, string spellNum, SpellData spellData){
         this.championSpells = championSpells;
         this.spellNum = spellNum;
         this.gameObject = championSpells.gameObject;
+        this.spellData = spellData;
         mainCamera = Camera.main;
         player = championSpells.gameObject.GetComponent<Player>();
         myCollider = championSpells.gameObject.GetComponent<Collider>();

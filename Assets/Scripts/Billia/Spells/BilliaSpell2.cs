@@ -12,7 +12,7 @@ using UnityEngine.AI;
 */
 public class BilliaSpell2 : DamageSpell, ICastable
 {
-    private BilliaSpell2Data spellData;
+    new private BilliaSpell2Data spellData;
     private string radius;
 
     /*
@@ -21,7 +21,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell2Data) spellData;
     }
 

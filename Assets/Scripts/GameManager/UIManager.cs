@@ -72,28 +72,21 @@ public class UIManager : MonoBehaviour
         return newPlayerUI;
     }
 
-    /*
-    *   SetUpSpellUI - Sets up the spell UIs buttons and icons.
-    *   @param player - Player the UI is being setup for.
-    */
-    public void SetupSpellUI(Player player){
-        GameObject spellContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer").gameObject;
-        ChampionSpells championSpells = player.gameObject.GetComponent<ChampionSpells>();
-        //TODO: non-hardcoded
+    public void SetupSpellButtons(Player player, Spell newSpell){
+        Transform spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer");
+        SpellButton spellButton = spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
+        spellButton.spell = newSpell;
         List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
-        // Setup spell1-4's spell button.
-        for(int i = 0; i < 5; i++){
-            SpellButton spellButton = spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Button").GetComponent<SpellButton>();
-            spellButton.spell = championSpells.mySpells[i];
-            spellButton.keyCode = inputs[i];
-            spellButton.playerSpellInput = player.gameObject.GetComponent<PlayerSpellInput>();
-            spellContainer.transform.GetChild(i).Find("SpellContainer/Spell/Icon").GetComponent<Image>().sprite = championSpells.mySpellData[i].sprite;
-            // Setup spell1-4's level up buttons.
-            if(i > 0){
-                SpellLevelUpButton spellLevelUpButton = spellContainer.transform.GetChild(i).Find("LevelUp/Button").GetComponent<SpellLevelUpButton>();
-                spellLevelUpButton.spell = championSpells.mySpells[i].spellNum;
-                spellLevelUpButton.player = player;
-            }
+        List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"};
+        int index = spellNames.FindIndex(name => name == newSpell.spellNum);
+        if(index != -1)
+            spellButton.keyCode = inputs[index];
+        spellButton.playerSpellInput = player.gameObject.GetComponent<PlayerSpellInput>();
+        spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
+        if(newSpell.spellNum != "Passive"){
+            SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(newSpell.spellNum + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
+            spellLevelUpButton.spell = newSpell.spellNum;
+            spellLevelUpButton.player = player;
         }
     }
 

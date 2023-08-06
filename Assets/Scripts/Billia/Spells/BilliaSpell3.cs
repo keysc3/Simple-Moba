@@ -11,7 +11,7 @@ using UnityEditor;
 */
 public class BilliaSpell3 : DamageSpell, ICastable
 {
-    private BilliaSpell3Data spellData;
+    new private BilliaSpell3Data spellData;
     private float p1_y_offset = 3f;
     private float p2_y = 0.85f;
 
@@ -21,7 +21,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BilliaSpell3Data) spellData;
     }
 

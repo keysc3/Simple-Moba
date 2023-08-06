@@ -12,7 +12,7 @@ using UnityEngine;
 public class BahriSpell1 : DamageSpell, ICastable
 {
 
-    private BahriSpell1Data spellData;
+    new private BahriSpell1Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public bool returning { get; private set; } = false;
 
@@ -22,7 +22,7 @@ public class BahriSpell1 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell1Data) spellData;
     }
 

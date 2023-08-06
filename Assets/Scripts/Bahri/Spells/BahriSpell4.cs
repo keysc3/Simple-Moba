@@ -12,7 +12,7 @@ using UnityEditor;
 */
 public class BahriSpell4 : DamageSpell, ICastable
 {
-    private BahriSpell4Data spellData;
+    new private BahriSpell4Data spellData;
 
     private PersonalSpell spell4Effect = null;
     private float spell_4_timer;
@@ -27,7 +27,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell4Data) spellData;
         player.score.takedownCallback += Spell_4_Takedown;
         isQuickCast = true;

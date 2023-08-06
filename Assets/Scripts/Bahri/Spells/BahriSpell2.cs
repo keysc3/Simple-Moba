@@ -12,7 +12,7 @@ using UnityEditor;
 */
 public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
 {
-    private BahriSpell2Data spellData;
+    new private BahriSpell2Data spellData;
     private List<GameObject> enemiesHit = new List<GameObject>();
     public List<GameObject> activeSpellObjects { get; } = new List<GameObject>();
 
@@ -22,7 +22,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell2Data) spellData;
         isQuickCast = true;
     }

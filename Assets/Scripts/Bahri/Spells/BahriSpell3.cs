@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class BahriSpell3 : DamageSpell, ICastable
 {
-    private BahriSpell3Data spellData;
+    new private BahriSpell3Data spellData;
 
     /*
     *   BahriSpell3 - Initialize Bahri's third spell.
@@ -17,7 +17,7 @@ public class BahriSpell3 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum){
+    public BahriSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriSpell3Data) spellData;
     }
 

@@ -14,7 +14,7 @@ public abstract class DamageSpell : Spell
     *   @param championSpells - ChampionSpells instance this damage spell is a part of.
     *   @param spellNum - string of the spell number this damage spell is.
     */
-    public DamageSpell(ChampionSpells championSpells, string spellNum) : base(championSpells, spellNum){}
+    public DamageSpell(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){}
 
     public delegate void SpellHitCallback(GameObject hit, Spell spellHit); 
     public SpellHitCallback spellHitCallback;
