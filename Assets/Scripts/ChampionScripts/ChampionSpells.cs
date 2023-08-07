@@ -19,55 +19,35 @@ public class ChampionSpells : MonoBehaviour
     public Spell Passive {
         get => passive;
         set {
-            if(passive != null)
-                passive.SpellRemoved();
-            passive = value;
-            passive.SpellNum = "Passive";
-            UIManager.instance.SetupSpellButtons(player, passive);
+            SpellSet(value, ref passive, "Passive");
         }
     }
     private Spell spell1;
     public Spell Spell1 {
         get => spell1;
         set {
-            if(spell1 != null)
-                spell1.SpellRemoved();
-            spell1 = value;
-            spell1.SpellNum = "Spell_1";
-            UIManager.instance.SetupSpellButtons(player, spell1);
+            SpellSet(value, ref spell1, "Spell_1");
         }
     }
     private Spell spell2;
     public Spell Spell2 {
         get => spell2;
         set {
-            if(Spell2 != null)
-                spell2.SpellRemoved();
-            spell2 = value;
-            spell2.SpellNum = "Spell_2";
-            UIManager.instance.SetupSpellButtons(player, spell2);
+            SpellSet(value, ref spell2, "Spell_2");
         }
     }
     private Spell spell3;
     public Spell Spell3 {
         get => spell3;
         set {
-            if(spell3 != null)
-                spell3.SpellRemoved();
-            spell3 = value;
-            spell3.SpellNum = "Spell_3";
-            UIManager.instance.SetupSpellButtons(player, spell3);
+            SpellSet(value, ref spell3, "Spell_3");
         }
     }
     private Spell spell4;
     public Spell Spell4 {
         get => spell4;
         set {
-            if(spell4 != null)
-                spell4.SpellRemoved();
-            spell4 = value;
-            spell4.SpellNum = "Spell_4";
-            UIManager.instance.SetupSpellButtons(player, spell4);
+            SpellSet(value, ref spell4, "Spell_4");
         }
     }
 
@@ -126,6 +106,16 @@ public class ChampionSpells : MonoBehaviour
             if(newSpell is IDeathCleanUp){
                 ((IDeathCleanUp) newSpell).OnDeathCleanUp();
             }
+        }
+    }
+
+    private void SpellSet(Spell newSpell, ref Spell setSpell, string spellNum){
+        if(newSpell != null){
+            if(setSpell != null)
+                setSpell.SpellRemoved();
+            setSpell = newSpell;
+            setSpell.SpellNum = spellNum;
+            UIManager.instance.SetupSpellButtons(player, setSpell);
         }
     }
 }
