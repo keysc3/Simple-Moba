@@ -9,7 +9,6 @@ using System;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class Spell
 {
     public bool onCd { get; protected set; } = false;
