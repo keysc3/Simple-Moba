@@ -64,11 +64,11 @@ public class StatusEffects
                 SetMostImpairing(effect);
             }
             else{
-                for(int i = 0; i < statusEffects.Count; i++){
-                    // Reset effect variables if the same effect hit them and it is not stackable.
+                for(int i = statusEffects.Count - 1; i >= 0; i--){
+                    // If the same effect hit them and it is not stackable remove it for the new one.
                     if(statusEffects[i].effectType.name == effect.effectType.name && !effect.effectType.isStackable){
-                        statusEffects[i].OverrideEffect(effect.casted);
-                        return;
+                        statusEffects[i].EndEffect();
+                        statusEffects.RemoveAt(i);
                     }
                 }
             }
