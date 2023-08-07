@@ -59,9 +59,7 @@ public class Spell
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
-    protected virtual void DrawSpell(){
-        //PlaceHolder
-    }
+    protected virtual void DrawSpell(){}
 
     /*
     *   GetTargetDirection - Gets the mouse world position.
