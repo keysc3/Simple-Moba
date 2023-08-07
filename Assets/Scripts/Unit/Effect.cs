@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Abstract class for effects.
+* Purpose: Class for effects.
 *
 * @author: Colin Keys
 */
