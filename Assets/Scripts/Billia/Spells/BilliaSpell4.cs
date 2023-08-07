@@ -148,4 +148,8 @@ public class BilliaSpell4 : Spell, ICastable
             }
         }
     }
+
+    public override void SpellRemoved(){
+        championSpells.updateCallback -= CanUseSpell;
+    }
 }

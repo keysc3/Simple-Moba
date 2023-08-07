@@ -19,6 +19,8 @@ public class ChampionSpells : MonoBehaviour
     public Spell Passive {
         get => passive;
         set {
+            if(passive != null)
+                passive.SpellRemoved();
             passive = value;
             passive.SpellNum = "Passive";
             UIManager.instance.SetupSpellButtons(player, passive);
@@ -28,6 +30,8 @@ public class ChampionSpells : MonoBehaviour
     public Spell Spell1 {
         get => spell1;
         set {
+            if(spell1 != null)
+                spell1.SpellRemoved();
             spell1 = value;
             spell1.SpellNum = "Spell_1";
             UIManager.instance.SetupSpellButtons(player, spell1);
@@ -37,6 +41,8 @@ public class ChampionSpells : MonoBehaviour
     public Spell Spell2 {
         get => spell2;
         set {
+            if(Spell2 != null)
+                spell2.SpellRemoved();
             spell2 = value;
             spell2.SpellNum = "Spell_2";
             UIManager.instance.SetupSpellButtons(player, spell2);
@@ -46,6 +52,8 @@ public class ChampionSpells : MonoBehaviour
     public Spell Spell3 {
         get => spell3;
         set {
+            if(spell3 != null)
+                spell3.SpellRemoved();
             spell3 = value;
             spell3.SpellNum = "Spell_3";
             UIManager.instance.SetupSpellButtons(player, spell3);
@@ -55,6 +63,8 @@ public class ChampionSpells : MonoBehaviour
     public Spell Spell4 {
         get => spell4;
         set {
+            if(spell4 != null)
+                spell4.SpellRemoved();
             spell4 = value;
             spell4.SpellNum = "Spell_4";
             UIManager.instance.SetupSpellButtons(player, spell4);

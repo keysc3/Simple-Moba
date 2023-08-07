@@ -52,4 +52,8 @@ public class BahriPassive : Spell
             }
         }
     }
+
+    public override void SpellRemoved(){
+        player.score.takedownCallback -= Passive;
+    }
 }

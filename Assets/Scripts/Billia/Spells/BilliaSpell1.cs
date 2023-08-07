@@ -19,6 +19,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     private int passiveStacks;
     private string radius;
     private List<Spell> passiveStackSpells = new List<Spell>();
+    public List<Spell> callbackSet { get; } = new List<Spell>();
 
     /*
     *   BilliaSpell1 - Initialize Billia's first spell.
@@ -243,7 +244,16 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         foreach(Spell newSpell in mySpells){
             if(newSpell is DamageSpell && !(newSpell is BilliaSpell1)){
                 ((DamageSpell) newSpell).spellHitCallback += Spell_1_PassiveProc;
+                callbackSet.Add(newSpell);
             }
+        }
+    }
+
+    public override void SpellRemoved(){
+        championSpells.lateUpdateCallback -= RemoveSpell_1_PassiveStack;
+        championSpells.lateUpdateCallback -= ClearPassiveStackSpells;
+        foreach(Spell spell in callbackSet){
+            ((DamageSpell) spell).spellHitCallback -= Spell_1_PassiveProc;
         }
     }
 }

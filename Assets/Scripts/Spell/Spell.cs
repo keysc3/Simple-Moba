@@ -131,4 +131,7 @@ public class Spell
         float reducedCD = baseCD*(100f/(100f+haste));
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
+
+    public virtual void SpellRemoved(){}
+
 }

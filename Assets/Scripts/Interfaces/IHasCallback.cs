@@ -9,5 +9,6 @@ using UnityEngine;
 */
 public interface IHasCallback
 {
+    List<Spell> callbackSet { get; }
     void SetupCallbacks(List<Spell> newSpells);
 }

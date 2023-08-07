@@ -11,6 +11,7 @@ public class BilliaPassive : Spell, IHasCallback
 {
     private BilliaPassiveData passiveData;
     private List<GameObject> passiveApplied = new List<GameObject>();
+    public List<Spell> callbackSet { get; } = new List<Spell>();
 
     /*
     *   BilliaPassive - Initialize Billia's passive spell.
@@ -72,7 +73,15 @@ public class BilliaPassive : Spell, IHasCallback
         foreach(Spell newSpell in mySpells){
             if(newSpell is DamageSpell && !(newSpell is BilliaPassive)){
                 ((DamageSpell) newSpell).spellHitCallback += Passive;
+                callbackSet.Add(newSpell);
+                
             }
+        }
+    }
+
+    public override void SpellRemoved(){
+        foreach(Spell spell in callbackSet){
+            ((DamageSpell) spell).spellHitCallback -= Passive;
         }
     }
 }

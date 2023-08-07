@@ -259,4 +259,7 @@ public class BahriSpell4 : DamageSpell, ICastable
         enemy.GetComponent<Unit>().TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);
     }
     
+    public override void SpellRemoved(){
+        player.score.takedownCallback -= Spell_4_Takedown;
+    }
 }
