@@ -22,7 +22,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BahriSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BahriSpell2Data) spellData;
         isQuickCast = true;
     }

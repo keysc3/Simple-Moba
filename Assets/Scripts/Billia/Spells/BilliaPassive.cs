@@ -18,7 +18,7 @@ public class BilliaPassive : Spell, IHasCallback
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BilliaPassive(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.passiveData = (BilliaPassiveData) spellData;
     }
 

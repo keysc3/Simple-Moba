@@ -21,7 +21,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BilliaSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BilliaSpell2Data) spellData;
     }
 

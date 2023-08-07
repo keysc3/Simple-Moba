@@ -15,7 +15,14 @@ public class Spell
     public bool canMove { get; protected set; } = false;
     public bool isQuickCast { get; protected set; } = false;
     public bool isDisplayed { get; private set; } = false;
-    public string spellNum { get; }
+    protected string spellNum;
+    public string SpellNum { 
+        get => spellNum;
+        set {
+            if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"}.Contains(value))
+                spellNum = value;
+        }
+    }
     public SpellData spellData { get; }
     protected Player player;
     protected ChampionStats championStats;
@@ -27,9 +34,8 @@ public class Spell
     *   @param championSpells - ChampionSpells instance this spell is a part of.
     *   @param spellNum - string of the spell number this spell is.
     */
-    public Spell(ChampionSpells championSpells, string spellNum, SpellData spellData){
+    public Spell(ChampionSpells championSpells, SpellData spellData){
         this.championSpells = championSpells;
-        this.spellNum = spellNum;
         this.spellData = spellData;
         mainCamera = Camera.main;
         player = championSpells.gameObject.GetComponent<Player>();

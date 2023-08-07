@@ -20,7 +20,8 @@ public class ChampionSpells : MonoBehaviour
         get => passive;
         set {
             passive = value;
-            UIManager.instance.SetupSpellButtons(player, value);
+            passive.SpellNum = "Passive";
+            UIManager.instance.SetupSpellButtons(player, passive);
         }
     }
     private Spell spell1;
@@ -28,7 +29,8 @@ public class ChampionSpells : MonoBehaviour
         get => spell1;
         set {
             spell1 = value;
-            UIManager.instance.SetupSpellButtons(player, value);
+            spell1.SpellNum = "Spell_1";
+            UIManager.instance.SetupSpellButtons(player, spell1);
         }
     }
     private Spell spell2;
@@ -36,7 +38,8 @@ public class ChampionSpells : MonoBehaviour
         get => spell2;
         set {
             spell2 = value;
-            UIManager.instance.SetupSpellButtons(player, value);
+            spell2.SpellNum = "Spell_2";
+            UIManager.instance.SetupSpellButtons(player, spell2);
         }
     }
     private Spell spell3;
@@ -44,7 +47,8 @@ public class ChampionSpells : MonoBehaviour
         get => spell3;
         set {
             spell3 = value;
-            UIManager.instance.SetupSpellButtons(player, value);
+            spell3.SpellNum = "Spell_3";
+            UIManager.instance.SetupSpellButtons(player, spell3);
         }
     }
     private Spell spell4;
@@ -52,7 +56,8 @@ public class ChampionSpells : MonoBehaviour
         get => spell4;
         set {
             spell4 = value;
-            UIManager.instance.SetupSpellButtons(player, value);
+            spell4.SpellNum = "Spell_4";
+            UIManager.instance.SetupSpellButtons(player, spell4);
         }
     }
 

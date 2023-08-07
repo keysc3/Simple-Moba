@@ -26,7 +26,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell1(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BilliaSpell1(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BilliaSpell1Data) spellData;
         championSpells.lateUpdateCallback += RemoveSpell_1_PassiveStack;
         championSpells.lateUpdateCallback += ClearPassiveStackSpells;

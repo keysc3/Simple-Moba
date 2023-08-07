@@ -36,7 +36,7 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     *   OnPointerDown - Called when the mouse is clicked over the button.
     */
     public void OnPointerDown(PointerEventData eventData){
-        if(spell.spellNum != "Passive"){
+        if(spell.SpellNum != "Passive"){
             playerSpellInput.buttonClick = true;
             playerSpellInput.SpellButtonPressed(keyCode, spell);
         }

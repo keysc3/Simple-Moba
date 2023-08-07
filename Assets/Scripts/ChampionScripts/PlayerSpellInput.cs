@@ -86,7 +86,7 @@ public class PlayerSpellInput : MonoBehaviour
     */
     public void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
         // Only attempt to cast if learned.
-        if(player.levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
+        if(player.levelManager.spellLevels[spellPressed.SpellNum] > 0 && !spellPressed.onCd){
             // Hide cast if a spell was prepped and new button pressed is different than last.
             if(lastSpellPressed != null && lastButtonPressed != buttonPressed)
                 lastSpellPressed.HideCast();

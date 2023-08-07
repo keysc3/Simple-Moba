@@ -19,7 +19,7 @@ public class BilliaSpell4 : Spell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BilliaSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BilliaSpell4Data) spellData;
         championSpells.updateCallback += CanUseSpell;
         canMove = true;
