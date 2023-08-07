@@ -44,14 +44,16 @@ public class score
     {
         // Arrange
         Score score = new Score();
-        GameObject tempObject = new GameObject();
-        tempObject.name = "tempObject";
+        GameObject tempObject1 = new GameObject();
+        GameObject tempObject2 = new GameObject();
+        tempObject1.name = "tempObject1";
+        tempObject2.name = "tempObject2";
 
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executetd.";
+        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
         
         // Act
-        score.ChampionKill(tempObject);
-        score.ChampionKill(tempObject);
+        score.ChampionKill(tempObject1);
+        score.ChampionKill(tempObject2);
 
         // Assert
         Assert.AreEqual(2, score.kills);
@@ -59,7 +61,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_1_assist()
+    public void add_1_assist_with_null_takedown_callback()
     {
         // Arrange
         Score score = new Score();
@@ -74,12 +76,32 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_2_assists()
+    public void add_assist_with_takedown_callback_change_gameobject_name()
+    {
+        // Arrange
+        Score score = new Score();
+        GameObject tempObject = new GameObject();
+        tempObject.name = "tempObject";
+        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
+        
+        // Act
+        score.Assist(tempObject);
+
+        // Assert
+        Assert.AreEqual("Takedown Callback executed.", tempObject.name);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void add_2_assists_with_takedown_callback()
     {
         // Arrange
         Score score = new Score();
         GameObject tempObject1 = new GameObject();
         GameObject tempObject2 = new GameObject();
+        tempObject1.name = "tempObject1";
+        tempObject2.name = "tempObject2";
+        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
         
         // Act
         score.Assist(tempObject1);
@@ -127,14 +149,17 @@ public class score
     {
         // Arrange
         Score score = new Score();
-        GameObject tempObject = new GameObject();
-        tempObject.name = "tempObject";
+        GameObject tempObject1 = new GameObject();
+        GameObject tempObject2 = new GameObject();
+        tempObject1.name = "tempObject1";
+        tempObject2.name = "tempObject2";
 
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executetd.";
+
+        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
         
         // Act
-        score.CreepKill(tempObject);
-        score.CreepKill(tempObject);
+        score.CreepKill(tempObject1);
+        score.CreepKill(tempObject2);
 
         // Assert
         Assert.AreEqual(2, score.cs);
