@@ -41,13 +41,6 @@ public class Dot : Effect
     }
 
     /*
-    *   EndEffect - End the dot effect.
-    */
-    public override void EndEffect(){
-        // Placeholder.
-    }
-
-    /*
     *   EffectTick - Tick for the dots effect.
     */
     public override void EffectTick(){

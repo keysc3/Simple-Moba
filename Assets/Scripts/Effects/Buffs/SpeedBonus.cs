@@ -24,16 +24,4 @@ public class SpeedBonus : Effect
     public SpeedBonus(ScriptableSpeedBonus speedBonusEffect, float duration, float bonusPercent, GameObject unitCasted, GameObject unitEffected) : base(speedBonusEffect, duration, unitCasted, unitEffected){
         this.bonusPercent = bonusPercent;
     }
-
-    /*
-    *   StartEffect - Start the speed bonus effect.
-    */
-    public override void StartEffect(){
-    }
-
-    /*
-    *   EndEffect - End the slow effect.
-    */
-    public override void EndEffect(){
-    }
 }

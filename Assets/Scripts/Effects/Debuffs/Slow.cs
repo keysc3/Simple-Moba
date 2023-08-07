@@ -31,20 +31,6 @@ public class Slow : Effect
     }
 
     /*
-    *   StartEffect - Start the slow effect.
-    */
-    public override void StartEffect(){
-
-    }
-
-    /*
-    *   EndEffect - End the slow effect.
-    */
-    public override void EndEffect(){
-
-    }
-
-    /*
     *   isEffectStronger - Checks if the the second effect is stronger than the first.
     *   @param strongest - Slow of a slow.
     *   @param newSlow - Slow of the slow to check if stronger.
