@@ -38,8 +38,9 @@ public class Score
     /*
     *   Assist - Adds an assist.
     */
-    public void Assist(){
+    public void Assist(GameObject killed){
         assists += 1;
+        takedownCallback?.Invoke(killed);
     }
 
     /*

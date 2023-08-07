@@ -93,7 +93,7 @@ public class Player : Unit, IRespawnable
             // Grant any assists if the unit is a champion.
             foreach(GameObject assist in damageTracker.CheckForAssists()){
                 if(assist != fromUnit.gameObject)
-                    assist.GetComponent<Player>().score.Assist();
+                    assist.GetComponent<Player>().score.Assist(gameObject);
             }
         }
     }
