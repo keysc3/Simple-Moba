@@ -7,7 +7,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public abstract class Effect
+public class Effect
 {
     public bool isFinished { get; private set; }
     public ScriptableEffect effectType { get; }
@@ -54,12 +54,12 @@ public abstract class Effect
     /*
     *   StartEffect - Start the effect.
     */
-    public abstract void StartEffect();
+    public virtual void StartEffect(){}
 
     /*
     *   EndEffect - End the effect.
     */
-    public abstract void EndEffect();
+    public virtual void EndEffect(){}
 
     /*
     *   TimerTick - Handles the effects duration.
@@ -82,11 +82,9 @@ public abstract class Effect
     }
 
     /*
-    *   EffectTick - Applies a tick of the effect. Used for effects that need to override.
+    *   EffectTick - Applies a tick of the effect.
     */
-    public virtual void EffectTick(){
-        // Place holder.
-    }
+    public virtual void EffectTick(){}
 
     /*
     *   OverrideEffect - Resets the effects timer to 0 and sets the new source.
