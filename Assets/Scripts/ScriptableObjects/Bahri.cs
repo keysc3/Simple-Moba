@@ -7,7 +7,6 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 [CreateAssetMenu(fileName = "New Bahri", menuName = "Unit/Champion/Bahri")]
 public class Bahri : ScriptableChampion
 {

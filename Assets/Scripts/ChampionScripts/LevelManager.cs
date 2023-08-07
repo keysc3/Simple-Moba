@@ -7,7 +7,6 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class LevelManager
 {
     public int level { get; private set; } = 1;
