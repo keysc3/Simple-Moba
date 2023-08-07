@@ -63,9 +63,10 @@ public class score
     {
         // Arrange
         Score score = new Score();
+        GameObject tempObject = new GameObject();
 
         // Act
-        score.Assist();
+        score.Assist(tempObject);
 
         // Assert
         Assert.AreEqual(1, score.assists);
@@ -77,10 +78,12 @@ public class score
     {
         // Arrange
         Score score = new Score();
+        GameObject tempObject1 = new GameObject();
+        GameObject tempObject2 = new GameObject();
         
         // Act
-        score.Assist();
-        score.Assist();
+        score.Assist(tempObject1);
+        score.Assist(tempObject2);
 
         // Assert
         Assert.AreEqual(2, score.assists);

@@ -12,9 +12,9 @@ public class Charm : Effect
 {
     private int spellLevel;
     private Vector3 currentTarget;
-    private NavMeshAgent effectedNavMeshAgent;
+    //private NavMeshAgent effectedNavMeshAgent;
     private Unit effectedUnit;
-    private Collider effectedCollider;
+    //private Collider effectedCollider;
     private PlayerController playerController;
     private PlayerSpellInput playerSpellInput;
     
@@ -28,8 +28,6 @@ public class Charm : Effect
     public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
         this.spellLevel = spellLevel;
         effectedUnit = effected.GetComponent<Unit>();
-        effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
-        effectedCollider = unitEffected.GetComponent<Collider>();
     }
 
     /*
@@ -44,7 +42,7 @@ public class Charm : Effect
             playerSpellInput.enabled = false;
         }
         // Reset the units current path.
-        effectedNavMeshAgent.ResetPath();
+        effectedUnit.navMeshAgent.ResetPath();
         effectedUnit.statusEffects.AddEffect(((ScriptableCharm) effectType).slow
         .InitializeEffect(spellLevel, casted, effected));
     }
@@ -54,7 +52,7 @@ public class Charm : Effect
     */
     public override void EndEffect(){
         // Reset the path and speed from the charm effect.
-        effectedNavMeshAgent.ResetPath();
+        effectedUnit.navMeshAgent.ResetPath();
         
         // Give controls back if charmed is active GameObject.
         if(effectedUnit.SUnit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == effected){
@@ -67,14 +65,14 @@ public class Charm : Effect
     *   EffectTick - Tick for the charms effect.
     */
     public override void EffectTick(){
-        effectedNavMeshAgent.destination = casted.transform.position;
+        effectedUnit.navMeshAgent.destination = casted.transform.position;
         Vector3 nextTarget;
         // If a path is set.
-        if(effectedNavMeshAgent.hasPath){
-            nextTarget = effectedNavMeshAgent.steeringTarget;
+        if(effectedUnit.navMeshAgent.hasPath){
+            nextTarget = effectedUnit.navMeshAgent.steeringTarget;
             // If a new target location exists set the target and look at the target location.
             if(currentTarget != nextTarget){
-                nextTarget.y = effectedCollider.bounds.center.y;
+                nextTarget.y = effectedUnit.myCollider.bounds.center.y;
                 effected.transform.LookAt(nextTarget);
                 currentTarget = nextTarget;
             }

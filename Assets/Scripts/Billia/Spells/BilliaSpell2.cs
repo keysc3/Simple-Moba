@@ -21,7 +21,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell2(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BilliaSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BilliaSpell2Data) spellData;
     }
 
@@ -31,23 +31,22 @@ public class BilliaSpell2 : DamageSpell, ICastable
     protected override void DrawSpell(){
         Vector3 targetDirection = GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
-        Vector3 targetPosition = (targetDirection - gameObject.transform.position);
+        Vector3 targetPosition = (targetDirection - player.gameObject.transform.position);
         // Set the spell cast position to max range if casted past that value.
         if(targetPosition.magnitude > spellData.maxMagnitude)
-            targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.maxMagnitude);
+            targetPosition = player.gameObject.transform.position + (targetPosition.normalized * spellData.maxMagnitude);
         // Set the spell cast position to the dashOffset if target positions magnitude is less than it.
         else if(targetPosition.magnitude < spellData.dashOffset)
-            targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.dashOffset);
+            targetPosition = player.gameObject.transform.position + (targetPosition.normalized * spellData.dashOffset);
         // Set target position to calculated mouse position.
         else
-            targetPosition = gameObject.transform.position + targetPosition;
-        //targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+            targetPosition = player.gameObject.transform.position + targetPosition;
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.outerRadius, 1f);
         Handles.color = Color.red;
         Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.innerRadius, 1f);
         Handles.color = Color.cyan;
-        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.maxMagnitude, 1f);
+        Handles.DrawWireDisc(player.gameObject.transform.position, Vector3.up, spellData.maxMagnitude, 1f);
     }
 
     /*
@@ -55,34 +54,34 @@ public class BilliaSpell2 : DamageSpell, ICastable
     */
     public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
-            Vector3 targetPosition = (targetDirection - gameObject.transform.position);
+            Vector3 targetPosition = (targetDirection - player.gameObject.transform.position);
             // Set the spell cast position to max range if casted past that value.
             if(targetPosition.magnitude > spellData.maxMagnitude)
-                targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.maxMagnitude);
+                targetPosition = player.gameObject.transform.position + (targetPosition.normalized * spellData.maxMagnitude);
             // Set the spell cast position to the dashOffset if target positions magnitude is less than it.
             else if(targetPosition.magnitude < spellData.dashOffset)
-                targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.dashOffset);
+                targetPosition = player.gameObject.transform.position + (targetPosition.normalized * spellData.dashOffset);
             // Set target position to calculated mouse position.
             else
-                targetPosition = gameObject.transform.position + targetPosition;
+                targetPosition = player.gameObject.transform.position + targetPosition;
 
             Vector3 initialTarget = targetPosition;
             // Initalize variables 
             NavMeshHit meshHit;
             int walkableMask = 1 << NavMesh.GetAreaFromName("Walkable");
             // Check if there is terrain between the target location and billia.
-            if(NavMesh.Raycast(gameObject.transform.position, targetPosition, out meshHit, walkableMask)){
+            if(NavMesh.Raycast(player.gameObject.transform.position, targetPosition, out meshHit, walkableMask)){
                 // Use the value returned in meshHit to set a new target position.
                 Vector3 temp = targetPosition;
                 targetPosition = meshHit.position;
                 targetPosition.y = temp.y;
             }
             // Get the direction to move Billia in using initial target.
-            Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - gameObject.transform.position).normalized;
+            Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - player.gameObject.transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
@@ -90,7 +89,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
             Spell_2_Visual(targetPosition);
             championSpells.StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
             // Use mana.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+            championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -129,21 +128,21 @@ public class BilliaSpell2 : DamageSpell, ICastable
         player.isCasting = true;
         player.CurrentCastedSpell = this;
         // Disable pathing.
-        navMeshAgent.ResetPath();
-        navMeshAgent.isStopped = true;
+        player.navMeshAgent.ResetPath();
+        player.navMeshAgent.isStopped = true;
         // Get dash speed since dash duration is a fixed time.
-        float dashSpeed = (targetPosition - gameObject.transform.position).magnitude/spellData.dashTime; 
+        float dashSpeed = (targetPosition - player.gameObject.transform.position).magnitude/spellData.dashTime; 
         float timer = 0.0f;
         // While still dashing.
         while(timer < spellData.dashTime){
             // Move towards target position.
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, dashSpeed * Time.deltaTime);
+            player.gameObject.transform.position = Vector3.MoveTowards(player.gameObject.transform.position, targetPosition, dashSpeed * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
         }
         // Apply last tick dash and enable pathing.
-        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, dashSpeed * Time.deltaTime);
-        navMeshAgent.isStopped = false;
+        player.gameObject.transform.position = Vector3.MoveTowards(player.gameObject.transform.position, targetPosition, dashSpeed * Time.deltaTime);
+        player.navMeshAgent.isStopped = false;
         player.isCasting = false;
         player.CurrentCastedSpell = this;
         Spell_2_Finished(spellTargetPosition);
@@ -154,7 +153,7 @@ public class BilliaSpell2 : DamageSpell, ICastable
     *   @param targetPosition - Vector3 of the center of the spell.
     */
     private void Spell_2_Finished(Vector3 targetPosition){
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));
         // Hitbox starts from center of calculated target position.
         HitboxCheck(targetPosition);
         Object.Destroy(GameObject.Find("/BilliaSpell_2"));
@@ -198,8 +197,8 @@ public class BilliaSpell2 : DamageSpell, ICastable
         spellHitCallback?.Invoke(hit, this);
         float magicDamage = championStats.magicDamage.GetValue();
         if(radius == "inner")
-            hit.GetComponent<Unit>().TakeDamage((spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage) * 2f, "magic", gameObject, false);   
+            hit.GetComponent<Unit>().TakeDamage((spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage) * 2f, "magic", player.gameObject, false);   
         else
-            hit.GetComponent<Unit>().TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);
+            hit.GetComponent<Unit>().TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);
     }
 }

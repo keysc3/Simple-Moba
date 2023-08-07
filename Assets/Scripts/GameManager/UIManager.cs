@@ -80,20 +80,20 @@ public class UIManager : MonoBehaviour
     public void SetupSpellButtons(Player player, Spell newSpell){
         // Spell button
         Transform spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer");
-        SpellButton spellButton = spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
+        SpellButton spellButton = spellsContainer.Find(newSpell.SpellNum + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
         spellButton.spell = newSpell;
         //TODO: Change this to not be hardcoded using a proper keybind/input system?
         List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
         List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"};
-        int index = spellNames.FindIndex(name => name == newSpell.spellNum);
+        int index = spellNames.FindIndex(name => name == newSpell.SpellNum);
         if(index != -1)
             spellButton.keyCode = inputs[index];
         spellButton.playerSpellInput = player.gameObject.GetComponent<PlayerSpellInput>();
         // Spell level up button.
-        spellsContainer.Find(newSpell.spellNum + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
-        if(newSpell.spellNum != "Passive"){
-            SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(newSpell.spellNum + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
-            spellLevelUpButton.spell = newSpell.spellNum;
+        spellsContainer.Find(newSpell.SpellNum + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
+        if(newSpell.SpellNum != "Passive"){
+            SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(newSpell.SpellNum + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
+            spellLevelUpButton.spell = newSpell.SpellNum;
             spellLevelUpButton.player = player;
         }
     }
@@ -143,8 +143,8 @@ public class UIManager : MonoBehaviour
     *   @param player - Player whose health bar is being updated.
     */
     public void UpdateManaBar(Player player){
-        Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         ChampionStats championStats = (ChampionStats) player.unitStats;
+        Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
         float manaPercent = Mathf.Round((championStats.CurrentMana/championStats.maxMana.GetValue()) * 100);
         mana.transform.Find("Value").GetComponent<TMP_Text>()
@@ -159,8 +159,8 @@ public class UIManager : MonoBehaviour
     *   @param player - Player whose stats are being updated.
     */
     public void UpdateAllStats(Player player){
-        Transform statsContainer = player.playerUI.transform.Find("Player/Info/Stats/Container");
         ChampionStats championStats = (ChampionStats) player.unitStats;
+        Transform statsContainer = player.playerUI.transform.Find("Player/Info/Stats/Container");
         UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue(), statsContainer);
         UpdateStat("Armor", championStats.armor.GetValue(), statsContainer);
         if(championStats.attackSpeed.GetValue() > 2.5f)

@@ -9,18 +9,14 @@ using UnityEngine;
 */
 public class TargetedProjectile : MonoBehaviour
 {
-    private GameObject target = null;
-    public GameObject Target {
-        get => target;
+    private Unit targetUnit = null;
+    public Unit TargetUnit {
+        get => targetUnit;
         set {
-            if((value.GetComponent<Unit>() as Unit) != null){
-                target = value;
-                targetSet = true;
-                targetUnit = target.GetComponent<Unit>();
-            }
+            targetUnit = value;
+            targetSet = true;
         }
     }
-    private Unit targetUnit = null;
     private bool targetSet = false;
 
     public delegate void HitMethod(GameObject hit);
@@ -38,7 +34,7 @@ public class TargetedProjectile : MonoBehaviour
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
         // Call collision handler for whichever spell the GameObject was for if the target was hit.
-        if(other.gameObject == target){
+        if(other.gameObject == targetUnit.gameObject){
             hit?.Invoke(other.gameObject);
             Destroy(gameObject);
         }

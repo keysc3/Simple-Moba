@@ -27,7 +27,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell4(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BahriSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BahriSpell4Data) spellData;
         player.score.takedownCallback += Spell_4_Takedown;
         isQuickCast = true;
@@ -38,8 +38,8 @@ public class BahriSpell4 : DamageSpell, ICastable
     */
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
-        Vector3 drawPosition = gameObject.transform.position;
-        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
+        Vector3 drawPosition = player.gameObject.transform.position;
+        drawPosition.y -= (player.myCollider.bounds.size.y/2) + 0.01f;
         Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.maxMagnitude, 1f);
     }
 
@@ -47,10 +47,10 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
             championSpells.StartCoroutine(Spell_4_Start());
             // Use mana and set spell on cooldown.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+            championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -77,7 +77,7 @@ public class BahriSpell4 : DamageSpell, ICastable
     *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
     */
     private IEnumerator Spell_4_Start(){
-        spell4Effect = (PersonalSpell) spellData.spell4.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, gameObject);
+        spell4Effect = (PersonalSpell) spellData.spell4.InitializeEffect(player.levelManager.spellLevels[spellNum]-1, player.gameObject, player.gameObject);
         player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = spellData.duration;
@@ -101,7 +101,7 @@ public class BahriSpell4 : DamageSpell, ICastable
         // Reset charges and start spell cooldown timer.
         spell4Casting = false;
         UIManager.instance.SetSpellDurationOver(spellNum, player.playerUI);
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));
     }
 
     /*
@@ -129,11 +129,11 @@ public class BahriSpell4 : DamageSpell, ICastable
         // Get the players mouse position on spell cast for spells target direction.
         Vector3 targetDirection = GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
-        Vector3 targetPosition = (targetDirection - gameObject.transform.position);
+        Vector3 targetPosition = (targetDirection - player.gameObject.transform.position);
         if(targetPosition.magnitude > spellData.maxMagnitude)
-            targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.maxMagnitude);
+            targetPosition = player.gameObject.transform.position + (targetPosition.normalized * spellData.maxMagnitude);
         else
-            targetPosition = gameObject.transform.position + (targetDirection - gameObject.transform.position);
+            targetPosition = player.gameObject.transform.position + (targetDirection - player.gameObject.transform.position);
         // Initalize variables 
         NavMeshHit meshHit;
         int walkableMask = 1 << NavMesh.GetAreaFromName("Walkable");
@@ -146,7 +146,7 @@ public class BahriSpell4 : DamageSpell, ICastable
                 // Raycast between the target position and the players current position.
                 // If the ray hits any NavMesh areas besides walkableArea then the RayCast returns true.
                 // The Raycast should always return true because we know the target position is not a walkable area.
-                if(NavMesh.Raycast(gameObject.transform.position, targetPosition, out meshHit, walkableMask)){
+                if(NavMesh.Raycast(player.gameObject.transform.position, targetPosition, out meshHit, walkableMask)){
                     // Use the value returned in meshHit to set a new target position on a walkable area in the direction of the original target position.
                     temp = targetPosition;
                     targetPosition = meshHit.position;
@@ -168,17 +168,17 @@ public class BahriSpell4 : DamageSpell, ICastable
         player.isCasting = true;
         player.CurrentCastedSpell = this;
         float newSpeed = championStats.speed.GetValue() + spellData.speed;
-        navMeshAgent.ResetPath();
-        navMeshAgent.enabled = false;
+        player.navMeshAgent.ResetPath();
+        player.navMeshAgent.enabled = false;
         // While not at target position or not dead.
-        while(gameObject.transform.position != targetPosition && !player.isDead){
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetPosition, newSpeed * Time.deltaTime);
+        while(player.gameObject.transform.position != targetPosition && !player.isDead){
+            player.gameObject.transform.position = Vector3.MoveTowards(player.gameObject.transform.position, targetPosition, newSpeed * Time.deltaTime);
             yield return null;
         }
         // Only fire end of dash projectiles if still alive.
         if(!player.isDead)
             Spell_4_Missiles();
-        navMeshAgent.enabled = true;
+        player.navMeshAgent.enabled = true;
         player.isCasting = false;
         player.CurrentCastedSpell = this;
         championSpells.StartCoroutine(NextCastCd(1.0f, spellNum));
@@ -191,27 +191,27 @@ public class BahriSpell4 : DamageSpell, ICastable
         // Set up necessary variables.
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
         List<GameObject> targets = new List<GameObject>();
-        Collider [] hitColliders = Physics.OverlapSphere(gameObject.transform.position, spellData.radius, enemyMask);
+        Collider [] hitColliders = Physics.OverlapSphere(player.gameObject.transform.position, spellData.radius, enemyMask);
         // If a target is in range.
         if(hitColliders.Length > 0){
             foreach(Collider collider in hitColliders){
                 // If the target is alive.
-                if(!collider.gameObject.GetComponent<Unit>().isDead && collider.gameObject != gameObject){
+                if(!collider.gameObject.GetComponent<Unit>().isDead && collider.gameObject != player.gameObject){
                     // If three targets have already been found.
                     if(targets.Count > 2){
                         // Set the farthest enemy as first in the targets found list.
                         int furthestEnemyIndex = 0;
-                        float furthestEnemyDist = (gameObject.transform.position - targets[0].transform.position).magnitude;
+                        float furthestEnemyDist = (player.gameObject.transform.position - targets[0].transform.position).magnitude;
                         // Check the other two targets against the first and set the farthest target in the targets found list.
                         for(int i = 1; i < 3; i++){
-                            float distToEnemy = (gameObject.transform.position - targets[i].transform.position).magnitude;
+                            float distToEnemy = (player.gameObject.transform.position - targets[i].transform.position).magnitude;
                             if(distToEnemy > furthestEnemyDist){
                                 furthestEnemyIndex = i;
                                 furthestEnemyDist = distToEnemy;
                             }
                         }
                         // If the farthest target in the targets found list is farther than the new target then replace it.
-                        float newEnemyDist = (gameObject.transform.position - collider.gameObject.transform.position).magnitude;
+                        float newEnemyDist = (player.gameObject.transform.position - collider.gameObject.transform.position).magnitude;
                         if(furthestEnemyDist > newEnemyDist){
                             targets.RemoveAt(furthestEnemyIndex);
                             targets.Add(collider.gameObject);
@@ -227,10 +227,10 @@ public class BahriSpell4 : DamageSpell, ICastable
         if(targets.Count > 0){
             foreach(GameObject target in targets){
                 // Create missile and set necessary variables
-                GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
+                GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, player.gameObject.transform.position, Quaternion.identity);
                 TargetedProjectile targetedProjectile = missile.GetComponent<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
-                targetedProjectile.Target = target;
+                targetedProjectile.TargetUnit = target.GetComponent<Unit>();
                 // Use the same animation as spell two to send the missiles to their target.
                 championSpells.StartCoroutine(Spell_4_Target(missile, target));
             }
@@ -256,7 +256,10 @@ public class BahriSpell4 : DamageSpell, ICastable
     */
     public override void Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
-        enemy.GetComponent<Unit>().TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);
+        enemy.GetComponent<Unit>().TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);
     }
     
+    public override void SpellRemoved(){
+        player.score.takedownCallback -= Spell_4_Takedown;
+    }
 }

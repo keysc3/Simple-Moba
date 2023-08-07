@@ -25,16 +25,4 @@ public class PersonalSpell : Effect
     public PersonalSpell(ScriptablePersonalSpell spellEffect, float duration, int stacks, GameObject unitCasted, GameObject unitEffected) : base(spellEffect, duration, unitCasted, unitEffected){
         this.stacks = stacks;
     }
-
-    /*
-    *   StartEffect - Start the spell effect.
-    */
-    public override void StartEffect(){
-    }
-
-    /*
-    *   EndEffect - End the spell effect.
-    */
-    public override void EndEffect(){
-    }
 }

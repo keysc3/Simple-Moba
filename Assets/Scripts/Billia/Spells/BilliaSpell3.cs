@@ -21,7 +21,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BilliaSpell3(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BilliaSpell3Data) spellData;
     }
 
@@ -30,42 +30,42 @@ public class BilliaSpell3 : DamageSpell, ICastable
     */
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
-        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
+        Handles.DrawWireDisc(player.gameObject.transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
 
        // Get the players mouse position on spell cast for spells target direction.
         Vector3 targetDirection = GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
-        Vector3 targetPosition = (targetDirection - gameObject.transform.position);
+        Vector3 targetPosition = (targetDirection - player.gameObject.transform.position);
         // Set target to lob seed to to max lob distance if casted at a greater distance.
         if(targetPosition.magnitude > spellData.maxLobMagnitude)
-            targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
+            targetPosition = player.gameObject.transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
         else
-            targetPosition = gameObject.transform.position + (targetDirection - gameObject.transform.position);
+            targetPosition = player.gameObject.transform.position + (targetDirection - player.gameObject.transform.position);
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.visualPrefab.transform.localScale.x, 1f);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(targetPosition, targetPosition + ((targetPosition - gameObject.transform.position).normalized * 2f));
+        Gizmos.DrawLine(targetPosition, targetPosition + ((targetPosition - player.gameObject.transform.position).normalized * 2f));
     }
 
      /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
-            Vector3 targetPosition = (targetDirection - gameObject.transform.position);
+            Vector3 targetPosition = (targetDirection - player.gameObject.transform.position);
             // Set target to lob seed to to max lob distance if casted at a greater distance.
             if(targetPosition.magnitude > spellData.maxLobMagnitude)
-                targetPosition = gameObject.transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
+                targetPosition = player.gameObject.transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
             else
-                targetPosition = gameObject.transform.position + (targetDirection - gameObject.transform.position);
-            championSpells.StartCoroutine(Spell_3_Cast(targetPosition, targetPosition - gameObject.transform.position));
+                targetPosition = player.gameObject.transform.position + (targetDirection - player.gameObject.transform.position);
+            championSpells.StartCoroutine(Spell_3_Cast(targetPosition, targetPosition - player.gameObject.transform.position));
             // Use mana.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+            championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -78,7 +78,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
         // Wait for cast time.
         while(player.isCasting)
             yield return null;
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));
         championSpells.StartCoroutine(Spell_3_Lob(targetPosition, targetDirection));
     }
     
@@ -88,14 +88,14 @@ public class BilliaSpell3 : DamageSpell, ICastable
     */
     private IEnumerator Spell_3_Lob(Vector3 targetPosition, Vector3 targetDirection){
         // Create spell object.
-        GameObject seed = (GameObject) GameObject.Instantiate(spellData.visualPrefab, gameObject.transform.position, Quaternion.identity);
+        GameObject seed = (GameObject) GameObject.Instantiate(spellData.visualPrefab, player.gameObject.transform.position, Quaternion.identity);
         BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponent<BilliaSpell3Trigger>();
         billiaSpell3Trigger.billiaSpell3 = this;
-        billiaSpell3Trigger.casted = gameObject;
+        billiaSpell3Trigger.casted = player.gameObject;
         // Set p0.
-        Vector3 p0 = gameObject.transform.position;
+        Vector3 p0 = player.gameObject.transform.position;
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
-        Vector3 p1 = gameObject.transform.position;
+        Vector3 p1 = player.gameObject.transform.position;
         p1.y = p1.y + p1_y_offset;
         Vector3 dir = targetDirection.normalized;
         float mag = targetDirection.magnitude;
@@ -140,7 +140,7 @@ public class BilliaSpell3 : DamageSpell, ICastable
         seed.GetComponent<SphereCollider>().radius * spellData.lobLandHitbox, ~groundMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
-            if(lobHit[0].gameObject != gameObject){
+            if(lobHit[0].gameObject != player.gameObject){
                 Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
                 Spell_3_ConeHitbox(seed, lobHit[0].gameObject, targetDirection);
                 GameObject.Destroy(seed);
@@ -189,8 +189,8 @@ public class BilliaSpell3 : DamageSpell, ICastable
         spellHitCallback?.Invoke(hit, this);
         float magicDamage = championStats.magicDamage.GetValue();
         Unit enemyUnit = hit.GetComponent<Unit>();
-        enemyUnit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, hit));
-        enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);   
+        enemyUnit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(player.levelManager.spellLevels[spellNum]-1, player.gameObject, hit));
+        enemyUnit.TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);   
     }
 
     /*

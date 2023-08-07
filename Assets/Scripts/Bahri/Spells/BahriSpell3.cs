@@ -17,7 +17,7 @@ public class BahriSpell3 : DamageSpell, ICastable
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BahriSpell3(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BahriSpell3(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BahriSpell3Data) spellData;
     }
 
@@ -25,27 +25,27 @@ public class BahriSpell3 : DamageSpell, ICastable
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
-        targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+        Vector3 targetPosition = (GetTargetDirection() - player.gameObject.transform.position).normalized;
+        targetPosition = player.gameObject.transform.position + (targetPosition * spellData.magnitude);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(gameObject.transform.position, targetPosition);
+        Gizmos.DrawLine(player.gameObject.transform.position, targetPosition);
     }
 
     /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
-            Vector3 targetPosition = (targetDirection - gameObject.transform.position).normalized;
-            targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+            Vector3 targetPosition = (targetDirection - player.gameObject.transform.position).normalized;
+            targetPosition = player.gameObject.transform.position + (targetPosition * spellData.magnitude);
             // Start coroutines to handle the spells cast time and animation.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             championSpells.StartCoroutine(Spell_3_Move(targetPosition));
             // Use mana and set the spell to be on cooldown.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+            championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -59,12 +59,12 @@ public class BahriSpell3 : DamageSpell, ICastable
         while(player.isCasting)
             yield return null;
         // Cooldown stats on cast.
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));  
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));  
         // Create spell 3 GameObject and set its necessary variables.
-        GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, gameObject.transform.position, Quaternion.identity);
+        GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, player.gameObject.transform.position, Quaternion.identity);
         Spell3Trigger spell3Trigger = missile.GetComponent<Spell3Trigger>();
         spell3Trigger.bahriSpell3 = this;
-        spell3Trigger.bahri = gameObject;
+        spell3Trigger.bahri = player.gameObject;
         // While the spell object still exists.
         while(missile){
             // If target location has not been reached then move the object towards the target location.
@@ -86,7 +86,7 @@ public class BahriSpell3 : DamageSpell, ICastable
         float magicDamage = championStats.magicDamage.GetValue();
         // Add the charm effect to the hit GameObject.
         Unit enemyUnit = enemy.GetComponent<Unit>();
-        enemyUnit.statusEffects.AddEffect(spellData.charmEffect.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, enemy));
-        enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);
+        enemyUnit.statusEffects.AddEffect(spellData.charmEffect.InitializeEffect(player.levelManager.spellLevels[spellNum]-1, player.gameObject, enemy));
+        enemyUnit.TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);
     }
 }

@@ -11,6 +11,7 @@ public class BilliaPassive : Spell, IHasCallback
 {
     private BilliaPassiveData passiveData;
     private List<GameObject> passiveApplied = new List<GameObject>();
+    public List<Spell> callbackSet { get; } = new List<Spell>();
 
     /*
     *   BilliaPassive - Initialize Billia's passive spell.
@@ -18,7 +19,7 @@ public class BilliaPassive : Spell, IHasCallback
     *   @param spellNum - string of the spell number this spell is.
     *   @param spellData - SpellData to use.
     */
-    public BilliaPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
+    public BilliaPassive(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.passiveData = (BilliaPassiveData) spellData;
     }
 
@@ -28,7 +29,7 @@ public class BilliaPassive : Spell, IHasCallback
     *   @param spellHit - Spell that has hit the GameObject.
     */
     public void Passive(GameObject hit, Spell spellHit){
-        hit.GetComponent<Unit>().statusEffects.AddEffect(passiveData.passiveDot.InitializeEffect(30f, 0, gameObject, hit));
+        hit.GetComponent<Unit>().statusEffects.AddEffect(passiveData.passiveDot.InitializeEffect(30f, 0, player.gameObject, hit));
         if(!passiveApplied.Contains(hit)){
             passiveApplied.Add(hit);
             championSpells.StartCoroutine(PassiveHeal(hit));
@@ -42,18 +43,18 @@ public class BilliaPassive : Spell, IHasCallback
     private IEnumerator PassiveHeal(GameObject enemy){
         // Check to make sure the dot is still on the unit.
         Unit unit = enemy.GetComponent<Unit>();
-        while(unit.statusEffects.CheckForEffectWithSource(passiveData.passiveDot, gameObject)){
+        while(unit.statusEffects.CheckForEffectWithSource(passiveData.passiveDot, player.gameObject)){
             // Heal the champion amount if unit is a champion.
             if(unit.SUnit is ScriptableChampion){
                 Debug.Log("Billia passive found on: " + enemy.name);
-                float healAmount = (6f + ((84f / 17f) * (float)(levelManager.level - 1)))/passiveData.passiveDot.duration[0];
+                float healAmount = (6f + ((84f / 17f) * (float)(player.levelManager.level - 1)))/passiveData.passiveDot.duration[0];
                 championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
                 Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
             }
             else if(unit.SUnit is ScriptableMonster){
                 if(((ScriptableMonster) unit.SUnit).size == "large"){
                     Debug.Log("Billia passive found on: " + enemy.name);
-                    float healAmount = (39f + ((15f / 17f) * (float)(levelManager.level - 1)))/passiveData.passiveDot.duration[0];
+                    float healAmount = (39f + ((15f / 17f) * (float)(player.levelManager.level - 1)))/passiveData.passiveDot.duration[0];
                     championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
                     Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
                 }
@@ -72,7 +73,15 @@ public class BilliaPassive : Spell, IHasCallback
         foreach(Spell newSpell in mySpells){
             if(newSpell is DamageSpell && !(newSpell is BilliaPassive)){
                 ((DamageSpell) newSpell).spellHitCallback += Passive;
+                callbackSet.Add(newSpell);
+                
             }
+        }
+    }
+
+    public override void SpellRemoved(){
+        foreach(Spell spell in callbackSet){
+            ((DamageSpell) spell).spellHitCallback -= Passive;
         }
     }
 }

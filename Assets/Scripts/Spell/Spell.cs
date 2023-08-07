@@ -9,22 +9,24 @@ using System;
 *
 * @author: Colin Keys
 */
-[System.Serializable]
 public class Spell
 {
     public bool onCd { get; protected set; } = false;
     public bool canMove { get; protected set; } = false;
     public bool isQuickCast { get; protected set; } = false;
     public bool isDisplayed { get; private set; } = false;
-    public string spellNum { get; }
+    protected string spellNum;
+    public string SpellNum { 
+        get => spellNum;
+        set {
+            if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"}.Contains(value))
+                spellNum = value;
+        }
+    }
     public SpellData spellData { get; }
-    protected NavMeshAgent navMeshAgent;
-    protected LevelManager levelManager;
-    protected ChampionStats championStats;
     protected Player player;
+    protected ChampionStats championStats;
     protected ChampionSpells championSpells;
-    protected GameObject gameObject;
-    protected Collider myCollider;
     protected Camera mainCamera;
     
     /*
@@ -32,17 +34,12 @@ public class Spell
     *   @param championSpells - ChampionSpells instance this spell is a part of.
     *   @param spellNum - string of the spell number this spell is.
     */
-    public Spell(ChampionSpells championSpells, string spellNum, SpellData spellData){
+    public Spell(ChampionSpells championSpells, SpellData spellData){
         this.championSpells = championSpells;
-        this.spellNum = spellNum;
-        this.gameObject = championSpells.gameObject;
         this.spellData = spellData;
         mainCamera = Camera.main;
         player = championSpells.gameObject.GetComponent<Player>();
-        myCollider = championSpells.gameObject.GetComponent<Collider>();
-        navMeshAgent = championSpells.gameObject.GetComponent<NavMeshAgent>();
         championStats = (ChampionStats) player.unitStats;
-        levelManager = player.levelManager;
     }
 
     /*
@@ -68,9 +65,7 @@ public class Spell
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
-    protected virtual void DrawSpell(){
-        //PlaceHolder
-    }
+    protected virtual void DrawSpell(){}
 
     /*
     *   GetTargetDirection - Gets the mouse world position.
@@ -83,7 +78,7 @@ public class Spell
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
         player.mouseOnCast = targetDirection;
-        targetDirection.y = myCollider.bounds.center.y;
+        targetDirection.y = player.myCollider.bounds.center.y;
         return targetDirection;
     }
 
@@ -98,15 +93,15 @@ public class Spell
         // While still casting spell stop the player.
         while(timer <= castTime){
             if(!canMove){
-                if(!navMeshAgent.isStopped)
-                    navMeshAgent.isStopped = true;
+                if(!player.navMeshAgent.isStopped)
+                    player.navMeshAgent.isStopped = true;
             }
             timer += Time.deltaTime;
             yield return null;
         }
         player.isCasting = false;
         player.CurrentCastedSpell = this;
-        navMeshAgent.isStopped = false;
+        player.navMeshAgent.isStopped = false;
     }
 
     /*
@@ -136,4 +131,7 @@ public class Spell
         float reducedCD = baseCD*(100f/(100f+haste));
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
+
+    public virtual void SpellRemoved(){}
+
 }
