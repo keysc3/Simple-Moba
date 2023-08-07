@@ -143,8 +143,8 @@ public class UIManager : MonoBehaviour
     *   @param player - Player whose health bar is being updated.
     */
     public void UpdateManaBar(Player player){
-        Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         ChampionStats championStats = (ChampionStats) player.unitStats;
+        Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
         float manaPercent = Mathf.Round((championStats.CurrentMana/championStats.maxMana.GetValue()) * 100);
         mana.transform.Find("Value").GetComponent<TMP_Text>()
@@ -159,8 +159,8 @@ public class UIManager : MonoBehaviour
     *   @param player - Player whose stats are being updated.
     */
     public void UpdateAllStats(Player player){
-        Transform statsContainer = player.playerUI.transform.Find("Player/Info/Stats/Container");
         ChampionStats championStats = (ChampionStats) player.unitStats;
+        Transform statsContainer = player.playerUI.transform.Find("Player/Info/Stats/Container");
         UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue(), statsContainer);
         UpdateStat("Armor", championStats.armor.GetValue(), statsContainer);
         if(championStats.attackSpeed.GetValue() > 2.5f)

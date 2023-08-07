@@ -22,7 +22,7 @@ public class BahriPassive : Spell
     */
     public BahriPassive(ChampionSpells championSpells, string spellNum, SpellData spellData) : base(championSpells, spellNum, spellData){
         this.spellData = (BahriPassiveData) spellData;
-        passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
+        passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, player.gameObject, player.gameObject);
         championSpells.initializationEffects.Add(passive);
         player.score.takedownCallback += Passive;
     }
@@ -36,7 +36,7 @@ public class BahriPassive : Spell
         float healAmount;
         // Heal off champion kill
         if(killed.GetComponent<Unit>().SUnit is ScriptableChampion){
-            healAmount = ((90f / 17f) * (float)(levelManager.level - 1)) + 75f;
+            healAmount = ((90f / 17f) * (float)(player.levelManager.level - 1)) + 75f;
             championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
             Debug.Log("Healed " + healAmount + " health from champion kill.");
         }
@@ -45,7 +45,7 @@ public class BahriPassive : Spell
             passiveStacks += 1;
             passive.Stacks = passiveStacks;
             if(passiveStacks == 9){
-                healAmount = ((60f / 17f) * (float)(levelManager.level - 1)) + 35f;
+                healAmount = ((60f / 17f) * (float)(player.levelManager.level - 1)) + 35f;
                 championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
                 passiveStacks = 0;
                 Debug.Log("Healed " + healAmount + " health from minion/monster kill.");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Implements basic attacks for a unit.
+* Purpose: Implements basic attacks for a player.
 *
 * @author: Colin Keys
 */
@@ -13,18 +13,11 @@ public class BasicAttack : MonoBehaviour
     public float nextAuto { get; private set; } = 0.0f;
 
     [SerializeField] private GameObject attackProjectile;
-    private UnitStats unitStats;
-    private Unit unit;
-    private PlayerController playerController;
+    private Player player;
 
     // Called when the script instance is being loaded. 
     protected virtual void Awake(){
-        playerController = GetComponent<PlayerController>();
-        unit = GetComponent<Unit>();
-    }
-
-    protected virtual void Start(){
-        unitStats = unit.unitStats;
+        player = GetComponent<Player>();
     }
 
     /*
@@ -32,7 +25,7 @@ public class BasicAttack : MonoBehaviour
     *   @param target - GameObject of the enemy to attack.
     */
     public void Attack(GameObject target){
-        if(unit.SUnit.rangeType == "melee")
+        if(player.SUnit.rangeType == "melee")
             MeleeAttack(target);
         else
             RangeAttack(target);
@@ -59,7 +52,7 @@ public class BasicAttack : MonoBehaviour
     *   @param target - GameObject of the target to attack.
     */
     public virtual void AttackHit(GameObject target){
-        float physicalDamage = unitStats.physicalDamage.GetValue();
+        float physicalDamage = player.unitStats.physicalDamage.GetValue();
         target.GetComponent<Unit>().TakeDamage(physicalDamage, "physical", gameObject, false);
     }
 
@@ -69,13 +62,13 @@ public class BasicAttack : MonoBehaviour
     */
     private IEnumerator AttackProjectile(GameObject target){
         // Create attack GameObject and set necessary variables.
-        GameObject projectile = (GameObject)Instantiate(attackProjectile, transform.position, Quaternion.identity);
+        GameObject projectile = (GameObject) Instantiate(attackProjectile, transform.position, Quaternion.identity);
         BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
         basicAttackTrigger.Target = target;
         basicAttackTrigger.basicAttack = this;
         // While the attack still exists animate it.
         while(projectile){
-            projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.transform.position, unitStats.attackProjectileSpeed.GetValue() * Time.deltaTime);
+            projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.transform.position, player.unitStats.attackProjectileSpeed.GetValue() * Time.deltaTime);
             yield return null;
         }
     }
@@ -85,17 +78,17 @@ public class BasicAttack : MonoBehaviour
     */
     public IEnumerator BasicAttackWindUp(){
         float timer = 0.0f;
-        unitStats.UpdateAttackSpeed();
+        player.unitStats.UpdateAttackSpeed();
         // Wind up time is the time it takes for the player to attack * the percentage of 
-        float windUpTime = ((1.0f/unitStats.attackSpeed.GetValue()) * unitStats.autoWindUp.GetValue());
-        while(playerController.targetedEnemy != null && windingUp){
+        float windUpTime = ((1.0f/player.unitStats.attackSpeed.GetValue()) * player.unitStats.autoWindUp.GetValue());
+        while(player.playerController.targetedEnemy != null && windingUp){
             if(timer <= windUpTime){
                 // TODO: Animate windup
             }
             else{
-                Attack(playerController.targetedEnemy);
-                nextAuto = Time.time + 1.0f/unitStats.attackSpeed.GetValue();
-                Debug.Log("Next auto in: " + 1.0f/unitStats.attackSpeed.GetValue());
+                Attack(player.playerController.targetedEnemy);
+                nextAuto = Time.time + 1.0f/player.unitStats.attackSpeed.GetValue();
+                Debug.Log("Next auto in: " + 1.0f/player.unitStats.attackSpeed.GetValue());
                 windingUp = false;
             }
             timer += Time.deltaTime;

@@ -13,10 +13,10 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
     public bool isDead { get; protected set; }
-    public UnitStats unitStats { get; protected set; }
+    [field:SerializeField] public UnitStats unitStats { get; protected set; }
     public StatusEffects statusEffects { get; private set; }
-    protected NavMeshAgent navMeshAgent;
-    protected Collider myCollider;
+    public NavMeshAgent navMeshAgent { get; private set; }
+    public Collider myCollider { get; private set; }
 
     public delegate void BonusDamage(GameObject toDamage, bool isDot); 
     public BonusDamage bonusDamage;

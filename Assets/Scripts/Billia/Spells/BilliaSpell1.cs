@@ -39,9 +39,9 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     */
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
-        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.outerRadius, 1f);
+        Handles.DrawWireDisc(player.gameObject.transform.position, Vector3.up, spellData.outerRadius, 1f);
         Handles.color = Color.red;
-        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.innerRadius, 1f);
+        Handles.DrawWireDisc(player.gameObject.transform.position, Vector3.up, spellData.innerRadius, 1f);
     }
 
     /*
@@ -49,12 +49,12 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     */
     public void Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
             // Start cast time then cast the spell.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             championSpells.StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+            championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }        
     }
@@ -68,7 +68,7 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         while(player.isCasting){
             yield return null;
         }
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));
         // Hitbox starts from center of Billia.
         HitboxCheck();
         // Animate the ending of the spell.
@@ -81,11 +81,11 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     */
     private void HitboxCheck(){
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, spellData.outerRadius, enemyMask));
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(player.gameObject.transform.position, spellData.outerRadius, enemyMask));
         foreach(Collider collider in outerHit){
             // Check if the center of the hit collider is within the spell hitbox.
             Vector3 colliderHitCenter = collider.bounds.center;
-            float distToHitboxCenter = (colliderHitCenter - gameObject.transform.position).magnitude;
+            float distToHitboxCenter = (colliderHitCenter - player.gameObject.transform.position).magnitude;
             if(distToHitboxCenter < spellData.outerRadius){
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < spellData.innerRadius){
@@ -138,10 +138,10 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         if(passiveStackSpells.Contains(spellHit))
             return;
         passiveStackSpells.Add(spellHit);
-        if(levelManager.spellLevels[spellNum] > 0 && passiveStacks < spellData.passiveMaxStacks){
+        if(player.levelManager.spellLevels[spellNum] > 0 && passiveStacks < spellData.passiveMaxStacks){
             // Create a new speed bonus with the 
-            float bonusPercent = spellData.passiveSpeed[levelManager.spellLevels[spellNum]-1];
-            SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, gameObject);
+            float bonusPercent = spellData.passiveSpeed[player.levelManager.spellLevels[spellNum]-1];
+            SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(player.levelManager.spellLevels[spellNum]-1, player.gameObject, player.gameObject);
             speedBonus.BonusPercent = bonusPercent;
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);
@@ -207,9 +207,9 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
     */
     private GameObject Spell_1_Visual(){
         // Create the spells visual hitbox and set necessary values.
-        GameObject visualHitbox = (GameObject) Object.Instantiate(spellData.visualPrefab, gameObject.transform.position, Quaternion.identity);
+        GameObject visualHitbox = (GameObject) Object.Instantiate(spellData.visualPrefab, player.gameObject.transform.position, Quaternion.identity);
         visualHitbox.name = "BilliaSpell_1";
-        visualHitbox.transform.SetParent(gameObject.transform);
+        visualHitbox.transform.SetParent(player.gameObject.transform);
         float yScale = visualHitbox.transform.GetChild(0).localScale.y;
         visualHitbox.transform.GetChild(0).localScale = new Vector3(spellData.innerRadius * 2f, yScale, spellData.innerRadius * 2f);
         visualHitbox.transform.GetChild(1).localScale = new Vector3(spellData.outerRadius * 2f, yScale, spellData.outerRadius * 2f);
@@ -227,10 +227,10 @@ public class BilliaSpell1 : DamageSpell, IHasCallback, ICastable
         float magicDamage = championStats.magicDamage.GetValue();
         Unit enemyUnit = hit.GetComponent<Unit>();
         if(radius == "inner")
-            enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);   
+            enemyUnit.TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);   
         else{
-            enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);
-            enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "true", gameObject, false);
+            enemyUnit.TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);
+            enemyUnit.TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "true", player.gameObject, false);
         }
     }
 

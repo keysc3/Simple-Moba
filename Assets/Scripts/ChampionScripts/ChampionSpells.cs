@@ -56,12 +56,10 @@ public class ChampionSpells : MonoBehaviour
         }
     }
 
-    private Player player;
-
-    //public List<Spell> mySpells { get; } = new List<Spell>();
     public List<Effect> initializationEffects { get; } = new List<Effect>();
     public List<SpellData> mySpellData { get; } = new List<SpellData>();
 
+    private Player player;
 
     public delegate void UpdateCallback(); 
     public UpdateCallback updateCallback;

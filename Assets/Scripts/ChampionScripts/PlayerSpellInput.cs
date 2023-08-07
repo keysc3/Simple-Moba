@@ -16,21 +16,17 @@ public class PlayerSpellInput : MonoBehaviour
     public bool buttonClick = false;
     public Spell lastSpellPressed { get; private set; } = null;
     private KeyCode lastButtonPressed = KeyCode.None;
-    private ChampionSpells championSpells;
-    private LevelManager levelManager;
     private Player player;
     private Camera mainCamera;
 
     // Called when the script instance is being loaded.
     private void Awake(){
         player = GetComponent<Player>();
-        championSpells = GetComponent<ChampionSpells>();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        levelManager = player.levelManager;
         mainCamera = Camera.main;
     }
 
@@ -51,25 +47,25 @@ public class PlayerSpellInput : MonoBehaviour
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.Q, championSpells.Spell1);
+                SpellButtonPressed(KeyCode.Q, player.championSpells.Spell1);
             }
         }
         // Spell 2
         if(Input.GetKeyDown(KeyCode.W)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.W, championSpells.Spell2);
+                SpellButtonPressed(KeyCode.W, player.championSpells.Spell2);
             }
         }
         // Spell 3
         if(Input.GetKeyDown(KeyCode.E)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.E, championSpells.Spell3);
+                SpellButtonPressed(KeyCode.E, player.championSpells.Spell3);
             }
         }
         // Spell 4
         if(Input.GetKeyDown(KeyCode.R)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                SpellButtonPressed(KeyCode.R, championSpells.Spell4);
+                SpellButtonPressed(KeyCode.R, player.championSpells.Spell4);
             }
         }
         // Left click
@@ -90,7 +86,7 @@ public class PlayerSpellInput : MonoBehaviour
     */
     public void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
         // Only attempt to cast if learned.
-        if(levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
+        if(player.levelManager.spellLevels[spellPressed.spellNum] > 0 && !spellPressed.onCd){
             // Hide cast if a spell was prepped and new button pressed is different than last.
             if(lastSpellPressed != null && lastButtonPressed != buttonPressed)
                 lastSpellPressed.HideCast();

@@ -25,9 +25,9 @@ public class Player : Unit, IRespawnable
     }
     [SerializeField] private Material dead;
     [SerializeField] private LevelInfo levelInfo;
-    private PlayerController playerController;
+    public PlayerController playerController { get; private set; }
     public PlayerSpellInput playerSpellInput { get; private set; }
-    private ChampionSpells championSpells;
+    public ChampionSpells championSpells { get; private set; }
     private Material alive;
     private Renderer rend;
 
@@ -39,7 +39,7 @@ public class Player : Unit, IRespawnable
     *   Init - Handles setup specific to this child class.
     */
     protected override void Init(){
-        unitStats = new ChampionStats((ScriptableChampion) SUnit);
+        unitStats = new ChampionStats((ScriptableChampion) SUnit); 
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
         championSpells = GetComponent<ChampionSpells>();

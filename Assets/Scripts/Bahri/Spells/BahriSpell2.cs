@@ -32,14 +32,14 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     */
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
-        Handles.DrawWireDisc(gameObject.transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
+        Handles.DrawWireDisc(player.gameObject.transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
     }
 
     /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");
             activeSpellObjects.Add(spell_2_parent);
@@ -58,7 +58,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
             championSpells.StartCoroutine(Spell_2_Move(spell_2_parent));
             championSpells.StartCoroutine(Spell_2_Cast(spell_2_parent));
             championSpells.StartCoroutine(Spell_2_Speed());
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+            championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -70,7 +70,8 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
         // While the spell is active.
         while(spell_2_parent){
             // Keep the spells parent at the same position as the player and rotate it.
-            spell_2_parent.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - spellData.heightOffset, gameObject.transform.position.z);
+            spell_2_parent.transform.position = 
+            new Vector3(player.gameObject.transform.position.x, player.gameObject.transform.position.y - spellData.heightOffset, player.gameObject.transform.position.z);
             spell_2_parent.transform.Rotate(Vector3.up, spellData.rotationSpeed * Time.deltaTime);
             yield return null;
         }
@@ -98,9 +99,9 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
                         foreach(Collider enemy in hitColliders){
                             Unit enemyUnit = enemy.gameObject.GetComponent<Unit>();
                             // Only want to target alive units.
-                            if(!enemyUnit.isDead && enemy.gameObject != gameObject){
+                            if(!enemyUnit.isDead && enemy.gameObject != player.gameObject){
                                 // If a player is currently under spell 3 effects, prioritize that player.
-                                if(enemyUnit.statusEffects.CheckForEffectWithSource(spellData.charm, gameObject)){
+                                if(enemyUnit.statusEffects.CheckForEffectWithSource(spellData.charm, player.gameObject)){
                                     target = enemy.gameObject;
                                     break;
                                 }
@@ -124,7 +125,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
                     if(target != null){
                         championSpells.StartCoroutine(Spell_2_Target(child.gameObject, target));
                         TargetedProjectile targetedProjectile = child.gameObject.GetComponent<TargetedProjectile>();
-                        targetedProjectile.Target = target;
+                        targetedProjectile.TargetUnit = target.GetComponent<Unit>();
                         child.parent = null;
                     }
                 }
@@ -138,7 +139,7 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
             GameObject.Destroy(spell_2_parent);
         enemiesHit.Clear();
         UIManager.instance.SetSpellDurationOver(spellNum, player.playerUI);
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));
     }
 
     /*
@@ -159,9 +160,9 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     */
     private IEnumerator Spell_2_Speed(){
         float timer = 0.0f;
-        int spellLevel = levelManager.spellLevels[spellNum]-1;
+        int spellLevel = player.levelManager.spellLevels[spellNum]-1;
         // Create and add a new speed bonus effect.
-        SpeedBonus speedBonus = (SpeedBonus) spellData.speedBonus.InitializeEffect(spellLevel, gameObject, gameObject);
+        SpeedBonus speedBonus = (SpeedBonus) spellData.speedBonus.InitializeEffect(spellLevel, player.gameObject, player.gameObject);
         player.statusEffects.AddEffect(speedBonus);
         // While speed boost is still active.
         while (timer < spellData.speedBonus.duration[spellLevel]){
@@ -181,12 +182,12 @@ public class BahriSpell2 : DamageSpell, IDeathCleanUp, ICastable
     */
     public override void Hit(GameObject enemy){
         float magicDamage = championStats.magicDamage.GetValue();
-        float finalDamage = spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage;
+        float finalDamage = spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage;
         // Reduce damage of spell if hitting the same target more than once.
         if(enemiesHit.Contains(enemy)){
             finalDamage = Mathf.Round(finalDamage * spellData.multiplier);
         }
-        enemy.GetComponent<Unit>().TakeDamage(finalDamage, "magic", gameObject, false);
+        enemy.GetComponent<Unit>().TakeDamage(finalDamage, "magic", player.gameObject, false);
         enemiesHit.Add(enemy);
     }
 

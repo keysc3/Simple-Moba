@@ -19,9 +19,9 @@ public class LevelManager
     private float currentXP = 0f;
     private bool newLevel = true;
     private LevelInfo levelInfo;
-    private ChampionStats championStats;
     private ScriptableChampion champion;
     private Player player;
+    private ChampionStats championStats;
     
     /*
     *   LevelManager - Initializes a new level manager.
@@ -118,7 +118,6 @@ public class LevelManager
         IncreaseBaseStat(championStats.armor, GrowthAmountCalculation(champion.armorGrowth));
         IncreaseBaseStat(championStats.magicResist, GrowthAmountCalculation(champion.magicResistGrowth));
         championStats.bonusAttackSpeed.BaseValue = GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth);
-        //championStats.bonusAttackSpeed.SetBaseValue(GrowthAmountCalculationAtkSpd(champion.attackSpeedGrowth));
     }
 
     /*

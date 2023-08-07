@@ -32,13 +32,13 @@ public class BilliaSpell4 : Spell, ICastable
     public void Cast(){
         // Only allow cast if a champion has passive on them.
         if(canUseSpell){
-            if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+            if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
                 // Start cast time then cast the spell.
-                championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
+                championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));
                 championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
                 championSpells.StartCoroutine(Spell_4_Cast(GetChampionsWithPassive()));
                 // Use mana.
-                championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+                championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
                 onCd = true;
             }
         }
@@ -78,7 +78,7 @@ public class BilliaSpell4 : Spell, ICastable
             Unit enemyUnit = enemy.GetComponent<Unit>();
             if(enemyUnit is Player){
                 // Add drowsy to enemy player and update the bonus damage delegate.
-                Drowsy newDrowsy = (Drowsy) spellData.drowsy.InitializeEffect(levelManager.spellLevels[spellNum]-1, gameObject, enemy);
+                Drowsy newDrowsy = (Drowsy) spellData.drowsy.InitializeEffect(player.levelManager.spellLevels[spellNum]-1, player.gameObject, enemy);
                 enemyUnit.statusEffects.AddEffect(newDrowsy);
                 enemyUnit.bonusDamage += Spell_4_SleepProc;
                 // Animate the drowsy effect.
@@ -87,7 +87,7 @@ public class BilliaSpell4 : Spell, ICastable
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
                 visualScript.drowsyDuration = newDrowsy.EffectDuration;
                 visualScript.drowsy = spellData.drowsy;
-                visualScript.source = gameObject;
+                visualScript.source = player.gameObject;
             }
         }
     }
@@ -96,7 +96,7 @@ public class BilliaSpell4 : Spell, ICastable
     *   CanUseSpell - Checks if any champion has Billia's passive on them, which allows the use of this spell.
     */
     private void CanUseSpell(){
-        if(levelManager.spellLevels[spellNum] > 0){
+        if(player.levelManager.spellLevels[spellNum] > 0){
             List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
             if(passiveAppliedChamps.Count > 0){
                 canUseSpell = true;
@@ -135,12 +135,12 @@ public class BilliaSpell4 : Spell, ICastable
         // Dots do not proc the sleep.
         if(!isDot){
             Unit enemyUnit = enemy.GetComponent<Unit>();
-            if(enemyUnit.statusEffects.CheckForEffectWithSource(spellData.drowsy.sleep, gameObject)){
+            if(enemyUnit.statusEffects.CheckForEffectWithSource(spellData.drowsy.sleep, player.gameObject)){
                 float magicDamage = championStats.magicDamage.GetValue();
                 // Remove sleep, deal damage and remove function from delegate.
-                enemyUnit.statusEffects.RemoveEffect(spellData.drowsy.sleep, gameObject);
+                enemyUnit.statusEffects.RemoveEffect(spellData.drowsy.sleep, player.gameObject);
                 enemyUnit.bonusDamage -= Spell_4_SleepProc;
-                enemyUnit.TakeDamage(spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", gameObject, false);
+                enemyUnit.TakeDamage(spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage, "magic", player.gameObject, false);
             }
             // If effect fell off before damage was dealt, remove the bonus damage method.
             else{

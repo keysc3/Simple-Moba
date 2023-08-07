@@ -30,27 +30,27 @@ public class BahriSpell1 : DamageSpell, ICastable
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetPosition = (GetTargetDirection() - gameObject.transform.position).normalized;
-        targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+        Vector3 targetPosition = (GetTargetDirection() - player.gameObject.transform.position).normalized;
+        targetPosition = player.gameObject.transform.position + (targetPosition * spellData.magnitude);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(gameObject.transform.position, targetPosition);
+        Gizmos.DrawLine(player.gameObject.transform.position, targetPosition);
     }
 
     /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[levelManager.spellLevels[spellNum]-1]){
+        if(!player.isCasting && championStats.CurrentMana >= spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
-            Vector3 targetPosition = (targetDirection - gameObject.transform.position).normalized;
-            targetPosition = gameObject.transform.position + (targetPosition * spellData.magnitude);
+            Vector3 targetPosition = (targetDirection - player.gameObject.transform.position).normalized;
+            targetPosition = player.gameObject.transform.position + (targetPosition * spellData.magnitude);
             // Start coroutines to handle the spells cast time and animation.
             championSpells.StartCoroutine(CastTime(spellData.castTime, canMove));
             championSpells.StartCoroutine(Spell_1_Move(targetPosition));
             // Use mana and set spell on cooldown to true.
-            championStats.UseMana(spellData.baseMana[levelManager.spellLevels[spellNum]-1]);
+            championStats.UseMana(spellData.baseMana[player.levelManager.spellLevels[spellNum]-1]);
             onCd = true;
         }
     }
@@ -64,12 +64,12 @@ public class BahriSpell1 : DamageSpell, ICastable
         while(player.isCasting)
             yield return null;
         // Cooldown starts on cast.
-        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[levelManager.spellLevels[spellNum]-1], spellNum));
+        championSpells.StartCoroutine(Spell_Cd_Timer(spellData.baseCd[player.levelManager.spellLevels[spellNum]-1], spellNum));
         // Create the spells object and set necessary values.
-        GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, gameObject.transform.position, Quaternion.identity);
+        GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, player.gameObject.transform.position, Quaternion.identity);
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
         spell1Trigger.bahriSpell1 = this;
-        spell1Trigger.bahri = gameObject; 
+        spell1Trigger.bahri = player.gameObject; 
         // Set initial return values.
         returning = false;
         float returnSpeed = spellData.minSpeed;
@@ -89,7 +89,7 @@ public class BahriSpell1 : DamageSpell, ICastable
             }
             else{
                 // The orb is returning, move it towards the player.
-                orb.transform.position = Vector3.MoveTowards(orb.transform.position, gameObject.transform.position, returnSpeed * Time.deltaTime);
+                orb.transform.position = Vector3.MoveTowards(orb.transform.position, player.gameObject.transform.position, returnSpeed * Time.deltaTime);
                 // Speed up the orb as it returns until the max speed is reached.
                 returnSpeed += spellData.accel * Time.deltaTime;
                 if(returnSpeed > spellData.maxSpeed)
@@ -109,13 +109,13 @@ public class BahriSpell1 : DamageSpell, ICastable
         float damageValue = 0;
         // Only want to hit an enemy once per way.
         if(!enemiesHit.Contains(enemy)){
-            damageValue = spellData.baseDamage[levelManager.spellLevels[spellNum]-1] + magicDamage;
+            damageValue = spellData.baseDamage[player.levelManager.spellLevels[spellNum]-1] + magicDamage;
             // Magic damage on first part then true damage on return.
             if(!returning){
-                enemy.GetComponent<Unit>().TakeDamage(damageValue, "magic", gameObject, false);
+                enemy.GetComponent<Unit>().TakeDamage(damageValue, "magic", player.gameObject, false);
             }
             else{
-                enemy.GetComponent<Unit>().TakeDamage(damageValue, "true", gameObject, false);
+                enemy.GetComponent<Unit>().TakeDamage(damageValue, "true", player.gameObject, false);
             }
             enemiesHit.Add(enemy);
         }

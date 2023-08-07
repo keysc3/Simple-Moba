@@ -18,13 +18,9 @@ public class Spell
     public bool isDisplayed { get; private set; } = false;
     public string spellNum { get; }
     public SpellData spellData { get; }
-    protected NavMeshAgent navMeshAgent;
-    protected LevelManager levelManager;
-    protected ChampionStats championStats;
     protected Player player;
+    protected ChampionStats championStats;
     protected ChampionSpells championSpells;
-    protected GameObject gameObject;
-    protected Collider myCollider;
     protected Camera mainCamera;
     
     /*
@@ -35,14 +31,10 @@ public class Spell
     public Spell(ChampionSpells championSpells, string spellNum, SpellData spellData){
         this.championSpells = championSpells;
         this.spellNum = spellNum;
-        this.gameObject = championSpells.gameObject;
         this.spellData = spellData;
         mainCamera = Camera.main;
         player = championSpells.gameObject.GetComponent<Player>();
-        myCollider = championSpells.gameObject.GetComponent<Collider>();
-        navMeshAgent = championSpells.gameObject.GetComponent<NavMeshAgent>();
         championStats = (ChampionStats) player.unitStats;
-        levelManager = player.levelManager;
     }
 
     /*
@@ -83,7 +75,7 @@ public class Spell
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
         player.mouseOnCast = targetDirection;
-        targetDirection.y = myCollider.bounds.center.y;
+        targetDirection.y = player.myCollider.bounds.center.y;
         return targetDirection;
     }
 
@@ -98,15 +90,15 @@ public class Spell
         // While still casting spell stop the player.
         while(timer <= castTime){
             if(!canMove){
-                if(!navMeshAgent.isStopped)
-                    navMeshAgent.isStopped = true;
+                if(!player.navMeshAgent.isStopped)
+                    player.navMeshAgent.isStopped = true;
             }
             timer += Time.deltaTime;
             yield return null;
         }
         player.isCasting = false;
         player.CurrentCastedSpell = this;
-        navMeshAgent.isStopped = false;
+        player.navMeshAgent.isStopped = false;
     }
 
     /*
