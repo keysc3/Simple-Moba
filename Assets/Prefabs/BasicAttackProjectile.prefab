@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1606231681406296314}
   - component: {fileID: -8932808149831243721}
   m_Layer: 0
-  m_Name: BahriAttack
+  m_Name: BasicAttackProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

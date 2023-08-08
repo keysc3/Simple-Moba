@@ -16,14 +16,11 @@ public class PlayerController : MonoBehaviour
     private RaycastHit hitInfo;
     private Vector3 dest;
     private Vector3 currentTarget;
-    private BasicAttack basicAttack;
     private Player player;
     private ChampionStats championStats;
 
     // Called when the script instance is being loaded.
     private void Awake(){
-
-        basicAttack = GetComponent<BasicAttack>();
         mainCamera = Camera.main;
         player = GetComponent<Player>();
     }
@@ -49,7 +46,7 @@ public class PlayerController : MonoBehaviour
     {
         // Stop the players attack windup if casting or moving.
         if(player.isCasting || player.navMeshAgent.hasPath){
-            basicAttack.windingUp = false;
+            player.basicAttack.windingUp = false;
         }
 
         if(player.navMeshAgent.enabled){
@@ -84,7 +81,7 @@ public class PlayerController : MonoBehaviour
                 targetedEnemy = null;
         }
         else
-            basicAttack.windingUp = false;
+            player.basicAttack.windingUp = false;
     }
 
     /*
@@ -133,15 +130,15 @@ public class PlayerController : MonoBehaviour
             player.navMeshAgent.ResetPath();
             // If the time since last auto is greater than the next time the player is allowed to auto.
             // Make sure player isn't already winding up an auto.
-            if(Time.time > basicAttack.nextAuto && !basicAttack.windingUp){
-                basicAttack.windingUp = true;
-                StartCoroutine(basicAttack.BasicAttackWindUp());
+            if(Time.time > player.basicAttack.nextAuto && !player.basicAttack.windingUp){
+                player.basicAttack.windingUp = true;
+                StartCoroutine(player.basicAttack.BasicAttackWindUp());
             }
         }
         else{
             // Stop the auto wind up since the enemy is no longer in range.
-            StopCoroutine(basicAttack.BasicAttackWindUp());
-            basicAttack.windingUp = false;
+            StopCoroutine(player.basicAttack.BasicAttackWindUp());
+            player.basicAttack.windingUp = false;
             // Move the player into range of the target.
             Vector3 enemyDest = targetedEnemy.transform.position;
             enemyDest.y = player.myCollider.bounds.center.y;

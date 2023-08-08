@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Implements basic attacks for a player.
+* Purpose: Implements basic attacks class for a player.
 *
 * @author: Colin Keys
 */
-public class BasicAttack : MonoBehaviour
+public class BasicAttack
 {
     public bool windingUp = false;
     public float nextAuto { get; private set; } = 0.0f;
 
-    [SerializeField] private GameObject attackProjectile;
+    private GameObject attackProjectile;
     private Player player;
 
-    // Called when the script instance is being loaded. 
-    protected virtual void Awake(){
-        player = GetComponent<Player>();
+    public BasicAttack(Player player, GameObject attackProjectile){
+        this.player = player;
+        this.attackProjectile = attackProjectile;
     }
 
     /*
@@ -35,7 +35,7 @@ public class BasicAttack : MonoBehaviour
     *   MeleeAttack - Melee basic attack method.
     *   @param target - GameObject of the target to attack.
     */
-    protected virtual void MeleeAttack(GameObject target){
+    private void MeleeAttack(GameObject target){
         AttackHit(target);
     }
 
@@ -43,17 +43,18 @@ public class BasicAttack : MonoBehaviour
     *   RangeAttack - Ranged basic attack method.
     *   @param target - GameObject of the target to attack.
     */
-    protected virtual void RangeAttack(GameObject target){
-        StartCoroutine(AttackProjectile(target));
+    private void RangeAttack(GameObject target){
+        if(attackProjectile != null)
+            player.StartCoroutine(AttackProjectile(target));
     }
     
     /*
     *   AttackHit - Apply basic attack damage.
     *   @param target - GameObject of the target to attack.
     */
-    public virtual void AttackHit(GameObject target){
+    public void AttackHit(GameObject target){
         float physicalDamage = player.unitStats.physicalDamage.GetValue();
-        target.GetComponent<Unit>().TakeDamage(physicalDamage, "physical", gameObject, false);
+        target.GetComponent<Unit>().TakeDamage(physicalDamage, "physical", player.gameObject, false);
     }
 
     /*
@@ -62,7 +63,7 @@ public class BasicAttack : MonoBehaviour
     */
     private IEnumerator AttackProjectile(GameObject target){
         // Create attack GameObject and set necessary variables.
-        GameObject projectile = (GameObject) Instantiate(attackProjectile, transform.position, Quaternion.identity);
+        GameObject projectile = (GameObject) GameObject.Instantiate(attackProjectile, player.transform.position, Quaternion.identity);
         BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
         basicAttackTrigger.Target = target;
         basicAttackTrigger.basicAttack = this;
