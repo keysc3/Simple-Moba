@@ -25,9 +25,11 @@ public class Player : Unit, IRespawnable
     }
     [SerializeField] private Material dead;
     [SerializeField] private LevelInfo levelInfo;
+    [SerializeField] private GameObject attackProjectile;
     public PlayerController playerController { get; private set; }
     public PlayerSpellInput playerSpellInput { get; private set; }
     public ChampionSpells championSpells { get; private set; }
+    public BasicAttack basicAttack { get; private set; }
     private Material alive;
     private Renderer rend;
 
@@ -49,6 +51,7 @@ public class Player : Unit, IRespawnable
         inventory = new Inventory();
         score = new Score();
         levelManager = new LevelManager(this, levelInfo);
+        basicAttack = new BasicAttack(this, attackProjectile);
         (playerUI, playerBar) = UIManager.instance.SetupPlayerUI(this);
         UIManager.instance.InitialValueSetup(this);
     }
