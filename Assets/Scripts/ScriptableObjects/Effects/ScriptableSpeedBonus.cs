@@ -10,8 +10,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects/SpeedBonus")]
 public class ScriptableSpeedBonus : ScriptableEffect
 {
-    //[field: SerializeField] public float duration { get; private set; }
-    [field: SerializeField] public List<float> bonusPercent { get; private set; }
+    [field: SerializeField] public List<float> bonusPercent { get; private set; } = new List<float>();
     [field: SerializeField] public bool isAdditive { get; private set; }
 
     /*
@@ -23,12 +22,4 @@ public class ScriptableSpeedBonus : ScriptableEffect
         ccValue = 0;
         return new SpeedBonus(this, duration[spellLevel], bonusPercent[spellLevel], unitCasted, unitEffected);
     }
-
-    /*
-    *   SetBonusPercent - Sets the bonus percent of the speed bonus.
-    *   @param bonusPercent - float of percent to set the bonus to.
-    */
-    /*public void SetBonusPercent(float bonusPercent){
-        this.bonusPercent = bonusPercent;
-    }*/
 }

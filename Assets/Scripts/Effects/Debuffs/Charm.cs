@@ -12,11 +12,8 @@ public class Charm : Effect
 {
     private int spellLevel;
     private Vector3 currentTarget;
-    //private NavMeshAgent effectedNavMeshAgent;
     private Unit effectedUnit;
-    //private Collider effectedCollider;
-    //private PlayerController playerController;
-    //private PlayerSpellInput playerSpellInput;
+    public Slow charmSlow { get; private set; }
     
     /*
     *   Charm - Initialize a new charm effect.
@@ -28,6 +25,8 @@ public class Charm : Effect
     public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
         this.spellLevel = spellLevel;
         effectedUnit = effected.GetComponent<Unit>();
+        if(((ScriptableCharm) effectType).slow != null)
+            charmSlow = (Slow) ((ScriptableCharm) effectType).slow.InitializeEffect(spellLevel, casted, effected);
     }
 
     /*
@@ -43,10 +42,8 @@ public class Charm : Effect
             }
             // Reset the units current path.
             effectedUnit.navMeshAgent.ResetPath();
-            if(((ScriptableCharm) effectType).slow != null){
-                effectedUnit.statusEffects.AddEffect(((ScriptableCharm) effectType).slow
-                .InitializeEffect(spellLevel, casted, effected));
-            }
+            if(charmSlow != null)
+                effectedUnit.statusEffects.AddEffect(charmSlow);
         }
     }
 
