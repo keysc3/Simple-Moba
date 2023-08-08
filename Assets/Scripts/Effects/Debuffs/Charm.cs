@@ -15,8 +15,8 @@ public class Charm : Effect
     //private NavMeshAgent effectedNavMeshAgent;
     private Unit effectedUnit;
     //private Collider effectedCollider;
-    private PlayerController playerController;
-    private PlayerSpellInput playerSpellInput;
+    //private PlayerController playerController;
+    //private PlayerSpellInput playerSpellInput;
     
     /*
     *   Charm - Initialize a new charm effect.
@@ -34,30 +34,37 @@ public class Charm : Effect
     *   StartEffect - Start the charm effect.
     */
     public override void StartEffect(){
-        // If the charmed unit ia a champion disable their controls.
-        if(effectedUnit.SUnit is ScriptableChampion){
-            playerController = effected.GetComponent<PlayerController>();
-            playerController.enabled = false;
-            playerSpellInput = effected.GetComponent<PlayerSpellInput>();
-            playerSpellInput.enabled = false;
+        if(effectedUnit != null){
+            // If the charmed unit ia a champion disable their controls.
+            if(effectedUnit is Player){
+                Player player = (Player) effectedUnit;
+                player.GetComponent<PlayerController>().enabled = false;
+                player.GetComponent<PlayerSpellInput>().enabled = false;
+            }
+            // Reset the units current path.
+            effectedUnit.navMeshAgent.ResetPath();
+            if(((ScriptableCharm) effectType).slow != null){
+                effectedUnit.statusEffects.AddEffect(((ScriptableCharm) effectType).slow
+                .InitializeEffect(spellLevel, casted, effected));
+            }
         }
-        // Reset the units current path.
-        effectedUnit.navMeshAgent.ResetPath();
-        effectedUnit.statusEffects.AddEffect(((ScriptableCharm) effectType).slow
-        .InitializeEffect(spellLevel, casted, effected));
     }
 
     /*
     *   EndEffect - End the charm effect.
     */
     public override void EndEffect(){
-        // Reset the path and speed from the charm effect.
-        effectedUnit.navMeshAgent.ResetPath();
-        
-        // Give controls back if charmed is active GameObject.
-        if(effectedUnit.SUnit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == effected){
-            playerController.enabled = true;
-            playerSpellInput.enabled = true;
+        if(effectedUnit != null){
+            // Reset the path and speed from the charm effect.
+            effectedUnit.navMeshAgent.ResetPath();
+            if(effectedUnit is Player){
+                // Give controls back if charmed is active GameObject.
+                if(effectedUnit.SUnit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == effected){
+                    Player player = (Player) effectedUnit;
+                    player.GetComponent<PlayerController>().enabled = true;
+                    player.GetComponent<PlayerSpellInput>().enabled = true;
+                }
+            }
         }
     }
 
