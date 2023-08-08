@@ -8,7 +8,7 @@ public class score
 {
     // A Test behaves as an ordinary method
     [Test]
-    public void add_1_champion_kill_with_null_takedown_callback()
+    public void adds_1_champion_kill_with_null_takedown_callback()
     {
         // Arrange
         Score score = new Score();
@@ -23,7 +23,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_champion_kill_with_takedown_callback_change_gameobject_name()
+    public void adds_champion_kill_with_takedown_callback_change_gameobject_name()
     {
         // Arrange
         Score score = new Score();
@@ -40,7 +40,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_2_champion_kills_with_takedown_callback()
+    public void adds_2_champion_kills_with_takedown_callback()
     {
         // Arrange
         Score score = new Score();
@@ -61,7 +61,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_1_assist_with_null_takedown_callback()
+    public void adds_1_assist_with_null_takedown_callback()
     {
         // Arrange
         Score score = new Score();
@@ -76,7 +76,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_assist_with_takedown_callback_change_gameobject_name()
+    public void adds_assist_with_takedown_callback_change_gameobject_name()
     {
         // Arrange
         Score score = new Score();
@@ -93,7 +93,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_2_assists_with_takedown_callback()
+    public void adds_2_assists_with_takedown_callback()
     {
         // Arrange
         Score score = new Score();
@@ -113,7 +113,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_1_creep_kill_with_null_takedown_callback()
+    public void adds_1_creep_kill_with_null_takedown_callback()
     {
         // Arrange
         Score score = new Score();
@@ -128,7 +128,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_creep_kill_with_takedown_callback_change_gameobject_name()
+    public void adds_creep_kill_with_takedown_callback_change_gameobject_name()
     {
         // Arrange
         Score score = new Score();
@@ -145,7 +145,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_2_creep_kills_with_takedown_callback()
+    public void adds_2_creep_kills_with_takedown_callback()
     {
         // Arrange
         Score score = new Score();
@@ -167,7 +167,7 @@ public class score
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_1_death()
+    public void adds_1_death()
     {
         // Arrange
         Score score = new Score();

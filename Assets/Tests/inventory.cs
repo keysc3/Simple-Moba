@@ -23,7 +23,7 @@ public class inventory
 
     // A Test behaves as an ordinary method
     [Test]
-    public void remove_item_from_inventory()
+    public void removes_item_from_inventory()
     {
         // Arrange
         Inventory inventory = new Inventory();
@@ -39,7 +39,7 @@ public class inventory
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_more_items_than_max_size()
+    public void adds_more_items_than_max_size()
     {
         // Arrange
         Inventory inventory = new Inventory();
@@ -56,7 +56,7 @@ public class inventory
 
     // A Test behaves as an ordinary method
     [Test]
-    public void remove_item_from_slot_without_item()
+    public void removes_item_from_slot_without_item()
     {
         // Arrange
         Inventory inventory = new Inventory();
@@ -71,7 +71,7 @@ public class inventory
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_item_to_lowest_open_slot_number()
+    public void adds_item_to_lowest_open_slot_number()
     {
         // Arrange
         Inventory inventory = new Inventory();

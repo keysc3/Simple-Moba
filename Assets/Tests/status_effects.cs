@@ -13,7 +13,7 @@ public class status_effects
 
     // A Test behaves as an ordinary method
     [Test]
-    public void add_3_slows_where_second_slow_is_the_strongest()
+    public void sets_only_strongest_slow_active_from_3_slows()
     {
         // Arrange 
         Slow s1 = CreateSlowEffect("Slow1", 0);
