@@ -4,17 +4,21 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/*
+* Purpose: Unit tests for the StatusEffects class.
+*
+* @author: Colin Keys
+*/
 public class status_effects
 {
     private List<float> slowValues { get; } = new List<float>(){0.1f, 0.15f, 0.2f, 0.25f, 0.3f};
     private List<float> durationValues { get; } = new List<float>(){1f, 2f, 3f, 4f, 5f};
-    /*public ScriptableSlow slow1;
-    public ScriptableSlow slow2;*/
 
-    // A Test behaves as an ordinary method
+    /*
+    *   Adds three slows to the status effects list. Only the strongest should be activated.
+    */
     [Test]
-    public void sets_only_strongest_slow_active_from_3_slows()
-    {
+    public void sets_only_strongest_slow_active_from_3_slows(){
         // Arrange 
         Slow s1 = CreateSlowEffect("Slow1", 0);
         Slow s2 = CreateSlowEffect("Slow2", 4);
@@ -31,6 +35,9 @@ public class status_effects
         Assert.AreEqual(new List<bool>(){false, true, false}, activeEffects);
     }
 
+    /*
+    *   Adds two non-zero cc value effects to the status effects list. Only the strongest should be active.
+    */
     [Test]
     public void sets_only_strongest_cc_effect_active_from_nonzero_cc_effects(){
         // Arrange
@@ -56,6 +63,9 @@ public class status_effects
         Assert.AreEqual(new List<bool>(){false, true}, isActivated);
     }
 
+    /*
+    *   Adds 5 different effects to the status effects list. The strongest nonzero cc value, strongest slow, and non-slow 0 cc value effects should be active.
+    */
     [Test]
     public void adds_range_of_cc_value_effects_and_sets_0_cc_values_active_and_strongest_nonzero_cc_value_active(){
         // Arrange
@@ -109,6 +119,9 @@ public class status_effects
 
     }
 
+    /*
+    *   Adds multiple 0 cc value effects to the status effects list, only one slow. All the effects should be active.
+    */
     [Test]
     public void adds_only_0_cc_values(){
         // Arrange
@@ -130,7 +143,7 @@ public class status_effects
         personalSpell1.duration.AddRange(durationValues);
         PersonalSpell ps1 = (PersonalSpell) personalSpell1.InitializeEffect(2, g1, g2);
 
-    ScriptablePersonalSpell personalSpell2 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
+        ScriptablePersonalSpell personalSpell2 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
         personalSpell2 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
         personalSpell2.duration.AddRange(new List<float>(){-1f});
         PersonalSpell ps2 = (PersonalSpell) personalSpell2.InitializeEffect(0, g1, g2);
@@ -150,6 +163,12 @@ public class status_effects
         Assert.AreEqual(new List<bool>(){true, true, true, true, true}, isActivated);
     }
 
+    /*
+    *   CreateSlowEffect - Creates a slow effect.
+    *   @param slowName - Name of the new slow.
+    *   @param index - Spell level index
+    *   @return Slow - New Slow.
+    */
     public Slow CreateSlowEffect(string slowName, int index){
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
