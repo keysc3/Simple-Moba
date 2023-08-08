@@ -61,6 +61,7 @@ public class ActiveChampion : MonoBehaviour
                 cameraMovement.targetObject = champions[i].transform;
             }
         }
+        DrawGizmos.instance.drawMethod = null;
     }
 
     /*
