@@ -7,7 +7,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public abstract class ScriptableEffect : ScriptableObject
+public class ScriptableEffect : ScriptableObject
 {
     [field: SerializeField] public List<float> duration { get; private set; } = new List<float>();
     [field: SerializeField] public bool isStackable { get; private set; } = false;

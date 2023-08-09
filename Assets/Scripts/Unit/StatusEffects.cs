@@ -28,7 +28,7 @@ public class StatusEffects
                 if(statusEffects.Contains(effectUpdating)){
                     if(statusEffects[i].isFinished){
                         Effect effect = statusEffects[i];
-                        statusEffects[i].EndEffect();
+                        //statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
                         if(effect is Slow){
