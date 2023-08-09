@@ -46,7 +46,7 @@ public class Effect
     public Effect(ScriptableEffect effect, float duration, GameObject unitCasted, GameObject unitEffected){
         casted =  unitCasted;
         effected = unitEffected;
-        effectDuration = duration;
+        EffectDuration = duration;
         isFinished = false;
         effectType = effect;
     }
@@ -70,12 +70,10 @@ public class Effect
             EffectTick();
         // Persistent effects have duration -1.
         if(effectDuration != -1f){
-            if(effectTimer <= effectDuration){
-                Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
-                effectTimer += delta;
-            }
-            else{
-                Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
+            effectTimer += delta;
+            Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
+            if(effectTimer >= effectDuration){
+                EndEffect();
                 isFinished = true;
             }
         }

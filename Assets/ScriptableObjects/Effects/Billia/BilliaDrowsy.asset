@@ -20,5 +20,5 @@ MonoBehaviour:
   <ccValue>k__BackingField: 0
   <isBuff>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
-  <slow>k__BackingField: {fileID: 11400000, guid: ad8247022f10f0246a1e376240348d0c, type: 2}
-  <sleep>k__BackingField: {fileID: 11400000, guid: cd143d3d6b7ea2f4a9cc87675b7e8f21, type: 2}
+  slow: {fileID: 11400000, guid: ad8247022f10f0246a1e376240348d0c, type: 2}
+  sleep: {fileID: 11400000, guid: cd143d3d6b7ea2f4a9cc87675b7e8f21, type: 2}
