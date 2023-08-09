@@ -73,7 +73,8 @@ public class Effect
             effectTimer += delta;
             Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
             if(effectTimer >= effectDuration){
-                EndEffect();
+                if(isActivated)
+                    EndEffect();
                 isFinished = true;
             }
         }
