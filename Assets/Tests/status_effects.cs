@@ -45,11 +45,17 @@ public class status_effects
         GameObject g2 = new GameObject();
 
         ScriptableSleep sleep = ScriptableObject.CreateInstance<ScriptableSleep>();
+        sleep.name = "Sleep1";
         sleep.duration.AddRange(durationValues);
         Sleep sleep1 = (Sleep) sleep.InitializeEffect(3, g1, g2);
 
         ScriptableCharm charm = ScriptableCharm.CreateInstance<ScriptableCharm>();
+        charm.name = "Charm1";
         charm.duration.AddRange(durationValues);
+        charm.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        charm.slow.name = "Charm1Slow";
+        charm.slow.duration.AddRange(durationValues);
+        charm.slow.slowPercent.AddRange(slowValues);
         Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
 
         StatusEffects se = new StatusEffects();
@@ -73,18 +79,21 @@ public class status_effects
         GameObject g2 = new GameObject();
 
         ScriptableDrowsy drowsy = ScriptableDrowsy.CreateInstance<ScriptableDrowsy>();
+        drowsy.name = "Drowsy1";
         drowsy.duration.AddRange(durationValues);
         drowsy.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
         drowsy.slow.duration.AddRange(durationValues);
         drowsy.slow.slowPercent.AddRange(slowValues);
-        drowsy.slow.name = "Drowsy Slow";
+        drowsy.slow.name = "Drowsy1Slow";
         drowsy.sleep = ScriptableObject.CreateInstance<ScriptableSleep>();
         drowsy.sleep.duration.AddRange(durationValues);
         Drowsy drowsy1 = (Drowsy) drowsy.InitializeEffect(0, g1, g2);
 
         ScriptableCharm charm = ScriptableCharm.CreateInstance<ScriptableCharm>();
+        charm.name = "Charm1";
         charm.duration.AddRange(durationValues);
         charm.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        charm.slow.name = "Charm1Slow";
         charm.slow.duration.AddRange(durationValues);
         charm.slow.slowPercent.AddRange(slowValues);
         Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
@@ -92,11 +101,13 @@ public class status_effects
         Slow slow1 = CreateSlowEffect("Slow1", 2);
 
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
+        speedBonus.name = "SpeedBonus1";
         speedBonus.duration.AddRange(durationValues);
         speedBonus.bonusPercent.AddRange(slowValues);
         SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(1, g1, g2);
 
         ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
+        dot.name = "Dot1";
         dot.duration.AddRange(durationValues);
         Dot dot1 = (Dot) dot.InitializeEffect(10f, 1, g1, g2);
 
@@ -131,19 +142,23 @@ public class status_effects
         Slow slow1 = CreateSlowEffect("Slow1", 1);
 
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
+        speedBonus.name = "SpeedBonus1";
         speedBonus.duration.AddRange(durationValues);
         speedBonus.bonusPercent.AddRange(slowValues);
         SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(4, g1, g2);
 
         ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
+        dot.name = "Dot1";
         dot.duration.AddRange(durationValues);
         Dot dot1 = (Dot) dot.InitializeEffect(20f, 3, g1, g2);
 
         ScriptablePersonalSpell personalSpell1 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
+        personalSpell1.name = "PS1";
         personalSpell1.duration.AddRange(durationValues);
         PersonalSpell ps1 = (PersonalSpell) personalSpell1.InitializeEffect(2, g1, g2);
 
         ScriptablePersonalSpell personalSpell2 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
+        personalSpell2.name = "PS2";
         personalSpell2 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
         personalSpell2.duration.AddRange(new List<float>(){-1f});
         PersonalSpell ps2 = (PersonalSpell) personalSpell2.InitializeEffect(0, g1, g2);
@@ -169,9 +184,11 @@ public class status_effects
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
 
-        ScriptableCharm charm = ScriptableCharm.CreateInstance<ScriptableCharm>();
+        ScriptableCharm charm = ScriptableObject.CreateInstance<ScriptableCharm>();
+        charm.name = "Charm1";
         charm.duration.AddRange(durationValues);
         charm.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        charm.slow.name = "Charm1Slow";
         charm.slow.duration.AddRange(durationValues);
         charm.slow.slowPercent.AddRange(slowValues);
         Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
@@ -179,11 +196,11 @@ public class status_effects
         Slow slow1 = CreateSlowEffect("Slow1", 2);
 
         ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
+        dot.name = "Dot1";
         dot.duration.AddRange(durationValues);
         Dot dot1 = (Dot) dot.InitializeEffect(10f, 1, g1, g2);
 
         ScriptablePersonalSpell personalSpell1 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
-        personalSpell1 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
         personalSpell1.name = "ps1";
         personalSpell1.duration.AddRange(new List<float>(){-1f});
         PersonalSpell ps1 = (PersonalSpell) personalSpell1.InitializeEffect(0, g1, g2);
@@ -202,6 +219,33 @@ public class status_effects
         // Assert
         Assert.AreEqual((1, "ps1"), (se.statusEffects.Count, se.statusEffects[0].effectType.name));
 
+    }
+
+    [Test]
+    public void checks_for_effect_with_specific_source(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+
+        ScriptableCharm charm = ScriptableObject.CreateInstance<ScriptableCharm>();
+        charm.name = "Charm1";
+        charm.duration.AddRange(durationValues);
+        charm.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        charm.slow.name = "Charm1Slow";
+        charm.slow.duration.AddRange(durationValues);
+        charm.slow.slowPercent.AddRange(slowValues);
+        Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(charm1);
+        se.AddEffect(charm1.charmSlow);
+
+        // Act
+        bool b = se.CheckForEffectWithSource(ScriptableObject.CreateInstance<ScriptableCharm>(), g1);
+    
+        // Arrange
+        Assert.AreEqual(true, b);
     }
 
     /*
