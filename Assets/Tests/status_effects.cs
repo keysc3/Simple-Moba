@@ -328,6 +328,52 @@ public class status_effects
 
     }
 
+    [Test]
+    public void returns_all_effects_in_status_effects_list_with_given_name(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+
+        Slow slow1 = CreateSlowEffect("Slow1", 2);
+
+        Slow slow2 = CreateSlowEffect("SpeedBonus1", 1);
+
+        ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
+        speedBonus.name = "SpeedBonus1";
+        speedBonus.isStackable = true;
+        speedBonus.duration.AddRange(durationValues);
+        speedBonus.bonusPercent.AddRange(slowValues);
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+
+        SpeedBonus speedBonus2 = (SpeedBonus) speedBonus.InitializeEffect(4, g1, g2);
+
+        ScriptableCharm charm = ScriptableObject.CreateInstance<ScriptableCharm>();
+        charm.name = "Charm1";
+        charm.duration.AddRange(durationValues);
+        charm.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        charm.slow.name = "Charm1Slow";
+        charm.slow.duration.AddRange(durationValues);
+        charm.slow.slowPercent.AddRange(slowValues);
+        Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(slow1);
+        se.AddEffect(slow2);
+        se.AddEffect(speedBonus1);
+        se.AddEffect(speedBonus2);
+        se.AddEffect(charm1);
+        se.AddEffect(charm1.charmSlow);
+
+        // Act
+        List<Effect> effects = se.GetEffectsByName("SpeedBonus1");
+
+        // Assert
+        Assert.AreEqual((typeof(ScriptableSlow), typeof(ScriptableSpeedBonus), typeof(ScriptableSpeedBonus), "SpeedBonus1", "SpeedBonus1", "SpeedBonus1"), 
+        (effects[0].effectType.GetType(), effects[1].effectType.GetType(), effects[2].effectType.GetType(), 
+        effects[0].effectType.name, effects[1].effectType.name, effects[2].effectType.name));
+    }
+
     /*
     *   CreateSlowEffect - Creates a slow effect.
     *   @param slowName - Name of the new slow.
