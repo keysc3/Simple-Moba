@@ -66,7 +66,9 @@ public class StatusEffects
             else{
                 for(int i = statusEffects.Count - 1; i >= 0; i--){
                     // If the same effect hit them and it is not stackable remove it for the new one.
-                    if(statusEffects[i].effectType.name == effect.effectType.name && !effect.effectType.isStackable){
+                    if(statusEffects[i].effectType.name == effect.effectType.name && 
+                    statusEffects[i].effectType.GetType() == effect.effectType.GetType() && 
+                    !effect.effectType.isStackable){
                         statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
                     }
