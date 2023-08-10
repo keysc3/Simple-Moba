@@ -42,16 +42,16 @@ public class Stat {
     *   @param modifier - float of the amount to modify the base value by.
     */
     public void AddModifier(float modifier){
-        if(modifier != 0)
+        if(modifier != 0f)
             modifiers.Add(modifier);
     }
 
     /*
-    *   AddModifier - Removes a modifier frome the stats modifier list.
+    *   AddModifier - Removes a modifier from the stats modifier list.
     *   @param modifier - float of the value to remove from the modifiers list.
     */
     public void RemoveModifier(float modifier){
-        if(modifier != 0)
+        if(modifier != 0f)
             modifiers.Remove(modifier);
     }
 
