@@ -68,7 +68,24 @@ public class unit_stats
         unitStats.ResetHealth();
 
         // Assert 
-        Assert.AreEqual(1032, unitStats.CurrentHealth);
+        Assert.AreEqual(1032f, unitStats.CurrentHealth);
     }
 
+    // A Test behaves as an ordinary method
+    [Test]
+    public void sets_attack_speed_to_0x876875_from_base_0x625_with_bonus_attack_speed_modifiers(){
+        // Arrange
+        ScriptableUnit sUnit = ScriptableObject.CreateInstance<ScriptableUnit>();
+        UnitStats unitStats = new UnitStats(sUnit);
+        unitStats.attackSpeed.BaseValue = 0.625f;
+        unitStats.bonusAttackSpeed.BaseValue = 7.7f;
+        unitStats.bonusAttackSpeed.AddModifier(26.4f);
+        unitStats.bonusAttackSpeed.AddModifier(6.2f);
+
+        // Act
+        unitStats.UpdateAttackSpeed();
+
+        // Assert 
+        Assert.AreEqual(0.876875f, unitStats.attackSpeed.GetValue());
+    }
 }
