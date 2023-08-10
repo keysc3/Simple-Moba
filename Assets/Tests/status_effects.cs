@@ -283,6 +283,51 @@ public class status_effects
         Assert.AreEqual(true, b);
     }
 
+    [Test]
+    public void returns_all_slow_effects_in_status_effects_list(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+
+        Slow slow1 = CreateSlowEffect("Slow1", 2);
+
+        ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
+        speedBonus.name = "SpeedBonus1";
+        speedBonus.duration.AddRange(durationValues);
+        speedBonus.bonusPercent.AddRange(slowValues);
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+    
+        ScriptableDrowsy drowsy = ScriptableDrowsy.CreateInstance<ScriptableDrowsy>();
+        drowsy.name = "Drowsy1";
+        drowsy.duration.AddRange(durationValues);
+        drowsy.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        drowsy.slow.duration.AddRange(durationValues);
+        drowsy.slow.slowPercent.AddRange(slowValues);
+        drowsy.slow.name = "Drowsy1Slow";
+        drowsy.sleep = ScriptableObject.CreateInstance<ScriptableSleep>();
+        drowsy.sleep.duration.AddRange(durationValues);
+        Drowsy drowsy1 = (Drowsy) drowsy.InitializeEffect(4, g1, g2);
+
+        Slow slow2 = CreateSlowEffect("Slow2", 1);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(slow1);
+        se.AddEffect(speedBonus1);
+        se.AddEffect(drowsy1);
+        se.AddEffect(drowsy1.drowsySlow);
+        se.AddEffect(slow2);
+
+        // Act
+        List<Effect> effects = se.GetEffectsByType(typeof(ScriptableSlow));
+
+        // Assert
+        Assert.AreEqual((typeof(ScriptableSlow), typeof(ScriptableSlow), typeof(ScriptableSlow), "Slow1", "Drowsy1Slow", "Slow2"), 
+        (effects[0].effectType.GetType(), effects[1].effectType.GetType(), effects[2].effectType.GetType(), 
+        effects[0].effectType.name, effects[1].effectType.name, effects[2].effectType.name));
+
+    }
+
     /*
     *   CreateSlowEffect - Creates a slow effect.
     *   @param slowName - Name of the new slow.
