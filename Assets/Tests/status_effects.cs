@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using System.Linq;
 
 /*
 * Purpose: Unit tests for the StatusEffects class.
@@ -393,7 +394,7 @@ public class status_effects
 
         SpeedBonus speedBonus4 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
 
-         Slow slow1 = CreateSlowEffect("Slow1", 3);
+        Slow slow1 = CreateSlowEffect("Slow1", 3);
 
         speedBonus1.TimerTick(0.5f);
         speedBonus2.TimerTick(2.5f);
@@ -414,6 +415,64 @@ public class status_effects
 
         // Assert
         Assert.AreEqual((3.8f, "SpeedBonus1"), (nextExpiring.effectTimer, nextExpiring.effectType.name));
+    }
+
+    [Test]
+    public void removes_most_impairing_effect_from_effect_list(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+        GameObject g3 = new GameObject();
+        GameObject g4 = new GameObject();
+
+        ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
+        dot.name = "Dot1";
+        dot.duration.AddRange(durationValues);
+        Dot dot1 = (Dot) dot.InitializeEffect(5f, 2, g1, g2);
+
+        ScriptableCharm charm = ScriptableObject.CreateInstance<ScriptableCharm>();
+        charm.name = "Charm1";
+        charm.duration.AddRange(durationValues);
+        charm.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        charm.slow.name = "Charm1Slow";
+        charm.slow.duration.AddRange(durationValues);
+        charm.slow.slowPercent.AddRange(slowValues);
+        Charm charm1 = (Charm) charm.InitializeEffect(3, g1, g2);
+
+        ScriptableSleep sleep1 = ScriptableObject.CreateInstance<ScriptableSleep>();
+        sleep1.name = "Sleep1";
+        sleep1.duration.AddRange(durationValues);
+        Sleep s1 = (Sleep) sleep1.InitializeEffect(4, g1, g2);
+
+        ScriptableSleep sleep2 = ScriptableObject.CreateInstance<ScriptableSleep>();
+        sleep2.name = "Sleep2";
+        sleep2.duration.AddRange(durationValues);
+        Sleep s2 = (Sleep) sleep2.InitializeEffect(4, g3, g2);
+
+        ScriptableSleep sleep3 = ScriptableObject.CreateInstance<ScriptableSleep>();
+        sleep3.name = "Sleep3";
+        sleep3.duration.AddRange(durationValues);
+        Sleep s3 = (Sleep) sleep3.InitializeEffect(4, g4, g2);
+
+        s3.TimerTick(2f);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(dot1);
+        se.AddEffect(charm1);
+        se.AddEffect(charm1.charmSlow);
+        se.AddEffect(s1);
+        se.AddEffect(s2);
+        se.AddEffect(s3);
+
+        // Act
+        se.RemoveEffect(sleep1, g1);
+        List<bool> activatedEffects = new List<bool>(){dot1.IsActivated, charm1.IsActivated, charm1.charmSlow.IsActivated, s1.IsActivated, s2.IsActivated, s3.IsActivated};
+        bool b = se.statusEffects.Contains(s1);
+
+        // Assert
+        List<bool> aE = new List<bool>(){true, false, true, false, false, true};
+        Assert.AreEqual((true, false, 5), (aE.SequenceEqual(activatedEffects), b, se.statusEffects.Count));
     }
 
     /*
