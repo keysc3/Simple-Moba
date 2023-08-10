@@ -25,7 +25,7 @@ public class unit_stats
 
     // A Test behaves as an ordinary method
     [Test]
-    public void sets_current_health_to_max_health_given_value_greater_than_max_health(){
+    public void sets_current_health_of_42_to_max_health_of_100_from_attempted_current_health_set_of_162(){
         // Arrange
         ScriptableUnit sUnit = ScriptableObject.CreateInstance<ScriptableUnit>();
         UnitStats unitStats = new UnitStats(sUnit);
@@ -55,5 +55,20 @@ public class unit_stats
         Assert.AreEqual(72f, unitStats.CurrentHealth);
     }
 
+    // A Test behaves as an ordinary method
+    [Test]
+    public void resets_current_health_of_50_to_max_health_value_of_1032(){
+        // Arrange
+        ScriptableUnit sUnit = ScriptableObject.CreateInstance<ScriptableUnit>();
+        UnitStats unitStats = new UnitStats(sUnit);
+        unitStats.maxHealth.BaseValue = 1032f;
+        unitStats.CurrentHealth = 50f;
+
+        // Act
+        unitStats.ResetHealth();
+
+        // Assert 
+        Assert.AreEqual(1032, unitStats.CurrentHealth);
+    }
 
 }
