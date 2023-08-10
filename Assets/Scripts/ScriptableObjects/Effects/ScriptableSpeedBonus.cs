@@ -11,7 +11,7 @@ using UnityEngine;
 public class ScriptableSpeedBonus : ScriptableEffect
 {
     [field: SerializeField] public List<float> bonusPercent { get; private set; } = new List<float>();
-    [field: SerializeField] public bool isAdditive { get; private set; }
+    public bool isAdditive;
 
     /*
     *   InitializeEffect - Initializes a new speed bonus effect with the duration and bonus percent.
