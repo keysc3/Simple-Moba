@@ -261,10 +261,12 @@ public class StatusEffects
     public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
         for(int i = 0; i < statusEffects.Count; i++){
             if(effectType.GetType() == statusEffects[i].effectType.GetType() && casted == statusEffects[i].casted){
+                Effect removed = statusEffects[i];
                 statusEffects[i].IsActivated = false;
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);
-                SetMostImpairing(GetMostImpairing());
+                if(removed == mostImpairing)
+                    SetMostImpairing(GetMostImpairing());
                 return;
             }
         }
