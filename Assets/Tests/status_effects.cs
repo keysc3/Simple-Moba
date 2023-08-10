@@ -163,6 +163,47 @@ public class status_effects
         Assert.AreEqual(new List<bool>(){true, true, true, true, true}, isActivated);
     }
 
+    [Test]
+    public void removes_all_effects_besides_personal_spells_from_effects_list(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+
+        ScriptableCharm charm = ScriptableCharm.CreateInstance<ScriptableCharm>();
+        charm.duration.AddRange(durationValues);
+        charm.slow = ScriptableObject.CreateInstance<ScriptableSlow>();
+        charm.slow.duration.AddRange(durationValues);
+        charm.slow.slowPercent.AddRange(slowValues);
+        Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
+
+        Slow slow1 = CreateSlowEffect("Slow1", 2);
+
+        ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
+        dot.duration.AddRange(durationValues);
+        Dot dot1 = (Dot) dot.InitializeEffect(10f, 1, g1, g2);
+
+        ScriptablePersonalSpell personalSpell1 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
+        personalSpell1 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
+        personalSpell1.name = "ps1";
+        personalSpell1.duration.AddRange(new List<float>(){-1f});
+        PersonalSpell ps1 = (PersonalSpell) personalSpell1.InitializeEffect(0, g1, g2);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(charm1);
+        se.AddEffect(charm1.charmSlow);
+        se.AddEffect(slow1);
+        se.AddEffect(dot1);
+        se.AddEffect(ps1);
+
+        // Act
+        se.ResetEffects();
+
+        // Assert
+        Assert.AreEqual((1, "ps1"), (se.statusEffects.Count, se.statusEffects[0].effectType.name));
+
+    }
+
     /*
     *   CreateSlowEffect - Creates a slow effect.
     *   @param slowName - Name of the new slow.
