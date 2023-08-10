@@ -103,30 +103,26 @@ public class unit_stats
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
         StatusEffects se = new StatusEffects();
+        List<Effect> myEffects  = new List<Effect>();
 
         for(int i = 0; i < 3; i++){
             ScriptableSlow slow = ScriptableObject.CreateInstance<ScriptableSlow>();
             slow.name = "Slow" + i;
             slow.duration.AddRange(durationValues);
             slow.slowPercent.AddRange(slowValues);
-            se.AddEffect((Slow) slow.InitializeEffect((i+2)%slowValues.Count, g1, g2));
+            myEffects.Add((Slow) slow.InitializeEffect((i+2)%slowValues.Count, g1, g2));
         }
 
-        SpeedBonus sb1 = CreateSpeedBonusEffect("AdditiveStackable", 3, true, true);
-        SpeedBonus sb2 = CreateSpeedBonusEffect("Additive1", 3, true, false);
-        SpeedBonus sb3 = CreateSpeedBonusEffect("Additive2", 4, true, false);
-        SpeedBonus sb4 = CreateSpeedBonusEffect("Additive3", 1, true, false);
-        SpeedBonus sb5 = CreateSpeedBonusEffect("Multi1", 0, false, false);
-        SpeedBonus sb6 = CreateSpeedBonusEffect("Multi2", 1, false, false);
-
-        se.AddEffect(sb1);
-        se.AddEffect(sb1);
-        se.AddEffect(sb1);
-        se.AddEffect(sb2);
-        se.AddEffect(sb3);
-        se.AddEffect(sb4);
-        se.AddEffect(sb5);
-        se.AddEffect(sb6);
+        for(int i = 0; i < 3; i ++){
+            myEffects.Add(CreateSpeedBonusEffect("AdditiveStackable", 3, true, true));
+        }
+        myEffects.Add(CreateSpeedBonusEffect("Additive1", 3, true, false));
+        myEffects.Add(CreateSpeedBonusEffect("Additive2", 4, true, false));
+        myEffects.Add(CreateSpeedBonusEffect("Additive3", 1, true, false));
+        myEffects.Add(CreateSpeedBonusEffect("Multi1", 0, false, false));
+        myEffects.Add(CreateSpeedBonusEffect("Multi2", 1, false, false));
+        
+        myEffects.ForEach(e => se.AddEffect(e));
 
         // Act
         float finalMS = unitStats.CalculateMoveSpeed(se);
