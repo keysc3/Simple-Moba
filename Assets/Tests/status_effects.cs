@@ -184,6 +184,7 @@ public class status_effects
         // Arrange
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
+        List<Effect> myEffects  = new List<Effect>();
 
         ScriptableCharm charm = ScriptableObject.CreateInstance<ScriptableCharm>();
         charm.name = "Charm1";
@@ -193,26 +194,24 @@ public class status_effects
         charm.slow.duration.AddRange(durationValues);
         charm.slow.slowPercent.AddRange(slowValues);
         Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
+        myEffects.Add(charm1);
+        myEffects.Add(charm1.charmSlow);
 
-        Slow slow1 = CreateSlowEffect("Slow1", 2);
+        myEffects.Add(CreateSlowEffect("Slow1", 2));
 
         ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
         dot.name = "Dot1";
         dot.duration.AddRange(durationValues);
-        Dot dot1 = (Dot) dot.InitializeEffect(10f, 1, g1, g2);
+        myEffects.Add((Dot) dot.InitializeEffect(10f, 1, g1, g2));
 
         ScriptablePersonalSpell personalSpell1 = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
         personalSpell1.name = "ps1";
         personalSpell1.duration.AddRange(new List<float>(){-1f});
-        PersonalSpell ps1 = (PersonalSpell) personalSpell1.InitializeEffect(0, g1, g2);
+        myEffects.Add((PersonalSpell) personalSpell1.InitializeEffect(0, g1, g2));
 
         StatusEffects se = new StatusEffects();
 
-        se.AddEffect(charm1);
-        se.AddEffect(charm1.charmSlow);
-        se.AddEffect(slow1);
-        se.AddEffect(dot1);
-        se.AddEffect(ps1);
+        myEffects.ForEach(e => se.AddEffect(e));
 
         // Act
         se.ResetEffects();
@@ -289,14 +288,15 @@ public class status_effects
         // Arrange
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
+        List<Effect> myEffects  = new List<Effect>();
 
-        Slow slow1 = CreateSlowEffect("Slow1", 2);
+        myEffects.Add(CreateSlowEffect("Slow1", 2));
 
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
         speedBonus.duration.AddRange(durationValues);
         speedBonus.bonusPercent.AddRange(slowValues);
-        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
     
         ScriptableDrowsy drowsy = ScriptableDrowsy.CreateInstance<ScriptableDrowsy>();
         drowsy.name = "Drowsy1";
@@ -308,16 +308,14 @@ public class status_effects
         drowsy.sleep = ScriptableObject.CreateInstance<ScriptableSleep>();
         drowsy.sleep.duration.AddRange(durationValues);
         Drowsy drowsy1 = (Drowsy) drowsy.InitializeEffect(4, g1, g2);
+        myEffects.Add(drowsy1);
+        myEffects.Add(drowsy1.drowsySlow);
 
-        Slow slow2 = CreateSlowEffect("Slow2", 1);
+        myEffects.Add(CreateSlowEffect("Slow2", 1));
 
         StatusEffects se = new StatusEffects();
 
-        se.AddEffect(slow1);
-        se.AddEffect(speedBonus1);
-        se.AddEffect(drowsy1);
-        se.AddEffect(drowsy1.drowsySlow);
-        se.AddEffect(slow2);
+        myEffects.ForEach(e => se.AddEffect(e));
 
         // Act
         List<Effect> effects = se.GetEffectsByType(typeof(ScriptableSlow));
@@ -334,19 +332,20 @@ public class status_effects
         // Arrange
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
+        List<Effect> myEffects  = new List<Effect>();
 
-        Slow slow1 = CreateSlowEffect("Slow1", 2);
+        myEffects.Add(CreateSlowEffect("Slow1", 2));
 
-        Slow slow2 = CreateSlowEffect("SpeedBonus1", 1);
+        myEffects.Add(CreateSlowEffect("SpeedBonus1", 1));
 
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
         speedBonus.isStackable = true;
         speedBonus.duration.AddRange(durationValues);
         speedBonus.bonusPercent.AddRange(slowValues);
-        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
 
-        SpeedBonus speedBonus2 = (SpeedBonus) speedBonus.InitializeEffect(4, g1, g2);
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(4, g1, g2));
 
         ScriptableCharm charm = ScriptableObject.CreateInstance<ScriptableCharm>();
         charm.name = "Charm1";
@@ -356,15 +355,12 @@ public class status_effects
         charm.slow.duration.AddRange(durationValues);
         charm.slow.slowPercent.AddRange(slowValues);
         Charm charm1 = (Charm) charm.InitializeEffect(4, g1, g2);
+        myEffects.Add(charm1);
+        myEffects.Add(charm1.charmSlow);
 
         StatusEffects se = new StatusEffects();
 
-        se.AddEffect(slow1);
-        se.AddEffect(slow2);
-        se.AddEffect(speedBonus1);
-        se.AddEffect(speedBonus2);
-        se.AddEffect(charm1);
-        se.AddEffect(charm1.charmSlow);
+        myEffects.ForEach(e => se.AddEffect(e));
 
         // Act
         List<Effect> effects = se.GetEffectsByName("SpeedBonus1");
@@ -380,38 +376,32 @@ public class status_effects
         // Arrange
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
+        List<Effect> myEffects  = new List<Effect>();
 
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
         speedBonus.isStackable = true;
         speedBonus.duration.AddRange(durationValues);
         speedBonus.bonusPercent.AddRange(slowValues);
-        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
 
-        SpeedBonus speedBonus2 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
+        myEffects.Add(CreateSlowEffect("Slow1", 3));
 
-        SpeedBonus speedBonus3 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
-
-        SpeedBonus speedBonus4 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
-
-        Slow slow1 = CreateSlowEffect("Slow1", 3);
-
-        speedBonus1.TimerTick(0.5f);
-        speedBonus2.TimerTick(2.5f);
-        speedBonus3.TimerTick(3.8f);
-        speedBonus4.TimerTick(1.2f);
-        slow1.TimerTick(3.8f);
+        myEffects[0].TimerTick(0.5f);
+        myEffects[1].TimerTick(2.5f);
+        myEffects[2].TimerTick(3.8f);
+        myEffects[3].TimerTick(1.2f);
+        myEffects[4].TimerTick(3.8f);
 
         StatusEffects se = new StatusEffects();
 
-        se.AddEffect(speedBonus1);
-        se.AddEffect(speedBonus2);
-        se.AddEffect(speedBonus3);
-        se.AddEffect(speedBonus4);
-        se.AddEffect(slow1);
+        myEffects.ForEach(e => se.AddEffect(e));
 
         // Act
-        Effect nextExpiring = se.GetNextExpiringStack(speedBonus1);
+        Effect nextExpiring = se.GetNextExpiringStack(myEffects[0]);
 
         // Assert
         Assert.AreEqual((3.8f, "SpeedBonus1"), (nextExpiring.effectTimer, nextExpiring.effectType.name));
@@ -480,6 +470,7 @@ public class status_effects
         // Arrange
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
+        List<Effect> myEffects  = new List<Effect>();
 
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
@@ -487,16 +478,13 @@ public class status_effects
         speedBonus.duration.AddRange(durationValues);
         speedBonus.bonusPercent.AddRange(slowValues);
 
-        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
-        SpeedBonus speedBonus2 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
-        SpeedBonus speedBonus3 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, g1, g2));
 
         StatusEffects se = new StatusEffects();
 
-        se.AddEffect(speedBonus1);
-        se.AddEffect(speedBonus2);
-        se.AddEffect(speedBonus3);
-
+        myEffects.ForEach(e => se.AddEffect(e));
 
         // Act
         int count = se.statusEffects.Count;
