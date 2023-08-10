@@ -248,6 +248,41 @@ public class status_effects
         Assert.AreEqual(true, b);
     }
 
+    [Test]
+    public void checks_for_effect_by_name(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+
+        ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
+        speedBonus.name = "SpeedBonus1";
+        speedBonus.duration.AddRange(durationValues);
+        speedBonus.bonusPercent.AddRange(slowValues);
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(4, g1, g2);
+
+        ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
+        dot.name = "Dot1";
+        dot.duration.AddRange(durationValues);
+        Dot dot1 = (Dot) dot.InitializeEffect(10f, 3, g1, g2);
+
+        ScriptableSleep sleep = ScriptableObject.CreateInstance<ScriptableSleep>();
+        sleep.name = "Sleep1";
+        sleep.duration.AddRange(durationValues);
+        Sleep sleep1 = (Sleep) sleep.InitializeEffect(2, g1, g2);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(speedBonus1);
+        se.AddEffect(dot1);
+        se.AddEffect(sleep1);
+
+        // Act
+        bool b = se.CheckForEffectByName(ScriptableObject.CreateInstance<ScriptableDot>(), dot1.effectType.name);
+
+        // Assert
+        Assert.AreEqual(true, b);
+    }
+
     /*
     *   CreateSlowEffect - Creates a slow effect.
     *   @param slowName - Name of the new slow.
