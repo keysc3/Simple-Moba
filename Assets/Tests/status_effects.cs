@@ -475,6 +475,36 @@ public class status_effects
         Assert.AreEqual((true, false, 5), (aE.SequenceEqual(activatedEffects), b, se.statusEffects.Count));
     }
 
+    [Test]
+    public void adds_3_of_a_stackable_speed_bonuses_to_status_effects(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+
+        ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
+        speedBonus.name = "SpeedBonus1";
+        speedBonus.isStackable = true;
+        speedBonus.duration.AddRange(durationValues);
+        speedBonus.bonusPercent.AddRange(slowValues);
+
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+        SpeedBonus speedBonus2 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+        SpeedBonus speedBonus3 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(speedBonus1);
+        se.AddEffect(speedBonus2);
+        se.AddEffect(speedBonus3);
+
+
+        // Act
+        int count = se.statusEffects.Count;
+
+        // Assert
+        Assert.AreEqual(3, count);
+    }
+
     /*
     *   CreateSlowEffect - Creates a slow effect.
     *   @param slowName - Name of the new slow.
