@@ -374,6 +374,48 @@ public class status_effects
         effects[0].effectType.name, effects[1].effectType.name, effects[2].effectType.name));
     }
 
+    [Test]
+    public void returns_next_expiring_stack_of_stackable_given_effect(){
+        // Arrange
+        GameObject g1 = new GameObject();
+        GameObject g2 = new GameObject();
+
+        ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
+        speedBonus.name = "SpeedBonus1";
+        speedBonus.isStackable = true;
+        speedBonus.duration.AddRange(durationValues);
+        speedBonus.bonusPercent.AddRange(slowValues);
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+
+        SpeedBonus speedBonus2 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+
+        SpeedBonus speedBonus3 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+
+        SpeedBonus speedBonus4 = (SpeedBonus) speedBonus.InitializeEffect(3, g1, g2);
+
+         Slow slow1 = CreateSlowEffect("Slow1", 3);
+
+        speedBonus1.TimerTick(0.5f);
+        speedBonus2.TimerTick(2.5f);
+        speedBonus3.TimerTick(3.8f);
+        speedBonus4.TimerTick(1.2f);
+        slow1.TimerTick(3.8f);
+
+        StatusEffects se = new StatusEffects();
+
+        se.AddEffect(speedBonus1);
+        se.AddEffect(speedBonus2);
+        se.AddEffect(speedBonus3);
+        se.AddEffect(speedBonus4);
+        se.AddEffect(slow1);
+
+        // Act
+        Effect nextExpiring = se.GetNextExpiringStack(speedBonus1);
+
+        // Assert
+        Assert.AreEqual((3.8f, "SpeedBonus1"), (nextExpiring.effectTimer, nextExpiring.effectType.name));
+    }
+
     /*
     *   CreateSlowEffect - Creates a slow effect.
     *   @param slowName - Name of the new slow.
