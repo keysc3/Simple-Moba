@@ -33,7 +33,7 @@ public class ChampionStats : UnitStats
     */
     public void UseMana(float cost){
         currentMana -= cost;
-        if(currentMana < 0)
+        if(currentMana < 0f)
             currentMana = 0;
     }
 

@@ -70,4 +70,35 @@ public class champion_stats
         Assert.AreEqual(867f, championStats.CurrentMana);
     }
 
+    // A Test behaves as an ordinary method
+    [Test]
+    public void sets_current_mana_to_491_from_562(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxMana.BaseValue = 562f;
+        championStats.CurrentMana = championStats.maxMana.GetValue();
+
+        // Act
+        championStats.UseMana(71f);
+
+        // Assert 
+        Assert.AreEqual(491f, championStats.CurrentMana);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void sets_current_mana_to_0_from_302_by_using_more_mana_than_max_mana(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxMana.BaseValue = 302f;
+        championStats.CurrentMana = championStats.maxMana.GetValue();
+
+        // Act
+        championStats.UseMana(400f);
+
+        // Assert 
+        Assert.AreEqual(0f, championStats.CurrentMana);
+    }
 }
