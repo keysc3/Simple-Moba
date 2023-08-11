@@ -101,4 +101,84 @@ public class champion_stats
         // Assert 
         Assert.AreEqual(0f, championStats.CurrentMana);
     }
+
+    [Test]
+    public void adds_item_stats_to_champion_stats_where_item_has_every_stat(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxHealth.BaseValue = 212f;
+        championStats.CurrentHealth = championStats.maxHealth.GetValue() - 50f;
+        championStats.maxMana.BaseValue = 178f;
+        championStats.CurrentMana = championStats.maxMana.GetValue() - 20f;
+        
+        Item item = ScriptableObject.CreateInstance<Item>();
+        item.magicDamage = 60f;
+        item.physicalDamage = 21f;
+        item.health = 391f;
+        item.mana = 30f;
+        item.speed = 1f;
+        item.magicResist = 12f;
+        item.armor = 19f;
+        item.attackSpeed = 8f;
+
+        // Act
+        championStats.AddItemStats(item);
+
+        // Assert
+        Assert.AreEqual((60f, 21f, 553f, 188f, 1f, 12f, 19f, 8f, 603f, 208f),
+        (championStats.magicDamage.GetValue(), championStats.physicalDamage.GetValue(), championStats.CurrentHealth, 
+        championStats.CurrentMana, championStats.speed.GetValue(), championStats.magicResist.GetValue(), 
+        championStats.armor.GetValue(), championStats.bonusAttackSpeed.GetValue(), championStats.maxHealth.GetValue(), championStats.maxMana.GetValue()));
+    }
+
+    [Test]
+    public void adds_item_stats_to_champion_stats_where_item_has_no_health_or_mana(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxHealth.BaseValue = 461f;
+        championStats.CurrentHealth = championStats.maxHealth.GetValue() - 80f;
+        championStats.maxMana.BaseValue = 98f;
+        championStats.CurrentMana = championStats.maxMana.GetValue() - 8f;
+        
+        Item item = ScriptableObject.CreateInstance<Item>();
+        item.magicDamage = 50f;
+        item.physicalDamage = 11f;
+        item.speed = 1.4f;
+        item.magicResist = 28f;
+        item.armor = 16f;
+        item.attackSpeed = 12f;
+
+        // Act
+        championStats.AddItemStats(item);
+
+        // Assert
+        Assert.AreEqual((50f, 11f, 381f, 90f, 1.4f, 28f, 16f, 12f, 461f, 98f),
+        (championStats.magicDamage.GetValue(), championStats.physicalDamage.GetValue(), championStats.CurrentHealth, 
+        championStats.CurrentMana, championStats.speed.GetValue(), championStats.magicResist.GetValue(), 
+        championStats.armor.GetValue(), championStats.bonusAttackSpeed.GetValue(), championStats.maxHealth.GetValue(), championStats.maxMana.GetValue()));
+    }
+
+    [Test]
+    public void does_not_add_any_stats_to_champion_stats_from_null_item(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxHealth.BaseValue = 222f;
+        championStats.CurrentHealth = championStats.maxHealth.GetValue() - 42f;
+        championStats.maxMana.BaseValue = 10f;
+        championStats.CurrentMana = championStats.maxMana.GetValue() - 1f;
+        
+        Item item = null;
+
+        // Act
+        championStats.AddItemStats(item);
+
+        // Assert
+        Assert.AreEqual((0f, 0f, 180f, 9f, 0f, 0f, 0f, 0f, 222f, 10f),
+        (championStats.magicDamage.GetValue(), championStats.physicalDamage.GetValue(), championStats.CurrentHealth, 
+        championStats.CurrentMana, championStats.speed.GetValue(), championStats.magicResist.GetValue(), 
+        championStats.armor.GetValue(), championStats.bonusAttackSpeed.GetValue(), championStats.maxHealth.GetValue(), championStats.maxMana.GetValue()));
+    }
 }
