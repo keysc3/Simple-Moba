@@ -181,4 +181,117 @@ public class champion_stats
         championStats.CurrentMana, championStats.speed.GetValue(), championStats.magicResist.GetValue(), 
         championStats.armor.GetValue(), championStats.bonusAttackSpeed.GetValue(), championStats.maxHealth.GetValue(), championStats.maxMana.GetValue()));
     }
+
+    [Test]
+    public void removes_item_stats_from_champion_stats_where_item_has_no_health_or_mana(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxHealth.BaseValue = 988f;
+        championStats.CurrentHealth = championStats.maxHealth.GetValue() - 100f;
+        championStats.maxMana.BaseValue = 102f;
+        championStats.CurrentMana = championStats.maxMana.GetValue() - 52f;
+        
+        Item item = ScriptableObject.CreateInstance<Item>();
+        item.magicDamage = 50f;
+        item.physicalDamage = 11f;
+        item.speed = 1.4f;
+        item.magicResist = 28f;
+        item.armor = 16f;
+        item.attackSpeed = 12f;
+        championStats.AddItemStats(item);
+
+        // Act
+        championStats.RemoveItemStats(item);
+
+        // Assert
+        Assert.AreEqual((0f, 0f, 888f, 50f, 0f, 0f, 0f, 0f, 988f, 102f),
+        (championStats.magicDamage.GetValue(), championStats.physicalDamage.GetValue(), championStats.CurrentHealth, 
+        championStats.CurrentMana, championStats.speed.GetValue(), championStats.magicResist.GetValue(), 
+        championStats.armor.GetValue(), championStats.bonusAttackSpeed.GetValue(), championStats.maxHealth.GetValue(), championStats.maxMana.GetValue()));
+    }
+
+    [Test]
+    public void removes_item_stats_from_item_with_health_that_has_not_been_used(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxHealth.BaseValue = 988f;
+        
+        Item item = ScriptableObject.CreateInstance<Item>();
+        item.health = 252f;
+        championStats.AddItemStats(item);
+
+        championStats.CurrentHealth = championStats.maxHealth.GetValue() - 128f;
+
+
+        // Act
+        championStats.RemoveItemStats(item);
+
+        // Assert
+        Assert.AreEqual((988f, 988f), (championStats.CurrentHealth, championStats.maxHealth.GetValue()));
+    }
+
+    [Test]
+    public void removes_item_stats_from_item_with_health_that_has_been_used(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxHealth.BaseValue = 843f;
+        
+        Item item = ScriptableObject.CreateInstance<Item>();
+        item.health = 106f;
+        championStats.AddItemStats(item);
+
+        championStats.CurrentHealth = championStats.maxHealth.GetValue() - 481f;
+
+
+        // Act
+        championStats.RemoveItemStats(item);
+
+        // Assert
+        Assert.AreEqual((468f, 843f), (championStats.CurrentHealth, championStats.maxHealth.GetValue()));
+    }
+
+    [Test]
+    public void removes_item_stats_from_item_with_mana_that_has_not_been_fully_used(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxMana.BaseValue = 1423f;
+        
+        Item item = ScriptableObject.CreateInstance<Item>();
+        item.mana = 200f;
+        championStats.AddItemStats(item);
+
+        championStats.CurrentMana = championStats.maxMana.GetValue() - 61f;
+
+
+        // Act
+        championStats.RemoveItemStats(item);
+
+        // Assert
+        Assert.AreEqual((1423f, 1423f), (championStats.CurrentMana, championStats.maxMana.GetValue()));
+    }
+
+    [Test]
+    public void removes_item_stats_from_item_with_mana_that_has_been_fully_used(){
+        // Arrange
+        ScriptableChampion sChampion = ScriptableObject.CreateInstance<ScriptableChampion>();
+        ChampionStats championStats = new ChampionStats(sChampion);
+        championStats.maxMana.BaseValue = 1235f;
+        
+        Item item = ScriptableObject.CreateInstance<Item>();
+        item.mana = 170f;
+        championStats.AddItemStats(item);
+
+        championStats.CurrentMana = championStats.maxMana.GetValue() - 231f;
+
+
+        // Act
+        championStats.RemoveItemStats(item);
+
+        // Assert
+        Assert.AreEqual((1174f, 1235f), (championStats.CurrentMana, championStats.maxMana.GetValue()));
+    }
 }
