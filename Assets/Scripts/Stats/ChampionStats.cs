@@ -63,6 +63,8 @@ public class ChampionStats : UnitStats
                 maxMana.AddModifier(item.mana);
                 currentMana = currentMana + item.mana;
             }
+            magicResist.AddModifier(item.magicResist);
+            armor.AddModifier(item.armor);
             speed.AddModifier(item.speed);
             bonusAttackSpeed.AddModifier(item.attackSpeed);
             UpdateAttackSpeed();
@@ -90,6 +92,8 @@ public class ChampionStats : UnitStats
                     currentMana = currentMana - (item.mana - (maxMana.GetValue() - currentMana));
                 maxMana.RemoveModifier(item.mana);
             }
+            magicResist.RemoveModifier(item.magicResist);
+            armor.RemoveModifier(item.armor);
             speed.RemoveModifier(item.speed);
             bonusAttackSpeed.RemoveModifier(item.attackSpeed);
             UpdateAttackSpeed();
