@@ -14,7 +14,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
         }
     }
     public UnitStats unitStats { get; set; }
-    public StatusEffects statusEffects { get; set; }
+    public NewStatusEffects statusEffects { get; set; }
     public NewDamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
     //public Score score { get; private set; }
@@ -48,12 +48,12 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     void Awake(){
         isDead = false;
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
-        statusEffects = new StatusEffects();
+        statusEffects = new NewStatusEffects();
         damageTracker = new NewDamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
 
-        //levelManager = new LevelManager(this, ScriptableObject.CreateInstance<LevelInfo>());
+        levelManager = new NewLevelManager(this);
         score = new NewScore(playerUI.transform.Find("Score"));
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerController>();
@@ -74,12 +74,18 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     void Update()
     {
         damageTracker.CheckForReset(Time.time);
-        statusEffects.UpdateEffects();
+        statusEffects.UpdateEffects(Time.deltaTime);
+        if(UIManager.instance != null){
+            UIManager.instance.UpdatePlayerUIHealthBar(playerUI, (ChampionStats) unitStats, IsDead);
+            UIManager.instance.UpdatePlayerBarHealthBar(playerBar, (ChampionStats) unitStats, IsDead);
+            UIManager.instance.UpdateManaUIs(playerUI, playerBar, (ChampionStats) unitStats);
+            UIManager.instance.UpdateAllStatsUI(playerUI, (ChampionStats) unitStats);
+        }
     }
 
     void LateUpdate(){
         unitStats.UpdateAttackSpeed();
-        navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
+        //navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
     }
 
     /*

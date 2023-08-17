@@ -7,5 +7,7 @@ public interface IPlayer : IUnit
 {
     NewLevelManager levelManager { get; set; }
     NewScore score { get; set; }
-    NavMeshAgent navMeshAgent { get; set; }
+    //NavMeshAgent navMeshAgent { get; set; }
+    GameObject playerUI { get; }
+    GameObject playerBar { get; }
 }

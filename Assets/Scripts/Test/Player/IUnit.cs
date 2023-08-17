@@ -6,7 +6,7 @@ public interface IUnit
 {
     ScriptableUnit SUnit { get; }
     UnitStats unitStats { get; set; }
-    StatusEffects statusEffects { get; set; }
+    NewStatusEffects statusEffects { get; set; }
     NewDamageTracker damageTracker { get; set; }
     Inventory inventory { get; set; }
     //NewScore score { get; set; }
