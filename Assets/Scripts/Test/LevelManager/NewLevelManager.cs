@@ -72,17 +72,17 @@ public class NewLevelManager
     *   @param plater - Player this level manager is for.
     *   @param levelInfo - LevelInfo to use for leveling information/constants.
     */
-    public NewLevelManager(IUnit unit, Transform playerUI, TMP_Text barLevelText){
-        if(playerUI != null){
-            xpSlider = playerUI.Find("Player/Info/PlayerContainer/InnerContainer/Experience").GetComponent<Slider>();
-            playerUILevelText = playerUI.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").GetComponent<TMP_Text>();
-            playerBarLevelText = barLevelText;
-            spellsContainer = playerUI.Find("Player/Combat/SpellsContainer/");
-            statusEffectsRect = playerUI.Find("Player/StatusEffects").GetComponent<RectTransform>();
-            //playerBarLevelText = playerBar.transform.Find("PlayerBar/Container/Level/Value").GetComponent<TMP_Text>().SetText(currentLevel.ToString());
-            playerUILevelText = barLevelText;
+    public NewLevelManager(IUnit unit){
+        if(unit is IPlayer){
+            IPlayer player = (IPlayer) unit;
+            if(player.playerUI != null && player.playerBar != null){
+                xpSlider = player.playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/Experience").GetComponent<Slider>();
+                playerUILevelText = player.playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").GetComponent<TMP_Text>();
+                spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer/");
+                statusEffectsRect = player.playerUI.transform.Find("Player/StatusEffects").GetComponent<RectTransform>();
+                playerBarLevelText = player.playerBar.transform.Find("PlayerBar/Container/Level/Value").GetComponent<TMP_Text>();
+            }
         }
-        playerBarLevelText = barLevelText;
         SetUpGradient();
         levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
         _unit = unit;
@@ -137,11 +137,6 @@ public class NewLevelManager
         if(_unit is IPlayer)
             IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
         //championStats.UpdateAttackSpeed();
-        if(UIManager.instance != null){
-            /*UIManager.instance.UpdateHealthBar(player);
-            UIManager.instance.UpdateManaBar(player);
-            UIManager.instance.UpdateAllStats(player);*/
-        }
     }
 
     /*
