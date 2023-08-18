@@ -17,6 +17,8 @@ public class NewMinion : MonoBehaviour, IUnit, INewDamagable
     public NewStatusEffects statusEffects { get; set; }
     public NewDamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
+    public NewLevelManager levelManager { get; set; }
+    public BonusDamage bonusDamage { get; set; }
     
     public Collider myCollider { get;set; }
     [SerializeField] private ScriptableUnit sUnit;
@@ -30,6 +32,7 @@ public class NewMinion : MonoBehaviour, IUnit, INewDamagable
         statusEffects = new NewStatusEffects();
         damageTracker = new NewDamageTracker();
         inventory = new Inventory();
+        levelManager = new NewLevelManager(this);
         myCollider = GetComponent<Collider>();
         //levelManager = new LevelManager(this, ScriptableObject.CreateInstance<LevelInfo>());
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -63,10 +66,11 @@ public class NewMinion : MonoBehaviour, IUnit, INewDamagable
             isDead = true;
             if(damager is IPlayer)
                 ((IPlayer) damager).score.CreepKill(this);
+            Destroy(gameObject);
         }
         // Apply any damage that procs after recieving damage.
         else{
-            //bonusDamage?.Invoke(gameObject, isDot);
+            bonusDamage?.Invoke(this, isDot);
         }
     }
 }

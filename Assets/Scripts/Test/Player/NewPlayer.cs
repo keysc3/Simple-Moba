@@ -26,6 +26,8 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
 
     public NewLevelManager levelManager { get; set; }
     public NewScore score { get; set; }
+    public BonusDamage bonusDamage { get; set; }
+
     public NavMeshAgent navMeshAgent { get; set; }
     public PlayerController playerController { get; private set; }
     public PlayerSpellInput playerSpellInput { get; private set; }
@@ -107,7 +109,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
         }
         // Apply any damage that procs after recieving damage.
         else{
-            //bonusDamage?.Invoke(gameObject, isDot);
+            bonusDamage?.Invoke(this, isDot);
         }
     }
 
