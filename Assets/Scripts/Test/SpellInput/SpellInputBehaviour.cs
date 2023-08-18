@@ -7,17 +7,17 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     private NewSpellInput newSI;
 
     public bool ButtonClick { get; set; } = false;
-    public Spell LastSpellPressed { get; set; } = null;
+    public NewSpell LastSpellPressed { get; set; } = null;
     public KeyCode LastButtonPressed { get; set; } = KeyCode.None;
     private Dictionary<string, int> spellLevels;
     public Dictionary<string, int> SpellLevels { get => levelManager.spellLevels; }
-    private LevelManager levelManager;
-    private ChampionSpells championSpells;
+    private NewLevelManager levelManager;
+    private NewChampionSpells championSpells;
     private Camera mainCamera;
 
     void Awake(){
-        levelManager = GetComponent<Player>().levelManager;
-        championSpells = GetComponent<ChampionSpells>();
+        levelManager = GetComponent<IPlayer>().levelManager;
+        championSpells = GetComponent<NewChampionSpells>();
         newSI = new NewSpellInput(this);
     }
 

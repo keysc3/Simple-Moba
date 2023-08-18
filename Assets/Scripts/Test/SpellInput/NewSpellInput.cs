@@ -15,9 +15,9 @@ public class NewSpellInput
     *   @param buttonPressed - KeyCode of the input used for the spell pressed.
     *   @param  spellPressed - Spell of the spell pressed.
     */
-    public void SpellButtonPressed(KeyCode buttonPressed, Spell spellPressed){
+    public void SpellButtonPressed(KeyCode buttonPressed, NewSpell spellPressed){
         // Only attempt to cast if learned.
-        if(_si.SpellLevels[spellPressed.SpellNum] > 0 && !spellPressed.onCd){
+        if(_si.SpellLevels[spellPressed.SpellNum] > 0 && !spellPressed.OnCd){
             // Hide cast if a spell was prepped and new button pressed is different than last.
             if(_si.LastSpellPressed != null && _si.LastButtonPressed != buttonPressed)
                 _si.LastSpellPressed.HideCast();
