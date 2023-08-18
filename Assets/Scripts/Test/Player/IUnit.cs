@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void BonusDamage(IUnit toDamage, bool isDot);
+
 public interface IUnit
 {
     ScriptableUnit SUnit { get; }
@@ -16,4 +18,5 @@ public interface IUnit
     //GameObject playerUI { get; set; }
     //GameObject playerBar { get; set; }
     bool IsDead { get; }
+    BonusDamage bonusDamage { get; set; }
 }
