@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UI;
 
 /*
 * Purpose: Implements Bahri'a second spell. Bahri summons a number of projectiles that orbit her and gains a decaying speed boost.
@@ -16,6 +17,8 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
     private List<IUnit> enemiesHit = new List<IUnit>();
     public List<GameObject> activeSpellObjects { get; } = new List<GameObject>();
     public SpellHitCallback spellHitCallback { get; set; }
+    private GameObject spellDurationSlider;
+    private Image imageSlider;
 
     /*
     *   BahriSpell2 - Initialize Bahri's second spell.
@@ -30,6 +33,10 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
 
     void Start(){
         IsQuickCast = true;
+        if(player.playerUI != null){
+            spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
+            imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
+        }
     }
 
     /*
@@ -89,6 +96,8 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
     private IEnumerator Spell_2_Cast(GameObject spell_2_parent){
         float timer = 0.0f;
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        if(spellDurationSlider != null)
+            spellDurationSlider.SetActive(true);
         // While spells still active.
         while(spell_2_parent && timer < spellData.duration && spell_2_parent.transform.childCount > 0){
             // Wait for 0.25s wind up on cast.
@@ -135,7 +144,7 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
                     }
                 }
             }
-            UIManager.instance.SetSpellActiveDuration(SpellNum, spellData.duration, timer, player.playerUI);
+            sc.UpdateActiveSpellSlider(imageSlider, spellData.duration, timer);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -143,7 +152,8 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
         if(spell_2_parent)
             GameObject.Destroy(spell_2_parent);
         enemiesHit.Clear();
-        UIManager.instance.SetSpellDurationOver(SpellNum, player.playerUI);
+        if(spellDurationSlider != null)
+            spellDurationSlider.SetActive(false);
         StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 

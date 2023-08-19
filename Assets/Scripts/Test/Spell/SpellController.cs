@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpellController
 {
@@ -82,6 +83,16 @@ public class SpellController
     public void SpellCDChildrenSetActive(Transform parent, bool isActive){
         for(int i = 0; i < parent.childCount; i++){
             parent.GetChild(i).gameObject.SetActive(isActive);
+        }
+    }
+
+    public void UpdateActiveSpellSlider(Image imageSlider, float duration, float active){
+        if(imageSlider != null){
+            // Get value between 0 and 1 representing the percent of the spell duration left.
+            float fill = 1.0f - (active/duration);
+            fill = Mathf.Clamp(fill, 0f, 1f);
+            // Set the fill on the active spells slider.
+            imageSlider.fillAmount = fill;
         }
     }
 }

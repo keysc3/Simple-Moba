@@ -97,7 +97,7 @@ public class NewSpell
         LayerMask groundMask = LayerMask.GetMask("Ground");
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
-        championSpells.mouseOnCast = targetDirection;
+        //championSpells.mouseOnCast = targetDirection;
         targetDirection.y = player.myCollider.bounds.center.y;
         return targetDirection;
     }
@@ -108,8 +108,8 @@ public class NewSpell
     */
     protected IEnumerator CastTime(float castTime, bool canMove){
         float timer = 0.0f;
-        championSpells.isCasting = true;
-        championSpells.CurrentCastedSpell = this;
+        //championSpells.isCasting = true;
+        //championSpells.CurrentCastedSpell = this;
         // While still casting spell stop the player.
         while(timer <= castTime){
             if(!canMove){
@@ -119,8 +119,8 @@ public class NewSpell
             timer += Time.deltaTime;
             yield return null;
         }
-        championSpells.isCasting = false;
-        championSpells.CurrentCastedSpell = this;
+        //championSpells.isCasting = false;
+        //championSpells.CurrentCastedSpell = this;
         player.navMeshAgent.isStopped = false;
     }
 
