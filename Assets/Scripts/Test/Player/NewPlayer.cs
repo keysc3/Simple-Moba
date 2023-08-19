@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
+public class NewPlayer : MonoBehaviour, IPlayer
 {
     private bool isDead = false;
     public bool IsDead { 
@@ -36,8 +36,13 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
 
-    public Vector3 mouseOnCast;
-    public bool isCasting = false;
+    public Vector3 MouseOnCast { get; set; }
+    public bool IsCasting { get; set; }
+    private ISpell currentCastedSpell;
+    public ISpell CurrentCastedSpell { 
+        get  => currentCastedSpell; 
+        set => currentCastedSpell = !IsCasting ? null : value;
+    }
 
 
     private Material alive;
