@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEditor;
+using UnityEngine.UI;
 
 /*
 * Purpose: Implements Bahri'a fourth spell. Bahri dashes in a target direction and fires a damaging projectile at a number of units upon landing. 
@@ -18,9 +19,34 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     private float spell_4_timer;
     private float spell_4_duration;
     private int spell_4_chargesLeft;
+    public int Spell_4_ChargesLeft {
+        get => spell_4_chargesLeft;
+        set {
+            spell_4_chargesLeft = value;
+            if(spell4Effect != null)
+                spell4Effect.Stacks = value;
+            if(spellCDCover!= null){
+                if(value > 0)
+                    spellCDCover.SetActive(false);
+                else
+                    spellCDCover.SetActive(true);
+            }
+        }
+    }
     private bool spell4Casting;
+    public bool Spell4Casting {
+        get => spell4Casting;
+        set {
+            spell4Casting = value;
+            if(spellDurationSlider != null)
+                spellDurationSlider.SetActive(value);
+        }
+    }
     private bool canRecast = false;
     public SpellHitCallback spellHitCallback { get; set; }
+    private GameObject spellDurationSlider;
+    private Image imageSlider;
+    private GameObject spellCDCover;
 
     /*
     *   BahriSpell4 - Initialize Bahri's fourth spell.
@@ -37,6 +63,11 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     void Start(){
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
+        if(player.playerUI != null){
+            spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
+            imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
+            spellCDCover = sc.spellCDTransform.Find("Cover").gameObject;
+        }
     }
 
     /*
@@ -66,15 +97,20 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     *   @param spell_cd - float of the cooldown between casts.
     *   @param spell - string of the spell number.
     */
-    private IEnumerator NextCastCd(float spell_cd, string spell){
+    private IEnumerator NextCastCd(float spell_cd){
         float spell_timer = 0.0f;
         // While time since last cast is less than or equal to the cd between casts.
         while(spell_timer <= spell_cd){
             spell_timer += Time.deltaTime;
-            UIManager.instance.UpdateCooldown(spell, spell_cd - spell_timer, spell_cd, player.playerUI);
+            if(sc.spellCDTransform != null){
+                // Update the UI cooldown text and slider.
+                float cooldownLeft = spell_cd - spell_timer;
+                sc.spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
+                float fill = Mathf.Clamp(cooldownLeft/spell_cd, 0f, 1f);
+                sc.spellCDImage.fillAmount = fill;
+            }
             yield return null;
         }
-        UIManager.instance.UpdateCooldown(spell, 0, spell_cd, player.playerUI);
         // Allow the spell to be cast again.
         canRecast = true;
     }
@@ -87,26 +123,22 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
         player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = spellData.duration;
-        spell4Casting = true;
+        Spell4Casting = true;
         Spell_4_Move();
-        spell_4_chargesLeft = spellData.charges - 1;
+        Spell_4_ChargesLeft = spellData.charges - 1;
         // While the spells duration has not expired.
         while(spell_4_timer < spell_4_duration){
             // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
-            if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting && spell_4_chargesLeft > 0 && canRecast && !player.IsDead){
+            if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting && Spell_4_ChargesLeft > 0 && canRecast && !player.IsDead){
                 Spell_4_Move();
-                spell_4_chargesLeft--;
-                spell4Effect.Stacks = spell_4_chargesLeft;
+                Spell_4_ChargesLeft--;
             }
-            //UIManager.instance.SetSpellActiveDuration(spellNum, spell_4_duration, spell_4_timer, player.playerUI);
-            if(spell_4_chargesLeft == 0)
-                //UIManager.instance.SetSpellCoverActive(spellNum, true, player.playerUI);
+            sc.UpdateActiveSpellSlider(imageSlider, spell_4_duration, spell_4_timer);
             spell_4_timer += Time.deltaTime;
             yield return null;
         }
         // Reset charges and start spell cooldown timer.
-        spell4Casting = false;
-        //UIManager.instance.SetSpellDurationOver(spellNum, player.playerUI);
+        Spell4Casting = false;
         StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
@@ -116,12 +148,10 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     */
     private void Spell_4_Takedown(IUnit killed){
         if(killed is IPlayer){
-            if(spell_4_chargesLeft < spellData.charges && spell4Casting){
-                //UIManager.instance.SetSpellCoverActive(spellNum, false, player.playerUI);
-                spell_4_chargesLeft += 1;
+            if(Spell_4_ChargesLeft < spellData.charges && Spell4Casting){
+                Spell_4_ChargesLeft += 1;
                 spell_4_timer = 0.0f;
                 spell_4_duration = 10.0f;
-                spell4Effect.Stacks = spell_4_chargesLeft;
                 spell4Effect.ResetTimer();
                 spell4Effect.EffectDuration = spell_4_duration;
             }
@@ -187,7 +217,7 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
         player.navMeshAgent.enabled = true;
         player.IsCasting = false;
         player.CurrentCastedSpell = this;
-        StartCoroutine(NextCastCd(1.0f, SpellNum));
+        StartCoroutine(NextCastCd(1.0f));
     }
 
     /*

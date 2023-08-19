@@ -7,20 +7,17 @@ using UnityEngine.UI;
 public class InterSpell : MonoBehaviour, ISpell
 {
     protected SpellController sc;
-    private Transform spellCDTransform;
-    private TMP_Text spellCDText;
-    private Image spellCDImage;
 
     private bool onCd = false;
     public bool OnCd { 
         get => onCd;
         set {
             onCd = value;
-            if(spellCDTransform != null)
+            if(sc.spellCDTransform != null)
                 if(value == true)
-                    sc.SpellCDChildrenSetActive(spellCDTransform, true);
+                    sc.SpellCDChildrenSetActive(true);
                 else
-                    sc.SpellCDChildrenSetActive(spellCDTransform, false);
+                    sc.SpellCDChildrenSetActive(false);
         }
     }
     public bool CanMove { get; set; } = false;
@@ -33,9 +30,9 @@ public class InterSpell : MonoBehaviour, ISpell
             if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"}.Contains(value)){
                 spellNum = value;
                 if(player != null && player.playerUI != null){
-                    spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value + "_Container/SpellContainer/Spell/CD");
-                    spellCDText = spellCDTransform.Find("Value").GetComponent<TMP_Text>();
-                    spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();
+                    sc.spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value + "_Container/SpellContainer/Spell/CD");
+                    sc.spellCDText = sc.spellCDTransform.Find("Value").GetComponent<TMP_Text>();
+                    sc.spellCDImage = sc.spellCDTransform.Find("Slider").GetComponent<Image>();
                 }
             }
         }
