@@ -36,10 +36,11 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         }
     }
     public Vector3 Position { get => transform.position; set => transform.position = value; }
-    public float Range { get => unitStats.autoRange.GetValue(); }
+    public float Range { get => player.unitStats.autoRange.GetValue(); }
     //private Player player;
-    private UnitStats unitStats;
+    //private UnitStats unitStats;
     private NewChampionSpells championSpells;
+    private IPlayer player;
 
     // Called when the script instance is being loaded.
     private void Awake(){
@@ -47,7 +48,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         newpc = new NewPlayerController(this);
         nma = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
-        unitStats = GetComponent<Player>().unitStats;
+        player = GetComponent<IPlayer>();
     }
 
     // Start is called before the first frame update
@@ -96,12 +97,12 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
 
         // Point players forward at the direction they are cast or moving.
         // The player should never be casting something if currentspell is null but just to be safe check for null.
-        if(championSpells.isCasting && championSpells.CurrentCastedSpell != null && championSpells.CurrentCastedSpell.canMove)
-            newpc.PlayerLookDirection(championSpells.mouseOnCast);
+        if(player.IsCasting && player.CurrentCastedSpell != null && player.CurrentCastedSpell.CanMove)
+            newpc.PlayerLookDirection(player.MouseOnCast);
         else if(nma.hasPath)
             newpc.PlayerLookDirection(nma.steeringTarget);
 
-        if(TargetedEnemy != null && !championSpells.isCasting){
+        if(TargetedEnemy != null && !player.IsCasting){
             if(!TargetedEnemy.GetComponent<Unit>().isDead)
                 newpc.MovePlayerToEnemy();
             else
