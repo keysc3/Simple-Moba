@@ -7,14 +7,6 @@ public class NewChampionSpells : MonoBehaviour
 {
     private Transform spellsContainer;
 
-    public Vector3 mouseOnCast;
-    public bool isCasting = false;
-    private NewSpell currentCastedSpell;
-    public NewSpell CurrentCastedSpell { 
-        get  => currentCastedSpell; 
-        set => currentCastedSpell = !isCasting ? null : value;
-    }
-
     [SerializeField] protected SpellData passiveData;
     [SerializeField] protected SpellData spell1Data;
     [SerializeField] protected SpellData spell2Data;
