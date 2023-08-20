@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NewPlayer : MonoBehaviour, IPlayer
+public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
 {
     private bool isDead = false;
     public bool IsDead { 
