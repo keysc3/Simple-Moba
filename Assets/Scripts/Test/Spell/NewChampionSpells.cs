@@ -12,6 +12,8 @@ public class NewChampionSpells : MonoBehaviour
     [SerializeField] protected SpellData spell2Data;
     [SerializeField] protected SpellData spell3Data;
     [SerializeField] protected SpellData spell4Data;
+
+    public Dictionary<string, ISpell> spells { get; set; } = new Dictionary<string, ISpell>(); 
     
     private NewSpell passive;
     public NewSpell Passive {
@@ -72,7 +74,11 @@ public class NewChampionSpells : MonoBehaviour
         CallbackSetup();
         foreach(Effect effect in initializationEffects){
             player.statusEffects.AddEffect(effect);
-        }  
+        }
+        ISpell[] objSpells = GetComponents<ISpell>();
+        foreach(ISpell spellInterface in objSpells){
+            spells.Add(spellInterface.SpellNum, spellInterface);
+        }
     }
 
     // Update is called once per frame.
@@ -101,10 +107,9 @@ public class NewChampionSpells : MonoBehaviour
     *   OnDeathSpellCleanUp - Handles calling OnDeathCleanUp method for any spell that needs death clean up.
     */
     public void OnDeathSpellCleanUp(){
-        List<NewSpell> mySpells = new List<NewSpell>(){passive, spell1, spell2, spell3, spell4};
-        foreach(NewSpell newSpell in mySpells){
-            if(newSpell is IDeathCleanUp){
-                ((IDeathCleanUp) newSpell).OnDeathCleanUp();
+        foreach(KeyValuePair<string, ISpell> entry in spells){
+            if(entry.Value is IDeathCleanUp){
+                ((IDeathCleanUp) entry.Value).OnDeathCleanUp();
             }
         }
     }
