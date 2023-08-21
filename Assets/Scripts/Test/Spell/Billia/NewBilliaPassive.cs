@@ -10,7 +10,10 @@ public class NewBilliaPassive : InterSpell, INewHasCallback
 
     // Start is called before the first frame update
     void Start(){
-        this.passiveData = (BilliaPassiveData) spellData;
+        if(SpellNum == null){
+            SpellNum = spellData.defaultSpellNum;
+        }
+        //this.passiveData = (BilliaPassiveData) spellData;
     }
 
     public void OnDisable(){
