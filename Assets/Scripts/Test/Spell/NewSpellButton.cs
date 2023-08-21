@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class NewSpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     //TODO? could change to properties with validation on spell and keycode based on constant values.
-    public NewSpell spell;
+    public ISpell spell;
     public KeyCode keyCode;
     private ISpellInput _si;
     public ISpellInput _SI{
@@ -32,7 +32,7 @@ public class NewSpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     *   OnPointerExit - Called when the cursor exits the rect area of this button.
     */
     public void OnPointerExit(PointerEventData eventData){
-        if(_si.LastSpellPressed != spell && spell.isDisplayed)
+        if(_si.LastSpellPressed != spell && spell.IsDisplayed)
             spell.HideCast();
     }
 
