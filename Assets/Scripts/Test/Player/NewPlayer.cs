@@ -29,9 +29,9 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     public BonusDamage bonusDamage { get; set; }
 
     private NavMeshAgent navMeshAgent;
-    public PlayerController playerController { get; private set; }
-    public PlayerSpellInput playerSpellInput { get; private set; }
-    public ChampionSpells championSpells { get; private set; }
+    private PlayerController playerController;
+    private PlayerSpellInput playerSpellInput;
+    private ChampionSpells championSpells;
 
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }

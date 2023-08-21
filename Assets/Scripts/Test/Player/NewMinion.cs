@@ -24,7 +24,7 @@ public class NewMinion : MonoBehaviour, IMinion, INewDamagable
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
 
-    public NavMeshAgent navMeshAgent { get; set; }
+    private NavMeshAgent navMeshAgent;
 
     void Awake(){
         isDead = false;
