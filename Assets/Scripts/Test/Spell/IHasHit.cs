@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void SpellHitCallback(IUnit unit, NewSpell spellHit);
+public delegate void SpellHitCallback(IUnit unit, ISpell spellHit);
 
 public interface IHasHit
 {
