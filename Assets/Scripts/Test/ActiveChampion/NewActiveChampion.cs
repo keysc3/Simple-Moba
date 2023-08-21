@@ -45,18 +45,18 @@ public class NewActiveChampion : MonoBehaviour
     public void SetActiveChamp(){
         for(int i = 0; i < champions.Count; i++){
             if(i != newActiveChamp){
-                champions[i].GetComponent<PlayerController>().enabled = false;
-                champions[i].GetComponent<PlayerSpellInput>().enabled = false;
+                champions[i].GetComponent<PlayerControllerBehaviour>().enabled = false;
+                champions[i].GetComponent<SpellInputBehaviour>().enabled = false;
                 champions[i].tag = "Enemy"; 
                 champions[i].layer = LayerMask.NameToLayer("Enemy");
-                UIManager.instance.SetChampionUIActive(false, champions[i].GetComponent<Player>().playerUI);
+                //UIManager.instance.SetChampionUIActive(false, champions[i].GetComponent<Player>().playerUI);
             }
             else{
-                champions[i].GetComponent<PlayerController>().enabled = true;
-                champions[i].GetComponent<PlayerSpellInput>().enabled = true;
+                champions[i].GetComponent<PlayerControllerBehaviour>().enabled = true;
+                champions[i].GetComponent<SpellInputBehaviour>().enabled = true;
                 champions[i].tag = "Player";
                 champions[i].layer = LayerMask.NameToLayer("Default");
-                UIManager.instance.SetChampionUIActive(true, champions[i].GetComponent<Player>().playerUI);
+                //UIManager.instance.SetChampionUIActive(true, champions[i].GetComponent<Player>().playerUI);
                 cameraMovement.targetObject = champions[i].transform;
             }
         }
