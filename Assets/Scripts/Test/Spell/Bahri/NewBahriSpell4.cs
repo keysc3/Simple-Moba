@@ -61,8 +61,6 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     }*/
 
     void Start(){
-        if(SpellNum == null)
-            SpellNum = "Spell_4";
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
         if(player.playerUI != null){
@@ -70,6 +68,10 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
             imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
             spellCDCover = spellCDTransform.Find("Cover").gameObject;
         }
+    }
+
+    void OnDisable(){
+        player.score.takedownCallback -= Spell_4_Takedown;
     }
 
     /*
@@ -293,13 +295,10 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     *   @param enemy - GameObject of the enemy hit.
     */
     public void Hit(IUnit unit){
+        spellHitCallback?.Invoke(unit, this);
         if(unit is INewDamagable){
             float magicDamage = championStats.magicDamage.GetValue();
             ((INewDamagable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
         }
-    }
-    
-    public override void SpellRemoved(){
-        player.score.takedownCallback -= Spell_4_Takedown;
     }
 }

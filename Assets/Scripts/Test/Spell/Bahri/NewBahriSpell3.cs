@@ -23,11 +23,6 @@ public class NewBahriSpell3 : InterSpell, IHasCast, IHasHit
         this.spellData = (BahriSpell3Data) spellData;
     }*/
 
-    void Start(){
-        if(SpellNum == null)
-            SpellNum = "Spell_3";
-    }
-
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
@@ -90,6 +85,7 @@ public class NewBahriSpell3 : InterSpell, IHasCast, IHasHit
     *   @param enemy - GameObject of the enemy hit.
     */
     public void Hit(IUnit unit){
+        spellHitCallback?.Invoke(unit, this);
         if(unit is INewDamagable){
             float magicDamage = championStats.magicDamage.GetValue();
             // Add the charm effect to the hit GameObject.

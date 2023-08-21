@@ -28,11 +28,14 @@ public class NewBahriPassive : InterSpell
     }*/
 
     void Start(){
-        if(SpellNum == null)
-            SpellNum = "Passive";
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
         player.statusEffects.AddEffect(passive);
         player.score.takedownCallback += Passive;
+    }
+
+    void OnDisable(){
+        player.statusEffects.RemoveEffect(passive.effectType, gameObject);
+        player.score.takedownCallback -= Passive;
     }
     
      /*
@@ -59,9 +62,5 @@ public class NewBahriPassive : InterSpell
                 Debug.Log("Healed " + healAmount + " health from minion/monster kill.");
             }
         }
-    }
-
-    public override void SpellRemoved(){
-        player.score.takedownCallback -= Passive;
     }
 }

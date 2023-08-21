@@ -26,12 +26,7 @@ public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
     /*public NewBahriSpell1(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BahriSpell1Data) spellData;
     }*/
-
-    void Start(){
-        if(SpellNum == null)
-            SpellNum = "Spell_1";
-    }
-
+    
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
@@ -111,6 +106,7 @@ public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
     *   @param enemy - GameObject of the enemy hit.
     */
     public void Hit(IUnit unit){
+        spellHitCallback?.Invoke(unit, this);
         if(unit is INewDamagable){
             INewDamagable damageMethod = (INewDamagable) unit;
             float magicDamage = championStats.magicDamage.GetValue();

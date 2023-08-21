@@ -33,8 +33,6 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
 
     void Start(){
         IsQuickCast = true;
-        if(SpellNum == null)
-            SpellNum = "Spell_2";
         if(player.playerUI != null){
             spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
             imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
@@ -195,18 +193,19 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
 
     /*
     *   Hit - Deals second spells damage to the enemy hit. Reduced damage on missiles that hit the same target more than once.
-    *   @param enemy - GameObject of the enemy hit.
+    *   @param unit - GameObject of the unit hit.
     */
-    public void Hit(IUnit enemy){
-        if(enemy is INewDamagable){
+    public void Hit(IUnit unit){
+        spellHitCallback?.Invoke(unit, this);
+        if(unit is INewDamagable){
             float magicDamage = championStats.magicDamage.GetValue();
             float finalDamage = spellData.baseDamage[SpellLevel] + magicDamage;
             // Reduce damage of spell if hitting the same target more than once.
-            if(enemiesHit.Contains(enemy)){
+            if(enemiesHit.Contains(unit)){
                 finalDamage = Mathf.Round(finalDamage * spellData.multiplier);
             }
-            ((INewDamagable) enemy).TakeDamage(finalDamage, "magic", enemy, false);
-            enemiesHit.Add(enemy);
+            ((INewDamagable) unit).TakeDamage(finalDamage, "magic", unit, false);
+            enemiesHit.Add(unit);
         }
     }
 
