@@ -269,7 +269,7 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
         if(targets.Count > 0){
             foreach(GameObject target in targets){
                 // Create missile and set necessary variables
-                GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, transform.position, Quaternion.identity);
+                GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
                 NewTargetedProjectile targetedProjectile = missile.GetComponent<NewTargetedProjectile>();
                 targetedProjectile.hit = Hit;
                 targetedProjectile.TargetUnit = target.GetComponent<IUnit>();

@@ -60,7 +60,7 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
             float angle = 0.0f;
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
-                GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, spell_2_parent.transform.position, Quaternion.identity);
+                GameObject missile = (GameObject) Instantiate(spellData.missile, spell_2_parent.transform.position, Quaternion.identity);
                 NewTargetedProjectile targetedProjectile = missile.GetComponent<NewTargetedProjectile>();
                 targetedProjectile.hit = Hit;
                 missile.transform.SetParent(spell_2_parent.transform);
@@ -152,7 +152,7 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
         }
         // Once spell is complete, destroy the parent and start the cooldown timer.
         if(spell_2_parent)
-            GameObject.Destroy(spell_2_parent);
+            Destroy(spell_2_parent);
         enemiesHit.Clear();
         if(spellDurationSlider != null)
             spellDurationSlider.SetActive(false);
@@ -218,7 +218,7 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
         // Destroy all spell parent objects.
         if(activeSpellObjects.Count > 0){
             for(int i = 0; i < activeSpellObjects.Count; i++){
-                Object.Destroy(activeSpellObjects[i]);
+                Destroy(activeSpellObjects[i]);
             }
         }
         activeSpellObjects.Clear();

@@ -72,7 +72,7 @@ public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
         // Cooldown starts on cast.
         StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Create the spells object and set necessary values.
-        GameObject orb = (GameObject) GameObject.Instantiate(spellData.orb, transform.position, Quaternion.identity);
+        GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
         Spell1Trigger spell1Trigger = orb.GetComponent<Spell1Trigger>();
         //spell1Trigger.bahriSpell1 = this;
         spell1Trigger.bahri = gameObject; 

@@ -68,7 +68,7 @@ public class NewBahriSpell3 : InterSpell, IHasCast, IHasHit
         // Cooldown stats on cast.
         StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));  
         // Create spell 3 GameObject and set its necessary variables.
-        GameObject missile = (GameObject) GameObject.Instantiate(spellData.missile, transform.position, Quaternion.identity);
+        GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
         NewBahriSpell3Trigger spell3Trigger = missile.GetComponent<NewBahriSpell3Trigger>();
         spell3Trigger.hitMethod = this;
         spell3Trigger.caster = player;
@@ -79,7 +79,7 @@ public class NewBahriSpell3 : InterSpell, IHasCast, IHasHit
                 missile.transform.position = Vector3.MoveTowards(missile.transform.position, targetPosition, spellData.speed * Time.deltaTime);
             }
             else{
-                GameObject.Destroy(missile);
+                Destroy(missile);
             }
             yield return null;
         }
