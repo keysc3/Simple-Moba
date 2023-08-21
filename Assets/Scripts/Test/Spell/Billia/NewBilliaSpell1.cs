@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NewBilliaSpell1 : InterSpell, IHasHit, ICastable, INewHasCallback
+public class NewBilliaSpell1 : InterSpell, IHasHit, IHasCast, INewHasCallback
 {
     new private BilliaSpell1Data spellData;
     private List<Effect> passiveEffectTracker = new List<Effect>();
