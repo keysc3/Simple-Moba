@@ -78,6 +78,4 @@ public class InterSpell : MonoBehaviour, ISpell
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected virtual void DrawSpell(){}
-
-    public virtual void SpellRemoved(){}
 }
