@@ -61,12 +61,14 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     }*/
 
     void Start(){
+        if(SpellNum == null)
+            SpellNum = "Spell_4";
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
         if(player.playerUI != null){
             spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
             imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
-            spellCDCover = sc.spellCDTransform.Find("Cover").gameObject;
+            spellCDCover = spellCDTransform.Find("Cover").gameObject;
         }
     }
 
@@ -102,12 +104,12 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
         // While time since last cast is less than or equal to the cd between casts.
         while(spell_timer <= spell_cd){
             spell_timer += Time.deltaTime;
-            if(sc.spellCDTransform != null){
+            if(spellCDTransform != null){
                 // Update the UI cooldown text and slider.
                 float cooldownLeft = spell_cd - spell_timer;
-                sc.spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
+                spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
                 float fill = Mathf.Clamp(cooldownLeft/spell_cd, 0f, 1f);
-                sc.spellCDImage.fillAmount = fill;
+                spellCDImage.fillAmount = fill;
             }
             yield return null;
         }

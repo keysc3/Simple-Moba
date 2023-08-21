@@ -28,6 +28,8 @@ public class NewBahriPassive : InterSpell
     }*/
 
     void Start(){
+        if(SpellNum == null)
+            SpellNum = "Passive";
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
         player.statusEffects.AddEffect(passive);
         player.score.takedownCallback += Passive;
