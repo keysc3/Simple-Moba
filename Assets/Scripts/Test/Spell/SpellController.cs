@@ -9,9 +9,6 @@ public class SpellController
     private ISpell spell;
     private IPlayer player;
     private Camera mainCamera;
-    public Transform spellCDTransform;
-    public TMP_Text spellCDText;
-    public Image spellCDImage;
 
     public SpellController(ISpell spell, IPlayer player){
         this.spell = spell;
@@ -67,12 +64,12 @@ public class SpellController
         // While spell is still on CD
         while(spell_timer <= spell_cd){
             spell_timer += Time.deltaTime;
-            if(spellCDTransform != null){
+            if(spell.spellCDTransform != null){
                 // Update the UI cooldown text and slider.
                 float cooldownLeft = spell_cd - spell_timer;
-                spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
+                spell.spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
                 float fill = Mathf.Clamp(cooldownLeft/spell_cd, 0f, 1f);
-                spellCDImage.fillAmount = fill;
+                spell.spellCDImage.fillAmount = fill;
             }
             yield return null;
         }
@@ -89,9 +86,9 @@ public class SpellController
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
 
-    public void SpellCDChildrenSetActive(bool isActive){
-        for(int i = 0; i < spellCDTransform.childCount; i++){
-            spellCDTransform.GetChild(i).gameObject.SetActive(isActive);
+    public void SpellCDChildrenSetActive(Transform parent, bool isActive){
+        for(int i = 0; i < parent.childCount; i++){
+            parent.GetChild(i).gameObject.SetActive(isActive);
         }
     }
 
