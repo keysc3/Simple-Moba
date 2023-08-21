@@ -27,7 +27,9 @@ public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
         this.spellData = (BahriSpell1Data) spellData;
     }*/
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
+        this.spellData = (BahriSpell1Data) base.spellData;
         if(SpellNum == null)
             SpellNum = spellData.defaultSpellNum;
     }

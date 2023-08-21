@@ -11,7 +11,7 @@ using UnityEngine.UI;
 *
 * @author: Colin Keys
 */
-public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
+public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
 {
     new private BahriSpell4Data spellData;
     private NavMeshAgent navMeshAgent;
@@ -61,7 +61,9 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
         isQuickCast = true;
     }*/
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
+        this.spellData = (BahriSpell4Data) base.spellData;
         if(SpellNum == null)
             SpellNum = spellData.defaultSpellNum;
         player.score.takedownCallback += Spell_4_Takedown;

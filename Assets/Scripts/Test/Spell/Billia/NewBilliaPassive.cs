@@ -9,7 +9,8 @@ public class NewBilliaPassive : InterSpell, INewHasCallback
     public List<ISpell> callbackSet { get; } = new List<ISpell>();
 
     // Start is called before the first frame update
-    void Start(){
+    protected override void Start(){
+        base.Start();
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }

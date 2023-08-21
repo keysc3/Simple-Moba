@@ -42,18 +42,20 @@ public class InterSpell : MonoBehaviour, ISpell
         }
     }
     public int SpellLevel { get => player.levelManager.spellLevels[SpellNum]-1; }
-    public SpellData spellData { get; }
+    [field: SerializeField] public SpellData spellData { get; protected set; }
     protected ChampionStats championStats;
     protected Camera mainCamera;
     protected IPlayer player;
 
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
-        championStats = (ChampionStats) player.unitStats;
         mainCamera = Camera.main;
         sc = new SpellController(this, player);
     }
 
+    protected virtual void Start(){
+        championStats = (ChampionStats) player.unitStats;
+    }
     /*
     *   DisplayCast - Displays the spell by adding its DrawSpell method to the Debug drawing singleton.
     */

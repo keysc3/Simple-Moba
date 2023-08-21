@@ -8,7 +8,8 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
     private bool canUseSpell = false;
     private GameObject spellCDCover;
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }

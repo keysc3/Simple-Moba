@@ -31,7 +31,9 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
         isQuickCast = true;
     }*/
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
+        this.spellData = (BahriSpell2Data) base.spellData;
         IsQuickCast = true;
         if(SpellNum == null)
             SpellNum = spellData.defaultSpellNum;

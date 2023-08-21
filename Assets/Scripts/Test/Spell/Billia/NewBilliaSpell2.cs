@@ -12,7 +12,8 @@ public class NewBilliaSpell2 : InterSpell, IHasHit, IHasCast
     public SpellHitCallback spellHitCallback { get; set; }
 
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }

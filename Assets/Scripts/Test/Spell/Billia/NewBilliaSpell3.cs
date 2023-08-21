@@ -10,7 +10,8 @@ public class NewBilliaSpell3 : InterSpell, IHasHit, IHasCast
     private float p2_y = 0.85f;
     public SpellHitCallback spellHitCallback { get; set; }
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }

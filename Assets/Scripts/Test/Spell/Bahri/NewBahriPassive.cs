@@ -27,7 +27,9 @@ public class NewBahriPassive : InterSpell
         player.score.takedownCallback += Passive;
     }*/
 
-    void Start(){
+    protected override void Start(){
+        base.Start();
+        this.spellData = (BahriPassiveData) base.spellData;
         if(SpellNum == null)
             SpellNum = spellData.defaultSpellNum;
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
@@ -36,7 +38,7 @@ public class NewBahriPassive : InterSpell
     }
 
     void OnDisable(){
-        player.statusEffects.RemoveEffect(passive.effectType, gameObject);
+        //player.statusEffects.RemoveEffect(passive.effectType, gameObject);
         player.score.takedownCallback -= Passive;
     }
     
