@@ -94,7 +94,7 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
                 // Animate the drowsy effect.
                 GameObject drowsyObject = (GameObject) Instantiate(spellData.drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
-                BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
+                NewBilliaDrowsyVisual visualScript = drowsyObject.GetComponent<NewBilliaDrowsyVisual>();
                 visualScript.drowsyDuration = newDrowsy.EffectDuration;
                 visualScript.drowsy = spellData.drowsy;
                 visualScript.source = gameObject;
