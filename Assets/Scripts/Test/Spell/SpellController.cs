@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 using TMPro;
 
 public class SpellController
@@ -9,11 +10,13 @@ public class SpellController
     private ISpell spell;
     private IPlayer player;
     private Camera mainCamera;
+    private NavMeshAgent navMeshAgent;
 
     public SpellController(ISpell spell, IPlayer player){
         this.spell = spell;
         this.player = player;
         mainCamera = Camera.main;
+        navMeshAgent = (spell as MonoBehaviour).gameObject.GetComponent<NavMeshAgent>();
     }
 
     /*
@@ -42,15 +45,18 @@ public class SpellController
         // While still casting spell stop the player.
         while(timer <= castTime){
             if(!spell.CanMove){
-                if(!player.navMeshAgent.isStopped)
-                    player.navMeshAgent.isStopped = true;
+                if(navMeshAgent != null){
+                    if(!navMeshAgent.isStopped)
+                        navMeshAgent.isStopped = true;
+                }
             }
             timer += Time.deltaTime;
             yield return null;
         }
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
-        player.navMeshAgent.isStopped = false;
+        if(navMeshAgent != null)
+            navMeshAgent.isStopped = false;
     }
 
     /*

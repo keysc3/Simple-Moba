@@ -14,6 +14,7 @@ using UnityEngine.UI;
 public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
 {
     new private BahriSpell4Data spellData;
+    private NavMeshAgent navMeshAgent;
 
     private PersonalSpell spell4Effect = null;
     private float spell_4_timer;
@@ -70,6 +71,7 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
             imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
             spellCDCover = spellCDTransform.Find("Cover").gameObject;
         }
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     void OnDisable(){
@@ -210,8 +212,8 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
         player.IsCasting = true;
         player.CurrentCastedSpell = this;
         float newSpeed = championStats.speed.GetValue() + spellData.speed;
-        player.navMeshAgent.ResetPath();
-        player.navMeshAgent.enabled = false;
+        navMeshAgent.ResetPath();
+        navMeshAgent.enabled = false;
         // While not at target position or not dead.
         while(transform.position != targetPosition && !player.IsDead){
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, newSpeed * Time.deltaTime);
@@ -220,7 +222,7 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
         // Only fire end of dash projectiles if still alive.
         if(!player.IsDead)
             Spell_4_Missiles();
-        player.navMeshAgent.enabled = true;
+        navMeshAgent.enabled = true;
         player.IsCasting = false;
         player.CurrentCastedSpell = this;
         StartCoroutine(NextCastCd(1.0f));

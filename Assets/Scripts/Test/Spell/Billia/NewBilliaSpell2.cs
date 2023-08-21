@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class NewBilliaSpell2 : InterSpell, IHasHit, IHasCast
 {
     new private BilliaSpell2Data spellData;
+    private NavMeshAgent navMeshAgent;
     private string radius;
     public SpellHitCallback spellHitCallback { get; set; }
 
@@ -15,6 +16,7 @@ public class NewBilliaSpell2 : InterSpell, IHasHit, IHasCast
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
     /*
     *   BilliaSpell2 - Initialize Billia's second spell.
@@ -129,8 +131,8 @@ public class NewBilliaSpell2 : InterSpell, IHasHit, IHasCast
         player.IsCasting = true;
         player.CurrentCastedSpell = this;
         // Disable pathing.
-        player.navMeshAgent.ResetPath();
-        player.navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
+        navMeshAgent.isStopped = true;
         // Get dash speed since dash duration is a fixed time.
         float dashSpeed = (targetPosition - transform.position).magnitude/spellData.dashTime; 
         float timer = 0.0f;
@@ -143,7 +145,7 @@ public class NewBilliaSpell2 : InterSpell, IHasHit, IHasCast
         }
         // Apply last tick dash and enable pathing.
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
-        player.navMeshAgent.isStopped = false;
+        navMeshAgent.isStopped = false;
         player.IsCasting = false;
         player.CurrentCastedSpell = this;
         Spell_2_Finished(spellTargetPosition);
