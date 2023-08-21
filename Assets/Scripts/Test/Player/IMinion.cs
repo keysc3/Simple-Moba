@@ -6,5 +6,5 @@ using UnityEngine.AI;
 public interface IMinion : IUnit
 {
     NewLevelManager levelManager { get; set; }
-    NavMeshAgent navMeshAgent { get; set; }
+    //NavMeshAgent navMeshAgent { get; set; }
 }
