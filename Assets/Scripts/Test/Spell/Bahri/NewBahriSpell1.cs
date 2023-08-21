@@ -26,7 +26,12 @@ public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
     /*public NewBahriSpell1(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
         this.spellData = (BahriSpell1Data) spellData;
     }*/
-    
+
+    void Start(){
+        if(SpellNum == null)
+            SpellNum = "Spell_1";
+    }
+
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */

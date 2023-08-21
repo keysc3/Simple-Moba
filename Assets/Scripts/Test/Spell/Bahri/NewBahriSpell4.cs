@@ -61,6 +61,8 @@ public class NeewBahriSpell4 : InterSpell, IHasCast, IHasHit
     }*/
 
     void Start(){
+        if(SpellNum == null)
+            SpellNum = "Spell_4";
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
         if(player.playerUI != null){

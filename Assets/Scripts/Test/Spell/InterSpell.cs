@@ -52,7 +52,6 @@ public class InterSpell : MonoBehaviour, ISpell
         championStats = (ChampionStats) player.unitStats;
         mainCamera = Camera.main;
         sc = new SpellController(this, player);
-        SpellNum = spellData.defaultSpellNum;
     }
 
     /*
