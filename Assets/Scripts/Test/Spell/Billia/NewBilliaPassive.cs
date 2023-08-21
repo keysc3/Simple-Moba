@@ -28,8 +28,7 @@ public class NewBilliaPassive : InterSpell, INewHasCallback
     *   @param spellHit - Spell that has hit the GameObject.
     */
     public void Passive(IUnit unit, ISpell spellHit){
-        //TODO CHANGE
-        //unit.statusEffects.AddEffect(passiveData.passiveDot.InitializeEffect(30f, 0, gameObject, unit));
+        unit.statusEffects.AddEffect(passiveData.passiveDot.InitializeEffect(30f, 0, gameObject, (unit as MonoBehaviour).gameObject));
         if(!passiveApplied.Contains(unit)){
             passiveApplied.Add(unit);
             StartCoroutine(PassiveHeal(unit));
