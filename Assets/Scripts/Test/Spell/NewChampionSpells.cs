@@ -24,6 +24,9 @@ public class NewChampionSpells : MonoBehaviour
         foreach(ISpell spellInterface in objSpells){
             spells.Add(spellInterface.SpellNum, spellInterface);
             SetupSpellButtons(spellInterface);
+            if(spellInterface is INewHasCallback){
+                ((INewHasCallback) spellInterface).SetupCallbacks(spells);
+            }
         }
     }
 
@@ -46,9 +49,12 @@ public class NewChampionSpells : MonoBehaviour
             spells[num] = newSpell;
             newSpell.SpellNum = num;
             SetupSpellButtons(newSpell);
+            if(newSpell is INewHasCallback){
+                ((INewHasCallback) newSpell).SetupCallbacks(spells);
+            }
         }
     }
-    
+
     /*
     *   SetupSpellButtons - Setup for the a spells button click and level up button click.
     *   @param player - Player the spell is for.
