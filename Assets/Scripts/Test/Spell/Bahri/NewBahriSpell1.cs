@@ -29,7 +29,7 @@ public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
 
     void Start(){
         if(SpellNum == null)
-            SpellNum = "Spell_1";
+            SpellNum = spellData.defaultSpellNum;
     }
 
     /*

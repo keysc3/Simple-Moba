@@ -25,7 +25,7 @@ public class NewBahriSpell3 : InterSpell, IHasCast, IHasHit
 
     void Start(){
         if(SpellNum == null)
-            SpellNum = "Spell_3";
+            SpellNum = spellData.defaultSpellNum;
     }
 
     /*

@@ -34,7 +34,7 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
     void Start(){
         IsQuickCast = true;
         if(SpellNum == null)
-            SpellNum = "Spell_2";
+            SpellNum = spellData.defaultSpellNum;
         if(player.playerUI != null){
             spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
             imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
