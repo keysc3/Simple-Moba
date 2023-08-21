@@ -41,13 +41,14 @@ public class NewChampionSpells : MonoBehaviour
     public void SetSpell(ISpell newSpell, string num){
         if(newSpell != null){
             if(spells[num] != null){
-                spells[num].SpellRemoved();
+                Destroy(spells[num] as MonoBehaviour);
             }
             spells[num] = newSpell;
             newSpell.SpellNum = num;
             SetupSpellButtons(newSpell);
         }
     }
+    
     /*
     *   SetupSpellButtons - Setup for the a spells button click and level up button click.
     *   @param player - Player the spell is for.
