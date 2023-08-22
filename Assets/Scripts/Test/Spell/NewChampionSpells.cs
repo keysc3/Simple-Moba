@@ -22,7 +22,7 @@ public class NewChampionSpells : MonoBehaviour
     void Start(){
         ISpell[] objSpells = GetComponents<ISpell>();
         foreach(ISpell spellInterface in objSpells){
-            spells.Add(spellInterface.SpellNum, spellInterface);
+            spells.Add(spellInterface.spellData.defaultSpellNum, spellInterface);
             SetupSpellButtons(spellInterface);
             if(spellInterface is INewHasCallback){
                 ((INewHasCallback) spellInterface).SetupCallbacks(spells);
@@ -61,23 +61,25 @@ public class NewChampionSpells : MonoBehaviour
     *   @param newSpell - Spell to set the buttons for.
     */
     private void SetupSpellButtons(ISpell newSpell){
-        //Spell button
-        NewSpellButton spellButton = spellsContainer.Find(newSpell.SpellNum + "_Container/SpellContainer/Spell/Button").GetComponent<NewSpellButton>();
-        spellButton.spell = newSpell;
-        //TODO: Change this to not be hardcoded using a proper keybind/input system?
-        List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
-        List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"};
-        int index = spellNames.FindIndex(name => name == newSpell.SpellNum);
-        if(index != -1)
-            spellButton.keyCode = inputs[index];
-        spellButton._SI = gameObject.GetComponent<ISpellInput>();
-        // Spell level up button.
-        spellsContainer.Find(newSpell.SpellNum + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
-        if(newSpell.SpellNum != "Passive"){
-            NewSpellLevelUpButton spellLevelUpButton = spellsContainer.Find(newSpell.SpellNum + "_Container/LevelUp/Button").GetComponent<NewSpellLevelUpButton>();
-            spellLevelUpButton.spell = newSpell.SpellNum;
-            spellLevelUpButton.LevelManager = player.levelManager;
-            spellLevelUpButton._SI = gameObject.GetComponent<ISpellInput>();
+        if(spellsContainer != null){
+            //Spell button
+            NewSpellButton spellButton = spellsContainer.Find(newSpell.SpellNum + "_Container/SpellContainer/Spell/Button").GetComponent<NewSpellButton>();
+            spellButton.spell = newSpell;
+            //TODO: Change this to not be hardcoded using a proper keybind/input system?
+            List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
+            List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"};
+            int index = spellNames.FindIndex(name => name == newSpell.SpellNum);
+            if(index != -1)
+                spellButton.keyCode = inputs[index];
+            spellButton._SI = gameObject.GetComponent<ISpellInput>();
+            // Spell level up button.
+            spellsContainer.Find(newSpell.SpellNum + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
+            if(newSpell.SpellNum != "Passive"){
+                NewSpellLevelUpButton spellLevelUpButton = spellsContainer.Find(newSpell.SpellNum + "_Container/LevelUp/Button").GetComponent<NewSpellLevelUpButton>();
+                spellLevelUpButton.spell = newSpell.SpellNum;
+                spellLevelUpButton.LevelManager = player.levelManager;
+                spellLevelUpButton._SI = gameObject.GetComponent<ISpellInput>();
+            }
         }
     }
 }
