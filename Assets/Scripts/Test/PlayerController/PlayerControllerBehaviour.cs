@@ -32,6 +32,8 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         get => currentTarget; 
         set {
             currentTarget = value;
+            if(player.myCollider != null)
+                currentTarget.y = player.myCollider.bounds.center.y;
             transform.LookAt(currentTarget);
         }
     }
