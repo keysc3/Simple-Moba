@@ -91,8 +91,11 @@ public class NewStatusEffects
         }
         IUnit unit = (IUnit) effect.effected.GetComponent<IUnit>();
         if(unit != null){
-            if(unit.SUnit is ScriptableChampion && UIManager.instance != null){}
-                //UIManager.instance.AddStatusEffectUI(this, effect, ((Player) unit).playerUI);
+            if(unit is IPlayer){
+                if(((IPlayer) unit).playerUI != null){
+                    //NewUIManager.instance.AddStatusEffectUI(this, effect, ((IPlayer) unit).playerUI);
+                }
+            }
         }
     }
 
@@ -145,6 +148,7 @@ public class NewStatusEffects
     */
     public bool CheckForEffectByName(ScriptableEffect checkFor, string effectName){
         foreach(Effect effect in statusEffects){
+            Debug.Log("NUM: " + effect.effectType.GetType() + " " + checkFor.GetType() + " " + effect.effectType.name + " " + effectName);
             if(effect.effectType.GetType() == checkFor.GetType() && effect.effectType.name == effectName)
                 return true;
         }
