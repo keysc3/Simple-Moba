@@ -12,6 +12,7 @@ public class NewBilliaSpell3 : InterSpell, IHasHit, IHasCast
 
     protected override void Start(){
         base.Start();
+        this.spellData = (BilliaSpell3Data) base.spellData;
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }

@@ -12,7 +12,6 @@ public class NewSpell1Trigger : MonoBehaviour
 
     // Start is called before the first frame update.
     private void Start(){
-        unit = GetComponent<IUnit>();
         orbCollider = GetComponent<SphereCollider>();
     }
 

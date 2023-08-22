@@ -11,7 +11,7 @@ using UnityEngine.UI;
 *
 * @author: Colin Keys
 */
-public class NewBahriSpell2 : InterSpell, IDeathCleanUp, ICastable, IHasHit
+public class NewBahriSpell2 : InterSpell, IDeathCleanUp, IHasCast, IHasHit
 {
     new private BahriSpell2Data spellData;
     private List<IUnit> enemiesHit = new List<IUnit>();

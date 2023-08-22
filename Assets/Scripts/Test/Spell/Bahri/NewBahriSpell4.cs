@@ -26,12 +26,6 @@ public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
             spell_4_chargesLeft = value;
             if(spell4Effect != null)
                 spell4Effect.Stacks = value;
-            if(spellCDCover!= null){
-                if(value > 0)
-                    spellCDCover.SetActive(false);
-                else
-                    spellCDCover.SetActive(true);
-            }
         }
     }
     private bool spell4Casting;
@@ -108,6 +102,7 @@ public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
     *   @param spell - string of the spell number.
     */
     private IEnumerator NextCastCd(float spell_cd){
+        sc.SpellCDChildrenSetActive(spellCDTransform, true);
         float spell_timer = 0.0f;
         // While time since last cast is less than or equal to the cd between casts.
         while(spell_timer <= spell_cd){
@@ -122,6 +117,10 @@ public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
             yield return null;
         }
         // Allow the spell to be cast again.
+        if(Spell_4_ChargesLeft == 0 && spellCDText != null)
+            spellCDText.gameObject.SetActive(false);
+        else
+            sc.SpellCDChildrenSetActive(spellCDTransform, false);
         canRecast = true;
     }
 

@@ -10,13 +10,14 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
 
     protected override void Start(){
         base.Start();
+        this.spellData = (BilliaSpell4Data) base.spellData;
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }
         CanMove = true;
         IsQuickCast = true;
-        if(spellCDTransform != null){
-            spellCDCover = spellCDTransform.Find("Cover").gameObject;
+        if(player.playerUI != null){
+            spellCDCover = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/CD/Cover").gameObject;
         }
     }
 
@@ -112,12 +113,12 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
             if(passiveAppliedChamps.Count > 0){
                 canUseSpell = true;
                 if(spellCDCover != null)
-                    spellCDCover.SetActive(true);
+                    spellCDCover.SetActive(false);
             }
             else{
                 canUseSpell = false;
                 if(spellCDCover != null)
-                    spellCDCover.SetActive(false);
+                    spellCDCover.SetActive(true);
             }
         }
     }
@@ -129,7 +130,7 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
     private List<GameObject> GetChampionsWithPassive(){
         List<GameObject> passiveAppliedChamps = new List<GameObject>();
         // Get all StatusEffectManagers.
-        Player[] playerScripts = Object.FindObjectsOfType<Player>();
+        NewPlayer[] playerScripts = Object.FindObjectsOfType<NewPlayer>();
         for (int i = 0; i < playerScripts.Length; i++){
             // If it is a champion and has the Billia dot then add it to the list.
             if(playerScripts[i].statusEffects.CheckForEffectByName(spellData.passiveDot, spellData.passiveDot.name)){

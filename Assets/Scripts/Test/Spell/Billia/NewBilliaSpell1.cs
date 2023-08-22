@@ -16,6 +16,7 @@ public class NewBilliaSpell1 : InterSpell, IHasHit, IHasCast, INewHasCallback
 
     protected override void Start(){
         base.Start();
+        this.spellData = (BilliaSpell1Data) base.spellData;
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }
@@ -223,6 +224,7 @@ public class NewBilliaSpell1 : InterSpell, IHasHit, IHasCast, INewHasCallback
     *   @param radius - string of which radius was hit.
     */
     public void Hit(IUnit unit){
+        Debug.Log("HIT");
         spellHitCallback?.Invoke(unit, this);
         if(unit is INewDamagable){
             INewDamagable damageMethod = (INewDamagable) unit;
