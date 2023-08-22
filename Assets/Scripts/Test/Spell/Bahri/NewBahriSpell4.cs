@@ -65,7 +65,7 @@ public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
         if(player.playerUI != null){
             spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
             imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
-            spellCDCover = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value + "_Container/SpellContainer/Spell/CD/Cover").gameObject;
+            spellCDCover = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/CD/Cover").gameObject;
         }
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
