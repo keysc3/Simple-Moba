@@ -133,7 +133,7 @@ public class NewLevelManager
         //requiredXP += 100.0f;
         gainAmount += 100.0f;
         // Give the champion another skill level up point and start the coroutine to allow them to level spells if not already running.
-        spellLevelPoints += 1;
+        SpellLevelPoints += 1;
         // Increase the champions base stats.
         if(_unit is IPlayer)
             IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
@@ -239,13 +239,15 @@ public class NewLevelManager
     *   @paream spell - string of the spell to be leveled up.
     */
     public void SpellLevelUp(string spell){
-        spellLevels[spell] = spellLevels[spell] + 1;
-        spellLevelPoints -= 1;
-        // If the spell wasn't level 1 yet then take of the spell unlearned cover.
-        if(spellLevels[spell] == 1)
-            SpellLearned(spell);
-        else
-            SpellLeveled(spell, spellLevels[spell]);
+        if(spellLevelPoints > 0){
+            spellLevels[spell] = spellLevels[spell] + 1;
+            SpellLevelPoints -= 1;
+            // If the spell wasn't level 1 yet then take of the spell unlearned cover.
+            if(spellLevels[spell] == 1)
+                SpellLearned(spell);
+            else
+                SpellLeveled(spell, spellLevels[spell]);
+        }
     }
 
     /*
