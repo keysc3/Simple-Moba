@@ -90,6 +90,7 @@ public class NewLevelManager
             spellLevels.Add("Spell_" + (i+1), 0);
         if(unit is IPlayer)
             ((IPlayer) unit).score.takedownCallback += GainXP; 
+        SpellLevelPoints += 1;
     }
 
     /*
@@ -207,7 +208,7 @@ public class NewLevelManager
                 }
             }
             // Skill level up available animation.
-            SkillLevelUpGradient(Time.time);
+            SkillLevelUpGradient(currentTime);
         }
     }
 
@@ -336,8 +337,10 @@ public class NewLevelManager
     public void SkillLevelUpGradient(float currentTime){
         // For each spell.
         for(int i = 0; i < 4; i++){
-            spellsContainer.Find("Spell_" + (i+1) + "_Container/LevelUp/Background")
-            .gameObject.GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(currentTime, 1));
+            if(spellsContainer != null){
+                spellsContainer.Find("Spell_" + (i+1) + "_Container/LevelUp/Background")
+                .gameObject.GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(currentTime, 1));
+            }
         }
     }
 }
