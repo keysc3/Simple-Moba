@@ -59,9 +59,11 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
         damageTracker = new NewDamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
-
+        if(playerUI != null)
+            score = new NewScore(playerUI.transform.Find("Score"));
+        else
+            score = new NewScore(null);
         levelManager = new NewLevelManager(this);
-        score = new NewScore(playerUI.transform.Find("Score"));
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerController>();
         playerSpellInput = GetComponent<PlayerSpellInput>();
@@ -82,11 +84,14 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     {
         damageTracker.CheckForReset(Time.time);
         statusEffects.UpdateEffects(Time.deltaTime);
+        levelManager.LevelUpSkill(Time.time);
         if(UIManager.instance != null){
-            UIManager.instance.UpdatePlayerUIHealthBar(playerUI, (ChampionStats) unitStats, IsDead);
-            UIManager.instance.UpdatePlayerBarHealthBar(playerBar, (ChampionStats) unitStats, IsDead);
-            UIManager.instance.UpdateManaUIs(playerUI, playerBar, (ChampionStats) unitStats);
-            UIManager.instance.UpdateAllStatsUI(playerUI, (ChampionStats) unitStats);
+            if(playerUI != null){
+                UIManager.instance.UpdatePlayerUIHealthBar(playerUI, (ChampionStats) unitStats, IsDead);
+                UIManager.instance.UpdatePlayerBarHealthBar(playerBar, (ChampionStats) unitStats, IsDead);
+                UIManager.instance.UpdateManaUIs(playerUI, playerBar, (ChampionStats) unitStats);
+                UIManager.instance.UpdateAllStatsUI(playerUI, (ChampionStats) unitStats);
+            }
         }
     }
 
