@@ -53,14 +53,17 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
 
     void Awake(){
-        isDead = false;
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
+        playerUI = UIManager.instance.CreateNewPlayerUI(gameObject.name, SUnit.icon);
+        playerBar = UIManager.instance.CreateNewPlayerBar(gameObject);
+        UIManager.instance.NewInitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
+        isDead = false;
         statusEffects = new NewStatusEffects();
         damageTracker = new NewDamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
         if(playerUI != null)
-            score = new NewScore(playerUI.transform.Find("Score"));
+            score = new NewScore(playerUI.transform.Find("Score/Container"));
         else
             score = new NewScore(null);
         levelManager = new NewLevelManager(this);
