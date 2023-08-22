@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
 {
@@ -44,19 +45,21 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
         set => currentCastedSpell = !IsCasting ? null : value;
     }
 
-
     private Material alive;
     private Renderer rend;
+
     [SerializeField] private Material dead;
+    [SerializeField] private GameObject playerBarPrefab;
+    [SerializeField] private GameObject playerUIPrefab;
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
 
     void Awake(){
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
-        playerUI = UIManager.instance.CreateNewPlayerUI(gameObject.name, SUnit.icon);
-        playerBar = UIManager.instance.CreateNewPlayerBar(gameObject);
-        UIManager.instance.NewInitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
+        //Debug.Log("NE: " + NewUIManager.instance);
+        playerUI = CreateNewPlayerUI(gameObject.name, SUnit.icon);
+        playerBar = CreateNewPlayerBar(gameObject);
         isDead = false;
         statusEffects = new NewStatusEffects();
         damageTracker = new NewDamageTracker();
@@ -79,7 +82,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     // Start is called before the first frame update
     void Start()
     {
-        
+        UIManager.instance.NewInitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
     }
 
     // Update is called once per frame
@@ -95,6 +98,10 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
                 UIManager.instance.UpdateManaUIs(playerUI, playerBar, (ChampionStats) unitStats);
                 UIManager.instance.UpdateAllStatsUI(playerUI, (ChampionStats) unitStats);
             }
+        }
+        if(NewActiveChampion.instance.champions[NewActiveChampion.instance.NewActiveChamp] == gameObject){
+            if(Input.GetKeyDown(KeyCode.K))
+                levelManager.GainXPTester();
         }
     }
 
@@ -198,5 +205,26 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
         }
         //UIManager.instance.UpdateDeathTimer(0f, playerUI);
         Respawn();
+    }
+
+    public GameObject CreateNewPlayerUI(string name, Sprite icon){
+        // Set up the players UI.
+        GameObject newPlayerUI = (GameObject) Instantiate(playerUIPrefab, playerUIPrefab.transform.position, playerUIPrefab.transform.rotation);
+        newPlayerUI.name = name + "UI";
+        newPlayerUI.transform.SetParent(GameObject.Find("/Canvas").transform);
+        RectTransform newPlayerUIRectTransform = newPlayerUI.GetComponent<RectTransform>();
+        newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
+        newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
+        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = icon;
+        return newPlayerUI;
+    }
+    public GameObject CreateNewPlayerBar(GameObject champion){
+        GameObject newPlayerBar = (GameObject) Instantiate(playerBarPrefab, playerBarPrefab.transform.position, playerBarPrefab.transform.rotation);
+        newPlayerBar.name = champion.name + "PlayerBar";
+        RectTransform newPlayerBarRectTransform = newPlayerBar.GetComponent<RectTransform>();
+        Vector3 newPlayerBarPos = newPlayerBarRectTransform.anchoredPosition;
+        newPlayerBar.transform.SetParent(champion.transform);
+        newPlayerBarRectTransform.anchoredPosition3D = newPlayerBarPos;
+        return newPlayerBar;
     }
 }
