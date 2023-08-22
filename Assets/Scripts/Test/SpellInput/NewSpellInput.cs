@@ -16,17 +16,21 @@ public class NewSpellInput
     *   @param  spellPressed - Spell of the spell pressed.
     */
     public void SpellButtonPressed(KeyCode buttonPressed, ISpell spellPressed){
+        foreach(KeyValuePair<string, int> entry in _si.SpellLevels){
+            Debug.Log("Key: " + entry.Key + "Value: " + entry.Value);
+        }
         // Only attempt to cast if learned.
         if(_si.SpellLevels[spellPressed.SpellNum] > 0 && !spellPressed.OnCd){
             // Hide cast if a spell was prepped and new button pressed is different than last.
             if(_si.LastSpellPressed != null && _si.LastButtonPressed != buttonPressed)
                 _si.LastSpellPressed.HideCast();
             // If pressed spell is a castable spell.
-            if(spellPressed is ICastable){
+            if(spellPressed is IHasCast){
                 // If spell is not cast on press.
                 if(!spellPressed.IsQuickCast){
                     // If Last button press is different new than new button press, prep the spell.
                     if(_si.LastButtonPressed != buttonPressed){
+                        Debug.Log("HERE");
                         spellPressed.DisplayCast();
                         _si.LastButtonPressed = buttonPressed;
                         _si.LastSpellPressed = spellPressed;
@@ -34,7 +38,7 @@ public class NewSpellInput
                 }
                 // Cast the spell since it is cast on press.
                 else{
-                    ((ICastable) spellPressed).Cast();
+                    ((IHasCast) spellPressed).Cast();
                     _si.LastSpellPressed = null;
                     _si.LastButtonPressed = KeyCode.None;
                 }
@@ -62,11 +66,11 @@ public class NewSpellInput
                 // If the player click hit a GameObject.
                 if(Physics.Raycast(ray, out hitInfo))
                     // Handle GamObject checking in the spell.
-                    ((ITargetCastable) _si.LastSpellPressed).Cast(hitInfo.collider.gameObject);
+                    ((IHasTargetedCast) _si.LastSpellPressed).Cast(hitInfo.collider.gameObject.GetComponent<IUnit>());
             }
             // Cast spell.
             else{
-                ((ICastable) _si.LastSpellPressed).Cast();
+                ((IHasCast) _si.LastSpellPressed).Cast();
             }
             // Unprepare spell.
             _si.LastSpellPressed = null;

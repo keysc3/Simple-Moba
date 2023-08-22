@@ -16,7 +16,6 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     private Camera mainCamera;
 
     void Awake(){
-        levelManager = GetComponent<IPlayer>().levelManager;
         championSpells = GetComponent<NewChampionSpells>();
         newSI = new NewSpellInput(this);
     }
@@ -24,6 +23,7 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     // Start is called before the first frame update
     void Start()
     {
+        levelManager = GetComponent<IPlayer>().levelManager;
         mainCamera = Camera.main;
     }
 
