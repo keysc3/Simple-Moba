@@ -16,9 +16,6 @@ public class NewSpellInput
     *   @param  spellPressed - Spell of the spell pressed.
     */
     public void SpellButtonPressed(KeyCode buttonPressed, ISpell spellPressed){
-        foreach(KeyValuePair<string, int> entry in _si.SpellLevels){
-            Debug.Log("Key: " + entry.Key + "Value: " + entry.Value);
-        }
         // Only attempt to cast if learned.
         if(_si.SpellLevels[spellPressed.SpellNum] > 0 && !spellPressed.OnCd){
             // Hide cast if a spell was prepped and new button pressed is different than last.
@@ -30,7 +27,6 @@ public class NewSpellInput
                 if(!spellPressed.IsQuickCast){
                     // If Last button press is different new than new button press, prep the spell.
                     if(_si.LastButtonPressed != buttonPressed){
-                        Debug.Log("HERE");
                         spellPressed.DisplayCast();
                         _si.LastButtonPressed = buttonPressed;
                         _si.LastSpellPressed = spellPressed;
