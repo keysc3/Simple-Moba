@@ -29,7 +29,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     }
     private Vector3 currentTarget;
     public Vector3 CurrentTarget { 
-        get => CurrentTarget; 
+        get => currentTarget; 
         set {
             currentTarget = value;
             transform.LookAt(currentTarget);
@@ -81,7 +81,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hitInfo;
                     if(Physics.Raycast(ray, out hitInfo)){
-                        newpc.RightClick(hitInfo);
+                        newpc.RightClick(hitInfo, gameObject);
                     }
             }
 

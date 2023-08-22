@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewPlayerController : MonoBehaviour
+public class NewPlayerController
 {
     private IPlayerMover _pm;
 
@@ -13,7 +13,7 @@ public class NewPlayerController : MonoBehaviour
     /*
     *   RightClick - Moves the player to the click position if no enemy is targeted, otherwise sets the target.
     */
-    public void RightClick(RaycastHit hitInfo){
+    public void RightClick(RaycastHit hitInfo, GameObject gameObject){
         Vector3 dest = hitInfo.point;
         //dest.y = player.myCollider.bounds.center.y;
         // If the player clicked an enemy set the target, otherwise set the destination.
