@@ -65,6 +65,7 @@ public class SpellController
     *   @param myResult - Action<bool> method used for returning a value for setting the spell cooldowns onCd value back to false.
     */
     public IEnumerator Spell_Cd_Timer(float spell_cd){
+        SpellCDChildrenSetActive(spell.spellCDTransform, true);
         spell_cd = CalculateCooldown(spell_cd, player.unitStats.haste.GetValue());
         float spell_timer = 0.0f;
         // While spell is still on CD
@@ -80,6 +81,7 @@ public class SpellController
             yield return null;
         }
         spell.OnCd = false;
+        SpellCDChildrenSetActive(spell.spellCDTransform, false);
     }
 
     /*
@@ -93,8 +95,10 @@ public class SpellController
     }
 
     public void SpellCDChildrenSetActive(Transform parent, bool isActive){
-        for(int i = 0; i < parent.childCount; i++){
-            parent.GetChild(i).gameObject.SetActive(isActive);
+        if(parent != null){
+            for(int i = 0; i < parent.childCount; i++){
+                parent.GetChild(i).gameObject.SetActive(isActive);
+            }
         }
     }
 

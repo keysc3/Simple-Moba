@@ -12,16 +12,16 @@ public class InterSpell : MonoBehaviour, ISpell
     public TMP_Text spellCDText { get; set; }
     public Image spellCDImage { get; set; }
 
-    private bool onCd = false;
+    protected bool onCd = false;
     public bool OnCd { 
         get => onCd;
         set {
             onCd = value;
-            if(spellCDTransform != null)
+            /*if(spellCDTransform != null)
                 if(value == true)
                     sc.SpellCDChildrenSetActive(spellCDTransform, true);
                 else
-                    sc.SpellCDChildrenSetActive(spellCDTransform, false);
+                    sc.SpellCDChildrenSetActive(spellCDTransform, false);*/
         }
     }
     public bool CanMove { get; set; } = false;
