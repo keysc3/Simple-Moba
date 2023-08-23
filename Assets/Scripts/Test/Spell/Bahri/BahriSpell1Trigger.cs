@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewSpell1Trigger : MonoBehaviour
+public class BahriSpell1Trigger : MonoBehaviour
 {
-    public NewBahriSpell1 bahriSpell1;
+    public BahriSpell1 bahriSpell1;
 
     private Bounds bahriBounds;
     public IUnit unit;

@@ -9,7 +9,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
+public class BahriSpell1 : InterSpell, IHasCast, IHasHit
 {
 
     new private BahriSpell1Data spellData;
@@ -75,7 +75,7 @@ public class NewBahriSpell1 : InterSpell, IHasCast, IHasHit
         StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
-        NewSpell1Trigger spell1Trigger = orb.GetComponent<NewSpell1Trigger>();
+        BahriSpell1Trigger spell1Trigger = orb.GetComponent<BahriSpell1Trigger>();
         spell1Trigger.bahriSpell1 = this;
         spell1Trigger.unit = player; 
         // Set initial return values.

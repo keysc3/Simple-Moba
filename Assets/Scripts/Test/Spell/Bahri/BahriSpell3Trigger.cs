@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBahriSpell3Trigger : MonoBehaviour
+public class BahriSpell3Trigger : MonoBehaviour
 {
     public IHasHit hitMethod;
     public IUnit caster;

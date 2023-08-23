@@ -8,7 +8,7 @@ using UnityEditor;
 *
 * @author: Colin Keys
 */
-public class NewBahriSpell3 : InterSpell, IHasCast, IHasHit
+public class BahriSpell3 : InterSpell, IHasCast, IHasHit
 {
     new private BahriSpell3Data spellData;
     public SpellHitCallback spellHitCallback { get; set; }
@@ -71,7 +71,7 @@ public class NewBahriSpell3 : InterSpell, IHasCast, IHasHit
         StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));  
         // Create spell 3 GameObject and set its necessary variables.
         GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
-        NewBahriSpell3Trigger spell3Trigger = missile.GetComponent<NewBahriSpell3Trigger>();
+        BahriSpell3Trigger spell3Trigger = missile.GetComponent<BahriSpell3Trigger>();
         spell3Trigger.hitMethod = this;
         spell3Trigger.caster = player;
         // While the spell object still exists.
