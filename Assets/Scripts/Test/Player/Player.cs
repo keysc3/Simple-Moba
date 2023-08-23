@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, IPlayer, IDamagable
         }
     }
     public UnitStats unitStats { get; set; }
-    public NewStatusEffects statusEffects { get; set; }
+    public StatusEffects statusEffects { get; set; }
     public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
     //public Score score { get; private set; }
@@ -57,11 +57,10 @@ public class Player : MonoBehaviour, IPlayer, IDamagable
 
     void Awake(){
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
-        //Debug.Log("NE: " + NewUIManager.instance);
         playerUI = CreateNewPlayerUI(gameObject.name, SUnit.icon);
         playerBar = CreateNewPlayerBar(gameObject);
         isDead = false;
-        statusEffects = new NewStatusEffects();
+        statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();

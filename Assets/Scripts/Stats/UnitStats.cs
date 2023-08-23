@@ -68,7 +68,7 @@ public class UnitStats
     /*
     *   CalculateMoveSpeed - Calculates a units move speed. All speed boosts are used but only one slow is used.
     */
-    public float CalculateMoveSpeed(NewStatusEffects statusEffects){
+    public float CalculateMoveSpeed(StatusEffects statusEffects){
         List<Effect> speedBonuses = statusEffects.GetEffectsByType(typeof(ScriptableSpeedBonus));
         float additive = 1f;
         float multiplicative = 1f;

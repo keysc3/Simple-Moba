@@ -10,7 +10,7 @@ public class BilliaDrowsyVisual : MonoBehaviour
     public GameObject source;
     private Image drowsyVisual;
     private RectTransform rectTransform;
-    private NewStatusEffects statusEffects;
+    private StatusEffects statusEffects;
     private float yOffset = 1f;
 
     // Start is called before the first frame update

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewStatusEffects
+public class StatusEffects
 {
     public List<Effect> statusEffects { get; } = new List<Effect>();
     

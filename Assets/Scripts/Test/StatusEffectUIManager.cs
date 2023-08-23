@@ -28,7 +28,7 @@ public class StatusEffectUIManager : MonoBehaviour
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
     // increase size of container, increase y offset.
-    public void AddStatusEffectUI(NewStatusEffects statusEffects, Effect effect, GameObject playerUI){
+    public void AddStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject playerUI){
         // If a stackable effect already has 1 stack, don't create a new UI element.
         if(effect.effectType.isStackable)
             if(statusEffects.GetEffectsByType(effect.effectType.GetType()).Count > 1)
@@ -96,7 +96,7 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StatusEffectUI(NewStatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         float elapsedDuration;
         // Get the timer image component.
         Image slider = effectUI.transform.Find("InnerContainer/Slider").GetComponent<Image>();
@@ -127,7 +127,7 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StackableStatusEffectUI(NewStatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         // Set stack text active.
         effectUI.transform.Find("InnerContainer/Value").gameObject.SetActive(true);
         // Setup variables.

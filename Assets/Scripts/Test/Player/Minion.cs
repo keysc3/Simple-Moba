@@ -14,7 +14,7 @@ public class Minion : MonoBehaviour, IMinion, IDamagable
         }
     }
     public UnitStats unitStats { get; set; }
-    public NewStatusEffects statusEffects { get; set; }
+    public StatusEffects statusEffects { get; set; }
     public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
     public LevelManager levelManager { get; set; }
@@ -29,7 +29,7 @@ public class Minion : MonoBehaviour, IMinion, IDamagable
     void Awake(){
         isDead = false;
         unitStats = new MinionStats((ScriptableMinion) sUnit);
-        statusEffects = new NewStatusEffects();
+        statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         levelManager = new LevelManager(this);
