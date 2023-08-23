@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
 {
-    private NewPlayerController newpc;
+    private PlayerController newpc;
 
     private NavMeshAgent nma;
 
@@ -47,7 +47,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     // Called when the script instance is being loaded.
     private void Awake(){
         championSpells = GetComponent<NewChampionSpells>();
-        newpc = new NewPlayerController(this);
+        newpc = new PlayerController(this);
         nma = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
         player = GetComponent<IPlayer>();

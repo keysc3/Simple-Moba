@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewPlayerController
+public class PlayerController
 {
     private IPlayerMover _pm;
 
-    public NewPlayerController(IPlayerMover pm){
+    public PlayerController(IPlayerMover pm){
         _pm = pm;
     }
     
