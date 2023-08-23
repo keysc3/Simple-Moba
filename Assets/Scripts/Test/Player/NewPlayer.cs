@@ -99,7 +99,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
                 UIManager.instance.UpdateAllStatsUI(playerUI, (ChampionStats) unitStats);
             }
         }
-        if(NewActiveChampion.instance.champions[NewActiveChampion.instance.NewActiveChamp] == gameObject){
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
             if(Input.GetKeyDown(KeyCode.K))
                 levelManager.GainXPTester();
         }
@@ -174,7 +174,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     public void Respawn(){
         navMeshAgent.enabled = true;
         // If active champion then enable controls.
-        if(NewActiveChampion.instance.champions[NewActiveChampion.instance.NewActiveChamp] == gameObject){
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }

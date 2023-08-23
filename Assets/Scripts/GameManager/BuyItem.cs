@@ -57,7 +57,7 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to purchase.
     */
     private void PurchaseItem(int itemNumber){
-        IPlayer player = NewActiveChampion.instance.players[NewActiveChampion.instance.NewActiveChamp];
+        IPlayer player = ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp];
         Item addItem = allItems[itemNumber-1];
         int itemSlot = player.inventory.AddItem(addItem);
         if(itemSlot != -1){
@@ -76,7 +76,7 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to sell.
     */
     private void SellItem(int itemSlot){
-        IPlayer player = NewActiveChampion.instance.players[NewActiveChampion.instance.NewActiveChamp];
+        IPlayer player = ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp];
         Item removeItem = player.inventory.RemoveItem(itemSlot);
         if(removeItem != null){
             ((ChampionStats) player.unitStats).RemoveItemStats(removeItem);

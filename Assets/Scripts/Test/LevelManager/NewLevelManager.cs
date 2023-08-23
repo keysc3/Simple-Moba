@@ -191,7 +191,7 @@ public class NewLevelManager
     public void LevelUpSkill(float currentTime){
         // Check for level up skill input if skill level up available.
         if(spellLevelPoints > 0){
-            if(NewActiveChampion.instance.players[NewActiveChampion.instance.NewActiveChamp] == (IPlayer) _unit){
+            if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == (IPlayer) _unit){
                 // If first spell level up key bind pressed and it is not at max level then level it.
                 if(Input.GetKey(KeyCode.LeftControl)){
                     if(Input.GetKeyDown(KeyCode.Q))
