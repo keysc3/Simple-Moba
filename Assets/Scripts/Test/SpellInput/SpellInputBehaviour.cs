@@ -12,11 +12,11 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     private Dictionary<string, int> spellLevels;
     public Dictionary<string, int> SpellLevels { get => levelManager.spellLevels; }
     private LevelManager levelManager;
-    private NewChampionSpells championSpells;
+    private ChampionSpells championSpells;
     private Camera mainCamera;
 
     void Awake(){
-        championSpells = GetComponent<NewChampionSpells>();
+        championSpells = GetComponent<ChampionSpells>();
         newSI = new NewSpellInput(this);
     }
 

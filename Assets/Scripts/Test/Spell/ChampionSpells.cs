@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewChampionSpells : MonoBehaviour
+public class ChampionSpells : MonoBehaviour
 {
     private Transform spellsContainer;
 

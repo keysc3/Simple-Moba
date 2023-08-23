@@ -32,7 +32,7 @@ public class Player : MonoBehaviour, IPlayer, IDamagable
     private NavMeshAgent navMeshAgent;
     private PlayerControllerBehaviour playerController;
     private SpellInputBehaviour playerSpellInput;
-    private NewChampionSpells championSpells;
+    private ChampionSpells championSpells;
 
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour, IPlayer, IDamagable
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerControllerBehaviour>();
         playerSpellInput = GetComponent<SpellInputBehaviour>();
-        championSpells = GetComponent<NewChampionSpells>();
+        championSpells = GetComponent<ChampionSpells>();
 
         rend = GetComponent<Renderer>();
         alive = rend.material;

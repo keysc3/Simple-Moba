@@ -41,12 +41,12 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     public float Range { get => player.unitStats.autoRange.GetValue(); }
     //private Player player;
     //private UnitStats unitStats;
-    private NewChampionSpells championSpells;
+    private ChampionSpells championSpells;
     private IPlayer player;
 
     // Called when the script instance is being loaded.
     private void Awake(){
-        championSpells = GetComponent<NewChampionSpells>();
+        championSpells = GetComponent<ChampionSpells>();
         newpc = new PlayerController(this);
         nma = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
