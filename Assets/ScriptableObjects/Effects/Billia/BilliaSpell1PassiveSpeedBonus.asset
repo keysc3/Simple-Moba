@@ -18,7 +18,7 @@ MonoBehaviour:
   - 6.5
   - 6.5
   - 6.5
-  <isStackable>k__BackingField: 1
+  isStackable: 1
   <ccValue>k__BackingField: 0
   <isBuff>k__BackingField: 1
   <sprite>k__BackingField: {fileID: 21300000, guid: f171c95bab5c84349906641ebf3563a8, type: 3}
@@ -28,4 +28,4 @@ MonoBehaviour:
   - 0.05
   - 0.06
   - 0.07
-  <isAdditive>k__BackingField: 1
+  isAdditive: 0
