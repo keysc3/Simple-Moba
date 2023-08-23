@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewTargetedProjectile : MonoBehaviour
+public class TargetedProjectile : MonoBehaviour
 {
     private IUnit targetUnit = null;
     public IUnit TargetUnit {
