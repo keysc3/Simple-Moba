@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class NewSpellLevelUpButton : MonoBehaviour, IPointerDownHandler
+public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
 {
     private ISpellInput _si;
     public ISpellInput _SI {

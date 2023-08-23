@@ -81,7 +81,7 @@ public class ChampionSpells : MonoBehaviour
             // Spell level up button.
             spellsContainer.Find(num + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
             if(num != "Passive"){
-                NewSpellLevelUpButton spellLevelUpButton = spellsContainer.Find(num + "_Container/LevelUp/Button").GetComponent<NewSpellLevelUpButton>();
+                SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(num + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
                 spellLevelUpButton.spell = num;
                 spellLevelUpButton.LevelManager = player.levelManager;
                 spellLevelUpButton._SI = gameObject.GetComponent<ISpellInput>();
