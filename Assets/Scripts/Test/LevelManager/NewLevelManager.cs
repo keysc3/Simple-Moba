@@ -111,7 +111,7 @@ public class NewLevelManager
     */
     private void GainXP(IUnit killed){
         float gained;
-        if(killed is Player)
+        if(killed is IPlayer)
             gained = levelInfo.championKillXP[((IPlayer) killed).levelManager.Level - 1];
         else
             gained = 30f;

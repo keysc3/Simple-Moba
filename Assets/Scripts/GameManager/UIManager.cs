@@ -39,11 +39,11 @@ public class UIManager : MonoBehaviour
     *   @param player - Player the UI is being setup for.
     *   @return (GameObject, GameObject) - Tuple for returning the intialized player UI and player bar.
     */
-    public (GameObject, GameObject) SetupPlayerUI(Player player){
+    /*public (GameObject, GameObject) SetupPlayerUI(Player player){
         GameObject playerUI = CreatePlayerUI(player.gameObject, player.SUnit.icon);
         GameObject playerBar = CreatePlayerBar(player.gameObject);
         return (playerUI, playerBar);
-    }
+    }*/
 
     public GameObject CreateNewPlayerUI(string name, Sprite icon){
         // Set up the players UI.
@@ -78,11 +78,11 @@ public class UIManager : MonoBehaviour
     /*
     *   InitialValueSetup - Initializes the players resource and stat UI values.
     */
-    public void InitialValueSetup(Player player){
+    /*public void InitialValueSetup(Player player){
         UpdateHealthBar(player);
         UpdateManaBar(player);
         UpdateAllStats(player);
-    }
+    }*/
 
     /*
     *   CreatePlayerUI - Initializes a new player UI.
@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
     *   @param player - Player the spell is for.
     *   @param newSpell - Spell to set the buttons for.
     */
-    public void SetupSpellButtons(Player player, Spell newSpell){
+    /*public void SetupSpellButtons(Player player, Spell newSpell){
         // Spell button
         Transform spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer");
         SpellButton spellButton = spellsContainer.Find(newSpell.SpellNum + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour
             spellLevelUpButton.spell = newSpell.SpellNum;
             spellLevelUpButton.player = player;
         }
-    }
+    }*/
 
     /*
     *   CreatePlayerBar - Initializes a new player bar.
@@ -147,7 +147,7 @@ public class UIManager : MonoBehaviour
     *   UpdateHealthBar - Updates the health bar UI.
     *   @param player - Player whose health bar is being updated.
     */
-    public void UpdateHealthBar(Player player){
+    /*public void UpdateHealthBar(Player player){
         Slider health = player.playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
         TMP_Text healthText = health.transform.Find("Value").GetComponent<TMP_Text>();
         ChampionStats championStats = (ChampionStats) player.unitStats;
@@ -166,7 +166,7 @@ public class UIManager : MonoBehaviour
             healthText.SetText(0 + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
             health.value = 0;
         }
-    }
+    }*/
 
     public void UpdatePlayerUIHealthBar(GameObject playerUI, ChampionStats championStats, bool isDead){
         Slider health = playerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<Slider>();
@@ -202,7 +202,7 @@ public class UIManager : MonoBehaviour
     *   UpdateManaBar - Updates the mana bar UI.
     *   @param player - Player whose health bar is being updated.
     */
-    public void UpdateManaBar(Player player){
+    /*public void UpdateManaBar(Player player){
         ChampionStats championStats = (ChampionStats) player.unitStats;
         Slider mana = player.playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
         // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
@@ -212,7 +212,7 @@ public class UIManager : MonoBehaviour
         // Set the fill based on the player mana percent.
         player.playerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<Slider>().value = manaPercent;
         mana.value = manaPercent;
-    }
+    }*/
 
     public void UpdateManaUIs(GameObject playerUI, GameObject playerBar, ChampionStats championStats){
         Slider mana = playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<Slider>();
@@ -229,7 +229,7 @@ public class UIManager : MonoBehaviour
     *   UpdateAllStats - Updates all the UI for player stats.
     *   @param player - Player whose stats are being updated.
     */
-    public void UpdateAllStats(Player player){
+    /*public void UpdateAllStats(Player player){
         ChampionStats championStats = (ChampionStats) player.unitStats;
         Transform statsContainer = player.playerUI.transform.Find("Player/Info/Stats/Container");
         UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue(), statsContainer);
@@ -243,7 +243,7 @@ public class UIManager : MonoBehaviour
         UpdateStat("MagicResist", championStats.magicResist.GetValue(), statsContainer);
         UpdateStat("Haste", championStats.haste.GetValue(), statsContainer);
         UpdateStat("Speed", championStats.speed.GetValue(), statsContainer);
-    }
+    }*/
 
     public void UpdateAllStatsUI(GameObject playerUI, ChampionStats championStats){
         Transform statsContainer = playerUI.transform.Find("Player/Info/Stats/Container");
@@ -600,10 +600,6 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.M)){
-            if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject)
-                gameObject.GetComponent<Player>().TakeDamage(10, "magic", gameObject, false);
-        }
     }
 
     /*
@@ -615,7 +611,7 @@ public class UIManager : MonoBehaviour
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
     // increase size of container, increase y offset.
-    public void AddStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject playerUI){
+    /*public void AddStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject playerUI){
         // If a stackable effect already has 1 stack, don't create a new UI element.
         if(effect.effectType.isStackable)
             if(statusEffects.GetEffectsByType(effect.effectType.GetType()).Count > 1)
@@ -641,7 +637,7 @@ public class UIManager : MonoBehaviour
             StartCoroutine(StackableStatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.Find("Player/StatusEffects")));
         else
             StartCoroutine(StatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.Find("Player/StatusEffects")));
-    }
+    }*/
 
     /*
     *   SetStatusEffectUIPosition - Sets the position of the given status effect UI element.
@@ -649,7 +645,7 @@ public class UIManager : MonoBehaviour
     *   @param myEffect - GameObject of the new UI element.
     *   @param isBuff - bool for if the status effect is a buff or debuff.
     */
-    public void SetStatusEffectUIPosition(Transform UI, GameObject myEffect, bool isBuff){
+    /*public void SetStatusEffectUIPosition(Transform UI, GameObject myEffect, bool isBuff){
         // Set up variables
         float effectWidth = myEffect.GetComponent<RectTransform>().rect.width;
         Vector2 offset = Vector2.zero;
@@ -675,7 +671,7 @@ public class UIManager : MonoBehaviour
         }
         // Apply position.
         myEffect.GetComponent<RectTransform>().anchoredPosition = offset;
-    }
+    }*/
 
     /*
     *   StatusEffectUI - Coroutine to animate the UI to show time left on a non-stackable effect.
@@ -683,7 +679,7 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    /*public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         float elapsedDuration;
         // Get the timer image component.
         Image slider = effectUI.transform.Find("InnerContainer/Slider").GetComponent<Image>();
@@ -706,7 +702,7 @@ public class UIManager : MonoBehaviour
         UpdateStatusEffectsPositions(effect, effectUI, statusEffectsUI);
         // Remove UI component.
         Destroy(effectUI);
-    }
+    }*/
 
     /*
     *   StackableStatusEffectUI - Coroutine to animate the UI to show time left on a stackable effect.
@@ -714,7 +710,7 @@ public class UIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    /*public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         // Set stack text active.
         effectUI.transform.Find("InnerContainer/Value").gameObject.SetActive(true);
         // Setup variables.
@@ -763,7 +759,7 @@ public class UIManager : MonoBehaviour
         UpdateStatusEffectsPositions(effect, effectUI, statusEffectsUI);
         // Remove UI component.
         Destroy(effectUI);
-    }
+    }*/
 
     /*
     *   UpdateStatusEffectsPositions - Moves the status effect UI components that were created after the one that ended.

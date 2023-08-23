@@ -41,7 +41,7 @@ public class NewPlayerController
     *   MovePlayerToEnemy - Moves the player into range of their targeted enemy whenever they have one.
     */
     public void MovePlayerToEnemy(){
-        if(!_pm.TargetedEnemy.GetComponent<Unit>().isDead){}
+        if(!_pm.TargetedEnemy.GetComponent<IUnit>().IsDead){}
         // Get the targets distance from the player.
         Vector3 myTarget = _pm.TargetedEnemy.transform.position;
         myTarget.y = 0.0f;

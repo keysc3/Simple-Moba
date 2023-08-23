@@ -9,7 +9,7 @@ using UnityEngine;
 */
 public class ScriptableUnit : ScriptableObject
 {
-    [field: SerializeField] new public string name { get; private set; } = "New Unit";
+    [field: SerializeField] new public string name { get; set; } = "New Unit";
     [field: SerializeField] public Sprite icon { get; private set; } = null;
 
     #region "Base Stats"

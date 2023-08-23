@@ -18,7 +18,7 @@ public class BasicAttackBehaviour : MonoBehaviour, IBasicAttack
 
     void Awake(){
         nba = new NewBasicAttack(this, GetComponent<IPlayerMover>());
-        unitStats = GetComponent<Unit>().unitStats;
+        unitStats = GetComponent<IUnit>().unitStats;
         //RangeType = unitStats.rangeType;
     }
 

@@ -57,6 +57,6 @@ public class NewBasicAttack
     */
     public void AttackHit(GameObject target){
         float physicalDamage = _ba.PhysicalDamage;
-        target.GetComponent<Unit>().TakeDamage(physicalDamage, "physical", target, false);
+        target.GetComponent<INewDamagable>().TakeDamage(physicalDamage, "physical", target.GetComponent<IUnit>(), false);
     }
 }

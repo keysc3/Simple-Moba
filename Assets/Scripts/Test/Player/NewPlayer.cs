@@ -26,7 +26,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     public ScriptableUnit SUnit { get => sUnit; }
 
     public NewLevelManager levelManager { get; set; }
-    public NewScore score { get; set; }
+    public Score score { get; set; }
     public BonusDamage bonusDamage { get; set; }
 
     private NavMeshAgent navMeshAgent;
@@ -66,9 +66,9 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
         if(playerUI != null)
-            score = new NewScore(playerUI.transform.Find("Score/Container"));
+            score = new Score(playerUI.transform.Find("Score/Container"));
         else
-            score = new NewScore(null);
+            score = new Score(null);
         levelManager = new NewLevelManager(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerControllerBehaviour>();

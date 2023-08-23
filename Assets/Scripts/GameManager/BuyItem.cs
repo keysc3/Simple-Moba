@@ -57,17 +57,17 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to purchase.
     */
     private void PurchaseItem(int itemNumber){
-        Player player = ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp].GetComponent<Player>();
+        IPlayer player = NewActiveChampion.instance.players[NewActiveChampion.instance.NewActiveChamp];
         Item addItem = allItems[itemNumber-1];
         int itemSlot = player.inventory.AddItem(addItem);
         if(itemSlot != -1){
             ((ChampionStats) player.unitStats).AddItemStats(addItem);
-            if(!player.isDead){
+            /*if(!player.isDead){
                 UIManager.instance.UpdateHealthBar(player);
                 UIManager.instance.UpdateManaBar(player);
-            }
-            UIManager.instance.AddItem(itemSlot, addItem.icon, player.playerUI);
-            UIManager.instance.UpdateAllStats(player);
+            }*/
+            //UIManager.instance.AddItem(itemSlot, addItem.icon, player.playerUI);
+            //UIManager.instance.UpdateAllStats(player);
         }
     }
 
@@ -76,14 +76,14 @@ public class BuyItem : MonoBehaviour
     *   @param itemNumber - int of the index in allItems for the item to sell.
     */
     private void SellItem(int itemSlot){
-        Player player = ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp].GetComponent<Player>();
+        IPlayer player = NewActiveChampion.instance.players[NewActiveChampion.instance.NewActiveChamp];
         Item removeItem = player.inventory.RemoveItem(itemSlot);
         if(removeItem != null){
             ((ChampionStats) player.unitStats).RemoveItemStats(removeItem);
-            UIManager.instance.UpdateHealthBar(player);
+            /*UIManager.instance.UpdateHealthBar(player);
             UIManager.instance.UpdateManaBar(player);
             UIManager.instance.RemoveItem(itemSlot, player.playerUI);
-            UIManager.instance.UpdateAllStats(player);
+            UIManager.instance.UpdateAllStats(player);*/
         }
     }
 }

@@ -5,14 +5,14 @@ using UnityEngine;
 public class NewBasicAttackTrigger : MonoBehaviour
 {
     public NewBasicAttack nba;
-    private Unit targetUnit;
+    private IUnit targetUnit;
     private GameObject target = null;
     public GameObject Target {
         get => target;
         set {
-            if((value.GetComponent<Unit>() as Unit) != null){
+            if((value.GetComponent<IUnit>() as IUnit) != null){
                 target = value;
-                targetUnit = value.GetComponent<Unit>();
+                targetUnit = value.GetComponent<IUnit>();
             }
         }
     }
@@ -21,7 +21,7 @@ public class NewBasicAttackTrigger : MonoBehaviour
     private void Update()
     {
         // Destroy the attack object if the target dies or is destroyed.
-        if(targetUnit == null || targetUnit.isDead){
+        if(targetUnit == null || targetUnit.IsDead){
             Destroy(gameObject);
         }
     }

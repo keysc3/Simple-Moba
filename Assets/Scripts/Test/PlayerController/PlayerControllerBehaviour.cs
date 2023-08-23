@@ -105,7 +105,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
             newpc.PlayerLookDirection(nma.steeringTarget);
 
         if(TargetedEnemy != null && !player.IsCasting){
-            if(!TargetedEnemy.GetComponent<Unit>().isDead)
+            if(!TargetedEnemy.GetComponent<IUnit>().IsDead)
                 newpc.MovePlayerToEnemy();
             else
                 TargetedEnemy = null;
