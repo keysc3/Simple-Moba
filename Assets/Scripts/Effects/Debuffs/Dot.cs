@@ -12,7 +12,6 @@ public class Dot : Effect
 
     private IUnit effectedUnit;
     private float damagePerTick;
-    private float totalDamage;
     private float totalDealt;
     private float nextTick;
 
@@ -27,17 +26,11 @@ public class Dot : Effect
     public Dot(ScriptableDot dotEffect, float totalDamage, float duration, GameObject unitCasted, GameObject unitEffected) : base(dotEffect, duration, unitCasted, unitEffected){
         //effectedUnitStats = effected.GetComponent<Player>().summoner.championStats;
         effectedUnit = effected.GetComponent<IUnit>();
-        this.totalDamage = totalDamage;
-    }
-
-    /*
-    *   StartEffect - Start the dot effect.
-    */
-    public override void StartEffect(){
         // Get damage to deal on each tick.
         damagePerTick = totalDamage/(effectDuration/((ScriptableDot) effectType).tickRate);
         nextTick = Time.time;
         totalDealt = 0f;
+        
     }
 
     /*
