@@ -69,7 +69,7 @@ public class ChampionSpells : MonoBehaviour
                 num = newSpell.spellData.defaultSpellNum;
             else
                 num = newSpell.SpellNum;
-            NewSpellButton spellButton = spellsContainer.Find(num + "_Container/SpellContainer/Spell/Button").GetComponent<NewSpellButton>();
+            SpellButton spellButton = spellsContainer.Find(num + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
             spellButton.spell = newSpell;
             //TODO: Change this to not be hardcoded using a proper keybind/input system?
             List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R};
