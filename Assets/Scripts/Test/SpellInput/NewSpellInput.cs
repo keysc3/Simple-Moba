@@ -56,7 +56,7 @@ public class NewSpellInput
                 _si.LastSpellPressed.HideCast();
             }
             // Get GameObject the player wants to cast on. 
-            if(_si.LastSpellPressed is ITargetCastable){
+            if(_si.LastSpellPressed is IHasTargetedCast){
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hitInfo;
                 // If the player click hit a GameObject.

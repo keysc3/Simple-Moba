@@ -26,8 +26,8 @@ public class NewChampionSpells : MonoBehaviour
             SetupSpellButtons(spellInterface);
         }
         foreach(ISpell spellInterface in objSpells){
-            if(spellInterface is INewHasCallback)
-                ((INewHasCallback) spellInterface).SetupCallbacks(spells);
+            if(spellInterface is IHasCallback)
+                ((IHasCallback) spellInterface).SetupCallbacks(spells);
         }
     }
 
@@ -50,8 +50,8 @@ public class NewChampionSpells : MonoBehaviour
             spells[num] = newSpell;
             newSpell.SpellNum = num;
             SetupSpellButtons(newSpell);
-            if(newSpell is INewHasCallback){
-                ((INewHasCallback) newSpell).SetupCallbacks(spells);
+            if(newSpell is IHasCallback){
+                ((IHasCallback) newSpell).SetupCallbacks(spells);
             }
         }
     }
