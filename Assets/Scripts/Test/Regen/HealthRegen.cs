@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class NewHealthRegen : MonoBehaviour
+public class HealthRegen : MonoBehaviour
 {
     private IUnit unit;
     public IUnit Unit{

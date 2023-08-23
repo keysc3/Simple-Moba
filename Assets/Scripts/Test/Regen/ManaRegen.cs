@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class NewManaRegen : MonoBehaviour
+public class ManaRegen : MonoBehaviour
 {
     private ChampionStats championStats;
     private IUnit unit;
