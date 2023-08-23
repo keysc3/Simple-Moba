@@ -14,32 +14,36 @@ public class NewScore
     public int Kills { 
         get => kills;
         set {
+            kills = value;
             if(killsText != null)
-                killsText.SetText(kills.ToString());
+                killsText.SetText(value.ToString());
         }
     }
     private int assists = 0;
     public int Assists { 
         get => assists;
         set {
+            assists = value;
             if(assistsText != null)
-                assistsText.SetText(assists.ToString());
+                assistsText.SetText(value.ToString());
         }
     }
     private int deaths = 0;
     public int Deaths { 
         get => deaths;
         set {
+            deaths = value;
             if(deathsText != null)
-                deathsText.SetText(deaths.ToString());
+                deathsText.SetText(value.ToString());
         }
     }
     private int cs = 0;
     public int CS { 
         get => cs;
         set {
+            cs = value;
             if(csText != null)
-                csText.SetText(cs.ToString());
+                csText.SetText(value.ToString());
         }
     }
 
