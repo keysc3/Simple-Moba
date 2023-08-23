@@ -11,14 +11,14 @@ public class score
     public void add_1_champion_kill_with_null_takedown_callback()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
 
         // Act
-        score.ChampionKill(tempObject);
+        score.ChampionKill(mockUnit);
 
         // Assert
-        Assert.AreEqual(1, score.kills);
+        Assert.AreEqual(1, score.Kills);
     }
 
     // A Test behaves as an ordinary method
@@ -26,16 +26,16 @@ public class score
     public void add_champion_kill_with_takedown_callback_change_gameobject_name()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
-        tempObject.name = "tempObject";
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
+        mockUnit.SUnit.name = "tempName";
+        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
         
         // Act
-        score.ChampionKill(tempObject);
+        score.ChampionKill(mockUnit);
 
         // Assert
-        Assert.AreEqual("Takedown Callback executed.", tempObject.name);
+        Assert.AreEqual("Takedown Callback executed.", mockUnit.SUnit.name);
     }
 
     // A Test behaves as an ordinary method
@@ -43,18 +43,18 @@ public class score
     public void add_2_champion_kills_with_takedown_callback()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
-        tempObject.name = "tempObject";
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
+        mockUnit.SUnit.name = "tempName";
 
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executetd.";
+        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
         
         // Act
-        score.ChampionKill(tempObject);
-        score.ChampionKill(tempObject);
+        score.ChampionKill(mockUnit);
+        score.ChampionKill(mockUnit);
 
         // Assert
-        Assert.AreEqual(2, score.kills);
+        Assert.AreEqual(2, score.Kills);
     }
 
     // A Test behaves as an ordinary method
@@ -62,14 +62,14 @@ public class score
     public void add_1_assist()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
 
         // Act
-        score.Assist(tempObject);
+        score.Assist(mockUnit);
 
         // Assert
-        Assert.AreEqual(1, score.assists);
+        Assert.AreEqual(1, score.Assists);
     }
 
     // A Test behaves as an ordinary method
@@ -77,16 +77,16 @@ public class score
     public void add_2_assists()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject1 = new GameObject();
-        GameObject tempObject2 = new GameObject();
+        MockUnit mockUnit1 = new MockUnit();
+        MockUnit mockUnit2 = new MockUnit();
+        Score score = new Score(null);
         
         // Act
-        score.Assist(tempObject1);
-        score.Assist(tempObject2);
+        score.Assist(mockUnit1);
+        score.Assist(mockUnit2);
 
         // Assert
-        Assert.AreEqual(2, score.assists);
+        Assert.AreEqual(2, score.Assists);
     }
 
     // A Test behaves as an ordinary method
@@ -94,14 +94,14 @@ public class score
     public void add_1_creep_kill_with_null_takedown_callback()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
 
         // Act
-        score.CreepKill(tempObject);
+        score.CreepKill(mockUnit);
 
         // Assert
-        Assert.AreEqual(1, score.cs);
+        Assert.AreEqual(1, score.CS);
     }
 
     // A Test behaves as an ordinary method
@@ -109,16 +109,17 @@ public class score
     public void add_creep_kill_with_takedown_callback_change_gameobject_name()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
-        tempObject.name = "tempObject";
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
+        mockUnit.SUnit.name = "tempName";
+
+        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
         
         // Act
-        score.CreepKill(tempObject);
+        score.CreepKill(mockUnit);
 
         // Assert
-        Assert.AreEqual("Takedown Callback executed.", tempObject.name);
+        Assert.AreEqual("Takedown Callback executed.", mockUnit.SUnit.name);
     }
 
     // A Test behaves as an ordinary method
@@ -126,18 +127,18 @@ public class score
     public void add_2_creep_kills_with_takedown_callback()
     {
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
-        tempObject.name = "tempObject";
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
+        mockUnit.SUnit.name = "tempName";
 
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executetd.";
+        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
         
         // Act
-        score.CreepKill(tempObject);
-        score.CreepKill(tempObject);
+        score.CreepKill(mockUnit);
+        score.CreepKill(mockUnit);
 
         // Assert
-        Assert.AreEqual(2, score.cs);
+        Assert.AreEqual(2, score.CS);
     }
 
     // A Test behaves as an ordinary method
@@ -145,12 +146,12 @@ public class score
     public void add_1_death()
     {
         // Arrange
-        Score score = new Score();
+        Score score = new Score(null);
 
         // Act
         score.Death();
 
         // Assert
-        Assert.AreEqual(1, score.deaths);
+        Assert.AreEqual(1, score.Deaths);
     }
 }
