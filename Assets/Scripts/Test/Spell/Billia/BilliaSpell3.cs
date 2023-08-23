@@ -91,7 +91,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     private IEnumerator Spell_3_Lob(Vector3 targetPosition, Vector3 targetDirection){
         // Create spell object.
         GameObject seed = (GameObject) Instantiate(spellData.visualPrefab, transform.position, Quaternion.identity);
-        NewBilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponent<NewBilliaSpell3Trigger>();
+        BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponent<BilliaSpell3Trigger>();
         billiaSpell3Trigger.billiaSpell3 = this;
         billiaSpell3Trigger.casted = gameObject;
         // Set p0.
@@ -131,7 +131,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     *   target forward direction until a collision.
     *   @param targetDirection - Vector3 of the lobbed seeds direction to roll.
     */
-    private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, NewBilliaSpell3Trigger billiaSpell3Trigger){
+    private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
         // Set inital seed position.
         // Look at roll direction.

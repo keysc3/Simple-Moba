@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject statusEffectPrefab;
     [SerializeField] private GameObject playerUIPrefab;
     private float buffDebuffUIWidth;
-    private float xOffset = 2f;
+    //private float xOffset = 2f;
 
     private Gradient gradient;
     private GradientColorKey[] colorKey;
@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour
         instance = this;
         //defaultBorderColor = new Color(167f/255f, 126f/255f, 69f/255f);
         SetUpGradient();
-        buffDebuffUIWidth = playerUIPrefab.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
+        //buffDebuffUIWidth = playerUIPrefab.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
     }
 
     /*

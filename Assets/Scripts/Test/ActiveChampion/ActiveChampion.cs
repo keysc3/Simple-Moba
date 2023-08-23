@@ -6,7 +6,7 @@ public class ActiveChampion : MonoBehaviour
 {
     private int activeChamp;
     public int ActiveChamp { 
-        get => ActiveChamp;
+        get => activeChamp;
         set {
             if(value <= champions.Count - 1)
                 activeChamp = value;

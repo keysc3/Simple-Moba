@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4603369183437344739}
   - component: {fileID: 7153161682390749309}
   - component: {fileID: -7959535401484611740}
-  - component: {fileID: 6733584298296433811}
+  - component: {fileID: -3128815052879752657}
   m_Layer: 8
   m_Name: Seed
   m_TagString: Untagged
@@ -115,7 +115,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6733584298296433811
+--- !u!114 &-3128815052879752657
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

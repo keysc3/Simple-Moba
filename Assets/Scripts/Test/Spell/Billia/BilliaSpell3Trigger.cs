@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBilliaSpell3Trigger : MonoBehaviour
+public class BilliaSpell3Trigger : MonoBehaviour
 {
     public Vector3 forwardDirection;
     public BilliaSpell3 billiaSpell3;
