@@ -30,9 +30,9 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     public BonusDamage bonusDamage { get; set; }
 
     private NavMeshAgent navMeshAgent;
-    private PlayerController playerController;
-    private PlayerSpellInput playerSpellInput;
-    private ChampionSpells championSpells;
+    private PlayerControllerBehaviour playerController;
+    private SpellInputBehaviour playerSpellInput;
+    private NewChampionSpells championSpells;
 
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
@@ -71,9 +71,9 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
             score = new NewScore(null);
         levelManager = new NewLevelManager(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
-        playerController = GetComponent<PlayerController>();
-        playerSpellInput = GetComponent<PlayerSpellInput>();
-        championSpells = GetComponent<ChampionSpells>();
+        playerController = GetComponent<PlayerControllerBehaviour>();
+        playerSpellInput = GetComponent<SpellInputBehaviour>();
+        championSpells = GetComponent<NewChampionSpells>();
 
         rend = GetComponent<Renderer>();
         alive = rend.material;
@@ -118,18 +118,20 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     *   @param isDot - bool if the damage was from a dot.
     */
     public void TakeDamage(float incomingDamage, string damageType, IUnit damager, bool isDot){
-        float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
-        unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
-        //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
-        // If dead then award a kill and start the death method.
-        if(unitStats.CurrentHealth <= 0f){
-            isDead = true;
-            UpdateScores(damager);
-            Death();
-        }
-        // Apply any damage that procs after recieving damage.
-        else{
-            bonusDamage?.Invoke(this, isDot);
+        if(!isDead){
+            float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
+            unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
+            //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
+            // If dead then award a kill and start the death method.
+            if(unitStats.CurrentHealth <= 0f){
+                isDead = true;
+                UpdateScores(damager);
+                Death();
+            }
+            // Apply any damage that procs after recieving damage.
+            else{
+                bonusDamage?.Invoke(this, isDot);
+            }
         }
     }
 
@@ -172,7 +174,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
     public void Respawn(){
         navMeshAgent.enabled = true;
         // If active champion then enable controls.
-        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
+        if(NewActiveChampion.instance.champions[NewActiveChampion.instance.NewActiveChamp] == gameObject){
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }
@@ -186,6 +188,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
         // Set alive values.
         rend.material = alive;
         isDead = false;
+        playerBar.SetActive(true);
         //UIManager.instance.UpdateManaBar(this);
         //UIManager.instance.UpdateHealthBar(this);
         // Move player to respawn location.
