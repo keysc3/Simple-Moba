@@ -45,7 +45,7 @@ public class Unit : MonoBehaviour, IDamagable, IKillable
 
     // Called after all Update functions.
     private void LateUpdate(){
-        navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
+        //navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
     }
 
     /*
