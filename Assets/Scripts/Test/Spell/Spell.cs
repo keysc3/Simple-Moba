@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class InterSpell : MonoBehaviour, ISpell
+public class Spell : MonoBehaviour, ISpell
 {
     protected SpellController sc;
     

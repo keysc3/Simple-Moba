@@ -8,7 +8,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class BahriPassive : InterSpell
+public class BahriPassive : Spell
 {
     new private BahriPassiveData spellData;
     private int passiveStacks = 0;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class BilliaSpell3 : InterSpell, IHasHit, IHasCast
+public class BilliaSpell3 : Spell, IHasHit, IHasCast
 {
     new private BilliaSpell3Data spellData;
     private float p1_y_offset = 3f;

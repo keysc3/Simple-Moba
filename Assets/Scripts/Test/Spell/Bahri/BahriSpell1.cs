@@ -9,7 +9,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class BahriSpell1 : InterSpell, IHasCast, IHasHit
+public class BahriSpell1 : Spell, IHasCast, IHasHit
 {
 
     new private BahriSpell1Data spellData;

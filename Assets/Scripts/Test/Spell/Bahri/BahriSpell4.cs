@@ -11,7 +11,7 @@ using UnityEngine.UI;
 *
 * @author: Colin Keys
 */
-public class BahriSpell4 : InterSpell, IHasCast, IHasHit
+public class BahriSpell4 : Spell, IHasCast, IHasHit
 {
     new private BahriSpell4Data spellData;
     private NavMeshAgent navMeshAgent;

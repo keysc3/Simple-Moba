@@ -8,7 +8,7 @@ using UnityEditor;
 *
 * @author: Colin Keys
 */
-public class BahriSpell3 : InterSpell, IHasCast, IHasHit
+public class BahriSpell3 : Spell, IHasCast, IHasHit
 {
     new private BahriSpell3Data spellData;
     public SpellHitCallback spellHitCallback { get; set; }
