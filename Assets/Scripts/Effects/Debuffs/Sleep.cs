@@ -52,7 +52,7 @@ public class Sleep : Effect
         if(effectedUnit != null){
             if(effectedUnit is IPlayer){
                 // Give controls back if slept is active GameObject.
-                if(NewActiveChampion.instance.players[NewActiveChampion.instance.NewActiveChamp] == effectedUnit){
+                if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == effectedUnit){
                     effected.GetComponent<PlayerControllerBehaviour>().enabled = true;
                     effected.GetComponent<SpellInputBehaviour>().enabled = true;
                 }

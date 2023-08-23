@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewActiveChampion : MonoBehaviour
+public class ActiveChampion : MonoBehaviour
 {
-    private int newActiveChamp;
-    public int NewActiveChamp { 
-        get => newActiveChamp;
+    private int activeChamp;
+    public int ActiveChamp { 
+        get => ActiveChamp;
         set {
             if(value <= champions.Count - 1)
-                newActiveChamp = value;
+                activeChamp = value;
         }
     }
     [field: SerializeField] public List<GameObject> champions { get; private set; } = new List<GameObject>();
     public List<IPlayer> players { get; private set; } = new List<IPlayer>();
     
-    public static NewActiveChampion instance { get; private set; }
+    public static ActiveChampion instance { get; private set; }
     public CameraMovement cameraMovement;
 
     // Called when the script instance is being loaded.
@@ -44,7 +44,7 @@ public class NewActiveChampion : MonoBehaviour
 
     public void SetActiveChamp(){
         for(int i = 0; i < champions.Count; i++){
-            if(i != newActiveChamp){
+            if(i != activeChamp){
                 champions[i].GetComponent<PlayerControllerBehaviour>().enabled = false;
                 champions[i].GetComponent<SpellInputBehaviour>().enabled = false;
                 champions[i].tag = "Enemy"; 
@@ -70,28 +70,28 @@ public class NewActiveChampion : MonoBehaviour
         Debug.Log("Select active champion.");
         while(true){
             if(Input.GetKeyDown(KeyCode.C)){
-                NewActiveChamp = 0;
+                ActiveChamp = 0;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.V)){
-                NewActiveChamp = 1;
+                ActiveChamp = 1;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.B)){
-                NewActiveChamp = 2;
+                ActiveChamp = 2;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.N)){
-                NewActiveChamp = 3;
+                ActiveChamp = 3;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.M)){
-                NewActiveChamp = 4;
+                ActiveChamp = 4;
                 break;
             }
             yield return null;
         }
-        Debug.Log(champions[NewActiveChamp].name + " was chosen.");
+        Debug.Log(champions[activeChamp].name + " was chosen.");
         SetActiveChamp();
     }
 }
