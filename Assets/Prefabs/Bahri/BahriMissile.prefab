@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6906369101127839026}
   - component: {fileID: 6906369101127838925}
   - component: {fileID: 6906369101127838924}
-  - component: {fileID: 8604118536130547618}
+  - component: {fileID: -5621816296806518011}
   m_Layer: 0
   m_Name: BahriMissile
   m_TagString: DestroyOnDeath
@@ -98,7 +98,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8604118536130547618
+--- !u!114 &-5621816296806518011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,6 +107,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6906369101127838927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8316846586565d847aea4fdcac2dcfa1, type: 3}
+  m_Script: {fileID: 11500000, guid: e170c0802824b1b4e993ded03b42447a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

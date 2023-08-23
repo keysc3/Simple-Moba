@@ -1428,7 +1428,7 @@ GameObject:
   - component: {fileID: 5920223746959565207}
   - component: {fileID: 8104830063842714085}
   - component: {fileID: 7826538274952179909}
-  - component: {fileID: 118424625533840981}
+  - component: {fileID: 9146147493837000003}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1538,7 +1538,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &118424625533840981
+--- !u!114 &9146147493837000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1547,11 +1547,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 851420009466071793}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 192b98baf278103439ec08e65319d9de, type: 3}
+  m_Script: {fileID: 11500000, guid: d2d744105a9d84243917cd9f1e23d3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   keyCode: 0
-  playerSpellInput: {fileID: 0}
 --- !u!1 &866763650188630115
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,7 +2217,7 @@ GameObject:
   - component: {fileID: 6201607707332028197}
   - component: {fileID: 2680559527325814103}
   - component: {fileID: 5405249074649709487}
-  - component: {fileID: 6281501253563724081}
+  - component: {fileID: 8336789727584808021}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2328,7 +2327,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6281501253563724081
+--- !u!114 &8336789727584808021
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2337,11 +2336,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1294085912565767209}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 192b98baf278103439ec08e65319d9de, type: 3}
+  m_Script: {fileID: 11500000, guid: d2d744105a9d84243917cd9f1e23d3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   keyCode: 0
-  playerSpellInput: {fileID: 0}
 --- !u!1 &1310790179897277689
 GameObject:
   m_ObjectHideFlags: 0
@@ -5477,7 +5475,7 @@ GameObject:
   - component: {fileID: 5779046500871061916}
   - component: {fileID: 4158619661464791742}
   - component: {fileID: 4001478010056495808}
-  - component: {fileID: 5131664483020117803}
+  - component: {fileID: 6582628037370776808}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -5587,7 +5585,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5131664483020117803
+--- !u!114 &6582628037370776808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5596,11 +5594,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3107157341816002080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 192b98baf278103439ec08e65319d9de, type: 3}
+  m_Script: {fileID: 11500000, guid: d2d744105a9d84243917cd9f1e23d3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   keyCode: 0
-  playerSpellInput: {fileID: 0}
 --- !u!1 &3180299354985998457
 GameObject:
   m_ObjectHideFlags: 0
@@ -6080,7 +6077,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 21.5, y: 166}
+  m_AnchoredPosition: {x: 21.5, y: 128}
   m_SizeDelta: {x: 342, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3541688923771012012
@@ -6830,7 +6827,7 @@ GameObject:
   - component: {fileID: 2531470708779634534}
   - component: {fileID: 7526432009793463885}
   - component: {fileID: 7956155486865548567}
-  - component: {fileID: 5927954440582084233}
+  - component: {fileID: 7524647948133131395}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -6940,7 +6937,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5927954440582084233
+--- !u!114 &7524647948133131395
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6949,10 +6946,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3852952697458425847}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45840e38a8ece6344be5ad8f4881453a, type: 3}
+  m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   spell: 
 --- !u!1 &3898286953674919402
 GameObject:
@@ -8057,7 +8053,7 @@ GameObject:
   - component: {fileID: 3928917374438210411}
   - component: {fileID: 3928917374438210410}
   - component: {fileID: 3928917374438210409}
-  - component: {fileID: 2838922072422299469}
+  - component: {fileID: 1767465623929952860}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -8167,7 +8163,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2838922072422299469
+--- !u!114 &1767465623929952860
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8176,11 +8172,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3928917374438210415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 192b98baf278103439ec08e65319d9de, type: 3}
+  m_Script: {fileID: 11500000, guid: d2d744105a9d84243917cd9f1e23d3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   keyCode: 0
-  playerSpellInput: {fileID: 0}
 --- !u!1 &3928917374461170179
 GameObject:
   m_ObjectHideFlags: 0
@@ -15250,7 +15245,7 @@ GameObject:
   - component: {fileID: 2523897390531733964}
   - component: {fileID: 515936691400543593}
   - component: {fileID: 7489390331613896299}
-  - component: {fileID: 8171200336349997713}
+  - component: {fileID: 4877914945344276799}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -15360,7 +15355,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8171200336349997713
+--- !u!114 &4877914945344276799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15369,10 +15364,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7192533888010176095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45840e38a8ece6344be5ad8f4881453a, type: 3}
+  m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   spell: 
 --- !u!1 &7199323368018812923
 GameObject:
@@ -16131,7 +16125,7 @@ GameObject:
   - component: {fileID: 5534073829862757381}
   - component: {fileID: 1620717934189448625}
   - component: {fileID: 7477924329019735311}
-  - component: {fileID: 5647042849288363635}
+  - component: {fileID: 1165061944056375753}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -16241,7 +16235,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5647042849288363635
+--- !u!114 &1165061944056375753
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16250,10 +16244,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7711130648878760940}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45840e38a8ece6344be5ad8f4881453a, type: 3}
+  m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   spell: 
 --- !u!1 &7721091897835551480
 GameObject:
@@ -16610,7 +16603,7 @@ GameObject:
   - component: {fileID: 2156337967575779376}
   - component: {fileID: 1761097727795240780}
   - component: {fileID: 298304369044216258}
-  - component: {fileID: 8593532290016392123}
+  - component: {fileID: 818894682021528252}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -16720,7 +16713,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8593532290016392123
+--- !u!114 &818894682021528252
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16729,10 +16722,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7958666324663729389}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45840e38a8ece6344be5ad8f4881453a, type: 3}
+  m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   spell: 
 --- !u!1 &7966569210627678516
 GameObject:
@@ -18532,7 +18524,7 @@ GameObject:
   - component: {fileID: 5057786762771766232}
   - component: {fileID: 6757800881843590647}
   - component: {fileID: 4691010636084175729}
-  - component: {fileID: 5163829869291446838}
+  - component: {fileID: 1375905425274757099}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -18642,7 +18634,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5163829869291446838
+--- !u!114 &1375905425274757099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18651,11 +18643,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8948506767647091769}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 192b98baf278103439ec08e65319d9de, type: 3}
+  m_Script: {fileID: 11500000, guid: d2d744105a9d84243917cd9f1e23d3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   keyCode: 0
-  playerSpellInput: {fileID: 0}
 --- !u!1 &9021969257937009463
 GameObject:
   m_ObjectHideFlags: 0

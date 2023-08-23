@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 1675367922604819782}
   - component: {fileID: 4603369183437344739}
   - component: {fileID: 7153161682390749309}
-  - component: {fileID: 4448892678829451974}
   - component: {fileID: -7959535401484611740}
+  - component: {fileID: 6733584298296433811}
   m_Layer: 8
   m_Name: Seed
   m_TagString: Untagged
@@ -99,20 +99,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4448892678829451974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484404483246906668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 611f7b3f9fc70f34e848bceff8cac252, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  billiaAbilities: {fileID: 0}
-  forwardDirection: {x: 0, y: 0, z: 0}
 --- !u!54 &-7959535401484611740
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,3 +115,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6733584298296433811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484404483246906668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1528702c3656c284b93d0ef7e82f65c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forwardDirection: {x: 0, y: 0, z: 0}
+  billiaSpell3: {fileID: 0}
+  casted: {fileID: 0}
