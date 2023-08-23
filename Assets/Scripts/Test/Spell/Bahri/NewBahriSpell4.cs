@@ -242,7 +242,7 @@ public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
         if(hitColliders.Length > 0){
             foreach(Collider collider in hitColliders){
                 // If the target is alive.
-                if(!collider.gameObject.GetComponent<IUnit>().IsDead && collider.gameObject != gameObject && collider.gameObject.GetComponent<INewDamagable>() != null){
+                if(!collider.gameObject.GetComponent<IUnit>().IsDead && collider.gameObject != gameObject && collider.gameObject.GetComponent<IDamagable>() != null){
                     // If three targets have already been found.
                     if(targets.Count > 2){
                         // Set the farthest enemy as first in the targets found list.
@@ -302,9 +302,9 @@ public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
-        if(unit is INewDamagable){
+        if(unit is IDamagable){
             float magicDamage = championStats.magicDamage.GetValue();
-            ((INewDamagable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
+            ((IDamagable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
         }
     }
 }

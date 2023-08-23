@@ -225,8 +225,8 @@ public class NewBilliaSpell1 : InterSpell, IHasHit, IHasCast, INewHasCallback
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
-        if(unit is INewDamagable){
-            INewDamagable damageMethod = (INewDamagable) unit;
+        if(unit is IDamagable){
+            IDamagable damageMethod = (IDamagable) unit;
             Spell_1_PassiveProc(unit, this);
             float magicDamage = championStats.magicDamage.GetValue();
             if(radius == "inner")

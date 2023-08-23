@@ -189,10 +189,10 @@ public class NewBilliaSpell3 : InterSpell, IHasHit, IHasCast
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
-        if(unit is INewDamagable){
+        if(unit is IDamagable){
             float magicDamage = championStats.magicDamage.GetValue();
             unit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(SpellLevel, gameObject, (unit as MonoBehaviour).gameObject));
-            ((INewDamagable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);   
+            ((IDamagable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);   
         }
     }
 

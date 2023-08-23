@@ -201,14 +201,14 @@ public class NewBahriSpell2 : InterSpell, IDeathCleanUp, IHasCast, IHasHit
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
-        if(unit is INewDamagable){
+        if(unit is IDamagable){
             float magicDamage = championStats.magicDamage.GetValue();
             float finalDamage = spellData.baseDamage[SpellLevel] + magicDamage;
             // Reduce damage of spell if hitting the same target more than once.
             if(enemiesHit.Contains(unit)){
                 finalDamage = Mathf.Round(finalDamage * spellData.multiplier);
             }
-            ((INewDamagable) unit).TakeDamage(finalDamage, "magic", unit, false);
+            ((IDamagable) unit).TakeDamage(finalDamage, "magic", unit, false);
             enemiesHit.Add(unit);
         }
     }
