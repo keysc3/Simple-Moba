@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewDamage
+public class Damage
 {
     public float amount { get; }
     public float time { get; }
@@ -15,7 +15,7 @@ public class NewDamage
     *   @param damageAmount - float of the damage amount.
     *   @param damageType - string of the damage type.
     */
-    public NewDamage(IUnit damageDealer, float damageAmount, string damageType){
+    public Damage(IUnit damageDealer, float damageAmount, string damageType){
         from = damageDealer;
         amount = damageAmount;
         type = damageType;

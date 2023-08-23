@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewDamageTracker
+public class DamageTracker
 {
-    public List<NewDamage> damageReceived { get; } = new List<NewDamage>();
+    public List<Damage> damageReceived { get; } = new List<Damage>();
     private float resetTime = 15f; 
     private float assistTime = 10.0f;
 
@@ -26,7 +26,7 @@ public class NewDamageTracker
     *   @param damageType - string of the type of damage.
     */
     public void AddDamage(IUnit damageDealer, float damageAmount, string damageType){
-        damageReceived.Add(new NewDamage(damageDealer, damageAmount, damageType));
+        damageReceived.Add(new Damage(damageDealer, damageAmount, damageType));
     }
 
     /*
@@ -35,7 +35,7 @@ public class NewDamageTracker
     */
     public List<IPlayer> CheckForAssists(IPlayer killer, float currentTime){
         List<IPlayer> assisters = new List<IPlayer>();
-        foreach(NewDamage damage in damageReceived){
+        foreach(Damage damage in damageReceived){
             if(damage.from != killer && damage.from is IPlayer && !assisters.Contains((IPlayer) damage.from)){
                 if(currentTime - damage.time <= assistTime){
                     assisters.Add((IPlayer) damage.from);

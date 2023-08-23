@@ -15,7 +15,7 @@ public class NewMinion : MonoBehaviour, IMinion, IDamagable
     }
     public UnitStats unitStats { get; set; }
     public NewStatusEffects statusEffects { get; set; }
-    public NewDamageTracker damageTracker { get; set; }
+    public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
     public NewLevelManager levelManager { get; set; }
     public BonusDamage bonusDamage { get; set; }
@@ -30,7 +30,7 @@ public class NewMinion : MonoBehaviour, IMinion, IDamagable
         isDead = false;
         unitStats = new MinionStats((ScriptableMinion) sUnit);
         statusEffects = new NewStatusEffects();
-        damageTracker = new NewDamageTracker();
+        damageTracker = new DamageTracker();
         inventory = new Inventory();
         levelManager = new NewLevelManager(this);
         myCollider = GetComponent<Collider>();

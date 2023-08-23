@@ -7,7 +7,7 @@ public class MockUnit : IUnit
     public ScriptableUnit SUnit { get; set; } = ScriptableObject.CreateInstance<ScriptableUnit>();
     public UnitStats unitStats { get; set; }
     public NewStatusEffects statusEffects { get; set; }
-    public NewDamageTracker damageTracker { get; set; }
+    public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
     //NewScore score { get; set; }
     //LevelManager levelManager { get; set; }

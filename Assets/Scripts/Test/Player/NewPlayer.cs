@@ -16,7 +16,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, IDamagable
     }
     public UnitStats unitStats { get; set; }
     public NewStatusEffects statusEffects { get; set; }
-    public NewDamageTracker damageTracker { get; set; }
+    public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
     //public Score score { get; private set; }
     
@@ -62,7 +62,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, IDamagable
         playerBar = CreateNewPlayerBar(gameObject);
         isDead = false;
         statusEffects = new NewStatusEffects();
-        damageTracker = new NewDamageTracker();
+        damageTracker = new DamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
         if(playerUI != null)

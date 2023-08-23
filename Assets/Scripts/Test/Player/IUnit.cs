@@ -9,7 +9,7 @@ public interface IUnit
     ScriptableUnit SUnit { get; }
     UnitStats unitStats { get; set; }
     NewStatusEffects statusEffects { get; set; }
-    NewDamageTracker damageTracker { get; set; }
+    DamageTracker damageTracker { get; set; }
     Inventory inventory { get; set; }
     //NewScore score { get; set; }
     //LevelManager levelManager { get; set; }
