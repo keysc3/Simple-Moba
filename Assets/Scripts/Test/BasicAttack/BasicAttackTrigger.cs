@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBasicAttackTrigger : MonoBehaviour
+public class BasicAttackTrigger : MonoBehaviour
 {
-    public NewBasicAttack nba;
+    public BasicAttack nba;
     private IUnit targetUnit;
     private GameObject target = null;
     public GameObject Target {

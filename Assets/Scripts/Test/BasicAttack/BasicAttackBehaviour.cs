@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BasicAttackBehaviour : MonoBehaviour, IBasicAttack
 {
-    protected NewBasicAttack nba;
+    protected BasicAttack nba;
     protected UnitStats unitStats;
     [SerializeField] protected GameObject attackProjectile;
 
@@ -17,7 +17,7 @@ public class BasicAttackBehaviour : MonoBehaviour, IBasicAttack
     
 
     void Awake(){
-        nba = new NewBasicAttack(this, GetComponent<IPlayerMover>());
+        nba = new BasicAttack(this, GetComponent<IPlayerMover>());
         unitStats = GetComponent<IUnit>().unitStats;
         //RangeType = unitStats.rangeType;
     }

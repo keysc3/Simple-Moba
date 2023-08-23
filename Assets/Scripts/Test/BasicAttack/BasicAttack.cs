@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBasicAttack
+public class BasicAttack
 {
 
     private IBasicAttack _ba;
     private IPlayerMover _pm;
 
-    public NewBasicAttack(IBasicAttack ba, IPlayerMover pm){
+    public BasicAttack(IBasicAttack ba, IPlayerMover pm){
         _ba = ba;
         _pm = pm;
     }
