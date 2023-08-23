@@ -176,7 +176,7 @@ public class UIManager : MonoBehaviour
             // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
             float healthPercent = Mathf.Round((championStats.CurrentHealth/championStats.maxHealth.GetValue()) * 100);
             healthText.SetText(Mathf.Ceil(championStats.CurrentHealth) + "/" + Mathf.Ceil(championStats.maxHealth.GetValue()));
-
+            health.value = healthPercent;
         }
         else{
             // Set players health text and fill to 0.
