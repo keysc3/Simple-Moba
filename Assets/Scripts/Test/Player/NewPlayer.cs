@@ -107,7 +107,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, INewDamagable
 
     void LateUpdate(){
         unitStats.UpdateAttackSpeed();
-        //navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
+        navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
     }
 
     /*
