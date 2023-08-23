@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewSpellInput
+public class SpellInput
 {
     private ISpellInput _si;
 
-    public NewSpellInput(ISpellInput si){
+    public SpellInput(ISpellInput si){
         _si = si;
     }
 

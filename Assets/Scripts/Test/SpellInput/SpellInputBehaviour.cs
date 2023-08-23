@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpellInputBehaviour : MonoBehaviour, ISpellInput
 {
-    private NewSpellInput newSI;
+    private SpellInput newSI;
 
     public bool ButtonClick { get; set; } = false;
     public ISpell LastSpellPressed { get; set; } = null;
@@ -17,7 +17,7 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
 
     void Awake(){
         championSpells = GetComponent<ChampionSpells>();
-        newSI = new NewSpellInput(this);
+        newSI = new SpellInput(this);
     }
 
     // Start is called before the first frame update

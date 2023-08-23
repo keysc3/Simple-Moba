@@ -14,11 +14,11 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         set {
             if(value != null){
                 _si = value;
-                newSpellInput = new NewSpellInput(value);
+                newSpellInput = new SpellInput(value);
             }
         }
     }
-    private NewSpellInput newSpellInput;
+    private SpellInput newSpellInput;
 
     /*
     *   OnPointerEnter - Called when the cursor enters the rect area of this button.
