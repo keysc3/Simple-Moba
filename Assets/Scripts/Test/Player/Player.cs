@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class NewPlayer : MonoBehaviour, IPlayer, IDamagable
+public class Player : MonoBehaviour, IPlayer, IDamagable
 {
     private bool isDead = false;
     public bool IsDead { 

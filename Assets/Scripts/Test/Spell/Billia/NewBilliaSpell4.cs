@@ -130,7 +130,7 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
     private List<GameObject> GetChampionsWithPassive(){
         List<GameObject> passiveAppliedChamps = new List<GameObject>();
         // Get all StatusEffectManagers.
-        NewPlayer[] playerScripts = Object.FindObjectsOfType<NewPlayer>();
+        Player[] playerScripts = FindObjectsOfType<Player>();
         for (int i = 0; i < playerScripts.Length; i++){
             // If it is a champion and has the Billia dot then add it to the list.
             if(playerScripts[i].statusEffects.CheckForEffectByName(spellData.passiveDot, spellData.passiveDot.name)){
