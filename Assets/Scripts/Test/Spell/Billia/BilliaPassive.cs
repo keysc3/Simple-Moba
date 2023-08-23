@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBilliaPassive : InterSpell, INewHasCallback
+public class BilliaPassive : InterSpell, INewHasCallback
 {
     new private BilliaPassiveData spellData;
     private List<IUnit> passiveApplied = new List<IUnit>();

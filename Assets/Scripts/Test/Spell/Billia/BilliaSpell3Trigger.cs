@@ -5,7 +5,7 @@ using UnityEngine;
 public class NewBilliaSpell3Trigger : MonoBehaviour
 {
     public Vector3 forwardDirection;
-    public NewBilliaSpell3 billiaSpell3;
+    public BilliaSpell3 billiaSpell3;
     public GameObject casted;
     private bool hit = false;
     private int groundLayer;

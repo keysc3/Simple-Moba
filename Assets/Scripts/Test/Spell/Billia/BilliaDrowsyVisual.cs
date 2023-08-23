@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewBilliaDrowsyVisual : MonoBehaviour
+public class BilliaDrowsyVisual : MonoBehaviour
 {
     public float drowsyDuration;
     public ScriptableDrowsy drowsy;

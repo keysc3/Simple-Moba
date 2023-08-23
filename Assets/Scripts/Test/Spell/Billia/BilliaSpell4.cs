@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBilliaSpell4 : InterSpell, IHasCast
+public class BilliaSpell4 : InterSpell, IHasCast
 {
     new private BilliaSpell4Data spellData;
     private bool canUseSpell = false;
@@ -96,7 +96,7 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
                 // Animate the drowsy effect.
                 GameObject drowsyObject = (GameObject) Instantiate(spellData.drowsyVisual, enemy.transform.position, Quaternion.identity);
                 drowsyObject.transform.SetParent(enemy.transform);
-                NewBilliaDrowsyVisual visualScript = drowsyObject.GetComponent<NewBilliaDrowsyVisual>();
+                BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
                 visualScript.drowsyDuration = newDrowsy.EffectDuration;
                 visualScript.drowsy = spellData.drowsy;
                 visualScript.source = gameObject;

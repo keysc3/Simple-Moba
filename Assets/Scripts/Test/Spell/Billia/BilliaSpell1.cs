@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NewBilliaSpell1 : InterSpell, IHasHit, IHasCast, INewHasCallback
+public class BilliaSpell1 : InterSpell, IHasHit, IHasCast, INewHasCallback
 {
     new private BilliaSpell1Data spellData;
     private List<Effect> passiveEffectTracker = new List<Effect>();
@@ -245,7 +245,7 @@ public class NewBilliaSpell1 : InterSpell, IHasHit, IHasCast, INewHasCallback
     public void SetupCallbacks(Dictionary<string, ISpell> spells){
         // If the Spell is a DamageSpell then add this spells passive proc to its spell hit callback.
         foreach(KeyValuePair<string, ISpell> entry in spells){
-            if(entry.Value is IHasHit && !(entry.Value is NewBilliaSpell1)){
+            if(entry.Value is IHasHit && !(entry.Value is BilliaSpell1)){
                 ((IHasHit) entry.Value).spellHitCallback += Spell_1_PassiveProc;
                 callbackSet.Add(entry.Value);
             }

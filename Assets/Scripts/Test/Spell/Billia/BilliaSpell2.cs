@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 
-public class NewBilliaSpell2 : InterSpell, IHasHit, IHasCast
+public class BilliaSpell2 : InterSpell, IHasHit, IHasCast
 {
     new private BilliaSpell2Data spellData;
     private NavMeshAgent navMeshAgent;
