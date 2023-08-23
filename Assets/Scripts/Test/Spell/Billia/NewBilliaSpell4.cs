@@ -21,7 +21,7 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
         }
     }
 
-    void Update(){
+    void LateUpdate(){
         CanUseSpell();
     }
 
@@ -108,7 +108,7 @@ public class NewBilliaSpell4 : InterSpell, IHasCast
     *   CanUseSpell - Checks if any champion has Billia's passive on them, which allows the use of this spell.
     */
     private void CanUseSpell(){
-        if(SpellLevel >= 0){
+        if(SpellLevel >= 0 && !OnCd){
             List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
             if(passiveAppliedChamps.Count > 0){
                 canUseSpell = true;
