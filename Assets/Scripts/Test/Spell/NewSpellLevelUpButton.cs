@@ -13,8 +13,8 @@ public class NewSpellLevelUpButton : MonoBehaviour, IPointerDownHandler
                 _si = value; 
         }
     }
-    private NewLevelManager levelManager;
-    public NewLevelManager LevelManager {
+    private LevelManager levelManager;
+    public LevelManager LevelManager {
         get => levelManager;
         set {
             if(value != null)

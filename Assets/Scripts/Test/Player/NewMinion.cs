@@ -17,7 +17,7 @@ public class NewMinion : MonoBehaviour, IMinion, IDamagable
     public NewStatusEffects statusEffects { get; set; }
     public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
-    public NewLevelManager levelManager { get; set; }
+    public LevelManager levelManager { get; set; }
     public BonusDamage bonusDamage { get; set; }
     
     public Collider myCollider { get;set; }
@@ -32,7 +32,7 @@ public class NewMinion : MonoBehaviour, IMinion, IDamagable
         statusEffects = new NewStatusEffects();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
-        levelManager = new NewLevelManager(this);
+        levelManager = new LevelManager(this);
         myCollider = GetComponent<Collider>();
         //levelManager = new LevelManager(this, ScriptableObject.CreateInstance<LevelInfo>());
         navMeshAgent = GetComponent<NavMeshAgent>();

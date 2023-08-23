@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public interface IPlayer : IUnit
 {
-    NewLevelManager levelManager { get; set; }
+    LevelManager levelManager { get; set; }
     Score score { get; set; }
     //NavMeshAgent navMeshAgent { get; set; }
     GameObject playerUI { get; }

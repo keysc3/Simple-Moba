@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class NewLevelManager
+public class LevelManager
 {
 
     private Slider xpSlider = null;
@@ -72,7 +72,7 @@ public class NewLevelManager
     *   @param plater - Player this level manager is for.
     *   @param levelInfo - LevelInfo to use for leveling information/constants.
     */
-    public NewLevelManager(IUnit unit){
+    public LevelManager(IUnit unit){
         if(unit is IPlayer){
             IPlayer player = (IPlayer) unit;
             if(player.playerUI != null && player.playerBar != null){

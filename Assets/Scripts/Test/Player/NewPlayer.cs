@@ -25,7 +25,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, IDamagable
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
 
-    public NewLevelManager levelManager { get; set; }
+    public LevelManager levelManager { get; set; }
     public Score score { get; set; }
     public BonusDamage bonusDamage { get; set; }
 
@@ -69,7 +69,7 @@ public class NewPlayer : MonoBehaviour, IPlayer, IDamagable
             score = new Score(playerUI.transform.Find("Score/Container"));
         else
             score = new Score(null);
-        levelManager = new NewLevelManager(this);
+        levelManager = new LevelManager(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerControllerBehaviour>();
         playerSpellInput = GetComponent<SpellInputBehaviour>();

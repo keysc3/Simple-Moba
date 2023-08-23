@@ -11,7 +11,7 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     public KeyCode LastButtonPressed { get; set; } = KeyCode.None;
     private Dictionary<string, int> spellLevels;
     public Dictionary<string, int> SpellLevels { get => levelManager.spellLevels; }
-    private NewLevelManager levelManager;
+    private LevelManager levelManager;
     private NewChampionSpells championSpells;
     private Camera mainCamera;
 
