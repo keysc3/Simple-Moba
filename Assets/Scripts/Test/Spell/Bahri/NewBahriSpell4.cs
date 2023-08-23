@@ -163,6 +163,7 @@ public class NewBahriSpell4 : InterSpell, IHasCast, IHasHit
                 spell_4_duration = 10.0f;
                 spell4Effect.ResetTimer();
                 spell4Effect.EffectDuration = spell_4_duration;
+                spellCDCover.SetActive(false);
             }
         }
     }
