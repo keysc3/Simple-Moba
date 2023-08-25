@@ -4,10 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+/*
+*   Purpose: Implements a Spell class.
+*
+*   @author: Colin Keys
+*/
 public class Spell : MonoBehaviour, ISpell
 {
-    protected SpellController sc;
-    
     public Transform spellCDTransform { get; set; }
     public TMP_Text spellCDText { get; set; }
     public Image spellCDImage { get; set; }
@@ -15,14 +18,7 @@ public class Spell : MonoBehaviour, ISpell
     protected bool onCd = false;
     public bool OnCd { 
         get => onCd;
-        set {
-            onCd = value;
-            /*if(spellCDTransform != null)
-                if(value == true)
-                    sc.SpellCDChildrenSetActive(spellCDTransform, true);
-                else
-                    sc.SpellCDChildrenSetActive(spellCDTransform, false);*/
-        }
+        set => onCd = value;
     }
     public bool CanMove { get; set; } = false;
     public bool IsQuickCast { get; set; } = false;
@@ -46,13 +42,16 @@ public class Spell : MonoBehaviour, ISpell
     protected ChampionStats championStats;
     protected Camera mainCamera;
     protected IPlayer player;
+    protected SpellController sc;
 
+    // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
         mainCamera = Camera.main;
         sc = new SpellController(this, player);
     }
 
+    // Start is called before the first frame update
     protected virtual void Start(){
         championStats = (ChampionStats) player.unitStats;
     }
