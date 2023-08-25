@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+*   Purpose: Handles a players movement and non-spell methods.
+*
+*   @author: Colin Keys
+*/
 public class PlayerController
 {
-    private IPlayerMover _pm;
+    private IPlayerMover playerMover;
 
-    public PlayerController(IPlayerMover pm){
-        _pm = pm;
+    public PlayerController(IPlayerMover playerMover){
+        this.playerMover = playerMover;
     }
     
     /*
@@ -18,11 +23,11 @@ public class PlayerController
         //dest.y = player.myCollider.bounds.center.y;
         // If the player clicked an enemy set the target, otherwise set the destination.
         if(hitInfo.collider.tag == "Enemy" && hitInfo.collider.gameObject != gameObject && hitInfo.collider.enabled){
-            _pm.TargetedEnemy = hitInfo.collider.gameObject;
+            playerMover.TargetedEnemy = hitInfo.collider.gameObject;
         }
         else{
-            _pm.TargetedEnemy = null;
-            _pm.Destination = dest;
+            playerMover.TargetedEnemy = null;
+            playerMover.Destination = dest;
         }
     }
 
@@ -31,9 +36,9 @@ public class PlayerController
     *   @param nextTarget - Vector3 of the direction to look at.
     */
     public void PlayerLookDirection(Vector3 nextTarget){
-        if(_pm.CurrentTarget != nextTarget){
+        if(playerMover.CurrentTarget != nextTarget){
             //nextTarget.y = player.myCollider.bounds.center.y;
-            _pm.CurrentTarget = nextTarget;
+            playerMover.CurrentTarget = nextTarget;
         }
     }
 
@@ -41,15 +46,15 @@ public class PlayerController
     *   MovePlayerToEnemy - Moves the player into range of their targeted enemy whenever they have one.
     */
     public void MovePlayerToEnemy(){
-        if(!_pm.TargetedEnemy.GetComponent<IUnit>().IsDead){}
+        if(!playerMover.TargetedEnemy.GetComponent<IUnit>().IsDead){}
         // Get the targets distance from the player.
-        Vector3 myTarget = _pm.TargetedEnemy.transform.position;
+        Vector3 myTarget = playerMover.TargetedEnemy.transform.position;
         myTarget.y = 0.0f;
-        float distToEnemy = (_pm.Position - myTarget).magnitude;
+        float distToEnemy = (playerMover.Position - myTarget).magnitude;
         // If the enemy is in auto range then start autoing.
-        if(distToEnemy < _pm.Range){
+        if(distToEnemy < playerMover.Range){
             // Stop navmesh
-            _pm.Destination = _pm.Position;
+            playerMover.Destination = playerMover.Position;
             // If the time since last auto is greater than the next time the player is allowed to auto.
             // Make sure player isn't already winding up an auto.
             /*if(Time.time > player.basicAttack.nextAuto && !player.basicAttack.windingUp){
@@ -62,9 +67,9 @@ public class PlayerController
             //StopCoroutine(player.basicAttack.BasicAttackWindUp());
             //player.basicAttack.windingUp = false;
             // Move the player into range of the target.
-            Vector3 enemyDest = _pm.TargetedEnemy.transform.position;
+            Vector3 enemyDest = playerMover.TargetedEnemy.transform.position;
             //enemyDest.y = player.myCollider.bounds.center.y;
-            _pm.Destination = enemyDest;
+            playerMover.Destination = enemyDest;
         }
     }
 }

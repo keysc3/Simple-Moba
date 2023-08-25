@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+*   Purpose: Handles receiving input for players movement and non-spells.
+*
+*   @author: Colin Keys
+*/
 public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
 {
-    private PlayerController newpc;
-
-    private NavMeshAgent nma;
-
     private GameObject targetedEnemy;
     public GameObject TargetedEnemy { 
         get => targetedEnemy;
         set{
             if(value == null)
-                nma.ResetPath();
+                navMeshAgent.ResetPath();
             else
                 targetedEnemy = value;
         }
     }
-    //private float attackTime;
     private Camera mainCamera;
-    //private RaycastHit hitInfo;
-    //private Vector3 destination = Vector3.zero;
     public Vector3 Destination { 
-        get => nma.destination; 
-        set => nma.destination = value;
+        get => navMeshAgent.destination; 
+        set => navMeshAgent.destination = value;
     }
     private Vector3 currentTarget;
     public Vector3 CurrentTarget { 
@@ -39,60 +37,45 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     }
     public Vector3 Position { get => transform.position; set => transform.position = value; }
     public float Range { get => player.unitStats.autoRange.GetValue(); }
-    //private Player player;
-    //private UnitStats unitStats;
+
+    private PlayerController playerController;
+    private NavMeshAgent navMeshAgent;
     private PlayerSpells playerSpells;
     private IPlayer player;
 
     // Called when the script instance is being loaded.
     private void Awake(){
         playerSpells = GetComponent<PlayerSpells>();
-        newpc = new PlayerController(this);
-        nma = GetComponent<NavMeshAgent>();
+        playerController = new PlayerController(this);
+        navMeshAgent = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
         player = GetComponent<IPlayer>();
     }
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update.
     private void Start()
     {
-        //championStats = (ChampionStats) player.unitStats;
-        nma.updateRotation = false;
-        //nma.speed = championStats.speed.GetValue();
-        //attackTime = 1.0f/championStats.attackSpeed.GetValue();
-
+        navMeshAgent.updateRotation = false;
     }
 
-    // Called when the script is enabled.
-    /*private void OnDisable(){
-        if(player.navMeshAgent.isOnNavMesh && player.navMeshAgent != null)
-            player.navMeshAgent.ResetPath();
-    }*/
-
-    // Update is called once per frame
+    // Update is called once per frame.
     private void Update()
     {
-        // Stop the players attack windup if casting or moving.
-        /*if(player.isCasting || player.navMeshAgent.hasPath){
-            player.basicAttack.windingUp = false;
-        }*/
-
-        if(nma.enabled){
+        if(navMeshAgent.enabled){
             // Set the players destination.
             if(Input.GetMouseButtonDown(1)){
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hitInfo;
                     if(Physics.Raycast(ray, out hitInfo)){
-                        newpc.RightClick(hitInfo, gameObject);
+                        playerController.RightClick(hitInfo, gameObject);
                     }
             }
 
             // Stop player if they are at their destination or stop input received. 
-            //if(nma.hasPath && !player.isCasting){
-            if(nma.hasPath){
-                if(transform.position == nma.destination || Input.GetKeyDown(KeyCode.S)){
+            if(navMeshAgent.hasPath){
+                if(transform.position == navMeshAgent.destination || Input.GetKeyDown(KeyCode.S)){
                     TargetedEnemy = null;
-                    nma.ResetPath();
+                    navMeshAgent.ResetPath();
                 }
             }
         }
@@ -100,17 +83,15 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         // Point players forward at the direction they are cast or moving.
         // The player should never be casting something if currentspell is null but just to be safe check for null.
         if(player.IsCasting && player.CurrentCastedSpell != null && player.CurrentCastedSpell.CanMove)
-            newpc.PlayerLookDirection(player.MouseOnCast);
-        else if(nma.hasPath)
-            newpc.PlayerLookDirection(nma.steeringTarget);
+            playerController.PlayerLookDirection(player.MouseOnCast);
+        else if(navMeshAgent.hasPath)
+            playerController.PlayerLookDirection(navMeshAgent.steeringTarget);
 
         if(TargetedEnemy != null && !player.IsCasting){
             if(!TargetedEnemy.GetComponent<IUnit>().IsDead)
-                newpc.MovePlayerToEnemy();
+                playerController.MovePlayerToEnemy();
             else
                 TargetedEnemy = null;
         }
-        //else
-            //player.basicAttack.windingUp = false;
     }
 }

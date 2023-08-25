@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using TMPro;
 
 /*
-*   Purpose: Handles a spell buttons actions.
+*   Purpose: Handles a spells actions.
 *
 *   @author: Colin Keys
 */
