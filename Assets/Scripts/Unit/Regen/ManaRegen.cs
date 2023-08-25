@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/*
+* Purpose: Implements mana regeneration for a unit.
+*
+* @author: Colin Keys
+*/
 public class ManaRegen : MonoBehaviour
 {
-    private ChampionStats championStats;
     private IUnit unit;
     public IUnit Unit{
         get => unit;
@@ -17,7 +21,6 @@ public class ManaRegen : MonoBehaviour
             }
         }
     }
-    private TMP_Text manaRegenText;
     private float manaToRegen;
     public float ManaToRegen {
         get => manaToRegen;
@@ -32,7 +35,10 @@ public class ManaRegen : MonoBehaviour
             }
         }
     }
-
+    
+    private TMP_Text manaRegenText;
+    private ChampionStats championStats;
+    
     // Called when the script instance is being loaded.
     private void Awake(){
         Unit = GetComponent<IUnit>();

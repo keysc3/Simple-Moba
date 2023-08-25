@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/*
+* Purpose: Implements health regeneration for a unit.
+*
+* @author: Colin Keys
+*/
 public class HealthRegen : MonoBehaviour
 {
     private IUnit unit;
@@ -16,7 +21,6 @@ public class HealthRegen : MonoBehaviour
             }
         }
     }
-    private TMP_Text healthRegenText;
     private float healthToRegen;
     public float HealthToRegen {
         get => healthToRegen;
@@ -31,6 +35,8 @@ public class HealthRegen : MonoBehaviour
             }
         }
     }
+
+    private TMP_Text healthRegenText;
 
     // Called when the script instance is being loaded.
     private void Awake(){
@@ -64,9 +70,6 @@ public class HealthRegen : MonoBehaviour
                     currentHealth = maxHealth;
                 // Set health and only regen every 0.5s.
                 unit.unitStats.CurrentHealth = currentHealth;
-                //UIManager.instance.UpdateHealthBar(player);
-                // Display per 1s on UI.
-                //UIManager.instance.UpdateHealthRegen(championStats.HP5.GetValue()/5.0f, player.playerUI);
             }
             yield return new WaitForSeconds(0.5f);
         }
