@@ -12,8 +12,6 @@ public class Sleep : Effect
 {
     private IUnit effectedUnit;
     private NavMeshAgent effectedNavMeshAgent;
-    //private PlayerController playerController;
-    //private PlayerSpellInput playerSpellInput;
 
     /*
     *   Sleep - Initialize a new sleep effect.
@@ -25,8 +23,6 @@ public class Sleep : Effect
     public Sleep(ScriptableSleep sleepEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(sleepEffect, duration, unitCasted, unitEffected){
         effectedUnit = effected.GetComponent<IUnit>();
         effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
-        //playerController = effected.GetComponent<PlayerController>();
-        //playerSpellInput = effected.GetComponent<PlayerSpellInput>();
     }
 
     /*

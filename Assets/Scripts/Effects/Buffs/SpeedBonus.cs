@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements a speed bonus effect.
+*
+* @author: Colin Keys
+*/
 public class SpeedBonus : Effect
 {
     private float bonusPercent;
