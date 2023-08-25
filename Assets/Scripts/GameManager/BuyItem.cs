@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
 * Purpose: Handles input for item buying and selling.
@@ -66,7 +67,7 @@ public class BuyItem : MonoBehaviour
                 UIManager.instance.UpdateHealthBar(player);
                 UIManager.instance.UpdateManaBar(player);
             }*/
-            //UIManager.instance.AddItem(itemSlot, addItem.icon, player.playerUI);
+            UIAddItem(itemSlot, addItem.icon, player.playerUI);
             //UIManager.instance.UpdateAllStats(player);
         }
     }
@@ -80,10 +81,37 @@ public class BuyItem : MonoBehaviour
         Item removeItem = player.inventory.RemoveItem(itemSlot);
         if(removeItem != null){
             ((ChampionStats) player.unitStats).RemoveItemStats(removeItem);
-            /*UIManager.instance.UpdateHealthBar(player);
-            UIManager.instance.UpdateManaBar(player);
-            UIManager.instance.RemoveItem(itemSlot, player.playerUI);
-            UIManager.instance.UpdateAllStats(player);*/
+            //UIManager.instance.UpdateHealthBar(player);
+            //UIManager.instance.UpdateManaBar(player);
+            UIRemoveItem(itemSlot, player.playerUI);
+            //UIManager.instance.UpdateAllStats(player);
+        }
+    }
+
+    /*
+    *   UIAddItem - Updates the inventory UI with a new item.
+    *   @param itemSlot - int of the UI item slot to add the item to.
+    *   @param itemSprite - sprite of the item.
+    *   @param playerUI - GameObject of the playerUI being updated.
+    */
+    private void UIAddItem(int itemSlot, Sprite itemSprite, GameObject playerUI){
+        if(playerUI != null){
+            GameObject itemImage = playerUI.transform.Find("Player/Items/ItemsContainer/Item_" + itemSlot + "_Container/Sprite").gameObject;
+            itemImage.GetComponent<Image>().sprite = itemSprite;
+            itemImage.SetActive(true);
+        }
+    }
+
+    /*
+    *   UIAddItem - Removes an item from the inventory UI.
+    *   @param itemSlot - int of the UI item slot to remove the item from.
+    *   @param playerUI - GameObject of the playerUI being updated.
+    */
+    private void UIRemoveItem(int itemSlot, GameObject playerUI){
+        if(playerUI != null){
+            GameObject itemImage = playerUI.transform.Find("Player/Items/ItemsContainer/Item_" + itemSlot + "_Container/Sprite").gameObject;
+            itemImage.GetComponent<Image>().sprite = null;
+            itemImage.SetActive(false);
         }
     }
 }

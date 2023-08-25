@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+*   Purpose: Singleton for making sure only one player is being controlled at once.
+*
+*   Author: Colin Keys
+*/
 public class ActiveChampion : MonoBehaviour
 {
     private int activeChamp;
@@ -19,7 +24,7 @@ public class ActiveChampion : MonoBehaviour
     public CameraMovement cameraMovement;
 
     // Called when the script instance is being loaded.
-    void Awake(){
+    private void Awake(){
         instance = this;
         for(int i = 0; i < champions.Count; i++){
             players.Add(champions[i].GetComponent<IPlayer>());
@@ -27,14 +32,14 @@ public class ActiveChampion : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         cameraMovement = Camera.main.GetComponent<CameraMovement>();
         SetActiveChamp(); 
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if(GameController.instance.currentChampion == null){
             if(Input.GetKeyDown(KeyCode.J))
@@ -42,6 +47,9 @@ public class ActiveChampion : MonoBehaviour
         }
     }
 
+    /*
+    *   SetActiveChamp - Enables the active champs controls and disables every others.
+    */
     public void SetActiveChamp(){
         for(int i = 0; i < champions.Count; i++){
             if(i != activeChamp){
@@ -49,14 +57,14 @@ public class ActiveChampion : MonoBehaviour
                 champions[i].GetComponent<SpellInputBehaviour>().enabled = false;
                 champions[i].tag = "Enemy"; 
                 champions[i].layer = LayerMask.NameToLayer("Enemy");
-                //UIManager.instance.SetChampionUIActive(false, champions[i].GetComponent<Player>().playerUI);
+                SetChampionUIActive(false, players[i].playerUI);
             }
             else{
                 champions[i].GetComponent<PlayerControllerBehaviour>().enabled = true;
                 champions[i].GetComponent<SpellInputBehaviour>().enabled = true;
                 champions[i].tag = "Player";
                 champions[i].layer = LayerMask.NameToLayer("Default");
-                //UIManager.instance.SetChampionUIActive(true, champions[i].GetComponent<Player>().playerUI);
+                SetChampionUIActive(true, players[i].playerUI);
                 cameraMovement.targetObject = champions[i].transform;
             }
         }
@@ -93,5 +101,15 @@ public class ActiveChampion : MonoBehaviour
         }
         Debug.Log(champions[activeChamp].name + " was chosen.");
         SetActiveChamp();
+    }
+
+    /*
+    *   SetChampionUIActive - Sets the champion UI to active or not.
+    *   @param isActive - bool of whether or not to activate the spell cover.
+    *   @param playerUI - GameObject of the playerUI being updated.
+    */
+    public void SetChampionUIActive(bool isActive, GameObject playerUI){
+        if(playerUI != null)
+            playerUI.SetActive(isActive);
     }
 }

@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+*   Purpose: Singleton for drawing and animating status effects on the UI.
+*
+*   Author: Colin Keys
+*/
 public class StatusEffectUIManager : MonoBehaviour
 {
     public static StatusEffectUIManager instance { get; private set; }
@@ -13,7 +18,8 @@ public class StatusEffectUIManager : MonoBehaviour
     private float buffDebuffUIWidth;
     private float xOffset = 2f;
 
-    void Awake(){
+    // Called when the script instance is being loaded.
+    private void Awake(){
         if(instance == null)
             instance = this;
         buffDebuffUIWidth = playerUIPrefab.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
@@ -62,7 +68,7 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param myEffect - GameObject of the new UI element.
     *   @param isBuff - bool for if the status effect is a buff or debuff.
     */
-    public void SetStatusEffectUIPosition(Transform UI, GameObject myEffect, bool isBuff){
+    private void SetStatusEffectUIPosition(Transform UI, GameObject myEffect, bool isBuff){
         // Set up variables
         float effectWidth = myEffect.GetComponent<RectTransform>().rect.width;
         Vector2 offset = Vector2.zero;
@@ -96,7 +102,7 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    private IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         float elapsedDuration;
         // Get the timer image component.
         Image slider = effectUI.transform.Find("InnerContainer/Slider").GetComponent<Image>();
@@ -127,7 +133,7 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    public IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    private IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
         // Set stack text active.
         effectUI.transform.Find("InnerContainer/Value").gameObject.SetActive(true);
         // Setup variables.
@@ -184,7 +190,7 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param effect - Effect that expired.
     *   @param effectUI - GameObject of the status effect UI component to remove.
     */
-    public void UpdateStatusEffectsPositions(Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    private void UpdateStatusEffectsPositions(Effect effect, GameObject effectUI, Transform statusEffectsUI){
         // Get the UI components child index and its current position.
         int index = effectUI.transform.GetSiblingIndex();
         Vector2 newPos = effectUI.GetComponent<RectTransform>().anchoredPosition;
