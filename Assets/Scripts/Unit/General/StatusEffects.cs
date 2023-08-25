@@ -13,6 +13,11 @@ public class StatusEffects
     
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
+    private GameObject statusEffectPrefab;
+
+    public StatusEffects(GameObject statusEffectPrefab){
+        this.statusEffectPrefab = statusEffectPrefab;
+    }
 
     /*
     *   UpdateEffects - Ticks the effects.
@@ -95,12 +100,30 @@ public class StatusEffects
                 return;
             }
         }
-        IUnit unit = (IUnit) effect.effected.GetComponent<IUnit>();
+        // Add UI element.
+        NewStatusEffectUIElement((IUnit) effect.effected.GetComponent<IUnit>(), effect);
+    }
+
+    /*
+    *   NewStatusEffectUIElement - Adds a new UI element if the unit is a player and not an existing stackable effect.
+    *   @param unit - IUnit the effect is on.
+    *   @param effect - Effect to be displayed on the UI.
+    */
+    private void NewStatusEffectUIElement(IUnit unit, Effect effect){
         if(unit != null){
             if(unit is IPlayer){
                 if(((IPlayer) unit).playerUI != null){
-                    if(StatusEffectUIManager.instance != null)
-                        StatusEffectUIManager.instance.AddStatusEffectUI(this, effect, ((IPlayer) unit).playerUI);
+                    // If a stackable effect already has 1 stack, don't create a new UI element.
+                    if(effect.effectType.isStackable)
+                        if(GetEffectsByType(effect.effectType.GetType()).Count > 1)
+                            return;
+                    //Instantiate status effect prefab.
+                    if(statusEffectPrefab != null){
+                        GameObject myEffect = (GameObject) GameObject.Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
+                        StatusEffectUI statusEffectUI = myEffect.GetComponent<StatusEffectUI>();
+                        statusEffectUI.player = (IPlayer) unit;
+                        statusEffectUI.effect = effect;
+                    }
                 }
             }
         }

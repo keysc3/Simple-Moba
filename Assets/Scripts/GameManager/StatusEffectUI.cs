@@ -4,25 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/*
-*   Purpose: Singleton for drawing and animating status effects on the UI.
-*
-*   Author: Colin Keys
-*/
-public class StatusEffectUIManager : MonoBehaviour
+public class StatusEffectUI : MonoBehaviour
 {
-    public static StatusEffectUIManager instance { get; private set; }
-
-    [SerializeField] private GameObject statusEffectPrefab;
-    [SerializeField] private GameObject playerUIPrefab;
+    //[SerializeField] private GameObject statusEffectPrefab;
+    public IPlayer player;
+    public Effect effect;
+    private StatusEffects statusEffects;
     private float buffDebuffUIWidth;
     private float xOffset = 2f;
+    private Transform statusEffectsUI;
 
     // Called when the script instance is being loaded.
-    private void Awake(){
-        if(instance == null)
-            instance = this;
-        buffDebuffUIWidth = playerUIPrefab.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
+    private void Start(){
+        buffDebuffUIWidth = player.playerUI.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
+        statusEffectsUI = player.playerUI.transform.Find("Player/StatusEffects");
+        statusEffects = player.statusEffects;
+        AddStatusEffectUI();
     }
 
     /*
@@ -34,32 +31,26 @@ public class StatusEffectUIManager : MonoBehaviour
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
     // increase size of container, increase y offset.
-    public void AddStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject playerUI){
-        // If a stackable effect already has 1 stack, don't create a new UI element.
-        if(effect.effectType.isStackable)
-            if(statusEffects.GetEffectsByType(effect.effectType.GetType()).Count > 1)
-                return;
-        //Instantiate status effect prefab.
-        GameObject myEffect = (GameObject) Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
-        myEffect.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        myEffect.name = effect.effectType.name;
-        myEffect.transform.Find("InnerContainer/Sprite").GetComponent<Image>().sprite = effect.effectType.sprite;
+    public void AddStatusEffectUI(){
+        gameObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        gameObject.name = effect.effectType.name;
+        gameObject.transform.Find("InnerContainer/Sprite").GetComponent<Image>().sprite = effect.effectType.sprite;
         if(effect.EffectDuration == -1f)
-            myEffect.transform.Find("InnerContainer/Slider").gameObject.SetActive(false);
+            gameObject.transform.Find("InnerContainer/Slider").gameObject.SetActive(false);
         // Set color and position of the UI element.
         if(effect.effectType.isBuff){
-            myEffect.transform.Find("Background").GetComponent<Image>().color = Color.blue;
-            SetStatusEffectUIPosition(playerUI.transform.Find("Player/StatusEffects/BuffsContainer"), myEffect, true);
+            gameObject.transform.Find("Background").GetComponent<Image>().color = Color.blue;
+            SetStatusEffectUIPosition(statusEffectsUI.Find("BuffsContainer"), true);
         }
         else{
-            myEffect.transform.Find("Background").GetComponent<Image>().color = Color.red;
-            SetStatusEffectUIPosition(playerUI.transform.Find("Player/StatusEffects/DebuffsContainer"), myEffect, false);
+            gameObject.transform.Find("Background").GetComponent<Image>().color = Color.red;
+            SetStatusEffectUIPosition(statusEffectsUI.Find("DebuffsContainer"), false);
         }
         // Start effect timer animation coroutine.
         if(effect.effectType.isStackable)
-            StartCoroutine(StackableStatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.Find("Player/StatusEffects")));
+            (player as MonoBehaviour).StartCoroutine(AnimateStackableStatusEffect());
         else
-            StartCoroutine(StatusEffectUI(statusEffects, effect, myEffect, playerUI.transform.Find("Player/StatusEffects")));
+            (player as MonoBehaviour).StartCoroutine(AnimateStatusEffect());
     }
 
     /*
@@ -68,13 +59,13 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param myEffect - GameObject of the new UI element.
     *   @param isBuff - bool for if the status effect is a buff or debuff.
     */
-    private void SetStatusEffectUIPosition(Transform UI, GameObject myEffect, bool isBuff){
+    private void SetStatusEffectUIPosition(Transform UI, bool isBuff){
         // Set up variables
-        float effectWidth = myEffect.GetComponent<RectTransform>().rect.width;
+        float effectWidth = gameObject.GetComponent<RectTransform>().rect.width;
         Vector2 offset = Vector2.zero;
         // Set parent.
-        myEffect.transform.SetParent(UI);
-        int index = myEffect.transform.GetSiblingIndex();
+        gameObject.transform.SetParent(UI);
+        int index = gameObject.transform.GetSiblingIndex();
         // Calculate the position to put the new UI element in its parent.
         if(index > 0){
             // Offset new element based on last elements position.
@@ -93,22 +84,22 @@ public class StatusEffectUIManager : MonoBehaviour
                 offset = -(offset);
         }
         // Apply position.
-        myEffect.GetComponent<RectTransform>().anchoredPosition = offset;
+        gameObject.GetComponent<RectTransform>().anchoredPosition = offset;
     }
 
     /*
-    *   StatusEffectUI - Coroutine to animate the UI to show time left on a non-stackable effect.
+    *   AnimateStatusEffect - Coroutine to animate the UI to show time left on a non-stackable effect.
     *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for. 
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    private IEnumerator StatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    private IEnumerator AnimateStatusEffect(){
         float elapsedDuration;
         // Get the timer image component.
-        Image slider = effectUI.transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        Image slider = transform.Find("InnerContainer/Slider").GetComponent<Image>();
         TMP_Text value = null;
         if(effect.effectType is ScriptablePersonalSpell)
-            value = effectUI.transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
+            value = transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
                 if(value != null){
@@ -122,20 +113,20 @@ public class StatusEffectUIManager : MonoBehaviour
                 yield return null;
         }
         // Update UI positions based on what position the ended effect was in.
-        UpdateStatusEffectsPositions(effect, effectUI, statusEffectsUI);
+        UpdateStatusEffectsPositions();
         // Remove UI component.
-        Destroy(effectUI);
+        Destroy(gameObject);
     }
 
     /*
-    *   StackableStatusEffectUI - Coroutine to animate the UI to show time left on a stackable effect.
+    *   AnimateStackableStatusEffect - Coroutine to animate the UI to show time left on a stackable effect.
     *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for. 
     *   @param effect - Effect to adjust time left for.
     *   @param effectUI - GameObject of the UI component to be animated.
     */
-    private IEnumerator StackableStatusEffectUI(StatusEffects statusEffects, Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    private IEnumerator AnimateStackableStatusEffect(){
         // Set stack text active.
-        effectUI.transform.Find("InnerContainer/Value").gameObject.SetActive(true);
+        transform.Find("InnerContainer/Value").gameObject.SetActive(true);
         // Setup variables.
         Effect displayEffect = effect;
         int stacks = 0;
@@ -147,8 +138,8 @@ public class StatusEffectUIManager : MonoBehaviour
         // This is necessary for stacks that falloff over time instead of at the same time.
         float reduceAmount = 0f;
         // Get the timer image component.
-        Image slider = effectUI.transform.Find("InnerContainer/Slider").GetComponent<Image>();
-        TMP_Text value = effectUI.transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
+        Image slider = transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        TMP_Text value = transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
             // Get how many stacks the effect has.
@@ -179,9 +170,9 @@ public class StatusEffectUIManager : MonoBehaviour
             yield return null;
         }
         // Update UI positions based on what position the ended effect was in.
-        UpdateStatusEffectsPositions(effect, effectUI, statusEffectsUI);
+        UpdateStatusEffectsPositions();
         // Remove UI component.
-        Destroy(effectUI);
+        Destroy(gameObject);
     }
 
     /*
@@ -190,10 +181,10 @@ public class StatusEffectUIManager : MonoBehaviour
     *   @param effect - Effect that expired.
     *   @param effectUI - GameObject of the status effect UI component to remove.
     */
-    private void UpdateStatusEffectsPositions(Effect effect, GameObject effectUI, Transform statusEffectsUI){
+    private void UpdateStatusEffectsPositions(){
         // Get the UI components child index and its current position.
-        int index = effectUI.transform.GetSiblingIndex();
-        Vector2 newPos = effectUI.GetComponent<RectTransform>().anchoredPosition;
+        int index = transform.GetSiblingIndex();
+        Vector2 newPos = GetComponent<RectTransform>().anchoredPosition;
         Vector2 lastPos = Vector2.zero;
         Transform UI;
         // Get the appropriate UI container.

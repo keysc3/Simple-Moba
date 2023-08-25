@@ -51,6 +51,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     [SerializeField] private Material dead;
     [SerializeField] private GameObject playerBarPrefab;
     [SerializeField] private GameObject playerUIPrefab;
+    [SerializeField] private GameObject statusEffectPrefab;
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
@@ -65,7 +66,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
             playerRespawnTimer = playerIconCover.transform.Find("DeathTimer").GetComponent<TMP_Text>();
         }
         isDead = false;
-        statusEffects = new StatusEffects();
+        statusEffects = new StatusEffects(statusEffectPrefab);
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();

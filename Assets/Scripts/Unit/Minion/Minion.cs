@@ -23,18 +23,18 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
     public Inventory inventory { get; set; }
     public LevelManager levelManager { get; set; }
     public BonusDamage bonusDamage { get; set; }
-    
     public Collider myCollider { get;set; }
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
 
+    [SerializeField] private GameObject statusEffectPrefab;
     private NavMeshAgent navMeshAgent;
 
     // Called when the script instance is being loaded.
     private void Awake(){
         isDead = false;
         unitStats = new MinionStats((ScriptableMinion) sUnit);
-        statusEffects = new StatusEffects();
+        statusEffects = new StatusEffects(statusEffectPrefab);
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         levelManager = new LevelManager(this);
