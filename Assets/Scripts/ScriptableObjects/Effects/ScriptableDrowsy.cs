@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableEffect for intializing a Drowsy effect.
+* Purpose: ScriptableEffect for initializing a Drowsy effect.
 *
 * @author: Colin Keys
 */

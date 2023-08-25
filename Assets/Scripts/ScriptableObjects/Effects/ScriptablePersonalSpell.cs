@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableEffect for intializing a spell effect.
+* Purpose: ScriptableEffect for initializing a spell effect.
 *
 * @author: Colin Keys
 */
