@@ -42,13 +42,13 @@ public class Spell : MonoBehaviour, ISpell
     protected ChampionStats championStats;
     protected Camera mainCamera;
     protected IPlayer player;
-    protected SpellController sc;
+    protected SpellController spellController;
 
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
         mainCamera = Camera.main;
-        sc = new SpellController(this, player);
+        spellController = new SpellController(this, player);
     }
 
     // Start is called before the first frame update

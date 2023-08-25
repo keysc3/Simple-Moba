@@ -102,7 +102,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     *   @param spell - string of the spell number.
     */
     private IEnumerator NextCastCd(float spell_cd){
-        sc.SpellCDChildrenSetActive(spellCDTransform, true);
+        spellController.SpellCDChildrenSetActive(spellCDTransform, true);
         float spell_timer = 0.0f;
         // While time since last cast is less than or equal to the cd between casts.
         while(spell_timer <= spell_cd){
@@ -120,7 +120,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         if(Spell_4_ChargesLeft == 0 && spellCDText != null)
             spellCDText.gameObject.SetActive(false);
         else
-            sc.SpellCDChildrenSetActive(spellCDTransform, false);
+            spellController.SpellCDChildrenSetActive(spellCDTransform, false);
         canRecast = true;
     }
 
@@ -142,13 +142,13 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
                 Spell_4_Move();
                 Spell_4_ChargesLeft--;
             }
-            sc.UpdateActiveSpellSlider(imageSlider, spell_4_duration, spell_4_timer);
+            spellController.UpdateActiveSpellSlider(imageSlider, spell_4_duration, spell_4_timer);
             spell_4_timer += Time.deltaTime;
             yield return null;
         }
         // Reset charges and start spell cooldown timer.
         Spell4Casting = false;
-        StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
     /*
@@ -173,7 +173,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     */
     private void Spell_4_Move(){
         // Get the players mouse position on spell cast for spells target direction.
-        Vector3 targetDirection = sc.GetTargetDirection();
+        Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
         Vector3 targetPosition = (targetDirection - transform.position);
         if(targetPosition.magnitude > spellData.maxMagnitude)

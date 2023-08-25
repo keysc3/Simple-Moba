@@ -35,7 +35,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         Handles.DrawWireDisc(transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
 
        // Get the players mouse position on spell cast for spells target direction.
-        Vector3 targetDirection = sc.GetTargetDirection();
+        Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
         Vector3 targetPosition = (targetDirection - transform.position);
         // Set target to lob seed to to max lob distance if casted at a greater distance.
@@ -55,9 +55,9 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
-            StartCoroutine(sc.CastTime(spellData.castTime));
+            StartCoroutine(spellController.CastTime(spellData.castTime));
             // Get the players mouse position on spell cast for spells target direction.
-            Vector3 targetDirection = sc.GetTargetDirection();
+            Vector3 targetDirection = spellController.GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
             Vector3 targetPosition = (targetDirection - transform.position);
             // Set target to lob seed to to max lob distance if casted at a greater distance.
@@ -80,7 +80,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         // Wait for cast time.
         while(player.IsCasting)
             yield return null;
-        StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         StartCoroutine(Spell_3_Lob(targetPosition, targetDirection));
     }
     

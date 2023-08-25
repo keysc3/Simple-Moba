@@ -38,7 +38,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetPosition = (sc.GetTargetDirection() - transform.position).normalized;
+        Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
         targetPosition = transform.position + (targetPosition * spellData.magnitude);
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(transform.position, targetPosition);
@@ -50,12 +50,12 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
-            Vector3 targetDirection = sc.GetTargetDirection();
+            Vector3 targetDirection = spellController.GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
             Vector3 targetPosition = (targetDirection - transform.position).normalized;
             targetPosition = transform.position + (targetPosition * spellData.magnitude);
             // Start coroutines to handle the spells cast time and animation.
-            StartCoroutine(sc.CastTime(spellData.castTime));
+            StartCoroutine(spellController.CastTime(spellData.castTime));
             StartCoroutine(Spell_1_Move(targetPosition));
             // Use mana and set spell on cooldown to true.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
@@ -72,7 +72,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         while(player.IsCasting)
             yield return null;
         // Cooldown starts on cast.
-        StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
         BahriSpell1Trigger spell1Trigger = orb.GetComponent<BahriSpell1Trigger>();

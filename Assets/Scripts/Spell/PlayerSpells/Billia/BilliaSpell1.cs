@@ -53,7 +53,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         // If the spell is off cd, Billia is not casting, and has enough mana.
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
-            StartCoroutine(sc.CastTime(spellData.castTime));
+            StartCoroutine(spellController.CastTime(spellData.castTime));
             StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
@@ -70,7 +70,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         while(player.IsCasting){
             yield return null;
         }
-        StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Hitbox starts from center of Billia.
         HitboxCheck();
         // Animate the ending of the spell.

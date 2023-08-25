@@ -34,7 +34,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetDirection = sc.GetTargetDirection();
+        Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
         Vector3 targetPosition = (targetDirection - transform.position);
         // Set the spell cast position to max range if casted past that value.
@@ -61,7 +61,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         // If the spell is off cd, Billia is not casting, and has enough mana.
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
-            Vector3 targetDirection = sc.GetTargetDirection();
+            Vector3 targetDirection = spellController.GetTargetDirection();
             // Set the target position to be in the direction of the mouse on cast.
             Vector3 targetPosition = (targetDirection - transform.position);
             // Set the spell cast position to max range if casted past that value.
@@ -89,7 +89,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
-            StartCoroutine(sc.CastTime(spellData.castTime));
+            StartCoroutine(spellController.CastTime(spellData.castTime));
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
             StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
@@ -158,7 +158,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   @param targetPosition - Vector3 of the center of the spell.
     */
     private void Spell_2_Finished(Vector3 targetPosition){
-        StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Hitbox starts from center of calculated target position.
         HitboxCheck(targetPosition);
         Destroy(GameObject.Find("/BilliaSpell_2"));

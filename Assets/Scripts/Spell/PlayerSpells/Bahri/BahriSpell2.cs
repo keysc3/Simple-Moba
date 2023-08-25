@@ -148,7 +148,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                     }
                 }
             }
-            sc.UpdateActiveSpellSlider(imageSlider, spellData.duration, timer);
+            spellController.UpdateActiveSpellSlider(imageSlider, spellData.duration, timer);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -158,7 +158,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         enemiesHit.Clear();
         if(spellDurationSlider != null)
             spellDurationSlider.SetActive(false);
-        StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
     /*

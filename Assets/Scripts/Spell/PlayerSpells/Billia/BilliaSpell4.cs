@@ -46,8 +46,8 @@ public class BilliaSpell4 : Spell, IHasCast
         if(canUseSpell){
             if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
                 // Start cast time then cast the spell.
-                StartCoroutine(sc.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
-                StartCoroutine(sc.CastTime(spellData.castTime));
+                StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+                StartCoroutine(spellController.CastTime(spellData.castTime));
                 StartCoroutine(Spell_4_Cast(GetChampionsWithPassive()));
                 // Use mana.
                 championStats.UseMana(spellData.baseMana[SpellLevel]);
