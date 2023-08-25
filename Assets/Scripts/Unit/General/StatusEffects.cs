@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements a status effects object.
+*
+* @author: Colin Keys
+*/
 public class StatusEffects
 {
     public List<Effect> statusEffects { get; } = new List<Effect>();
@@ -11,6 +16,7 @@ public class StatusEffects
 
     /*
     *   UpdateEffects - Ticks the effects.
+    *   @param delta - float of the interval since the last frame.
     */
     public void UpdateEffects(float delta){
         // Increment every effects timer.
@@ -145,6 +151,7 @@ public class StatusEffects
     /*
     *   CheckForEffectByName - Checks for the given effect in the status managers effect list with given name.
     *   @param checkFor - ScriptableObject of the effect to check for.
+    *   @param effectName - string of the effects name.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
     public bool CheckForEffectByName(ScriptableEffect checkFor, string effectName){

@@ -4,17 +4,21 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+/*
+* Purpose: Implements a leveling system for champions.
+*
+* @author: Colin Keys
+*/
 public class LevelManager
 {
+    public Dictionary<string, int> spellLevels { get; } = new Dictionary<string, int>();
 
     private Slider xpSlider = null;
     private TMP_Text playerUILevelText = null;
     private TMP_Text playerBarLevelText = null;
     private Transform spellsContainer = null;
     private RectTransform statusEffectsRect = null;
-
     private Gradient gradient;
-
     private int level = 1;
     public int Level { 
         get => level; 
@@ -26,8 +30,6 @@ public class LevelManager
                 playerBarLevelText.SetText(level.ToString());
         }
     }
-    public Dictionary<string, int> spellLevels { get; } = new Dictionary<string, int>();
-
     private int spellLevelPoints = 0;
     public int SpellLevelPoints {
         get => spellLevelPoints;
@@ -46,7 +48,6 @@ public class LevelManager
             spellLevelPoints = value;
         }
     }
-    //private bool skillLevelUpUIActive = true;
     private float gainAmount = 100f;
     private float currentXP = 0f;
     public float CurrentXP {
@@ -62,9 +63,6 @@ public class LevelManager
         }
     }
     private LevelInfo levelInfo;
-    //private ScriptableChampion champion;
-    //private Player player;
-    //private ChampionStats championStats;
     private IUnit _unit;
     
     /*
@@ -86,6 +84,7 @@ public class LevelManager
         SetUpGradient();
         levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
         _unit = unit;
+        // Set up spell levels dictionary.
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         if(unit is IPlayer)
@@ -107,7 +106,7 @@ public class LevelManager
 
     /*
     *   GainXP - Add xp to the champions total.
-    *   @param killed - GameObject of the killed unit.
+    *   @param killed - IUnit of the killed unit.
     */
     private void GainXP(IUnit killed){
         float gained;
@@ -137,7 +136,6 @@ public class LevelManager
         // Increase the champions base stats.
         if(_unit is IPlayer)
             IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
-        //championStats.UpdateAttackSpeed();
     }
 
     /*
@@ -173,6 +171,7 @@ public class LevelManager
 
     /*
     *   GrowthAmountCalculation - Calculates the amount to increase a stat for a new level by base on the growth multiplier for that stat.
+    *   @param growthStat - float of the growth value of the stat.
     */
     private float GrowthAmountCalculation(float growthStat){
         return growthStat * (0.65f + 0.035f * level);
@@ -180,6 +179,7 @@ public class LevelManager
 
     /*
     *   GrowthAmountCalculationAtkSpd - Calculates the amount to increase a stat for a new level by base on the growth multiplier for that stat.
+    *   @param growthStat - float of the growth value of the stat.
     */
     private float GrowthAmountCalculationAtkSpd(float growthStat){
         return growthStat * (Level - 1) * (0.7025f + (0.0175f * (Level - 1)));
@@ -187,6 +187,7 @@ public class LevelManager
 
     /*
     *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
+    *   @param currentTime - float of current game time.
     */
     public void LevelUpSkill(float currentTime){
         // Check for level up skill input if skill level up available.
@@ -268,6 +269,10 @@ public class LevelManager
         return respawnTime;
     }
 
+    /*
+    *   SetSkillLevelUpActive - Activates or deactivates spell level up buttons.
+    *   @param isActive - bool of wether or not to active the buttons.
+    */
     public void SetSkillLevelUpActive(bool isActive){
         // For each spell.
         foreach(KeyValuePair<string, int> spell in spellLevels){
@@ -301,6 +306,10 @@ public class LevelManager
         }
     }
 
+    /*
+    *   SpellLearned - Removes the spell cover the first time a spell is leveled.
+    *   @param spell - string of the spell number.
+    */
     private void SpellLearned(string spell){
         if(spellsContainer != null){
             Transform spellCover = spellsContainer.Find(spell + "_Container/SpellContainer/Spell/CD/Cover");
@@ -309,6 +318,11 @@ public class LevelManager
         SpellLeveled(spell, 1);
     }
 
+    /*
+    *   SpellLearned - Updates the UI to show a spell was leveled.
+    *   @param spell - string of the spell number.
+    *   @param spellLevel - int of the spells new level.
+    */
     private void SpellLeveled(string spell, int spellLevel){
         if(spellsContainer != null){
             Transform spellLevels = spellsContainer.Find(spell + "_Container/Levels");
@@ -316,6 +330,9 @@ public class LevelManager
         }
     }
 
+    /*
+    *   SetUpGradient - Creates a new Gradient object to use for animating the spell level up buttons.
+    */
     private void SetUpGradient(){
         GradientColorKey[] colorKey;
         GradientAlphaKey[] alphaKey;
@@ -336,6 +353,10 @@ public class LevelManager
         gradient.SetKeys(colorKey, alphaKey);
     }
 
+    /*
+    *   SkillLevelUpGradient - Animates the spell level up buttons.
+    *   @param currentTime - float of the current game time.
+    */
     public void SkillLevelUpGradient(float currentTime){
         // For each spell.
         for(int i = 0; i < 4; i++){
