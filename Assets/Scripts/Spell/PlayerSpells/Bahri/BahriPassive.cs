@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Implements Bahri'a passive spell. Bahri gains a stack on minion and monster takedowns. Upon reaching a number of stacks Bahri
+* Purpose: Implements Bahri's passive spell. Bahri gains a stack on minion and monster takedowns. Upon reaching a number of stacks Bahri
 * heals herself an amount and resets the stacks. On Champion takedowns Bahri heals an amount.
 *
 * @author: Colin Keys
@@ -26,14 +26,14 @@ public class BahriPassive : Spell
         player.score.takedownCallback += Passive;
     }
 
-    void OnDisable(){
+    private void OnDisable(){
         //player.statusEffects.RemoveEffect(passive.effectType, gameObject);
         player.score.takedownCallback -= Passive;
     }
     
      /*
     *   Passive - Handles the passive implementation for Bahri.
-    *   @param killed - GameObject of the unit that was killed.
+    *   @param killed - IUnit of the unit that was killed.
     */
     public void Passive(IUnit killed){
         Debug.Log("Takedown; use passive");

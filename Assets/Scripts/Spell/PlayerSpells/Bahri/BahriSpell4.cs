@@ -287,7 +287,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
 
     /*
     *   Hit - Deals fourth spells damage to the enemy hit.
-    *   @param enemy - GameObject of the enemy hit.
+    *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);

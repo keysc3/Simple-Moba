@@ -189,7 +189,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
 
     /*
     *   Hit - Deals second spells damage to the enemy hit. Reduced damage on missiles that hit the same target more than once.
-    *   @param unit - GameObject of the unit hit.
+    *   @param unit - IUnit of the unit hit.
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);

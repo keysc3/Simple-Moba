@@ -101,7 +101,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
 
     /*
     *   Hit - Deals first spells damage to the enemy hit. Magic damage on first part then true damage on return.
-    *   @param enemy - GameObject of the enemy hit.
+    *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);

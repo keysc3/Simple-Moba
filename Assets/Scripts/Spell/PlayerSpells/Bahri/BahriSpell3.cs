@@ -11,7 +11,7 @@ using UnityEditor;
 public class BahriSpell3 : Spell, IHasCast, IHasHit
 {
     public SpellHitCallback spellHitCallback { get; set; }
-    
+
     new private BahriSpell3Data spellData;
 
     // Start is called before the first frame update.
@@ -81,7 +81,7 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
 
     /*
     *   Hit - Deals third spells damage to the enemy hit. Applies a charm effect on target hit.
-    *   @param enemy - GameObject of the enemy hit.
+    *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
