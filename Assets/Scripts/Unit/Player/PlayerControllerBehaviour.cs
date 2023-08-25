@@ -14,10 +14,9 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     public GameObject TargetedEnemy { 
         get => targetedEnemy;
         set{
+            targetedEnemy = value;
             if(value == null)
                 navMeshAgent.ResetPath();
-            else
-                targetedEnemy = value;
         }
     }
     private Camera mainCamera;

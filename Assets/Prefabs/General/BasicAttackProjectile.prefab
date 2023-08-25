@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1606231681406296312}
   - component: {fileID: 1606231681406296315}
   - component: {fileID: 1606231681406296314}
-  - component: {fileID: -8932808149831243721}
+  - component: {fileID: 5648674874457635902}
   m_Layer: 0
   m_Name: BasicAttackProjectile
   m_TagString: Untagged
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-8932808149831243721
+--- !u!114 &5648674874457635902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,8 +107,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1606231681406296317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02ef7bc67410fc944a9f8f79c1df3e49, type: 3}
+  m_Script: {fileID: 11500000, guid: b3a3acd834f5622479f9c1233b084d66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  Champ1: {fileID: 5176743718820132594, guid: afed088faabcf68489020064a4a6beed, type: 3}

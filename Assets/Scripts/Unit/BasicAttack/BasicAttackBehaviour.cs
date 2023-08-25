@@ -23,9 +23,12 @@ public class BasicAttackBehaviour : MonoBehaviour, IBasicAttack
     
     // Called when the script instance is being loaded.
     private void Awake(){
-        basicAttackController = new BasicAttackController(this, GetComponent<IPlayerMover>());
-        unitStats = GetComponent<IUnit>().unitStats;
+        basicAttackController = new BasicAttackController(this, GetComponent<IPlayerMover>(), GetComponent<IPlayer>());
         //RangeType = unitStats.rangeType;
+    }
+
+    private void Start(){
+        unitStats = GetComponent<IUnit>().unitStats;
     }
 
     // Update is called once per frame

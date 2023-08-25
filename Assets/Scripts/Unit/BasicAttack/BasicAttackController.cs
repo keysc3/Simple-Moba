@@ -12,10 +12,12 @@ public class BasicAttackController
 
     private IBasicAttack basicAttack;
     private IPlayerMover playerMover;
+    private IPlayer player;
 
-    public BasicAttackController(IBasicAttack basicAttack, IPlayerMover playerMover){
+    public BasicAttackController(IBasicAttack basicAttack, IPlayerMover playerMover, IPlayer player){
         this.basicAttack = basicAttack;
         this.playerMover = playerMover;
+        this.player = player;
     }
 
     public void CheckForTargets(){
@@ -27,7 +29,7 @@ public class BasicAttackController
     *   @param currentTime - float of the current game time.
     */
     public bool CanAuto(float currentTime){
-        if(playerMover.TargetedEnemy != null){
+        if(playerMover.TargetedEnemy != null && !player.IsCasting){
             //Vector3 myTarget = target.transform.position;
             //myTarget.y = 0.0f;
             float distToEnemy = (playerMover.Position - playerMover.TargetedEnemy.transform.position).magnitude;
@@ -46,9 +48,15 @@ public class BasicAttackController
     */
     public IEnumerator BasicAttackWindUp(){
         float timer = 0.0f;
+        basicAttack.WindingUp = true;
         // Wind up time is the time it takes for the player to attack * the percentage of 
         float windUpTime = (1.0f/basicAttack.AttackSpeed) * basicAttack.AutoWindUp;
-        while(playerMover.TargetedEnemy != null && basicAttack.WindingUp && timer <= windUpTime){
+        Debug.Log("Wind up time: " + windUpTime);
+        while(basicAttack.WindingUp && timer <= windUpTime ){
+            if(playerMover.TargetedEnemy == null || player.IsCasting){
+                basicAttack.WindingUp = false;
+                yield break;
+            }
             // TODO: Animate windup
             timer += Time.deltaTime;
             yield return null;

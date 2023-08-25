@@ -26,10 +26,10 @@ public class RangeBasicAttack : BasicAttackBehaviour
     */
     private IEnumerator AttackProjectile(GameObject target){
         // Create attack GameObject and set necessary variables.
-        GameObject projectile = (GameObject) GameObject.Instantiate(attackProjectile, transform.position, Quaternion.identity);
-        BasicAttackTrigger newBasicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
-        newBasicAttackTrigger.Target = target;
-        newBasicAttackTrigger.basicAttackController = basicAttackController;
+        GameObject projectile = (GameObject) Instantiate(attackProjectile, transform.position, Quaternion.identity);
+        BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
+        basicAttackTrigger.Target = target;
+        basicAttackTrigger.basicAttackController = basicAttackController;
         // While the attack still exists animate it.
         while(projectile){
             projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.transform.position, AttackProjectileSpeed * Time.deltaTime);
