@@ -92,7 +92,7 @@ public class PlayerSpells : MonoBehaviour
             int index = spellNames.FindIndex(name => name == num);
             if(index != -1)
                 spellButton.keyCode = inputs[index];
-            spellButton._SI = gameObject.GetComponent<ISpellInput>();
+            spellButton.SpellInput = gameObject.GetComponent<ISpellInput>();
             // Spell level up button.
             spellsContainer.Find(num + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
             if(num != "Passive"){

@@ -13,12 +13,12 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     //TODO? could change to properties with validation on spell and keycode based on constant values.
     public ISpell spell;
     public KeyCode keyCode;
-    private ISpellInput _si;
-    public ISpellInput _SI{
-        get => _si;
+    private ISpellInput spellInput;
+    public ISpellInput SpellInput{
+        get => spellInput;
         set {
             if(value != null){
-                _si = value;
+                spellInput = value;
                 spellInputController = new SpellInputController(value);
             }
         }
@@ -37,7 +37,7 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     *   OnPointerExit - Called when the cursor exits the rect area of this button.
     */
     public void OnPointerExit(PointerEventData eventData){
-        if(_si.LastSpellPressed != spell && spell.IsDisplayed)
+        if(spellInput.LastSpellPressed != spell && spell.IsDisplayed)
             spell.HideCast();
     }
 
@@ -46,7 +46,7 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     */
     public void OnPointerDown(PointerEventData eventData){
         if(spell.SpellNum != "Passive"){
-            _si.ButtonClick = true;
+            spellInput.ButtonClick = true;
             if(spellInputController != null)
                 spellInputController.SpellButtonPressed(keyCode, spell);
         }
