@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+*   Purpose: Implements a targeted GameObject.
+*
+*   @author: Colin Keys
+*/
 public class TargetedProjectile : MonoBehaviour
 {
     private IUnit targetUnit = null;
