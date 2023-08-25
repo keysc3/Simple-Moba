@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Adds and animates status effects for a players UI.
+*
+* @author: Colin Keys
+*/
 public class StatusEffectUI : MonoBehaviour
 {
-    //[SerializeField] private GameObject statusEffectPrefab;
     public IPlayer player;
     public Effect effect;
     private StatusEffects statusEffects;
@@ -16,17 +20,18 @@ public class StatusEffectUI : MonoBehaviour
 
     // Called when the script instance is being loaded.
     private void Start(){
-        buffDebuffUIWidth = player.playerUI.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
-        statusEffectsUI = player.playerUI.transform.Find("Player/StatusEffects");
-        statusEffects = player.statusEffects;
-        AddStatusEffectUI();
+        if(player.playerUI != null){
+            buffDebuffUIWidth = player.playerUI.transform.Find("Player/StatusEffects/BuffsContainer").GetComponent<RectTransform>().rect.width;
+            statusEffectsUI = player.playerUI.transform.Find("Player/StatusEffects");
+            statusEffects = player.statusEffects;
+        }
+        if(statusEffectsUI != null){
+            AddStatusEffectUI();
+        }
     }
 
     /*
     *   AddStatusEffectUI - Adds a status effect indicator to the UI. Left side is buffs, right side is debuffs.
-    *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for.
-    *   @param effect - Effect to add to the UI.
-    *   @param playerUI - GameObject of the playerUI being updated.
     */
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
@@ -55,9 +60,6 @@ public class StatusEffectUI : MonoBehaviour
 
     /*
     *   SetStatusEffectUIPosition - Sets the position of the given status effect UI element.
-    *   @param UI - Transform of the new elements parent to set.
-    *   @param myEffect - GameObject of the new UI element.
-    *   @param isBuff - bool for if the status effect is a buff or debuff.
     */
     private void SetStatusEffectUIPosition(Transform UI, bool isBuff){
         // Set up variables
@@ -89,9 +91,6 @@ public class StatusEffectUI : MonoBehaviour
 
     /*
     *   AnimateStatusEffect - Coroutine to animate the UI to show time left on a non-stackable effect.
-    *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for. 
-    *   @param effect - Effect to adjust time left for.
-    *   @param effectUI - GameObject of the UI component to be animated.
     */
     private IEnumerator AnimateStatusEffect(){
         float elapsedDuration;
@@ -120,9 +119,6 @@ public class StatusEffectUI : MonoBehaviour
 
     /*
     *   AnimateStackableStatusEffect - Coroutine to animate the UI to show time left on a stackable effect.
-    *   @param statusEffectManager - StatusEffectManager script for the gameObject the UI is being updated for. 
-    *   @param effect - Effect to adjust time left for.
-    *   @param effectUI - GameObject of the UI component to be animated.
     */
     private IEnumerator AnimateStackableStatusEffect(){
         // Set stack text active.
@@ -178,8 +174,6 @@ public class StatusEffectUI : MonoBehaviour
     /*
     *   UpdateStatusEffectsPositions - Moves the status effect UI components that were created after the one that ended.
     *   This is to prevent gaps between UI components.
-    *   @param effect - Effect that expired.
-    *   @param effectUI - GameObject of the status effect UI component to remove.
     */
     private void UpdateStatusEffectsPositions(){
         // Get the UI components child index and its current position.
