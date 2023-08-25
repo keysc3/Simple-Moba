@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/*
+* Purpose: Implements a score object for a unit.
+*
+* @author: Colin Keys
+*/
 public class Score
 {
     private TMP_Text killsText = null;
@@ -50,6 +55,10 @@ public class Score
     public delegate void Takedown(IUnit killed);
     public event Takedown takedownCallback;
 
+    /*
+    *   Score - Creates a new Score object.
+    *   @param scoreUI - Transform of the scores UI parent.
+    */
     public Score(Transform scoreUI){
         if(scoreUI != null){
             killsText = scoreUI.Find("Kills/Value").GetComponent<TMP_Text>();
@@ -58,9 +67,10 @@ public class Score
             csText = scoreUI.Find("CS/Value").GetComponent<TMP_Text>();
         }
     }
+
     /*
     *   ChampionKill - Adds a champion kill.
-    *   @param killed - GameObject of the killed unit.
+    *   @param killed - IUnit of the killed unit.
     */
     public void ChampionKill(IUnit killed){
         Kills += 1;
@@ -69,7 +79,7 @@ public class Score
 
     /*
     *   CreepKill - Adds a creep kill.
-    *   @param killed - GameObject of the killed unit.
+    *   @param killed - IUnit of the killed unit.
     */
     public void CreepKill(IUnit killed){
         CS += 1;
@@ -78,6 +88,7 @@ public class Score
 
     /*
     *   Assist - Adds an assist.
+    *   @param killed - IUnit of the killed unit.
     */
     public void Assist(IUnit killed){
         Assists += 1;
@@ -85,7 +96,7 @@ public class Score
     }
 
     /*
-    *   Assist - Adds a death.
+    *   Death - Adds a death.
     */
     public void Death(){
         Deaths += 1;
