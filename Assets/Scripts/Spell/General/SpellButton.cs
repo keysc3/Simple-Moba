@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/*
+*   Purpose: Handles a spell buttons actions.
+*
+*   @author: Colin Keys
+*/
 public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     //TODO? could change to properties with validation on spell and keycode based on constant values.
