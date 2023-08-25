@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+/*
+* Purpose: Implements a player unit.
+*
+* @author: Colin Keys
+*/
 public class Player : MonoBehaviour, IPlayer, IDamageable
 {
     private bool isDead = false;
@@ -18,25 +23,14 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     public StatusEffects statusEffects { get; set; }
     public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
-    //public Score score { get; private set; }
-    
     public Collider myCollider { get;set; }
-    //public ChampionStats unitStats { get; set; }
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
-
     public LevelManager levelManager { get; set; }
     public Score score { get; set; }
     public BonusDamage bonusDamage { get; set; }
-
-    private NavMeshAgent navMeshAgent;
-    private PlayerControllerBehaviour playerController;
-    private SpellInputBehaviour playerSpellInput;
-    private PlayerSpells playerSpells;
-
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
-
     public Vector3 MouseOnCast { get; set; }
     public bool IsCasting { get; set; }
     private ISpell currentCastedSpell;
@@ -45,9 +39,12 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         set => currentCastedSpell = !IsCasting ? null : value;
     }
 
+    private NavMeshAgent navMeshAgent;
+    private PlayerControllerBehaviour playerController;
+    private SpellInputBehaviour playerSpellInput;
+    private PlayerSpells playerSpells;
     private Material alive;
     private Renderer rend;
-
     [SerializeField] private Material dead;
     [SerializeField] private GameObject playerBarPrefab;
     [SerializeField] private GameObject playerUIPrefab;
@@ -55,7 +52,8 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
 
-    void Awake(){
+    // Called when the script instance is being loaded.
+    private void Awake(){
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
         playerUI = CreateNewPlayerUI();
         playerBar = CreateNewPlayerBar();
@@ -79,13 +77,13 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         UIManager.instance.InitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         damageTracker.CheckForReset(Time.time);
         statusEffects.UpdateEffects(Time.deltaTime);
@@ -102,9 +100,14 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
             if(Input.GetKeyDown(KeyCode.K))
                 levelManager.GainXPTester();
         }
+        if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
+            if(Input.GetKeyDown(KeyCode.T))
+                Death();
+        }
     }
 
-    void LateUpdate(){
+    // Called after all Update functions have been called.
+    private void LateUpdate(){
         unitStats.UpdateAttackSpeed();
         navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
     }
@@ -113,7 +116,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     *   TakeDamage - Damages the unit.
     *   @param incomingDamage - float of the incoming damage amount.
     *   @param damageType - string of the type of damage that is being inflicted.
-    *   @param from - GameObject of the damage source.
+    *   @param damager - IUnit of the damage source.
     *   @param isDot - bool if the damage was from a dot.
     */
     public void TakeDamage(float incomingDamage, string damageType, IUnit damager, bool isDot){
@@ -123,9 +126,8 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
             //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
             // If dead then award a kill and start the death method.
             if(unitStats.CurrentHealth <= 0f){
-                isDead = true;
-                UpdateScores(damager);
                 Death();
+                UpdateScores(damager);
             }
             // Apply any damage that procs after recieving damage.
             else{
@@ -134,11 +136,14 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         }
     }
 
+    /*
+    *   UpdateScores - Update the scores of the players involved in a kill.
+    *   @param damager - IUnit of the killing player.
+    */
     private void UpdateScores(IUnit damager){
         if(damager is IPlayer){
             IPlayer killer = (IPlayer) damager;
             killer.score.ChampionKill(this);
-            //UIManager.instance.UpdateKills(killer.score.kills.ToString(), killer.playerUI);
             // Grant any assists if the unit is a champion.
             foreach(IPlayer assister in damageTracker.CheckForAssists(killer, Time.time)){
                 assister.score.Assist(this);
@@ -150,8 +155,8 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     *   Death - Handles the death of a player.
     */
     private void Death(){
+        isDead = true;
         score.Death();
-        //UIManager.instance.UpdateDeaths(score.deaths.ToString(), playerUI);
         // Disable all combat and movement controls.
         playerController.enabled = false; 
         playerSpellInput.enabled = false;
@@ -188,8 +193,6 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         rend.material = alive;
         isDead = false;
         playerBar.SetActive(true);
-        //UIManager.instance.UpdateManaBar(this);
-        //UIManager.instance.UpdateHealthBar(this);
         // Move player to respawn location.
         transform.position = respawnPosition;
     }
@@ -202,10 +205,9 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         float timer = 0.0f;
         while(timer < respawn){
             timer += Time.deltaTime;
-            //UIManager.instance.UpdateDeathTimer(respawn - timer, playerUI);
             yield return null;
         }
-        //UIManager.instance.UpdateDeathTimer(0f, playerUI);
+        //TODO: Respawn timer UI.
         Respawn();
     }
 
