@@ -14,24 +14,13 @@ public class BahriPassive : Spell
     private int passiveStacks = 0;
     private PersonalSpell passive;
 
-    /*
-    *   BahriPassive - Initialize Bahri's passive spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public BahriPassive(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BahriPassiveData) spellData;
-        passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, player.gameObject, player.gameObject);
-        championSpells.initializationEffects.Add(passive);
-        player.score.takedownCallback += Passive;
-    }*/
-
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriPassiveData) base.spellData;
         if(SpellNum == null)
             SpellNum = spellData.defaultSpellNum;
+        // Initialize and add passive effect.
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, gameObject, gameObject);
         player.statusEffects.AddEffect(passive);
         player.score.takedownCallback += Passive;

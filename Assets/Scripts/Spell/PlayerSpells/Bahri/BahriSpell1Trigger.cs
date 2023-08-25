@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Handless the GameObject collision actions for Bahri's spell 1.
+*
+* @author: Colin Keys
+*/
 public class BahriSpell1Trigger : MonoBehaviour
 {
     public BahriSpell1 bahriSpell1;

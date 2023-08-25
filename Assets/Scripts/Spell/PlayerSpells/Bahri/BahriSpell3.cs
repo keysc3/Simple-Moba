@@ -10,19 +10,11 @@ using UnityEditor;
 */
 public class BahriSpell3 : Spell, IHasCast, IHasHit
 {
-    new private BahriSpell3Data spellData;
     public SpellHitCallback spellHitCallback { get; set; }
+    
+    new private BahriSpell3Data spellData;
 
-    /*
-    *   BahriSpell3 - Initialize Bahri's third spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public BahriSpell3(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BahriSpell3Data) spellData;
-    }*/
-
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell3Data) base.spellData;

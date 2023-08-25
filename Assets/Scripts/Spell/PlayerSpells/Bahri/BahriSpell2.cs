@@ -13,30 +13,22 @@ using UnityEngine.UI;
 */
 public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
 {
-    new private BahriSpell2Data spellData;
-    private List<IUnit> enemiesHit = new List<IUnit>();
     public List<GameObject> activeSpellObjects { get; } = new List<GameObject>();
     public SpellHitCallback spellHitCallback { get; set; }
+    
+    new private BahriSpell2Data spellData;
+    private List<IUnit> enemiesHit = new List<IUnit>();
     private GameObject spellDurationSlider;
     private Image imageSlider;
 
-    /*
-    *   BahriSpell2 - Initialize Bahri's second spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public BahriSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BahriSpell2Data) spellData;
-        isQuickCast = true;
-    }*/
-
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell2Data) base.spellData;
         IsQuickCast = true;
         if(SpellNum == null)
             SpellNum = spellData.defaultSpellNum;
+        // Get UI elements.
         if(player.playerUI != null){
             spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
             imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();

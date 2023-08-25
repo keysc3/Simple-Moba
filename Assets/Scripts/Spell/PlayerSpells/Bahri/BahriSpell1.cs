@@ -11,22 +11,13 @@ using UnityEngine;
 */
 public class BahriSpell1 : Spell, IHasCast, IHasHit
 {
-
-    new private BahriSpell1Data spellData;
-    private List<IUnit> enemiesHit = new List<IUnit>();
     public bool returning { get; private set; } = false;
     public SpellHitCallback spellHitCallback { get; set; }
 
-    /*
-    *   BahriSpell1 - Initialize Bahri's first spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public NewBahriSpell1(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BahriSpell1Data) spellData;
-    }*/
+    new private BahriSpell1Data spellData;
+    private List<IUnit> enemiesHit = new List<IUnit>();
 
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell1Data) base.spellData;

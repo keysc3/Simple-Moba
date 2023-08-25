@@ -13,9 +13,10 @@ using UnityEngine.UI;
 */
 public class BahriSpell4 : Spell, IHasCast, IHasHit
 {
+    public SpellHitCallback spellHitCallback { get; set; }
+
     new private BahriSpell4Data spellData;
     private NavMeshAgent navMeshAgent;
-
     private PersonalSpell spell4Effect = null;
     private float spell_4_timer;
     private float spell_4_duration;
@@ -38,23 +39,11 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         }
     }
     private bool canRecast = false;
-    public SpellHitCallback spellHitCallback { get; set; }
     private GameObject spellDurationSlider;
     private Image imageSlider;
     private GameObject spellCDCover;
 
-    /*
-    *   BahriSpell4 - Initialize Bahri's fourth spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public BahriSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BahriSpell4Data) spellData;
-        player.score.takedownCallback += Spell_4_Takedown;
-        isQuickCast = true;
-    }*/
-
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell4Data) base.spellData;
