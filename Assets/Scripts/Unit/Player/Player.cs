@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using TMPro;
 
 /*
 * Purpose: Implements a player unit.
@@ -45,6 +46,8 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     private PlayerSpells playerSpells;
     private Material alive;
     private Renderer rend;
+    private GameObject playerIconCover;
+    private TMP_Text playerRespawnTimer;
     [SerializeField] private Material dead;
     [SerializeField] private GameObject playerBarPrefab;
     [SerializeField] private GameObject playerUIPrefab;
@@ -57,6 +60,10 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
         playerUI = CreateNewPlayerUI();
         playerBar = CreateNewPlayerBar();
+        if(playerUI != null){
+            playerIconCover = playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/IconCover").gameObject;
+            playerRespawnTimer = playerIconCover.transform.Find("DeathTimer").GetComponent<TMP_Text>();
+        }
         isDead = false;
         statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
@@ -71,7 +78,6 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         playerController = GetComponent<PlayerControllerBehaviour>();
         playerSpellInput = GetComponent<SpellInputBehaviour>();
         playerSpells = GetComponent<PlayerSpells>();
-
         rend = GetComponent<Renderer>();
         alive = rend.material;
     }
@@ -203,11 +209,16 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     */
     private IEnumerator RespawnTimer(float respawn){
         float timer = 0.0f;
+        if(playerIconCover != null)
+            playerIconCover.SetActive(true);
         while(timer < respawn){
             timer += Time.deltaTime;
+            if(playerRespawnTimer != null)
+                playerRespawnTimer.SetText(Mathf.Ceil(respawn - timer).ToString());
             yield return null;
         }
-        //TODO: Respawn timer UI.
+        if(playerIconCover != null)
+            playerIconCover.SetActive(false); 
         Respawn();
     }
 
