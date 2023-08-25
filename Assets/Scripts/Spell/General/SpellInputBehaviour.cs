@@ -2,69 +2,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+*   Purpose: Handles receiving input for spells.
+*
+*   @author: Colin Keys
+*/
 public class SpellInputBehaviour : MonoBehaviour, ISpellInput
 {
-    private SpellInput newSI;
-
     public bool ButtonClick { get; set; } = false;
     public ISpell LastSpellPressed { get; set; } = null;
     public KeyCode LastButtonPressed { get; set; } = KeyCode.None;
+
+    private SpellInput spellInput;
     private Dictionary<string, int> spellLevels;
     public Dictionary<string, int> SpellLevels { get => levelManager.spellLevels; }
     private LevelManager levelManager;
     private PlayerSpells playerSpells;
     private Camera mainCamera;
 
-    void Awake(){
+    // Called when the script instance is being loaded.
+    private void Awake(){
         playerSpells = GetComponent<PlayerSpells>();
-        newSI = new SpellInput(this);
+        spellInput = new SpellInput(this);
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         levelManager = GetComponent<IPlayer>().levelManager;
         mainCamera = Camera.main;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // If any input is detected.
         if(Input.anyKeyDown){
-            newSI.AnyInput();
+            spellInput.AnyInput();
         }
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.Q, playerSpells.spells["Spell_1"]);
+                spellInput.SpellButtonPressed(KeyCode.Q, playerSpells.spells["Spell_1"]);
             }
         }
         // Spell 2
         if(Input.GetKeyDown(KeyCode.W)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.W, playerSpells.spells["Spell_2"]);
+                spellInput.SpellButtonPressed(KeyCode.W, playerSpells.spells["Spell_2"]);
             }
         }
         // Spell 3
         if(Input.GetKeyDown(KeyCode.E)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.E, playerSpells.spells["Spell_3"]);
+                spellInput.SpellButtonPressed(KeyCode.E, playerSpells.spells["Spell_3"]);
             }
         }
         // Spell 4
         if(Input.GetKeyDown(KeyCode.R)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
+                spellInput.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
             }
         }
         // Left click
         if(Input.GetMouseButtonDown(0)){
-            newSI.LeftClick(mainCamera);
+            spellInput.LeftClick(mainCamera);
         }
     }
 
-    //LateUpdate is called after all Update functions have been called.
+    // LateUpdate is called after all Update functions have been called.
     private void LateUpdate(){
         ButtonClick = false;
     }

@@ -2,10 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+*   Purpose: Implements spell input functionality using a spell input interface.
+*
+*   @author: Colin Keys
+*/
 public class SpellInput
 {
     private ISpellInput spellInputInterface;
 
+    /*
+    *   SpellInput - Sets up new SpellInput.
+    *   @param spellInputInterface - ISpellInput to with methods.
+    */
     public SpellInput(ISpellInput spellInputInterface){
         this.spellInputInterface = spellInputInterface;
     }
@@ -18,14 +27,14 @@ public class SpellInput
     public void SpellButtonPressed(KeyCode buttonPressed, ISpell spellPressed){
         // Only attempt to cast if learned.
         if(spellInputInterface.SpellLevels[spellPressed.SpellNum] > 0 && !spellPressed.OnCd){
-            // Hide cast if a spell was prepped and new button pressed is different than last.
+            // Hide cast if a spell was readied and new button pressed is different than last.
             if(spellInputInterface.LastSpellPressed != null && spellInputInterface.LastButtonPressed != buttonPressed)
                 spellInputInterface.LastSpellPressed.HideCast();
             // If pressed spell is a castable spell.
             if(spellPressed is IHasCast){
                 // If spell is not cast on press.
                 if(!spellPressed.IsQuickCast){
-                    // If Last button press is different new than new button press, prep the spell.
+                    // If Last button press is different new than new button press, ready the spell.
                     if(spellInputInterface.LastButtonPressed != buttonPressed){
                         spellPressed.DisplayCast();
                         spellInputInterface.LastButtonPressed = buttonPressed;
@@ -47,11 +56,12 @@ public class SpellInput
 
     /*
     *   LeftClick - Handles the actions to take when a left click is inputted.
+    *   @param mainCamera - Camera to use for ray casting.
     */
     public void LeftClick(Camera mainCamera){
-        // If a spell is prepped and the input is not from a button click.
+        // If a spell is readied and the input is not from a button click.
         if(spellInputInterface.LastSpellPressed != null && !spellInputInterface.ButtonClick){
-            // If prepped spell is not instant cast then hide its cast.
+            // If readied spell is not instant cast then hide its cast.
             if(!spellInputInterface.LastSpellPressed.IsQuickCast){
                 spellInputInterface.LastSpellPressed.HideCast();
             }
@@ -68,17 +78,20 @@ public class SpellInput
             else{
                 ((IHasCast) spellInputInterface.LastSpellPressed).Cast();
             }
-            // Unprepare spell.
+            // Unready spell.
             spellInputInterface.LastSpellPressed = null;
             spellInputInterface.LastButtonPressed = KeyCode.None;
         }
     }
 
+    /*
+    *   AnyInput - Unready spell if any input is pressed besides the readied spell.
+    */
     public void AnyInput(){
         // If the input detected is different than the last button press and not left click.
         if(!Input.GetKeyDown(spellInputInterface.LastButtonPressed) && !Input.GetMouseButtonDown(0)){
-            // If a spell has been prepped and the last spell pressed is not a quick cast, then unprepare the spell.
-            if(spellInputInterface.LastSpellPressed != null && !spellInputInterface.LastSpellPressed.IsQuickCast){
+            // If a spell has been readied and the last spell pressed is not a quick cast, then unready the spell.
+            if(spellInputInterface.LastSpellPressed != null && spellInputInterface.LastButtonPressed != KeyCode.None){
                 spellInputInterface.LastSpellPressed.HideCast();
                 spellInputInterface.LastSpellPressed = null;
                 spellInputInterface.LastButtonPressed = KeyCode.None;
