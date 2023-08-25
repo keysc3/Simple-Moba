@@ -5,6 +5,11 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using TMPro;
 
+/*
+*   Purpose: Handles a spell buttons actions.
+*
+*   @author: Colin Keys
+*/
 public class SpellController
 {
     private ISpell spell;
@@ -12,6 +17,11 @@ public class SpellController
     private Camera mainCamera;
     private NavMeshAgent navMeshAgent;
 
+    /*
+    *   SpellController - Sets up new SpellController.
+    *   @param spell - ISpell to use with methods.
+    *   @param player - IPlayer to use with methods.
+    */
     public SpellController(ISpell spell, IPlayer player){
         this.spell = spell;
         this.player = player;
@@ -21,7 +31,6 @@ public class SpellController
 
     /*
     *   GetTargetDirection - Gets the mouse world position.
-    *   @return Vector3 - World position of the mouse.
     */
     public Vector3 GetTargetDirection(){
         RaycastHit hitInfo;
@@ -62,11 +71,10 @@ public class SpellController
     /*
     *   Spell_Cd_Timer - Times the cooldown of a spell and sets it cd bool to false when its cooldown is complete.
     *   @param spell_cd - float representing the spells cooldown.
-    *   @param myResult - Action<bool> method used for returning a value for setting the spell cooldowns onCd value back to false.
     */
     public IEnumerator Spell_Cd_Timer(float spell_cd){
         SpellCDChildrenSetActive(spell.spellCDTransform, true);
-        spell_cd = CalculateCooldown(spell_cd, player.unitStats.haste.GetValue());
+        spell_cd = CalculateCooldown(spell_cd);
         float spell_timer = 0.0f;
         // While spell is still on CD
         while(spell_timer <= spell_cd){
@@ -87,13 +95,17 @@ public class SpellController
     /*
     *   CalculateCooldown - Calculates the cooldown of a spell after applying the champions haste value.
     *   @param baseCD - float of the base cooldown.
-    *   @param haste - float of the haste value the champ has.
     */
-    private float CalculateCooldown(float baseCD, float haste){
-        float reducedCD = baseCD*(100f/(100f+haste));
+    private float CalculateCooldown(float baseCD){
+        float reducedCD = baseCD*(100f/(100f+player.unitStats.haste.GetValue()));
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
 
+    /*
+    *   SpellCDChildrenSetActive - Sets the children of a transform as active or inactive based on given bool.
+    *   @param parent - Transform of parent.
+    *   @param isActive - bool of wether to set children active or inactive.
+    */
     public void SpellCDChildrenSetActive(Transform parent, bool isActive){
         if(parent != null){
             for(int i = 0; i < parent.childCount; i++){
@@ -102,6 +114,12 @@ public class SpellController
         }
     }
 
+    /*
+    *   UpdateActiveSpellSlider - Updates a spells UI component representing an active duration.
+    *   @param imageSlider - Image component to update.
+    *   @param duration - float of the total duration.
+    *   @param active - float of the active duration.
+    */
     public void UpdateActiveSpellSlider(Image imageSlider, float duration, float active){
         if(imageSlider != null){
             // Get value between 0 and 1 representing the percent of the spell duration left.
