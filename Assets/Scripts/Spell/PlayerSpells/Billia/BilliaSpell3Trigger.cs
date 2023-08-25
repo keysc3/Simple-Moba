@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Handles the collision checking and GameObject for Billia's third spell.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell3Trigger : MonoBehaviour
 {
     public Vector3 forwardDirection;
     public BilliaSpell3 billiaSpell3;
     public GameObject casted;
+    
     private bool hit = false;
     private int groundLayer;
     private int projectileLayer;

@@ -4,14 +4,21 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements Billia's second spell. Billia dashes to a target location dealing damage in circle. The damage circle contains an inner circle
+* that deals double damage if a unit is hit by it.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell2 : Spell, IHasHit, IHasCast
 {
+    public SpellHitCallback spellHitCallback { get; set; }
+
     new private BilliaSpell2Data spellData;
     private NavMeshAgent navMeshAgent;
     private string radius;
-    public SpellHitCallback spellHitCallback { get; set; }
 
-
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaSpell2Data) base.spellData;
@@ -20,15 +27,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         }
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
-    /*
-    *   BilliaSpell2 - Initialize Billia's second spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public BilliaSpell2(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BilliaSpell2Data) spellData;
-    }*/
 
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
@@ -100,7 +98,8 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     }
 
     /*
-    *   Spell_2_Visual - Visual hitbox indicator for Billia's second spell.
+    *   Spell_2_Visual - Visual hit box indicator for Billia's second spell.
+    *   @param targetPosition - Vector3 for the spills visual hit box.
     */
     private void Spell_2_Visual(Vector3 targetPosition){
         // Create the spells visual hitbox and set necessary values.
@@ -115,7 +114,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     /*
     *   Spell_2_Cast - Handles cast time and dash initialization of Spell 2.
     *   @param billiaTargetPosition - Vector3 of the position to move Billia to.
-    *   @param targetPosition - Vecto3 of the center of the spell.
+    *   @param targetPosition - Vector3 of the center of the spell.
     */
     private IEnumerator Spell_2_Cast(Vector3 billiaTargetPosition, Vector3 targetPosition){
         while(player.IsCasting)
@@ -166,7 +165,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
 
     /*
     *   HitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
-    *   @param hitboxCenter - Vector3 of the position of the center of the radius' hitbox.
+    *   @param hitboxCenter - Vector3 of the position of the center of the radius' hit box.
     */
     private void HitboxCheck(Vector3 hitboxCenter){
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
@@ -195,8 +194,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
 
     /*
     *   Hit - Deals second spells damage to the enemy hit. Magic damage with inner hit dealing increased magic damage.
-    *   @param enemy - GameObject of the enemy hit.
-    *   @param radius - string of which radius was hit.
+    *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);

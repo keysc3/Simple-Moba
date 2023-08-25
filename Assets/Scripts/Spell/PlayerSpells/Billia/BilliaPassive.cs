@@ -2,20 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements Billia's passive spell. Billia applies a dot to any unit hit by a damage dealing ability. Each dot tick also heals Billia.
+*
+* @author: Colin Keys
+*/
 public class BilliaPassive : Spell, IHasCallback
 {
-    new private BilliaPassiveData spellData;
-    private List<IUnit> passiveApplied = new List<IUnit>();
     public List<ISpell> callbackSet { get; } = new List<ISpell>();
 
-    // Start is called before the first frame update
+    new private BilliaPassiveData spellData;
+    private List<IUnit> passiveApplied = new List<IUnit>();
+
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaPassiveData) base.spellData;
         if(SpellNum == null){
             SpellNum = spellData.defaultSpellNum;
         }
-        //this.passiveData = (BilliaPassiveData) spellData;
     }
 
     public void OnDisable(){
@@ -26,7 +31,7 @@ public class BilliaPassive : Spell, IHasCallback
 
     /*
     *   Passive - Passive implementation for Billia. Applies a dot to enemies hit by any of Billia's abilities and heals Billia over the duration.
-    *   @param enemy - GameObject of the unit to apply the passive to.
+    *   @param unit - IUnit of the unit to apply the passive to.
     *   @param spellHit - Spell that has hit the GameObject.
     */
     public void Passive(IUnit unit, ISpell spellHit){
@@ -39,7 +44,7 @@ public class BilliaPassive : Spell, IHasCallback
 
     /*
     *   PassiveHeal - Heals Billia while the unit has her passive applied to them.
-    *   @param enemy - GameObject the dot is applied to and the passive healing is coming from.
+    *   @param unit - IUnit the dot is applied to and the passive healing is coming from.
     */
     private IEnumerator PassiveHeal(IUnit unit){
         // Check to make sure the dot is still on the unit.
@@ -66,7 +71,7 @@ public class BilliaPassive : Spell, IHasCallback
 
     /*
     *   SetupCallbacks - Sets up the necessary callbacks for the spell.
-    *   @param mySpells - List of Spells to set callbacks.
+    *   @param spells - Dictionary of the current spells.
     */
     public void SetupCallbacks(Dictionary<string, ISpell> spells){
         // If the Spell is a DamageSpell then add this spells passive proc to its spell hit callback.

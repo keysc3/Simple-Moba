@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+* Purpose: Handles animating Billia's drowsy effect on a GameObject.
+*
+* @author: Colin Keys
+*/
 public class BilliaDrowsyVisual : MonoBehaviour
 {
     public float drowsyDuration;

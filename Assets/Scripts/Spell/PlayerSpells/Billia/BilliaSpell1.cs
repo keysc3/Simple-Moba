@@ -3,16 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/*
+* Purpose: Implements Billia's first spell. Billia swings her weapon around her dealing damage in a circle. 
+* The circle contains an inner and outer circle hitbox. The outer circle deals an additional amount of damage as true damage.
+* This spell has a passive: When Billia deals damage with any of her abilities she gains a movement speed stack, capped at a maximum value.
+* The stacks fall off overtime if no stack has been received within a time duration.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
 {
+    public List<ISpell> callbackSet { get; } = new List<ISpell>();
+    public SpellHitCallback spellHitCallback { get; set; }
+
     new private BilliaSpell1Data spellData;
     private List<Effect> passiveEffectTracker = new List<Effect>();
     private int passiveStacks;
     private string radius;
     private List<ISpell> passiveStackSpells = new List<ISpell>();
-    public List<ISpell> callbackSet { get; } = new List<ISpell>();
-    public SpellHitCallback spellHitCallback { get; set; }
-
 
     protected override void Start(){
         base.Start();
@@ -22,16 +30,16 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         }
         CanMove = true;
         IsQuickCast = true;
-        //this.spellData = (BilliaSpell1Data) spellData;
     }
 
-    void OnDisable(){
+    private void OnDisable(){
         foreach(ISpell spell in callbackSet){
             ((IHasHit) spell).spellHitCallback -= Spell_1_PassiveProc;
         }
     }
 
-    void LateUpdate(){
+    // Called after all Update functions have been called
+    private void LateUpdate(){
         RemoveSpell_1_PassiveStack();
         ClearPassiveStackSpells();
     }
@@ -79,7 +87,6 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
 
     /*
     *   HitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
-    *   @param hitboxCenter - Vector3 of the position of the center of the radius' hitbox.
     */
     private void HitboxCheck(){
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
@@ -134,14 +141,16 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
 
     /*
     *   Spell_1_PassiveProc - Handles spell 1's passive being activated or refreshed.
+    *   @param unit - IUnit of the hit unit.
+    *   @param spellHit - ISpell of the spell the hit.
     */
     private void Spell_1_PassiveProc(IUnit unit, ISpell spellHit){
-        // If a passive stack was received this frame, don't add another.
+        // If a passive stack was received this frame from the spell given, don't add another.
         if(passiveStackSpells.Contains(spellHit))
             return;
         passiveStackSpells.Add(spellHit);
         if(SpellLevel >= 0 && passiveStacks < spellData.passiveMaxStacks){
-            // Create a new speed bonus with the 
+            // Create a new speed bonus.
             float bonusPercent = spellData.passiveSpeed[SpellLevel];
             SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(SpellLevel, gameObject, gameObject);
             speedBonus.BonusPercent = bonusPercent;
@@ -220,8 +229,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
 
     /*
     *   Hit - Deals first spells damage to the enemy hit. Magic damage with additional true damage on outer hit.
-    *   @param enemy - GameObject of the enemy hit.
-    *   @param radius - string of which radius was hit.
+    *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
@@ -240,7 +248,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
 
     /*
     *   SetupCallbacks - Sets up the necessary callbacks for the spell.
-    *   @param mySpells - List of Spells to set callbacks.
+    *   @param spells - Dictionary of the current spells.
     */
     public void SetupCallbacks(Dictionary<string, ISpell> spells){
         // If the Spell is a DamageSpell then add this spells passive proc to its spell hit callback.

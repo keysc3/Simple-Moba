@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements Billia's fourth spell. Billia puts a Drowsy on any champion with her passive dot on them. After a set time of Drowsy the 
+* champion gets the Sleep effect. If the champion is woken up from the sleep by non-dot champion damage, they take bonus damage.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell4 : Spell, IHasCast
 {
     new private BilliaSpell4Data spellData;
     private bool canUseSpell = false;
     private GameObject spellCDCover;
 
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaSpell4Data) base.spellData;
@@ -21,22 +28,10 @@ public class BilliaSpell4 : Spell, IHasCast
         }
     }
 
-    void LateUpdate(){
+    // Called after all Update functions have been called
+    private void LateUpdate(){
         CanUseSpell();
     }
-
-    /*
-    *   BilliaSpell4 - Initialize Billia's fourth spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public BilliaSpell4(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BilliaSpell4Data) spellData;
-        championSpells.updateCallback += CanUseSpell;
-        canMove = true;
-        isQuickCast = true;
-    }*/
 
     /*
     *   Cast - Casts the spell.

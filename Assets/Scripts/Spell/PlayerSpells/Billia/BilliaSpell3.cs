@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/*
+* Purpose: Implements Billia's third spell. Billia lobs a seed at a target location which then rolls until colliding with a GameObject.
+* Upon collision the seed explodes in a cone in its forward direction. The seeds hitbox on landing is slightly larger than its rolling hitbox.
+*
+* @author: Colin Keys
+*/
 public class BilliaSpell3 : Spell, IHasHit, IHasCast
 {
+    public SpellHitCallback spellHitCallback { get; set; }
+
     new private BilliaSpell3Data spellData;
     private float p1_y_offset = 3f;
     private float p2_y = 0.85f;
-    public SpellHitCallback spellHitCallback { get; set; }
 
+    // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaSpell3Data) base.spellData;
@@ -17,15 +25,6 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             SpellNum = spellData.defaultSpellNum;
         }
     }
-    /*
-    *   BilliaSpell3 - Initialize Billia's third spell.
-    *   @param championSpells - ChampionSpells instance this spell is a part of.
-    *   @param spellNum - string of the spell number this spell is.
-    *   @param spellData - SpellData to use.
-    */
-    /*public BilliaSpell3(ChampionSpells championSpells, SpellData spellData) : base(championSpells, spellData){
-        this.spellData = (BilliaSpell3Data) spellData;
-    }*/
 
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
@@ -130,6 +129,8 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     *   Spell_3_Move - Instantiates the seed and checks for collision on lob landing. If no landing collision the seed rolls in the 
     *   target forward direction until a collision.
     *   @param targetDirection - Vector3 of the lobbed seeds direction to roll.
+    *   @param seed - GameObject of the spell.
+    *   @param billaSpell3Trigger - GameObjects collision script.
     */
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
@@ -160,7 +161,8 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
 
     /*
     *   Spell_3_ConeHitBox - Checks the seeds post collision cone hitbox for any units to apply the damage to.
-    *   @param spell_3_seed - GameObject of the seed.
+    *   @param seed - GameObject of the seed.
+    *   @param initialHit - GameObject of the first hit object.
     *   @param forwardDirection - Vector3 of the roll direction.
     */
     public void Spell_3_ConeHitbox(GameObject seed, GameObject initialHit, Vector3 forwardDirection){
@@ -185,7 +187,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
 
     /*
     *   Hit - Deals third spells damage to the enemy hit. Magic damage with a slow on hit.
-    *   @param enemy - GameObject of the enemy hit.
+    *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
