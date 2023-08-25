@@ -3,28 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChampionSpells : MonoBehaviour
+/*
+* Purpose: Handles player spells set up and storing.
+*
+* @author: Colin Keys
+*/
+public class PlayerSpells : MonoBehaviour
 {
-    private Transform spellsContainer;
-
     public Dictionary<string, ISpell> spells { get; set; } = new Dictionary<string, ISpell>(); 
-
+    private Transform spellsContainer;
     private IPlayer player;
 
-
-    void Awake(){
+    // Called when the script instance is being loaded.
+    private void Awake(){
         player = GetComponent<IPlayer>();
     }
     
     // Start is called before the first frame update
-    void Start(){
+    private void Start(){
+        // Get spells UI transform
         if(player.playerUI != null)
             spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer");
+        // Add spells on this GameObject to spells dictionary
         ISpell[] objSpells = GetComponents<ISpell>();
         foreach(ISpell spellInterface in objSpells){
             spells.Add(spellInterface.spellData.defaultSpellNum, spellInterface);
+            // Setup UI buttons.
             SetupSpellButtons(spellInterface);
         }
+        // Setup each spells callbacks, if any.
         foreach(ISpell spellInterface in objSpells){
             if(spellInterface is IHasCallback)
                 ((IHasCallback) spellInterface).SetupCallbacks(spells);
@@ -42,14 +49,23 @@ public class ChampionSpells : MonoBehaviour
         }
     }
 
-    public void SetSpell(ISpell newSpell, string num){
+    /*
+    *   AddNewSpell - Setup for adding a new spell to the spells dictionary.
+    *   @param newSpell - ISpell of the spell being setup and added.
+    *   @param num - string of the spells num.
+    */
+    public void AddNewSpell(ISpell newSpell, string num){
         if(newSpell != null){
+            // Remove spell in new spells slot if necessary.
             if(spells[num] != null){
                 Destroy(spells[num] as MonoBehaviour);
             }
+            // Add new spell as key.
             spells[num] = newSpell;
             newSpell.SpellNum = num;
+            // Setup UI buttons.
             SetupSpellButtons(newSpell);
+            // Setup any callbacks.
             if(newSpell is IHasCallback){
                 ((IHasCallback) newSpell).SetupCallbacks(spells);
             }
@@ -58,7 +74,6 @@ public class ChampionSpells : MonoBehaviour
 
     /*
     *   SetupSpellButtons - Setup for the a spells button click and level up button click.
-    *   @param player - Player the spell is for.
     *   @param newSpell - Spell to set the buttons for.
     */
     private void SetupSpellButtons(ISpell newSpell){

@@ -32,7 +32,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     private NavMeshAgent navMeshAgent;
     private PlayerControllerBehaviour playerController;
     private SpellInputBehaviour playerSpellInput;
-    private ChampionSpells championSpells;
+    private PlayerSpells playerSpells;
 
     public GameObject playerUI { get; private set; }
     public GameObject playerBar { get; private set; }
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerControllerBehaviour>();
         playerSpellInput = GetComponent<SpellInputBehaviour>();
-        championSpells = GetComponent<ChampionSpells>();
+        playerSpells = GetComponent<PlayerSpells>();
 
         rend = GetComponent<Renderer>();
         alive = rend.material;
@@ -161,7 +161,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         myCollider.enabled = false;
         statusEffects.ResetEffects();
         // Handle champion death clean up.
-        championSpells.OnDeathSpellCleanUp();
+        playerSpells.OnDeathSpellCleanUp();
         rend.material = dead;
         damageTracker.ResetDamageTracker();
         StartCoroutine(RespawnTimer(levelManager.RespawnTime()));

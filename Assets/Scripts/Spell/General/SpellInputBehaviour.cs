@@ -12,11 +12,11 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     private Dictionary<string, int> spellLevels;
     public Dictionary<string, int> SpellLevels { get => levelManager.spellLevels; }
     private LevelManager levelManager;
-    private ChampionSpells championSpells;
+    private PlayerSpells playerSpells;
     private Camera mainCamera;
 
     void Awake(){
-        championSpells = GetComponent<ChampionSpells>();
+        playerSpells = GetComponent<PlayerSpells>();
         newSI = new SpellInput(this);
     }
 
@@ -37,25 +37,25 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.Q, championSpells.spells["Spell_1"]);
+                newSI.SpellButtonPressed(KeyCode.Q, playerSpells.spells["Spell_1"]);
             }
         }
         // Spell 2
         if(Input.GetKeyDown(KeyCode.W)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.W, championSpells.spells["Spell_2"]);
+                newSI.SpellButtonPressed(KeyCode.W, playerSpells.spells["Spell_2"]);
             }
         }
         // Spell 3
         if(Input.GetKeyDown(KeyCode.E)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.E, championSpells.spells["Spell_3"]);
+                newSI.SpellButtonPressed(KeyCode.E, playerSpells.spells["Spell_3"]);
             }
         }
         // Spell 4
         if(Input.GetKeyDown(KeyCode.R)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                newSI.SpellButtonPressed(KeyCode.R, championSpells.spells["Spell_4"]);
+                newSI.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
             }
         }
         // Left click
