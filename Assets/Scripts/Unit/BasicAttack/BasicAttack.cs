@@ -2,29 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicAttack
+/*
+* Purpose: Implements basic attacks methods for a unit.
+*
+* @author: Colin Keys
+*/
+public class BasicAttackController
 {
 
-    private IBasicAttack _ba;
-    private IPlayerMover _pm;
+    private IBasicAttack basicAttack;
+    private IPlayerMover playerMover;
 
-    public BasicAttack(IBasicAttack ba, IPlayerMover pm){
-        _ba = ba;
-        _pm = pm;
+    public BasicAttackController(IBasicAttack basicAttack, IPlayerMover playerMover){
+        this.basicAttack = basicAttack;
+        this.playerMover = playerMover;
     }
 
     public void CheckForTargets(){
         // Check for anything in range if no target.
     }
 
+    /*
+    *   CanAuto - Determines if an auto can be cast.
+    *   @param currentTime - float of the current game time.
+    */
     public bool CanAuto(float currentTime){
-        if(_pm.TargetedEnemy != null){
+        if(playerMover.TargetedEnemy != null){
             //Vector3 myTarget = target.transform.position;
             //myTarget.y = 0.0f;
-            float distToEnemy = (_pm.Position - _pm.TargetedEnemy.transform.position).magnitude;
+            float distToEnemy = (playerMover.Position - playerMover.TargetedEnemy.transform.position).magnitude;
             // If the enemy is in auto range then start autoing.
-            if(distToEnemy < _pm.Range){
-                if(currentTime >  _ba.NextAuto && !_ba.WindingUp){
+            if(distToEnemy < playerMover.Range){
+                if(currentTime >  basicAttack.NextAuto && !basicAttack.WindingUp){
                     return true;
                 }
             }
@@ -38,25 +47,24 @@ public class BasicAttack
     public IEnumerator BasicAttackWindUp(){
         float timer = 0.0f;
         // Wind up time is the time it takes for the player to attack * the percentage of 
-        float windUpTime = (1.0f/_ba.AttackSpeed) * _ba.AutoWindUp;
-        while(_pm.TargetedEnemy != null && _ba.WindingUp && timer <= windUpTime){
+        float windUpTime = (1.0f/basicAttack.AttackSpeed) * basicAttack.AutoWindUp;
+        while(playerMover.TargetedEnemy != null && basicAttack.WindingUp && timer <= windUpTime){
             // TODO: Animate windup
             timer += Time.deltaTime;
             yield return null;
         }
-        _ba.Attack(_pm.TargetedEnemy);
-        _ba.NextAuto = Time.time + (1.0f/_ba.AttackSpeed);
+        basicAttack.Attack(playerMover.TargetedEnemy);
+        basicAttack.NextAuto = Time.time + (1.0f/basicAttack.AttackSpeed);
         //Debug.Log("Next auto in: " + 1.0f/player.unitStats.attackSpeed.GetValue());
-        _ba.WindingUp = false;
+        basicAttack.WindingUp = false;
     }
 
-    //TODO FIX TAKEDAMAGE FROM PARAMETER
     /*
     *   AttackHit - Apply basic attack damage.
     *   @param target - GameObject of the target to attack.
     */
     public void AttackHit(GameObject target){
-        float physicalDamage = _ba.PhysicalDamage;
+        float physicalDamage = basicAttack.PhysicalDamage;
         target.GetComponent<IDamageable>().TakeDamage(physicalDamage, "physical", target.GetComponent<IUnit>(), false);
     }
 }

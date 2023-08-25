@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Handles a basic attack GameObjects actions and collision.
+*
+* @author: Colin Keys
+*/
 public class BasicAttackTrigger : MonoBehaviour
 {
-    public BasicAttack nba;
-    private IUnit targetUnit;
+    public BasicAttackController basicAttackController;
     private GameObject target = null;
     public GameObject Target {
         get => target;
@@ -16,6 +20,7 @@ public class BasicAttackTrigger : MonoBehaviour
             }
         }
     }
+    private IUnit targetUnit;
 
     // Update is called once per frame
     private void Update()
@@ -30,7 +35,7 @@ public class BasicAttackTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         // If the attack has hit its target call the attack function.
         if(other.gameObject == target){
-            nba.AttackHit(other.gameObject);
+            basicAttackController.AttackHit(other.gameObject);
             Destroy(gameObject);
         }
     }

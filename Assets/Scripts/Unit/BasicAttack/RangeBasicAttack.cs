@@ -2,10 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements a range basic attack being cast.
+*
+* @author: Colin Keys
+*/
 public class RangeBasicAttack : BasicAttackBehaviour
 {
     private float AttackProjectileSpeed { get => unitStats.attackProjectileSpeed.GetValue(); }
 
+    /*
+    *   Attack - Range basic attack method.
+    *   @param target - GameObject of the target to attack.
+    */
     public override void Attack(GameObject target){
         if(attackProjectile != null)
             StartCoroutine(AttackProjectile(target));
@@ -20,7 +29,7 @@ public class RangeBasicAttack : BasicAttackBehaviour
         GameObject projectile = (GameObject) GameObject.Instantiate(attackProjectile, transform.position, Quaternion.identity);
         BasicAttackTrigger newBasicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
         newBasicAttackTrigger.Target = target;
-        newBasicAttackTrigger.nba = nba;
+        newBasicAttackTrigger.basicAttackController = basicAttackController;
         // While the attack still exists animate it.
         while(projectile){
             projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.transform.position, AttackProjectileSpeed * Time.deltaTime);
