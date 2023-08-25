@@ -13,7 +13,7 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     public ISpell LastSpellPressed { get; set; } = null;
     public KeyCode LastButtonPressed { get; set; } = KeyCode.None;
 
-    private SpellInput spellInput;
+    private SpellInputController spellInputController;
     private Dictionary<string, int> spellLevels;
     public Dictionary<string, int> SpellLevels { get => levelManager.spellLevels; }
     private LevelManager levelManager;
@@ -23,7 +23,7 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     // Called when the script instance is being loaded.
     private void Awake(){
         playerSpells = GetComponent<PlayerSpells>();
-        spellInput = new SpellInput(this);
+        spellInputController = new SpellInputController(this);
     }
 
     // Start is called before the first frame update
@@ -38,35 +38,35 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     {
         // If any input is detected.
         if(Input.anyKeyDown){
-            spellInput.AnyInput();
+            spellInputController.AnyInput();
         }
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInput.SpellButtonPressed(KeyCode.Q, playerSpells.spells["Spell_1"]);
+                spellInputController.SpellButtonPressed(KeyCode.Q, playerSpells.spells["Spell_1"]);
             }
         }
         // Spell 2
         if(Input.GetKeyDown(KeyCode.W)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInput.SpellButtonPressed(KeyCode.W, playerSpells.spells["Spell_2"]);
+                spellInputController.SpellButtonPressed(KeyCode.W, playerSpells.spells["Spell_2"]);
             }
         }
         // Spell 3
         if(Input.GetKeyDown(KeyCode.E)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInput.SpellButtonPressed(KeyCode.E, playerSpells.spells["Spell_3"]);
+                spellInputController.SpellButtonPressed(KeyCode.E, playerSpells.spells["Spell_3"]);
             }
         }
         // Spell 4
         if(Input.GetKeyDown(KeyCode.R)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInput.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
+                spellInputController.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
             }
         }
         // Left click
         if(Input.GetMouseButtonDown(0)){
-            spellInput.LeftClick(mainCamera);
+            spellInputController.LeftClick(mainCamera);
         }
     }
 

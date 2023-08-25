@@ -19,11 +19,11 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         set {
             if(value != null){
                 _si = value;
-                newSpellInput = new SpellInput(value);
+                spellInputController = new SpellInputController(value);
             }
         }
     }
-    private SpellInput newSpellInput;
+    private SpellInputController spellInputController;
 
     /*
     *   OnPointerEnter - Called when the cursor enters the rect area of this button.
@@ -47,8 +47,8 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerDown(PointerEventData eventData){
         if(spell.SpellNum != "Passive"){
             _si.ButtonClick = true;
-            if(newSpellInput != null)
-                newSpellInput.SpellButtonPressed(keyCode, spell);
+            if(spellInputController != null)
+                spellInputController.SpellButtonPressed(keyCode, spell);
         }
     }
 }
