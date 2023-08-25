@@ -13,12 +13,12 @@ public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
     //TODO validate spell against spell string constants.
     public string spell;
     
-    private ISpellInput _si;
-    public ISpellInput _SI {
-        get => _si;
+    private ISpellInput spellInput;
+    public ISpellInput SpellInput {
+        get => spellInput;
         set {
             if(value != null)
-                _si = value; 
+                spellInput = value; 
         }
     }
     private LevelManager levelManager;
@@ -34,8 +34,8 @@ public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
     *   OnPointerDown - Called when the mouse is clicked over the button.
     */
     public void OnPointerDown(PointerEventData eventData){
-        if(_si != null)
-            _si.ButtonClick = true;
+        if(spellInput != null)
+            spellInput.ButtonClick = true;
         if(levelManager != null)
             levelManager.SpellLevelUp(spell);
     }

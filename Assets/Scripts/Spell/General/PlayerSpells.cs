@@ -99,7 +99,7 @@ public class PlayerSpells : MonoBehaviour
                 SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(num + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
                 spellLevelUpButton.spell = num;
                 spellLevelUpButton.LevelManager = player.levelManager;
-                spellLevelUpButton._SI = gameObject.GetComponent<ISpellInput>();
+                spellLevelUpButton.SpellInput = gameObject.GetComponent<ISpellInput>();
             }
         }
     }
