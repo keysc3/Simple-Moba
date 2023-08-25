@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements a minion unit.
+*
+* @author: Colin Keys
+*/
 public class Minion : MonoBehaviour, IMinion, IDamageable
 {
     private bool isDead = false;
@@ -10,7 +15,6 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
         get => isDead; 
         private set{
             isDead = value;
-            //playerBar.SetActive(!value);
         }
     }
     public UnitStats unitStats { get; set; }
@@ -26,7 +30,8 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
 
     private NavMeshAgent navMeshAgent;
 
-    void Awake(){
+    // Called when the script instance is being loaded.
+    private void Awake(){
         isDead = false;
         unitStats = new MinionStats((ScriptableMinion) sUnit);
         statusEffects = new StatusEffects();
@@ -39,29 +44,29 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         damageTracker.CheckForReset(Time.time);
         statusEffects.UpdateEffects(Time.deltaTime);
     }
 
-    void LateUpdate(){
+    // Called after all Update functions have been called.
+    private void LateUpdate(){
         unitStats.UpdateAttackSpeed();
-        //navMeshAgent.speed = unitStats.CalculateMoveSpeed(statusEffects);
     }
 
     /*
     *   TakeDamage - Damages the unit.
     *   @param incomingDamage - float of the incoming damage amount.
     *   @param damageType - string of the type of damage that is being inflicted.
-    *   @param from - GameObject of the damage source.
+    *   @param damager - IUnit of the damage source.
     *   @param isDot - bool if the damage was from a dot.
     */
     public void TakeDamage(float incomingDamage, string damageType, IUnit damager, bool isDot){
         float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
         unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
         //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
-        // If dead then award a kill and start the death method.
+        // If dead then award a creep kill and start the death method.
         if(unitStats.CurrentHealth <= 0f){
             isDead = true;
             if(damager is IPlayer)
