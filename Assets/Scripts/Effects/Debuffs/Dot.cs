@@ -40,8 +40,8 @@ public class Dot : Effect
         if(nextTick <= Time.time){
             totalDealt += damagePerTick;
             // Apply the dot and calculate next tick time.
-            if(effectedUnit is IDamagable)
-                ((IDamagable) effectedUnit).TakeDamage(damagePerTick, ((ScriptableDot) effectType).damageType, casted.GetComponent<IUnit>(), true);
+            if(effectedUnit is IDamageable)
+                ((IDamageable) effectedUnit).TakeDamage(damagePerTick, ((ScriptableDot) effectType).damageType, casted.GetComponent<IUnit>(), true);
             nextTick = Time.time + ((ScriptableDot) effectType).tickRate;
         }
     }

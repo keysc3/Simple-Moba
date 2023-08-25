@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements an interface for a Player, extends units.
+*
+* @author: Colin Keys
+*/
 public interface IPlayer : IUnit
 {
     LevelManager levelManager { get; set; }

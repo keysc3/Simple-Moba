@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Implements an interface for a spell
+*
+* @author: Colin Keys
+*/
 public interface ISpell
 {
     bool OnCd { get; set; }

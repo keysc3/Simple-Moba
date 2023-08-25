@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements an interface for a player/unit movement.
+*
+* @author: Colin Keys
+*/
 public interface IPlayerMover
 {
     GameObject TargetedEnemy { get; set; }

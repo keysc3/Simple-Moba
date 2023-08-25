@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements an interface for a Minion, extends units.
+*
+* @author: Colin Keys
+*/
 public interface IMinion : IUnit
 {
     LevelManager levelManager { get; set; }

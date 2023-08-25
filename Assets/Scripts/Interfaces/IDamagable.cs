@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDamagable
+/*
+* Purpose: Implements an interface for a damageable object.
+*
+* @author: Colin Keys
+*/
+public interface IDamageable
 {
     void TakeDamage(float incomingDamage, string damageType, IUnit damager, bool isDot);
 }

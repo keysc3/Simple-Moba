@@ -1,7 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+* Purpose: Implements an interface for a Unit.
+*
+* @author: Colin Keys
+*/
 public delegate void BonusDamage(IUnit toDamage, bool isDot);
 
 public interface IUnit

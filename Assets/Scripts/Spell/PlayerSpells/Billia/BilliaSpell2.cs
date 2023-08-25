@@ -200,12 +200,12 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
-        if(unit is IDamagable){
+        if(unit is IDamageable){
         float magicDamage = championStats.magicDamage.GetValue();
             if(radius == "inner")
-                ((IDamagable) unit).TakeDamage((spellData.baseDamage[SpellLevel] + magicDamage) * 2f, "magic", player, false);   
+                ((IDamageable) unit).TakeDamage((spellData.baseDamage[SpellLevel] + magicDamage) * 2f, "magic", player, false);   
             else
-                ((IDamagable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
+                ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
         }
     }
 }

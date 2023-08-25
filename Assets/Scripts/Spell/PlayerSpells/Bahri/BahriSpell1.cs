@@ -114,8 +114,8 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     */
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
-        if(unit is IDamagable){
-            IDamagable damageMethod = (IDamagable) unit;
+        if(unit is IDamageable){
+            IDamageable damageMethod = (IDamageable) unit;
             float magicDamage = championStats.magicDamage.GetValue();
             float damageValue = 0;
             // Only want to hit an enemy once per way.

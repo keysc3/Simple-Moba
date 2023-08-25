@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Minion : MonoBehaviour, IMinion, IDamagable
+public class Minion : MonoBehaviour, IMinion, IDamageable
 {
     private bool isDead = false;
     public bool IsDead { 

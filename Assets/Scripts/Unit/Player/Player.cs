@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour, IPlayer, IDamagable
+public class Player : MonoBehaviour, IPlayer, IDamageable
 {
     private bool isDead = false;
     public bool IsDead { 
@@ -57,8 +57,8 @@ public class Player : MonoBehaviour, IPlayer, IDamagable
 
     void Awake(){
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
-        playerUI = CreateNewPlayerUI(gameObject.name, SUnit.icon);
-        playerBar = CreateNewPlayerBar(gameObject);
+        playerUI = CreateNewPlayerUI();
+        playerBar = CreateNewPlayerBar();
         isDead = false;
         statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
@@ -81,7 +81,7 @@ public class Player : MonoBehaviour, IPlayer, IDamagable
     // Start is called before the first frame update
     void Start()
     {
-        UIManager.instance.NewInitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
+        UIManager.instance.InitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
     }
 
     // Update is called once per frame
@@ -209,23 +209,31 @@ public class Player : MonoBehaviour, IPlayer, IDamagable
         Respawn();
     }
 
-    public GameObject CreateNewPlayerUI(string name, Sprite icon){
-        // Set up the players UI.
+    /*
+    *   CreateNewPlayerUI - Creates a new player UI.
+    *   @return GameObject - New player UI.
+    */
+    public GameObject CreateNewPlayerUI(){
         GameObject newPlayerUI = (GameObject) Instantiate(playerUIPrefab, playerUIPrefab.transform.position, playerUIPrefab.transform.rotation);
-        newPlayerUI.name = name + "UI";
+        newPlayerUI.name = transform.name + "UI";
         newPlayerUI.transform.SetParent(GameObject.Find("/Canvas").transform);
         RectTransform newPlayerUIRectTransform = newPlayerUI.GetComponent<RectTransform>();
         newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
         newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
-        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = icon;
+        newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = SUnit.icon;
         return newPlayerUI;
     }
-    public GameObject CreateNewPlayerBar(GameObject champion){
+
+    /*
+    *   CreateNewPlayerBar - Creates a new player bar.
+    *   @return GameObject - New player bar.
+    */
+    public GameObject CreateNewPlayerBar(){
         GameObject newPlayerBar = (GameObject) Instantiate(playerBarPrefab, playerBarPrefab.transform.position, playerBarPrefab.transform.rotation);
-        newPlayerBar.name = champion.name + "PlayerBar";
+        newPlayerBar.name = transform.name + "PlayerBar";
         RectTransform newPlayerBarRectTransform = newPlayerBar.GetComponent<RectTransform>();
         Vector3 newPlayerBarPos = newPlayerBarRectTransform.anchoredPosition;
-        newPlayerBar.transform.SetParent(champion.transform);
+        newPlayerBar.transform.SetParent(transform);
         newPlayerBarRectTransform.anchoredPosition3D = newPlayerBarPos;
         return newPlayerBar;
     }
