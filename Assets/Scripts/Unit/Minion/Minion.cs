@@ -34,7 +34,7 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
     private void Awake(){
         isDead = false;
         unitStats = new MinionStats((ScriptableMinion) sUnit);
-        statusEffects = new StatusEffects(statusEffectPrefab);
+        statusEffects = new StatusEffects(null);
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         levelManager = new LevelManager(this);
