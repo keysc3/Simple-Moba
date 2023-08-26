@@ -86,7 +86,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     // Start is called before the first frame update
     private void Start()
     {
-        UIManager.instance.InitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
+        //UIManager.instance.InitialValueSetup(playerUI, playerBar, (ChampionStats) unitStats);
     }
 
     // Update is called once per frame
@@ -95,14 +95,6 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         damageTracker.CheckForReset(Time.time);
         statusEffects.UpdateEffects(Time.deltaTime);
         levelManager.LevelUpSkill(Time.time);
-        if(UIManager.instance != null){
-            if(playerUI != null){
-                UIManager.instance.UpdatePlayerUIHealthBar(playerUI, (ChampionStats) unitStats, IsDead);
-                UIManager.instance.UpdatePlayerBarHealthBar(playerBar, (ChampionStats) unitStats, IsDead);
-                UIManager.instance.UpdateManaUIs(playerUI, playerBar, (ChampionStats) unitStats);
-                UIManager.instance.UpdateAllStatsUI(playerUI, (ChampionStats) unitStats);
-            }
-        }
         if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
             if(Input.GetKeyDown(KeyCode.K))
                 levelManager.GainXPTester();
@@ -235,6 +227,14 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
         newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
         newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = SUnit.icon;
+        // Setup health and mana UI updates.
+        UpdateHealthUI updateHealthUI = newPlayerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<UpdateHealthUI>();
+        updateHealthUI.player = this;
+        UpdateManaUI updateManaUI = newPlayerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<UpdateManaUI>();
+        updateManaUI.player = this;
+        // Setup stats UI updates.
+        UpdateAllStatsUI updateAllStatsUI = newPlayerUI.transform.Find("Player/Info/Stats/Container").GetComponent<UpdateAllStatsUI>();
+        updateAllStatsUI.player = this;
         return newPlayerUI;
     }
 
@@ -249,6 +249,11 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         Vector3 newPlayerBarPos = newPlayerBarRectTransform.anchoredPosition;
         newPlayerBar.transform.SetParent(transform);
         newPlayerBarRectTransform.anchoredPosition3D = newPlayerBarPos;
+        // Setup Health and mana UI updates.
+        UpdateHealthBarUI updateHealthBarUI = newPlayerBar.transform.Find("PlayerBar/Container/Health").GetComponent<UpdateHealthBarUI>();
+        updateHealthBarUI.player = this;
+        UpdateManaBarUI updateManaBarUI = newPlayerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<UpdateManaBarUI>();
+        updateManaBarUI.player = this;
         return newPlayerBar;
     }
 }
