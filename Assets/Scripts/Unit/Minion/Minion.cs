@@ -27,7 +27,7 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
 
-    [SerializeField] private GameObject statusEffectPrefab;
+    //[SerializeField] private GameObject statusEffectPrefab;
     private NavMeshAgent navMeshAgent;
 
     // Called when the script instance is being loaded.
