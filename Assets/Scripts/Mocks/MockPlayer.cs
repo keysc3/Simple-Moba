@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-* Purpose: Implements an mock unit for testing.
-*
-* @author: Colin Keys
-*/
-public class MockUnit : IUnit
+public class MockPlayer : IPlayer
 {
     public ScriptableUnit SUnit { get; set; } = ScriptableObject.CreateInstance<ScriptableUnit>();
     public UnitStats unitStats { get; set; }
@@ -17,4 +12,11 @@ public class MockUnit : IUnit
     public Collider myCollider { get; set; }
     public bool IsDead { get; }
     public BonusDamage bonusDamage { get; set; }
+    public LevelManager levelManager { get; set; }
+    public Score score { get; set; }
+    public GameObject playerUI { get; }
+    public GameObject playerBar { get; }
+    public Vector3 MouseOnCast { get; set; }
+    public bool IsCasting { get; set; }
+    public ISpell CurrentCastedSpell { get; set; }
 }
