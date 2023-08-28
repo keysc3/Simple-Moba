@@ -12,7 +12,7 @@ public class Dot : Effect
 
     private IUnit effectedUnit;
     private float damagePerTick;
-    private float totalDealt;
+    //private float totalDealt;
     private float nextTick;
 
     /*
@@ -29,7 +29,7 @@ public class Dot : Effect
         // Get damage to deal on each tick.
         damagePerTick = totalDamage/(effectDuration/((ScriptableDot) effectType).tickRate);
         nextTick = Time.time;
-        totalDealt = 0f;
+        //totalDealt = 0f;
         
     }
 
