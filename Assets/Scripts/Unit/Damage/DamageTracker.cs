@@ -41,7 +41,7 @@ public class DamageTracker
     *   @param currentTime - float of the current game time.
     *   @return List<GameObject> - List of GameObjects containing any damage dealers to this GameObject in the last 10s.
     */
-    public List<IPlayer> CheckForAssists(IPlayer killer, float currentTime){
+    public List<IPlayer> CheckForAssists(IUnit killer, float currentTime){
         List<IPlayer> assisters = new List<IPlayer>();
         foreach(Damage damage in damageReceived){
             if(damage.from != killer && damage.from is IPlayer && !assisters.Contains((IPlayer) damage.from)){

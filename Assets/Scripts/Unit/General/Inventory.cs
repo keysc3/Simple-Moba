@@ -10,7 +10,7 @@ using UnityEngine;
 public class Inventory {
 
     public int space { get; } = 6;
-    private Dictionary<int, Item> myItems = new Dictionary<int, Item>();
+    public Dictionary<int, Item> myItems { get; } = new Dictionary<int, Item>();
 
     /*
     *   AddItem - Adds an item to the champions inventory and calls the inventory changed handler.

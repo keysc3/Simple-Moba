@@ -4,12 +4,18 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+/*
+* Purpose: Tests for the Inventory class.
+*
+* @author: Colin Keys
+*/
 public class inventory
 {
-    // A Test behaves as an ordinary method
+    /*
+    *   Adds an item to the inventory. Inventory should have the added item.
+    */
     [Test]
-    public void adds_item_to_slot_1()
-    {
+    public void adds_item_to_inventory(){
         // Arrange
         Inventory inventory = new Inventory();
         Item item = ScriptableObject.CreateInstance<Item>();
@@ -18,13 +24,14 @@ public class inventory
         int itemSlot = inventory.AddItem(item);
 
         // Assert
-        Assert.AreEqual(1, itemSlot);
+        Assert.AreEqual(item, inventory.myItems[itemSlot]);
     }
 
-    // A Test behaves as an ordinary method
+    /*
+    *   Removes an item from inventory slot 1. The inventory should have zero items.
+    */
     [Test]
-    public void remove_item_from_inventory()
-    {
+    public void removes_item_from_inventory(){
         // Arrange
         Inventory inventory = new Inventory();
         Item item = ScriptableObject.CreateInstance<Item>();
@@ -34,13 +41,14 @@ public class inventory
         Item removedItem = inventory.RemoveItem(itemSlot);
 
         // Assert
-        Assert.AreEqual(item, removedItem);
+        Assert.AreEqual(0, inventory.myItems.Count);
     }
 
-    // A Test behaves as an ordinary method
+    /*
+    *   Add more items than the inventory can hold. The inventory should return -1 item slot.
+    */
     [Test]
-    public void add_more_items_than_max_size()
-    {
+    public void adds_more_items_than_max_size(){
         // Arrange
         Inventory inventory = new Inventory();
         for(int i = 0; i < inventory.space; i++){
@@ -54,10 +62,11 @@ public class inventory
         Assert.AreEqual(-1, itemSlot);
     }
 
-    // A Test behaves as an ordinary method
+    /*
+    *   Removes an item from inventory slot that doesn't have an item. The inventory shouldn't return an item.
+    */
     [Test]
-    public void remove_item_from_slot_without_item()
-    {
+    public void removes_item_from_slot_without_item(){
         // Arrange
         Inventory inventory = new Inventory();
         inventory.AddItem(ScriptableObject.CreateInstance<Item>());
@@ -69,10 +78,11 @@ public class inventory
         Assert.AreEqual(null, removedItem);
     }
 
-    // A Test behaves as an ordinary method
+    /*
+    *   Adds an item to the lowest open inventory slot. Should return item slot 2.
+    */
     [Test]
-    public void add_item_to_lowest_open_slot_number()
-    {
+    public void adds_item_to_lowest_open_slot_number(){
         // Arrange
         Inventory inventory = new Inventory();
         for(int i = 0; i < inventory.space; i++){

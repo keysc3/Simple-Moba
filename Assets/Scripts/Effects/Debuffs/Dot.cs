@@ -12,7 +12,7 @@ public class Dot : Effect
 
     private IUnit effectedUnit;
     private float damagePerTick;
-    private float totalDealt;
+    //private float totalDealt;
     private float nextTick;
 
     /*
@@ -29,7 +29,7 @@ public class Dot : Effect
         // Get damage to deal on each tick.
         damagePerTick = totalDamage/(effectDuration/((ScriptableDot) effectType).tickRate);
         nextTick = Time.time;
-        totalDealt = 0f;
+        //totalDealt = 0f;
         
     }
 
@@ -38,7 +38,6 @@ public class Dot : Effect
     */
     public override void EffectTick(){
         if(nextTick <= Time.time){
-            totalDealt += damagePerTick;
             // Apply the dot and calculate next tick time.
             if(effectedUnit is IDamageable)
                 ((IDamageable) effectedUnit).TakeDamage(damagePerTick, ((ScriptableDot) effectType).damageType, casted.GetComponent<IUnit>(), true);

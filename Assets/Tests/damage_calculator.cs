@@ -5,19 +5,24 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.TestTools;
 
+/*
+* Purpose: Tests for the DamageCalculator class.
+*
+* @author: Colin Keys
+*/
 public class damage_calculator : ScriptableObject
 {
-    public ScriptableUnit unit1;
-    public ScriptableUnit unit2;
-
-    // A Test behaves as an ordinary method
+    /*
+    *   Sets the magic damage to deal to something from 80 incoming damage with 23 magic resist. Should be 65.
+    */
     [Test]
-    public void sets_magic_damage_to_65_from_80_with_23_magic_resist()
-    {
+    public void sets_magic_damage_taken_to_65_from_80_with_23_magic_resist(){
         // Arrange
-        float magicResist = 23f;
+        ScriptableUnit unit1 = ScriptableObject.CreateInstance<ScriptableUnit>();
+        ScriptableUnit unit2 = ScriptableObject.CreateInstance<ScriptableUnit>();
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
+        float magicResist = 23f;
         to.magicResist.BaseValue = magicResist;
         float incomingDamage = 80f;
         string damageType = "magic";
@@ -30,13 +35,17 @@ public class damage_calculator : ScriptableObject
         Assert.AreEqual(65f, finalDamage);
     }
 
+    /*
+    *   Sets the physical damage to deal to something from 121 incoming damage with 72 magic resist. Should be 70.
+    */
     [Test]
-    public void sets_physical_damage_to_70_from_121_with_72_armor()
-    {
+    public void sets_physical_damage_taken_to_70_from_121_with_72_armor(){
         // Arrange
-        float armor = 72f;
+        ScriptableUnit unit1 = ScriptableObject.CreateInstance<ScriptableUnit>();
+        ScriptableUnit unit2 = ScriptableObject.CreateInstance<ScriptableUnit>();
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
+        float armor = 72f;
         to.armor.BaseValue = armor;
         float incomingDamage = 121f;
         string damageType = "physical";
@@ -49,12 +58,20 @@ public class damage_calculator : ScriptableObject
         Assert.AreEqual(70f, finalDamage);
     }
 
+    /*
+    *   Sets the true damage to deal to something from 81 incoming damage. Should be 81.
+    */
     [Test]
-    public void sets_true_damage_to_81_from_81()
-    {
+    public void sets_true_damage_to_81_from_81(){
         // Arrange
+        ScriptableUnit unit1 = ScriptableObject.CreateInstance<ScriptableUnit>();
+        ScriptableUnit unit2 = ScriptableObject.CreateInstance<ScriptableUnit>();
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
+        float armor = 72f;
+        to.armor.BaseValue = armor;
+        float magicResist = 23f;
+        to.magicResist.BaseValue = magicResist;
         string damageType = "true";
         float incomingDamage = 81f;
 
@@ -66,10 +83,14 @@ public class damage_calculator : ScriptableObject
         Assert.AreEqual(81f, finalDamage);
     }
 
+    /*
+    *   Sets the damage to deal to something from a negative incoming damage value. Should be 0.
+    */
     [Test]
-    public void sets_damage_to_0_from_negative_damage()
-    {
+    public void sets_damage_to_0_from_negative_damage(){
         // Arrange
+        ScriptableUnit unit1 = ScriptableObject.CreateInstance<ScriptableUnit>();
+        ScriptableUnit unit2 = ScriptableObject.CreateInstance<ScriptableUnit>();
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
         string damageType = "true";
@@ -82,10 +103,14 @@ public class damage_calculator : ScriptableObject
         Assert.AreEqual(0f, finalDamage);
     }
 
+    /*
+    *   Sets the damage to deal to something from an invalid damage type. Should be 0.
+    */
     [Test]
-    public void sets_damage_to_0_from_invalid_damage_type()
-    {
+    public void sets_damage_to_0_from_invalid_damage_type(){
         // Arrange
+        ScriptableUnit unit1 = ScriptableObject.CreateInstance<ScriptableUnit>();
+        ScriptableUnit unit2 = ScriptableObject.CreateInstance<ScriptableUnit>();
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
         string damageType = "goofball";
