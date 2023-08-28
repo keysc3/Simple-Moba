@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Interface for a GameObject that has needs cleanup on death.
+* Purpose: Interface for a scripts that has need cleanup on death.
 *
 * @author: Colin Keys
 */

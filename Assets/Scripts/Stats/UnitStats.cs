@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 /*
 * Purpose: Implements a generic units stats.
@@ -28,6 +27,7 @@ public class UnitStats
     public Stat attackSpeed { get; }
     public Stat attackProjectileSpeed { get; }
     public Stat bonusAttackSpeed { get; }
+    public Stat haste { get; }
 
     public UnitStats(ScriptableUnit unit){
         magicDamage = new Stat(unit.magicDamage);
@@ -42,6 +42,7 @@ public class UnitStats
         attackSpeed = new Stat(unit.attackSpeed);
         attackProjectileSpeed = new Stat(unit.attackProjectileSpeed);
         bonusAttackSpeed = new Stat(0f);
+        haste = new Stat(0f);
         currentHealth = maxHealth.GetValue();
     }
 

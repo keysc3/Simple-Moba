@@ -10,10 +10,8 @@ using UnityEngine.AI;
 */
 public class Sleep : Effect
 {
-    private Unit effectedUnit;
-    //private NavMeshAgent effectedNavMeshAgent;
-    //private PlayerController playerController;
-    //private PlayerSpellInput playerSpellInput;
+    private IUnit effectedUnit;
+    private NavMeshAgent effectedNavMeshAgent;
 
     /*
     *   Sleep - Initialize a new sleep effect.
@@ -23,10 +21,8 @@ public class Sleep : Effect
     *   @param unitEffected - GameObject of the unit that the sleeep is affecting.
     */
     public Sleep(ScriptableSleep sleepEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(sleepEffect, duration, unitCasted, unitEffected){
-        effectedUnit = effected.GetComponent<Unit>();
-        //effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
-        //playerController = effected.GetComponent<PlayerController>();
-        //playerSpellInput = effected.GetComponent<PlayerSpellInput>();
+        effectedUnit = effected.GetComponent<IUnit>();
+        effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
     }
 
     /*
@@ -34,14 +30,14 @@ public class Sleep : Effect
     */
     public override void StartEffect(){
         if(effectedUnit != null){
-            if(effectedUnit is Player){
-                Player player = (Player) effectedUnit;
-                player.GetComponent<PlayerController>().enabled = false;
-                player.GetComponent<PlayerSpellInput>().enabled = false;
+            if(effectedUnit is IPlayer){
+                effected.GetComponent<PlayerControllerBehaviour>().enabled = false;
+                effected.GetComponent<SpellInputBehaviour>().enabled = false;
             }
             // Add bonus effect method to a take damage delegate?
             // Reset the units current path.
-            effectedUnit.navMeshAgent.ResetPath();
+            if(effectedNavMeshAgent != null)
+                effectedNavMeshAgent.ResetPath();
         }
     }
 
@@ -50,16 +46,15 @@ public class Sleep : Effect
     */
     public override void EndEffect(){
         if(effectedUnit != null){
-            // Reset the path
-            effectedUnit.navMeshAgent.ResetPath();
-            if(effectedUnit is Player){
+            if(effectedUnit is IPlayer){
                 // Give controls back if slept is active GameObject.
-                if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == effected){
-                    Player player = (Player) effectedUnit;
-                    player.GetComponent<PlayerController>().enabled = true;
-                    player.GetComponent<PlayerSpellInput>().enabled = true;
+                if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == effectedUnit){
+                    effected.GetComponent<PlayerControllerBehaviour>().enabled = true;
+                    effected.GetComponent<SpellInputBehaviour>().enabled = true;
                 }
             }
+            if(effectedNavMeshAgent != null)
+                effectedNavMeshAgent.ResetPath();
         }
     }
 }

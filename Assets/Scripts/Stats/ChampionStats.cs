@@ -14,7 +14,6 @@ public class ChampionStats : UnitStats
     }
     public Stat maxMana { get; }
     public Stat MP5 { get; }
-    public Stat haste { get; }
 
     /*
     *   ChampionStat - Creates a champion stats object.
@@ -23,7 +22,6 @@ public class ChampionStats : UnitStats
     public ChampionStats(ScriptableChampion champion) : base(champion){
         MP5 = new Stat(((ScriptableChampion) champion).MP5);
         maxMana = new Stat(((ScriptableChampion) champion).baseMana);
-        haste = new Stat(0f);
         currentMana = maxMana.GetValue();
     }
 

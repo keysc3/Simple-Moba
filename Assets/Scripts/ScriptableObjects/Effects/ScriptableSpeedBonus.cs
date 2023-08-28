@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableEffect for intializing a SpeedBonus effect.
+* Purpose: ScriptableEffect for initializing a SpeedBonus effect.
 *
 * @author: Colin Keys
 */

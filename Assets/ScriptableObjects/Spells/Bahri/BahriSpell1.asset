@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BahriSpell1
   m_EditorClassIdentifier: 
   <sprite>k__BackingField: {fileID: 21300000, guid: 639a632daaf33ac46881eb06a8488a62, type: 3}
+  <defaultSpellNum>k__BackingField: Spell_1
   <castTime>k__BackingField: 0.25
   <baseDamage>k__BackingField:
   - 1
@@ -32,7 +33,7 @@ MonoBehaviour:
   - 8
   - 9
   - 10
-  <orb>k__BackingField: {fileID: 6785074727118801786, guid: a3f9f0a940b1d764682ca6c5bc7237c0, type: 3}
+  <orb>k__BackingField: {fileID: 6785074727118801786, guid: b49e549c20d7e5c4cbb10f1f5f83347f, type: 3}
   <magnitude>k__BackingField: 7
   <speed>k__BackingField: 10
   <minSpeed>k__BackingField: 0.4

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableEffect for intializing a Dot effect.
+* Purpose: ScriptableEffect for initializing a Dot effect.
 *
 * @author: Colin Keys
 */

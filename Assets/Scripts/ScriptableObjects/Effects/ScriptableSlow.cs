@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableEffect for intializing a Slow effect.
+* Purpose: ScriptableEffect for initializing a Slow effect.
 *
 * @author: Colin Keys
 */
