@@ -10,13 +10,13 @@ public class damage
     [Test]
     public void creates_new_damage_object_with_20_magic_damage(){
         // Arrange
-        GameObject g1 = new GameObject();
+        IUnit unit1 = new MockUnit();
 
         // Act
-        Damage dmg = new Damage(g1, 20f, "magic");
+        Damage dmg = new Damage(unit1, 20f, "magic");
 
         // Assert
-        Assert.AreEqual((g1, 20f, "magic"), (dmg.from, dmg.amount, dmg.type));
+        Assert.AreEqual((unit1, 20f, "magic"), (dmg.from, dmg.amount, dmg.type));
 
     }
 }

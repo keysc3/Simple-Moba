@@ -102,7 +102,7 @@ public class unit_stats
         List<float> durationValues = new List<float>(){1f, 2f, 3f, 4f, 5f};
         GameObject g1 = new GameObject();
         GameObject g2 = new GameObject();
-        StatusEffects se = new StatusEffects();
+        StatusEffects se = new StatusEffects(null);
         List<Effect> myEffects  = new List<Effect>();
 
         for(int i = 0; i < 3; i++){

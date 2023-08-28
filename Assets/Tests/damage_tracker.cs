@@ -12,10 +12,10 @@ public class damage_tracker
     {
         // Arrange
         DamageTracker dt = new DamageTracker();
-        GameObject g1 = new GameObject();
+        IUnit unit1 = new MockUnit();
 
         // Act
-        dt.AddDamage(g1, 32f, "magic");
+        dt.AddDamage(unit1, 32f, "magic");
 
         // Assert
         Assert.AreEqual(1, dt.damageReceived.Count);
@@ -27,10 +27,10 @@ public class damage_tracker
     {
         // Arrange
         DamageTracker dt = new DamageTracker();
-        GameObject g1 = new GameObject();
-        dt.AddDamage(g1, 323f, "true");
-        dt.AddDamage(g1, 324f, "magic");
-        dt.AddDamage(g1, 325f, "physical");
+        IUnit unit1 = new MockUnit();
+        dt.AddDamage(unit1, 323f, "true");
+        dt.AddDamage(unit1, 324f, "magic");
+        dt.AddDamage(unit1, 325f, "physical");
 
         // Act
         dt.CheckForReset(500f);
@@ -45,18 +45,22 @@ public class damage_tracker
     {
         // Arrange
         DamageTracker dt = new DamageTracker();
-        GameObject g1 = new GameObject();
-        GameObject g2 = new GameObject();
-        GameObject g3 = new GameObject();
+        IPlayer player1 = new MockPlayer();
+        IPlayer player2 = new MockPlayer();
+        IUnit unit1 = new MockUnit();
+        IUnit unit2 = new MockUnit();
+        IUnit unit3 = new MockUnit();
 
-        dt.AddDamage(g1, 1f, "true");
-        dt.AddDamage(g2, 2f, "magic");
-        dt.AddDamage(g3, 3f, "physical");
+        dt.AddDamage(player2, 3f, "physical");
+        dt.AddDamage(unit1, 1f, "true");
+        dt.AddDamage(unit2, 2f, "magic");
+        dt.AddDamage(unit3, 3f, "physical");
+        dt.AddDamage(player1, 15f, "physical");
 
         // Act
-        List<GameObject> assists = dt.CheckForAssists();
+        List<IPlayer> assists = dt.CheckForAssists(unit3, 10f);
 
         // Assert
-        Assert.AreEqual((g1, g2, g3), (assists[0], assists[1], assists[2]));
+        Assert.AreEqual((player2, player1), (assists[0], assists[1]));
     }
 }

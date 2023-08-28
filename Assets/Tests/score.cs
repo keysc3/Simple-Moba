@@ -87,16 +87,16 @@ public class score
     [Test]
     public void adds_assist_with_takedown_callback_change_gameobject_name(){
         // Arrange
-        Score score = new Score();
-        GameObject tempObject = new GameObject();
-        tempObject.name = "tempObject";
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
+        MockUnit mockUnit = new MockUnit();
+        Score score = new Score(null);
+        mockUnit.SUnit.name = "tempName";
+        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
         
         // Act
-        score.Assist(tempObject);
+        score.Assist(mockUnit);
 
         // Assert
-        Assert.AreEqual("Takedown Callback executed.", tempObject.name);
+        Assert.AreEqual("Takedown Callback executed.", mockUnit.SUnit.name);
     }
 
     /*
@@ -105,18 +105,9 @@ public class score
     [Test]
     public void adds_2_assists_with_takedown_callback(){
         // Arrange
-<<<<<<< HEAD
-        Score score = new Score();
-        GameObject tempObject1 = new GameObject();
-        GameObject tempObject2 = new GameObject();
-        tempObject1.name = "tempObject1";
-        tempObject2.name = "tempObject2";
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
-=======
         MockUnit mockUnit1 = new MockUnit();
         MockUnit mockUnit2 = new MockUnit();
         Score score = new Score(null);
->>>>>>> main
         
         // Act
         score.Assist(mockUnit1);
@@ -167,20 +158,6 @@ public class score
     [Test]
     public void adds_2_creep_kills_with_takedown_callback(){
         // Arrange
-<<<<<<< HEAD
-        Score score = new Score();
-        GameObject tempObject1 = new GameObject();
-        GameObject tempObject2 = new GameObject();
-        tempObject1.name = "tempObject1";
-        tempObject2.name = "tempObject2";
-
-
-        score.takedownCallback += (tempObject) => tempObject.name = "Takedown Callback executed.";
-        
-        // Act
-        score.CreepKill(tempObject1);
-        score.CreepKill(tempObject2);
-=======
         MockUnit mockUnit = new MockUnit();
         Score score = new Score(null);
         mockUnit.SUnit.name = "tempName";
@@ -190,7 +167,6 @@ public class score
         // Act
         score.CreepKill(mockUnit);
         score.CreepKill(mockUnit);
->>>>>>> main
 
         // Assert
         Assert.AreEqual(2, score.CS);
