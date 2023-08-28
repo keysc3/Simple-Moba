@@ -249,11 +249,6 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         Vector3 newPlayerBarPos = newPlayerBarRectTransform.anchoredPosition;
         newPlayerBar.transform.SetParent(transform);
         newPlayerBarRectTransform.anchoredPosition3D = newPlayerBarPos;
-        // Setup Health and mana UI updates.
-        UpdateHealthBarUI updateHealthBarUI = newPlayerBar.transform.Find("PlayerBar/Container/Health").GetComponent<UpdateHealthBarUI>();
-        updateHealthBarUI.player = this;
-        UpdateManaBarUI updateManaBarUI = newPlayerBar.transform.Find("PlayerBar/Container/Mana").GetComponent<UpdateManaBarUI>();
-        updateManaBarUI.player = this;
         return newPlayerBar;
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 */
 public class UpdateManaBarUI : MonoBehaviour
 {
-    public IPlayer player; 
+    private IPlayer player;
     private Slider mana;
     private ChampionStats championStats;
 
@@ -22,6 +22,7 @@ public class UpdateManaBarUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        player = GetComponentInParent<IPlayer>();
         championStats = (ChampionStats) player.unitStats; 
     }
 
