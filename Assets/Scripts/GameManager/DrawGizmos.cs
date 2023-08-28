@@ -16,7 +16,7 @@ public class DrawGizmos : MonoBehaviour
     public DrawMethod drawMethod;
 
     // Called when the script instance is being loaded.
-    void Awake(){
+    private void Awake(){
         instance = this;
     }
 

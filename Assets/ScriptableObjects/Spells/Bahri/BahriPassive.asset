@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BahriPassive
   m_EditorClassIdentifier: 
   <sprite>k__BackingField: {fileID: 21300000, guid: 32f0dd3c71af3d44fae717a62e0b08b6, type: 3}
+  <defaultSpellNum>k__BackingField: Passive
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField: []
   <baseCd>k__BackingField: []

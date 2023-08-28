@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableEffect for intializing a Slow effect.
+* Purpose: ScriptableEffect for initializing a Slow effect.
 *
 * @author: Colin Keys
 */
 [CreateAssetMenu(menuName = "Effects/Slow")]
 public class ScriptableSlow : ScriptableEffect
 {
-    //[field: SerializeField] public float duration { get; private set; }
-    [field: SerializeField] public List<float> slowPercent { get; private set; }
+    [field: SerializeField] public List<float> slowPercent { get; private set; } = new List<float>();
     [field: SerializeField] public bool isChild { get; private set; }
 
     /*
@@ -23,12 +22,4 @@ public class ScriptableSlow : ScriptableEffect
         ccValue = 0;
         return new Slow(this, duration[spellLevel], slowPercent[spellLevel], unitCasted, unitEffected);
     }
-
-    /*
-    *   SetDuration - Sets the slows duration.
-    *   @param duration - float of duration to set slow to.
-    */
-    /*public void SetDuration(float duration){
-        this.duration = duration;
-    }*/
 }

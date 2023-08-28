@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: ScriptableEffect for intializing a Sleep effect.
+* Purpose: ScriptableEffect for initializing a Sleep effect.
 *
 * @author: Colin Keys
 */

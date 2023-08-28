@@ -12,11 +12,9 @@ public class Charm : Effect
 {
     private int spellLevel;
     private Vector3 currentTarget;
-    //private NavMeshAgent effectedNavMeshAgent;
-    private Unit effectedUnit;
-    //private Collider effectedCollider;
-    private PlayerController playerController;
-    private PlayerSpellInput playerSpellInput;
+    private IUnit effectedUnit;
+    private NavMeshAgent effectedNavMeshAgent;
+    public Slow charmSlow { get; private set; }
     
     /*
     *   Charm - Initialize a new charm effect.
@@ -27,37 +25,45 @@ public class Charm : Effect
     */
     public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
         this.spellLevel = spellLevel;
-        effectedUnit = effected.GetComponent<Unit>();
+        effectedUnit = effected.GetComponent<IUnit>();
+        effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
+        if(((ScriptableCharm) effectType).slow != null)
+            charmSlow = (Slow) ((ScriptableCharm) effectType).slow.InitializeEffect(spellLevel, casted, effected);
     }
 
     /*
     *   StartEffect - Start the charm effect.
     */
     public override void StartEffect(){
-        // If the charmed unit ia a champion disable their controls.
-        if(effectedUnit.SUnit is ScriptableChampion){
-            playerController = effected.GetComponent<PlayerController>();
-            playerController.enabled = false;
-            playerSpellInput = effected.GetComponent<PlayerSpellInput>();
-            playerSpellInput.enabled = false;
+        if(effectedUnit != null){
+            // If the charmed unit ia a champion disable their controls.
+            if(effectedUnit is IPlayer){
+                effected.GetComponent<PlayerControllerBehaviour>().enabled = false;
+                effected.GetComponent<SpellInputBehaviour>().enabled = false;
+            }
+            // Reset the units current path.
+            if(effectedNavMeshAgent != null)
+                effectedNavMeshAgent.ResetPath();
+            if(charmSlow != null)
+                effectedUnit.statusEffects.AddEffect(charmSlow);
         }
-        // Reset the units current path.
-        effectedUnit.navMeshAgent.ResetPath();
-        effectedUnit.statusEffects.AddEffect(((ScriptableCharm) effectType).slow
-        .InitializeEffect(spellLevel, casted, effected));
     }
 
     /*
     *   EndEffect - End the charm effect.
     */
     public override void EndEffect(){
-        // Reset the path and speed from the charm effect.
-        effectedUnit.navMeshAgent.ResetPath();
-        
-        // Give controls back if charmed is active GameObject.
-        if(effectedUnit.SUnit is ScriptableChampion && ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == effected){
-            playerController.enabled = true;
-            playerSpellInput.enabled = true;
+        if(effectedUnit != null){
+            if(effectedUnit is IPlayer){
+                // Give controls back if charmed is active GameObject.
+                if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == effectedUnit){
+                    effected.GetComponent<PlayerControllerBehaviour>().enabled = true;
+                    effected.GetComponent<SpellInputBehaviour>().enabled = true;
+                }
+            }
+            // Reset the path and speed from the charm effect.
+            if(effectedNavMeshAgent != null)
+                effectedNavMeshAgent.ResetPath();
         }
     }
 
@@ -65,11 +71,11 @@ public class Charm : Effect
     *   EffectTick - Tick for the charms effect.
     */
     public override void EffectTick(){
-        effectedUnit.navMeshAgent.destination = casted.transform.position;
+        effectedNavMeshAgent.destination = casted.transform.position;
         Vector3 nextTarget;
         // If a path is set.
-        if(effectedUnit.navMeshAgent.hasPath){
-            nextTarget = effectedUnit.navMeshAgent.steeringTarget;
+        if(effectedNavMeshAgent.hasPath){
+            nextTarget = effectedNavMeshAgent.steeringTarget;
             // If a new target location exists set the target and look at the target location.
             if(currentTarget != nextTarget){
                 nextTarget.y = effectedUnit.myCollider.bounds.center.y;

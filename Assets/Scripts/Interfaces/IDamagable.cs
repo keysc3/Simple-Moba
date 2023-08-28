@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-* Purpose: Interface for a damagable GameObject.
+* Purpose: Implements an interface for a damageable object.
 *
 * @author: Colin Keys
 */
-public interface IDamagable
+public interface IDamageable
 {
-    
-    void TakeDamage(float incomingDamage, string damageType, GameObject from, bool isDot);
+    void TakeDamage(float incomingDamage, string damageType, IUnit damager, bool isDot);
 }

@@ -22,4 +22,4 @@ MonoBehaviour:
   <ccValue>k__BackingField: 1
   <isBuff>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 21300000, guid: b47ab3f27b63d6f44b5818e3c6155395, type: 3}
-  <slow>k__BackingField: {fileID: 11400000, guid: be3fdf73c49242e46aeaa70a0e7b6fe0, type: 2}
+  slow: {fileID: 11400000, guid: be3fdf73c49242e46aeaa70a0e7b6fe0, type: 2}

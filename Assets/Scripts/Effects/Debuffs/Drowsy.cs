@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 /*
 * Purpose: Implements a drowsy effect where the target isw slowed then put to sleep after a duration.
@@ -11,8 +10,10 @@ using UnityEngine.AI;
 public class Drowsy : Effect
 {
     private int spellLevel;
-    private Unit effectedUnit;
+    private IUnit effectedUnit;
     private float reducedAmount;
+    public Slow drowsySlow { get; private set; }
+    public Sleep drowsySleep { get; private set; }
 
     /*
     *   Drowsy - Initialize a new drowsy effect.
@@ -23,23 +24,30 @@ public class Drowsy : Effect
     */
     public Drowsy(ScriptableDrowsy drowsyEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(drowsyEffect, duration, unitCasted, unitEffected){
         this.spellLevel = spellLevel;
-        effectedUnit = effected.GetComponent<Unit>();
+        effectedUnit = effected.GetComponent<IUnit>();
+        if(((ScriptableDrowsy) effectType).slow != null)
+            drowsySlow = (Slow) ((ScriptableDrowsy) effectType).slow.InitializeEffect(spellLevel, casted, effected);
+        if(((ScriptableDrowsy) effectType).sleep != null)
+            drowsySleep = (Sleep) ((ScriptableDrowsy) effectType).sleep.InitializeEffect(spellLevel, casted, effected);
     }
 
     /*
     *   StartEffect - Start the drowsy effect.
     */
     public override void StartEffect(){
-        effectedUnit.statusEffects.AddEffect(((ScriptableDrowsy) effectType).slow
-        .InitializeEffect(spellLevel, casted, effected));
+        if(effectedUnit != null){
+            if(drowsySlow != null)
+                effectedUnit.statusEffects.AddEffect(drowsySlow);
+        }
     }
 
     /*
     *   EndEffect - End the drowsy effect.
     */
     public override void EndEffect(){
-        // Initialize new sleep effect.
-        effectedUnit.statusEffects.AddEffect(((ScriptableDrowsy) effectType).sleep
-        .InitializeEffect(spellLevel, casted, effected));
+        if(effectedUnit != null){
+            if(drowsySleep != null)
+                effectedUnit.statusEffects.AddEffect(drowsySleep);
+        }
     }
 }
