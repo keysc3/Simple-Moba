@@ -74,8 +74,10 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
                 RaycastHit[] hits = GetRaycastHits(ray);
                 // If any hits get first hit.
                 if(hits.Length > 0){
-                    RaycastHit firstHit = GetFirstHit(hits, ray.origin);
-                    playerController.RightClick(firstHit.transform.GetComponent<IUnit>(), firstHit.point);
+                    if(!(hits.Length == 1 && hits[0].collider.gameObject == gameObject)){
+                        RaycastHit firstHit = GetFirstHit(hits);
+                        playerController.RightClick(firstHit.transform.GetComponent<IUnit>(), firstHit.point);
+                    }
                 }
             }
             if(Input.GetKeyDown(KeyCode.S))
@@ -88,22 +90,17 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     }
 
     /*
-    *   GetFirstHit - Return the first hit ray from a list of RaycastHits and a rays origin.
+    *   GetFirstHit - Return the first hit ray from a list of RaycastHits.
     *   @param hits - List of RayCastHits to iterate over.
-    *   @param rayOrigin - Vector3 of the rays origin position.
     *   @return RaycastHit - First ray hit.
     */
-    private RaycastHit GetFirstHit(RaycastHit[] hits, Vector3 rayOrigin){
+    private RaycastHit GetFirstHit(RaycastHit[] hits){
         RaycastHit firstHit = hits[0];
-        float closestDistance = (hits[0].transform.position - rayOrigin).magnitude;
-
         for(int i = 1; i < hits.Length; i++){
             RaycastHit hit = hits[i];
             if(hit.collider.gameObject != gameObject){
-                float mag = (hit.transform.position - rayOrigin).magnitude;
-                if(mag < closestDistance){
+                if(hit.distance < firstHit.distance){
                     firstHit = hit;
-                    closestDistance = mag;
                 }
             }
         }
