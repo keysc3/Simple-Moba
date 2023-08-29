@@ -20,22 +20,16 @@ public class PlayerController
     /*
     *   RightClick - Moves the player to the click position if no enemy is targeted, otherwise sets the target.
     */
-    public void RightClick(){
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-        if(Physics.Raycast(ray, out hitInfo)){
-            IUnit hitUnit = hitInfo.transform.GetComponent<IUnit>();
-            if(hitUnit != null){
-                // If the player clicked an enemy set the target, otherwise set the destination.
-                if(hitUnit.GameObject.tag == "Enemy" && hitUnit != player && !hitUnit.IsDead){
-                    playerMover.TargetedEnemy = hitUnit;
-                }
-            }
-            else{
-                playerMover.TargetedEnemy = null;
-                playerMover.Destination = hitInfo.point;
+    public void RightClick(IUnit hitUnit, Vector3 hitVec){
+        if(hitUnit != null){
+            // If the player clicked an enemy set the target, otherwise set the destination.
+            if(hitUnit.GameObject.tag == "Enemy" && !hitUnit.IsDead){
+                playerMover.TargetedEnemy = hitUnit;
+                return;
             }
         }
+        playerMover.TargetedEnemy = null;
+        playerMover.Destination = hitVec;
     }
 
     /*

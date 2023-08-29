@@ -44,7 +44,6 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         }
     }
 
-    private Camera mainCamera;
     private PlayerController playerController;
     private NavMeshAgent navMeshAgent;
     private PlayerSpells playerSpells;
@@ -56,7 +55,6 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         playerSpells = GetComponent<PlayerSpells>();
         playerController = new PlayerController(this, GetComponent<IPlayer>());
         navMeshAgent = GetComponent<NavMeshAgent>();
-        mainCamera = Camera.main;
     }
 
     // Start is called before the first frame update.
@@ -71,7 +69,14 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         if(navMeshAgent.enabled){
             // Set the players destination.
             if(Input.GetMouseButtonDown(1)){
-                playerController.RightClick();
+                // Ray cast from mouse position.
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit[] hits = GetRaycastHits(ray);
+                // If any hits get first hit.
+                if(hits.Length > 0){
+                    RaycastHit firstHit = GetFirstHit(hits, ray.origin);
+                    playerController.RightClick(firstHit.transform.GetComponent<IUnit>(), firstHit.point);
+                }
             }
             if(Input.GetKeyDown(KeyCode.S))
                 playerController.StopPlayer();
@@ -80,5 +85,37 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         playerController.PlayerLookDirection();
         // Move player towards target.
         playerController.MovePlayerToEnemy();
+    }
+
+    /*
+    *   GetFirstHit - Return the first hit ray from a list of RaycastHits and a rays origin.
+    *   @param hits - List of RayCastHits to iterate over.
+    *   @param rayOrigin - Vector3 of the rays origin position.
+    *   @return RaycastHit - First ray hit.
+    */
+    private RaycastHit GetFirstHit(RaycastHit[] hits, Vector3 rayOrigin){
+        RaycastHit firstHit = hits[0];
+        float closestDistance = (hits[0].transform.position - rayOrigin).magnitude;
+
+        for(int i = 1; i < hits.Length; i++){
+            RaycastHit hit = hits[i];
+            if(hit.collider.gameObject != gameObject){
+                float mag = (hit.transform.position - rayOrigin).magnitude;
+                if(mag < closestDistance){
+                    firstHit = hit;
+                    closestDistance = mag;
+                }
+            }
+        }
+        return firstHit;
+    }
+
+    /*
+    *   GetRayCastHits - Returns a list of RaycastHits from a ray from the camera to the player plus 50f.
+    *   @param ray - Ray to cast with.
+    *   @return RaycastHit[] - List of of RaycastHits from the Raycast.
+    */
+    private RaycastHit[] GetRaycastHits(Ray ray){
+        return Physics.RaycastAll(ray, (Camera.main.transform.position - transform.position).magnitude + 50f);
     }
 }
