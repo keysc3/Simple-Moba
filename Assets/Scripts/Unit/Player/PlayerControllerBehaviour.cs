@@ -28,13 +28,21 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     }
     public Vector3 NextDestination { 
         get {
-            if(navMeshAgent.hasPath)
+            if(IsMoving)
                 return navMeshAgent.steeringTarget;
             else
                 return transform.position;
         }
     }
-    public bool IsMoving { get => navMeshAgent.isStopped; }
+    public bool IsMoving { 
+        get {
+            if(navMeshAgent.enabled){
+                if(navMeshAgent.hasPath && !navMeshAgent.isStopped)
+                    return true;
+            }
+            return false;
+        }
+    }
 
     private Camera mainCamera;
     private PlayerController playerController;
@@ -60,7 +68,6 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     // Update is called once per frame.
     private void Update()
     {
-        Debug.Log(navMeshAgent.hasPath);
         if(navMeshAgent.enabled){
             // Set the players destination.
             if(Input.GetMouseButtonDown(1)){
