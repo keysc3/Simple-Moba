@@ -19,4 +19,6 @@ public class MockPlayer : IPlayer
     public Vector3 MouseOnCast { get; set; }
     public bool IsCasting { get; set; }
     public ISpell CurrentCastedSpell { get; set; }
+    public GameObject GameObject { get; set; } = new GameObject();
+    public Vector3 Position { get; set; }
 }
