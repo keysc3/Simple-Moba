@@ -100,8 +100,8 @@ public class unit_stats
         
         List<float> slowValues  = new List<float>(){0.1f, 0.15f, 0.2f, 0.25f, 0.3f};
         List<float> durationValues = new List<float>(){1f, 2f, 3f, 4f, 5f};
-        GameObject g1 = new GameObject();
-        GameObject g2 = new GameObject();
+        MockUnit m1 = new MockUnit();
+        MockUnit m2 = new MockUnit();
         StatusEffects se = new StatusEffects(null);
         List<Effect> myEffects  = new List<Effect>();
 
@@ -110,7 +110,7 @@ public class unit_stats
             slow.name = "Slow" + i;
             slow.duration.AddRange(durationValues);
             slow.slowPercent.AddRange(slowValues);
-            myEffects.Add((Slow) slow.InitializeEffect((i+2)%slowValues.Count, g1, g2));
+            myEffects.Add((Slow) slow.InitializeEffect((i+2)%slowValues.Count, m1, m2));
         }
 
         for(int i = 0; i < 3; i ++){
@@ -140,8 +140,8 @@ public class unit_stats
     *   @return SpeedBonus - New SpeeBonus.
     */
     public SpeedBonus CreateSpeedBonusEffect(string speedBonusName, int index, bool isAdditive, bool isStackable){
-        GameObject g1 = new GameObject();
-        GameObject g2 = new GameObject();
+        MockUnit m1 = new MockUnit();
+        MockUnit m2 = new MockUnit();
         List<float> sbValues  = new List<float>(){0.1f, 0.15f, 0.2f, 0.25f, 0.3f};
         List<float> durationValues = new List<float>(){1f, 2f, 3f, 4f, 5f};
         ScriptableSpeedBonus sb = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
@@ -150,6 +150,6 @@ public class unit_stats
         sb.isAdditive = isAdditive;
         sb.duration.AddRange(durationValues);
         sb.bonusPercent.AddRange(sbValues);
-        return (SpeedBonus) sb.InitializeEffect(index, g1, g2);
+        return (SpeedBonus) sb.InitializeEffect(index, m1, m2);
     } 
 }
