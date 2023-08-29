@@ -17,4 +17,6 @@ public class MockUnit : IUnit
     public Collider myCollider { get; set; }
     public bool IsDead { get; }
     public BonusDamage bonusDamage { get; set; }
+    public GameObject GameObject { get; set; } = new GameObject();
+    public Vector3 Position { get; set; }
 }

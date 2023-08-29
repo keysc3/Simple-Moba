@@ -10,29 +10,27 @@ using UnityEngine.AI;
 */
 public class Sleep : Effect
 {
-    private IUnit effectedUnit;
     private NavMeshAgent effectedNavMeshAgent;
 
     /*
     *   Sleep - Initialize a new sleep effect.
     *   @param sleepEffect - ScriptableSleep of the sleep effect to apply.
     *   @param duration - float of the duration for the sleep to last.
-    *   @param unitCasted - GameObject of the unit that casted the sleep.
-    *   @param unitEffected - GameObject of the unit that the sleeep is affecting.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
-    public Sleep(ScriptableSleep sleepEffect, float duration, GameObject unitCasted, GameObject unitEffected) : base(sleepEffect, duration, unitCasted, unitEffected){
-        effectedUnit = effected.GetComponent<IUnit>();
-        effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
+    public Sleep(ScriptableSleep sleepEffect, float duration, IUnit casted, IUnit effected) : base(sleepEffect, duration, casted, effected){
+        effectedNavMeshAgent = effected.GameObject.GetComponent<NavMeshAgent>();
     }
 
     /*
     *   StartEffect - Start the sleep effect.
     */
     public override void StartEffect(){
-        if(effectedUnit != null){
-            if(effectedUnit is IPlayer){
-                effected.GetComponent<PlayerControllerBehaviour>().enabled = false;
-                effected.GetComponent<SpellInputBehaviour>().enabled = false;
+        if(effected != null){
+            if(effected is IPlayer){
+                effected.GameObject.GetComponent<PlayerControllerBehaviour>().enabled = false;
+                effected.GameObject.GetComponent<SpellInputBehaviour>().enabled = false;
             }
             // Add bonus effect method to a take damage delegate?
             // Reset the units current path.
@@ -45,12 +43,12 @@ public class Sleep : Effect
     *   EndEffect - End the sleep effect.
     */
     public override void EndEffect(){
-        if(effectedUnit != null){
-            if(effectedUnit is IPlayer){
+        if(effected != null){
+            if(effected is IPlayer){
                 // Give controls back if slept is active GameObject.
-                if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == effectedUnit){
-                    effected.GetComponent<PlayerControllerBehaviour>().enabled = true;
-                    effected.GetComponent<SpellInputBehaviour>().enabled = true;
+                if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == effected){
+                    effected.GameObject.GetComponent<PlayerControllerBehaviour>().enabled = true;
+                    effected.GameObject.GetComponent<SpellInputBehaviour>().enabled = true;
                 }
             }
             if(effectedNavMeshAgent != null)

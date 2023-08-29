@@ -69,7 +69,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
         Vector3 drawPosition = transform.position;
-        drawPosition.y -= (player.myCollider.bounds.size.y/2) + 0.01f;
+        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
         Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.maxMagnitude, 1f);
     }
 
@@ -117,7 +117,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
     */
     private IEnumerator Spell_4_Start(){
-        spell4Effect = (PersonalSpell) spellData.spell4.InitializeEffect(SpellLevel, gameObject, gameObject);
+        spell4Effect = (PersonalSpell) spellData.spell4.InitializeEffect(SpellLevel, player, player);
         player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = spellData.duration;

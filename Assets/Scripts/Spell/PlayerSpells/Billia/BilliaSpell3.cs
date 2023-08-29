@@ -193,7 +193,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             float magicDamage = championStats.magicDamage.GetValue();
-            unit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(SpellLevel, gameObject, (unit as MonoBehaviour).gameObject));
+            unit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(SpellLevel, player, unit));
             ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);   
         }
     }

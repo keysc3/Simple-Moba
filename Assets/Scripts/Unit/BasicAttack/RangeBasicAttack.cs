@@ -13,9 +13,9 @@ public class RangeBasicAttack : BasicAttackBehaviour
 
     /*
     *   Attack - Range basic attack method.
-    *   @param target - GameObject of the target to attack.
+    *   @param target - IUnit of the target to attack.
     */
-    public override void Attack(GameObject target){
+    public override void Attack(IUnit target){
         if(attackProjectile != null)
             StartCoroutine(AttackProjectile(target));
     }
@@ -24,15 +24,15 @@ public class RangeBasicAttack : BasicAttackBehaviour
     *   AttackProjectile - Animates the basic attack GameObject towards its target.
     *   @param target - GameObject of the target to attack.
     */
-    private IEnumerator AttackProjectile(GameObject target){
+    private IEnumerator AttackProjectile(IUnit target){
         // Create attack GameObject and set necessary variables.
         GameObject projectile = (GameObject) Instantiate(attackProjectile, transform.position, Quaternion.identity);
         BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
         basicAttackTrigger.Target = target;
         basicAttackTrigger.basicAttackController = basicAttackController;
         // While the attack still exists animate it.
-        while(projectile){
-            projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.transform.position, AttackProjectileSpeed * Time.deltaTime);
+        while(projectile && !target.IsDead){
+            projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, target.Position, AttackProjectileSpeed * Time.deltaTime);
             yield return null;
         }
     }

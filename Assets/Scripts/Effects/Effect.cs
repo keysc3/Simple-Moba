@@ -11,8 +11,8 @@ public class Effect
 {
     public bool isFinished { get; private set; }
     public ScriptableEffect effectType { get; }
-    public GameObject casted { get; private set; } 
-    public GameObject effected { get; }
+    public IUnit casted { get; private set; } 
+    public IUnit effected { get; }
     public float effectTimer { get; private set; } = 0f;
     protected float effectDuration;
     public float EffectDuration { 
@@ -31,7 +31,8 @@ public class Effect
                 if(value == false)
                     EndEffect();
                 else
-                    StartEffect();
+                    if(effected.statusEffects != null)
+                        StartEffect();
             }
         }
     }
@@ -40,12 +41,12 @@ public class Effect
     *   Effect - Initialize a new Effect object.
     *   @param effect - ScriptableObject of the effect to initialize.
     *   @param duration - float of the duration for the effect to last.
-    *   @param unitCasted - GameObject of the unit that caused the effect.
-    *   @param unitEffected - GameObject of the unit that is being affected by the effect.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
-    public Effect(ScriptableEffect effect, float duration, GameObject unitCasted, GameObject unitEffected){
-        casted =  unitCasted;
-        effected = unitEffected;
+    public Effect(ScriptableEffect effect, float duration, IUnit casted, IUnit effected){
+        this.casted =  casted;
+        this.effected = effected;
         EffectDuration = duration;
         isFinished = false;
         effectType = effect;
@@ -87,9 +88,9 @@ public class Effect
 
     /*
     *   OverrideEffect - Resets the effects timer to 0 and sets the new source.
-    *   @param source - GameObject of the caster.
+    *   @param source - IUnit of the caster.
     */
-    public virtual void OverrideEffect(GameObject source){
+    public virtual void OverrideEffect(IUnit source){
         effectTimer = 0f;
         isFinished = false;
         casted = source;

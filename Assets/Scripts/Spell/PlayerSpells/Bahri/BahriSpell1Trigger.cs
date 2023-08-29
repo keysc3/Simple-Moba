@@ -18,16 +18,15 @@ public class BahriSpell1Trigger : MonoBehaviour
     // Start is called before the first frame update.
     private void Start(){
         orbCollider = GetComponent<SphereCollider>();
+        bahriBounds = unit.GameObject.GetComponent<Collider>().bounds;
     }
 
     // Update is called once per frame
     private void Update()
     {
         // Get Bahri's bounds for when they die.
-        if(!unit.IsDead)
-            bahriBounds = unit.myCollider.bounds;
+        if(unit.IsDead){
         // If bahri is dead destroy the orb when it has returned to Bahri.
-        else{
             if(bahriSpell1.returning){
                 if(bahriBounds.Contains(orbCollider.bounds.min) && bahriBounds.Contains(orbCollider.bounds.max)){
                     Destroy(gameObject);

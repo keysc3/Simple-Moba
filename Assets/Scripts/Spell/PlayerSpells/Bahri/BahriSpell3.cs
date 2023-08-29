@@ -88,7 +88,7 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
         if(unit is IDamageable){
             float magicDamage = championStats.magicDamage.GetValue();
             // Add the charm effect to the hit GameObject.
-            unit.statusEffects.AddEffect(spellData.charmEffect.InitializeEffect(SpellLevel, gameObject, (unit as MonoBehaviour).gameObject));
+            unit.statusEffects.AddEffect(spellData.charmEffect.InitializeEffect(SpellLevel, player, unit));
             ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
         }
     }

@@ -10,23 +10,13 @@ using UnityEngine;
 public class BasicAttackTrigger : MonoBehaviour
 {
     public BasicAttackController basicAttackController;
-    private GameObject target = null;
-    public GameObject Target {
-        get => target;
-        set {
-            if((value.GetComponent<IUnit>() as IUnit) != null){
-                target = value;
-                targetUnit = value.GetComponent<IUnit>();
-            }
-        }
-    }
-    private IUnit targetUnit;
+    public IUnit Target { get; set; }
 
     // Update is called once per frame
     private void Update()
     {
         // Destroy the attack object if the target dies or is destroyed.
-        if(targetUnit == null || targetUnit.IsDead){
+        if(Target.IsDead){
             Destroy(gameObject);
         }
     }
@@ -34,8 +24,8 @@ public class BasicAttackTrigger : MonoBehaviour
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
         // If the attack has hit its target call the attack function.
-        if(other.gameObject == target){
-            basicAttackController.AttackHit(other.gameObject);
+        if(other.gameObject == Target.GameObject){
+            basicAttackController.AttackHit(other.GetComponent<IUnit>());
             Destroy(gameObject);
         }
     }

@@ -9,14 +9,9 @@ using UnityEngine;
 */
 public interface IPlayerMover
 {
-    GameObject TargetedEnemy { get; set; }
-    //private float attackTime;
-    //private Camera mainCamera;
-    //private RaycastHit hitInfo;
+    IUnit TargetedEnemy { get; set; }
     Vector3 Destination { get; set; }
+    Vector3 NextDestination { get; }
     Vector3 CurrentTarget { get; set; }
-    Vector3 Position { get; set; }
-    float Range { get; }
-    //Player player;
-    //private ChampionStats championStats;
+
 }

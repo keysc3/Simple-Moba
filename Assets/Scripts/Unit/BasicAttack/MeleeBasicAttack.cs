@@ -11,9 +11,9 @@ public class MeleeBasicAttack : BasicAttackBehaviour
 {
     /*
     *   Attack - Melee basic attack method.
-    *   @param target - GameObject of the target to attack.
+    *   @param target - IUnit of the target to attack.
     */
-    public override void Attack(GameObject target){
+    public override void Attack(IUnit target){
         basicAttackController.AttackHit(target);
     }
 }
