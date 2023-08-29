@@ -45,9 +45,9 @@ public class PlayerController
     }
 
     /*
-    *   MovePlayerToEnemy - Moves the player into range of their targeted enemy whenever they have one.
+    *   SetPlayerDestinationUsingTarget - Sets the player interfaces destination if a target exists.
     */
-    public void MovePlayerToEnemy(){
+    public void SetPlayerDestinationUsingTarget(){
         if(playerMover.TargetedEnemy != null && !player.IsCasting){
             if(!playerMover.TargetedEnemy.IsDead){
                 // Get the targets distance from the player.

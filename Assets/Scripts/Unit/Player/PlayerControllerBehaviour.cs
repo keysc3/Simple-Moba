@@ -85,8 +85,8 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         }
         // Point players forward at the direction they are cast or moving.
         playerController.PlayerLookDirection();
-        // Move player towards target.
-        playerController.MovePlayerToEnemy();
+        // Set target destination.
+        playerController.SetPlayerDestinationUsingTarget();
     }
 
     /*

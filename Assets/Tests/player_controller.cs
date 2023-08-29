@@ -170,7 +170,7 @@ public class player_controller
         playerMover.Destination = new Vector3(10f, 9f, 8f);
 
         // Act
-        pc.MovePlayerToEnemy();
+        pc.SetPlayerDestinationUsingTarget();
 
         // Assert
         Assert.AreEqual(new Vector3(10f, 9f, 8f), playerMover.Destination);
@@ -189,7 +189,7 @@ public class player_controller
         playerMover.Destination = new Vector3(10f, 9f, 8f);
 
         // Act
-        pc.MovePlayerToEnemy();
+        pc.SetPlayerDestinationUsingTarget();
 
         // Assert
         Assert.AreEqual(new Vector3(10f, 9f, 8f), playerMover.Destination);
@@ -209,7 +209,7 @@ public class player_controller
         playerMover.Destination = new Vector3(10f, 9f, 8f);
 
         // Act
-        pc.MovePlayerToEnemy();
+        pc.SetPlayerDestinationUsingTarget();
 
         // Assert
         Assert.AreEqual(new Vector3(20f, 15f, 10f), playerMover.Destination);
@@ -231,7 +231,7 @@ public class player_controller
         playerMover.Destination = new Vector3(10f, 9f, 8f);
 
         // Act
-        pc.MovePlayerToEnemy();
+        pc.SetPlayerDestinationUsingTarget();
 
         // Assert
         Assert.AreEqual(new Vector3(10f, 5f, 2f), playerMover.Destination);
@@ -253,7 +253,7 @@ public class player_controller
         playerMover.Destination = new Vector3(10f, 9f, 8f);
 
         // Act
-        pc.MovePlayerToEnemy();
+        pc.SetPlayerDestinationUsingTarget();
 
         // Assert
         Assert.AreEqual(new Vector3(4f, 8f, 3f), playerMover.Destination);
@@ -275,7 +275,7 @@ public class player_controller
         playerMover.Destination = new Vector3(10f, 9f, 8f);
 
         // Act
-        pc.MovePlayerToEnemy();
+        pc.SetPlayerDestinationUsingTarget();
 
         // Assert
         Assert.AreEqual(new Vector3(14f, 2f, 6f), playerMover.Destination);
