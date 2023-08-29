@@ -53,9 +53,9 @@ public class StatusEffectUI : MonoBehaviour
         }
         // Start effect timer animation coroutine.
         if(effect.effectType.isStackable)
-            StartCoroutine(AnimateStackableStatusEffect());
+            (player as MonoBehaviour).StartCoroutine(AnimateStackableStatusEffect());
         else
-            StartCoroutine(AnimateStatusEffect());
+            (player as MonoBehaviour).StartCoroutine(AnimateStatusEffect());
     }
 
     /*

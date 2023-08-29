@@ -13,5 +13,6 @@ public interface IPlayerMover
     Vector3 Destination { get; set; }
     Vector3 NextDestination { get; }
     Vector3 CurrentTarget { get; set; }
+    bool IsMoving { get; }
 
 }

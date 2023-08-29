@@ -34,6 +34,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
                 return transform.position;
         }
     }
+    public bool IsMoving { get => navMeshAgent.isStopped; }
 
     private Camera mainCamera;
     private PlayerController playerController;
@@ -59,21 +60,14 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     // Update is called once per frame.
     private void Update()
     {
+        Debug.Log(navMeshAgent.hasPath);
         if(navMeshAgent.enabled){
             // Set the players destination.
             if(Input.GetMouseButtonDown(1)){
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hitInfo;
-                if(Physics.Raycast(ray, out hitInfo)){
-                    playerController.RightClick(hitInfo.transform.GetComponent<IUnit>(), hitInfo.point);
-                }
+                playerController.RightClick();
             }
-
-            // Stop player if they are at their destination or stop input received. 
-            if(navMeshAgent.hasPath){
-                if(Input.GetKeyDown(KeyCode.S))
-                    playerController.StopPlayer();
-            }
+            if(Input.GetKeyDown(KeyCode.S))
+                playerController.StopPlayer();
         }
         // Point players forward at the direction they are cast or moving.
         playerController.PlayerLookDirection();

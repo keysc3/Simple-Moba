@@ -55,7 +55,7 @@ public class BasicAttackController
         float windUpTime = (1.0f/basicAttack.AttackSpeed) * basicAttack.AutoWindUp;
         Debug.Log("Wind up time: " + windUpTime);
         while(basicAttack.WindingUp && timer <= windUpTime ){
-            if(playerMover.TargetedEnemy.IsDead || playerMover.TargetedEnemy == null || player.IsCasting){
+            if(playerMover.TargetedEnemy.IsDead || playerMover.TargetedEnemy == null || player.IsCasting || playerMover.IsMoving){
                 basicAttack.WindingUp = false;
                 yield break;
             }
