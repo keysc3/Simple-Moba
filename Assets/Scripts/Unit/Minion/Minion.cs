@@ -26,6 +26,8 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
     public Collider myCollider { get;set; }
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
+    public GameObject GameObject { get => gameObject; }
+    public Vector3 Position { get => transform.position; set => transform.position = value; }
 
     //[SerializeField] private GameObject statusEffectPrefab;
     private NavMeshAgent navMeshAgent;
@@ -48,6 +50,8 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
     {
         damageTracker.CheckForReset(Time.time);
         statusEffects.UpdateEffects(Time.deltaTime);
+        if(Input.GetKeyDown(KeyCode.P))
+            Death();
     }
 
     // Called after all Update functions have been called.
@@ -68,14 +72,18 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
         //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
         // If dead then award a creep kill and start the death method.
         if(unitStats.CurrentHealth <= 0f){
-            isDead = true;
             if(damager is IPlayer)
                 ((IPlayer) damager).score.CreepKill(this);
-            Destroy(gameObject);
+            Death();
         }
         // Apply any damage that procs after recieving damage.
         else{
             bonusDamage?.Invoke(this, isDot);
         }
+    }
+
+    public void Death(){
+       isDead = true;
+       Destroy(gameObject);
     }
 }
