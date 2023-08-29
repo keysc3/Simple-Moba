@@ -11,9 +11,9 @@ public class player_controller
     [Test]
     public void set_target_enemy_and_destination_from_valid_right_click_with_no_unit(){
         // Arrange
-        MockPlayerMover pm = new MockPlayerMover();
+        MockPlayerMover playerMover = new MockPlayerMover();
         MockPlayer player = new MockPlayer();
-        PlayerController pc = new PlayerController(pm, player);
+        PlayerController pc = new PlayerController(playerMover, player);
 
         Vector3 targetVec = new Vector3(-12f, 96f, 93f);
 
@@ -21,15 +21,15 @@ public class player_controller
         pc.RightClick(null, targetVec);
 
         // Assert
-        Assert.AreEqual((nullUnit, new Vector3(-12f, 96f, 93f)), (pm.TargetedEnemy, pm.Destination));
+        Assert.AreEqual((nullUnit, new Vector3(-12f, 96f, 93f)), (playerMover.TargetedEnemy, playerMover.Destination));
     }
 
     [Test]
     public void set_target_enemy_from_valid_right_click_on_enemy_unit(){
         // Arrange
-        MockPlayerMover pm = new MockPlayerMover();
+        MockPlayerMover playerMover = new MockPlayerMover();
         MockPlayer player = new MockPlayer();
-        PlayerController pc = new PlayerController(pm, player);
+        PlayerController pc = new PlayerController(playerMover, player);
 
         MockUnit target = new MockUnit();
         target.GameObject.tag = "Enemy";
@@ -39,15 +39,15 @@ public class player_controller
         pc.RightClick(target, targetVec);
 
         // Assert
-        Assert.AreEqual(target, pm.TargetedEnemy);
+        Assert.AreEqual(target, playerMover.TargetedEnemy);
     }
 
     [Test]
     public void set_target_enemy_and_destination_from_right_click_on_non_enemy_unit(){
         // Arrange
-        MockPlayerMover pm = new MockPlayerMover();
+        MockPlayerMover playerMover = new MockPlayerMover();
         MockPlayer player = new MockPlayer();
-        PlayerController pc = new PlayerController(pm, player);
+        PlayerController pc = new PlayerController(playerMover, player);
 
         MockUnit target = new MockUnit();
 
@@ -57,15 +57,15 @@ public class player_controller
         pc.RightClick(target, targetVec);
 
         // Assert
-        Assert.AreEqual((nullUnit, new Vector3(10f, 3f, 5f)), (pm.TargetedEnemy, pm.Destination));
+        Assert.AreEqual((nullUnit, new Vector3(10f, 3f, 5f)), (playerMover.TargetedEnemy, playerMover.Destination));
     }
     
     [Test]
     public void set_target_and_destination_from_right_click_on_dead_enemy_unit(){
         // Arrange
-        MockPlayerMover pm = new MockPlayerMover();
+        MockPlayerMover playerMover = new MockPlayerMover();
         MockPlayer player = new MockPlayer();
-        PlayerController pc = new PlayerController(pm, player);
+        PlayerController pc = new PlayerController(playerMover, player);
 
         MockUnit target = new MockUnit();
         target.GameObject.tag = "Enemy";
@@ -76,22 +76,87 @@ public class player_controller
         pc.RightClick(target, targetVec);
 
         // Assert
-        Assert.AreEqual((nullUnit, new Vector3(76f, 67f, 767f)), (pm.TargetedEnemy, pm.Destination));
+        Assert.AreEqual((nullUnit, new Vector3(76f, 67f, 767f)), (playerMover.TargetedEnemy, playerMover.Destination));
     }
 
-    /*[Test]
-    public void valid_right_click_on_a_unit()
-    {
-        MockPlayerMover pm = new MockPlayerMover();
-        PlayerController pc = new PlayerController(pm);
-        GameObject g1 = new GameObject();
-        g1.tag = "Enemy";
-        g1.AddComponent<CapsuleCollider>();
-        Vector3 targ = new Vector3(10f, 3f, 5f);
+    [Test]
+    public void set_player_look_direction_to_mouse_on_cast(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockSpell spell = new MockSpell();
 
-        pc.RightClick(g1.GetComponent<Collider>(), targ);
+        spell.CanMove = false;
+        player.MouseOnCast = new Vector3(1f, 2f, 3f);
+        player.IsCasting = true;
+        player.CurrentCastedSpell = spell;
 
-        Assert.AreEqual(g1, pm.TargetedEnemy);
-        // Use the Assert class to test conditions
-    }*/
+        // Act
+        pc.PlayerLookDirection();
+
+        // Assert
+        Assert.AreEqual(new Vector3(1f, 2f, 3f), playerMover.CurrentTarget);
+    }
+
+    [Test]
+    public void set_player_look_direction_to_next_destination_from_is_casting_false(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockSpell spell = new MockSpell();
+
+        playerMover.NextDestination = new Vector3(3f, 2f, 1f);
+        spell.CanMove = false;
+        player.MouseOnCast = new Vector3(1f, 2f, 3f);
+        player.IsCasting = false;
+        player.CurrentCastedSpell = spell;
+
+        // Act
+        pc.PlayerLookDirection();
+
+        // Assert
+        Assert.AreEqual(new Vector3(3f, 2f, 1f), playerMover.CurrentTarget);
+    }
+
+    [Test]
+    public void set_player_look_direction_to_next_destination_from_current_spell_null(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+
+        playerMover.NextDestination = new Vector3(3f, 2f, 1f);
+        player.MouseOnCast = new Vector3(1f, 2f, 3f);
+        player.IsCasting = true;
+        player.CurrentCastedSpell = null;
+
+        // Act
+        pc.PlayerLookDirection();
+
+        // Assert
+        Assert.AreEqual(new Vector3(3f, 2f, 1f), playerMover.CurrentTarget);
+    }
+
+    [Test]
+    public void set_player_look_direction_to_next_destination_from_current_spell_can_move_true(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockSpell spell = new MockSpell();
+
+        playerMover.NextDestination = new Vector3(3f, 2f, 1f);
+        spell.CanMove = true;
+        player.MouseOnCast = new Vector3(1f, 2f, 3f);
+        player.IsCasting = true;
+        player.CurrentCastedSpell = spell;
+
+        // Act
+        pc.PlayerLookDirection();
+
+        // Assert
+        Assert.AreEqual(new Vector3(3f, 2f, 1f), playerMover.CurrentTarget);
+    }
 }
