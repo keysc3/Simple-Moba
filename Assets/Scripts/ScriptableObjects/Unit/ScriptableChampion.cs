@@ -25,14 +25,14 @@ public class ScriptableChampion : ScriptableUnit
     #endregion
 
     #region "Growth Statistic"
-    [field: SerializeField] public float physicalDamageGrowth { get; private set; }
-    [field: SerializeField] public float healthGrowth { get; private set; }
-    [field: SerializeField] public float manaGrowth { get; private set; }
-    [field: SerializeField] public float HP5Growth { get; private set; }
-    [field: SerializeField] public float MP5Growth { get; private set; }
-    [field: SerializeField] public float armorGrowth { get; private set; }
-    [field: SerializeField] public float magicResistGrowth { get; private set; }
-    [field: SerializeField] public float attackSpeedGrowth { get; private set; }
+    [field: SerializeField] public float physicalDamageGrowth { get; set; }
+    [field: SerializeField] public float healthGrowth { get; set; }
+    [field: SerializeField] public float manaGrowth { get; set; }
+    [field: SerializeField] public float HP5Growth { get; set; }
+    [field: SerializeField] public float MP5Growth { get; set; }
+    [field: SerializeField] public float armorGrowth { get; set; }
+    [field: SerializeField] public float magicResistGrowth { get; set; }
+    [field: SerializeField] public float attackSpeedGrowth { get; set; }
     #endregion
 
     #region "Spell Values Per Level"

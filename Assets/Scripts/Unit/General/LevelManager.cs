@@ -88,12 +88,13 @@ public class LevelManager
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         if(unit is IPlayer)
-            ((IPlayer) unit).score.takedownCallback += GainXP; 
+            if(((IPlayer) unit).score != null)
+                ((IPlayer) unit).score.takedownCallback += GainXP; 
         SpellLevelPoints += 1;
     }
 
     /*
-    *   GainXPTester - Add xp to the champions total. Used for testing with a key input.
+    *   Gain XPTester - Add xp to the champions total. Used for testing with a key input.
     *   @param gained - float of the amount of xp to add.
     */
     public void GainXPTester(){
@@ -108,14 +109,14 @@ public class LevelManager
     *   GainXP - Add xp to the champions total.
     *   @param killed - IUnit of the killed unit.
     */
-    private void GainXP(IUnit killed){
+    public void GainXP(IUnit killed){
         float gained;
         if(killed is IPlayer)
             gained = levelInfo.championKillXP[((IPlayer) killed).levelManager.Level - 1];
         else
-            gained = 30f;
+            gained = levelInfo.defaultXP;
         CurrentXP += gained;
-        if(CurrentXP >= levelInfo.requiredXP[Level - 1] && Level != levelInfo.maxLevel){
+        if(CurrentXP >= levelInfo.requiredXP[Level] && Level != levelInfo.maxLevel){
             LevelUp();
         }
     }
@@ -124,7 +125,7 @@ public class LevelManager
     *   LevelUp - Level up the champion. This includes increasing level, spell levels points, next level xp, and champion stats.
     *
     */
-    private void LevelUp(){
+    public void LevelUp(){
         // Keep any overflow xp for the next.
         CurrentXP = CurrentXP - levelInfo.requiredXP[Level];
         // Increase level and required amount for the next level.
@@ -135,7 +136,8 @@ public class LevelManager
         SpellLevelPoints += 1;
         // Increase the champions base stats.
         if(_unit is IPlayer)
-            IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
+            if(_unit.unitStats != null)
+                IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
     }
 
     /*
@@ -178,7 +180,7 @@ public class LevelManager
     }
 
     /*
-    *   GrowthAmountCalculationAtkSpd - Calculates the amount to increase a stat for a new level by base on the growth multiplier for that stat.
+    *   GrowthAmountCalculationAtkSpd - Calculates the amount to increase attack speed by based on level from level up.
     *   @param growthStat - float of the growth value of the stat.
     */
     private float GrowthAmountCalculationAtkSpd(float growthStat){

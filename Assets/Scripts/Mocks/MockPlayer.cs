@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MockPlayer : IPlayer
 {
-    public ScriptableUnit SUnit { get; set; } = ScriptableObject.CreateInstance<ScriptableUnit>();
+    public ScriptableUnit SUnit { get; set; } = ScriptableObject.CreateInstance<ScriptableChampion>();
     public UnitStats unitStats { get; set; }
     public StatusEffects statusEffects { get; set; }
     public DamageTracker damageTracker { get; set; }
