@@ -23,7 +23,6 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
     public Inventory inventory { get; set; }
     public LevelManager levelManager { get; set; }
     public BonusDamage bonusDamage { get; set; }
-    public Collider myCollider { get;set; }
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
     public GameObject GameObject { get => gameObject; }
@@ -40,8 +39,6 @@ public class Minion : MonoBehaviour, IMinion, IDamageable
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         levelManager = new LevelManager(this);
-        myCollider = GetComponent<Collider>();
-        //levelManager = new LevelManager(this, ScriptableObject.CreateInstance<LevelInfo>());
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 

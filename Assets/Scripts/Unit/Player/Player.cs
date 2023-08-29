@@ -24,7 +24,6 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     public StatusEffects statusEffects { get; set; }
     public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
-    public Collider myCollider { get;set; }
     [SerializeField] private ScriptableUnit sUnit;
     public ScriptableUnit SUnit { get => sUnit; }
     public LevelManager levelManager { get; set; }
@@ -42,6 +41,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     public GameObject GameObject { get => gameObject; }
     public Vector3 Position { get => transform.position; set => transform.position = value; }
 
+    private Collider myCollider;
     private NavMeshAgent navMeshAgent;
     private PlayerControllerBehaviour playerController;
     private SpellInputBehaviour playerSpellInput;

@@ -69,7 +69,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     protected override void DrawSpell(){
         Handles.color = Color.cyan;
         Vector3 drawPosition = transform.position;
-        drawPosition.y -= (player.myCollider.bounds.size.y/2) + 0.01f;
+        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
         Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.maxMagnitude, 1f);
     }
 

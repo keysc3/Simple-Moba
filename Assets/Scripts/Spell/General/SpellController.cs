@@ -16,6 +16,7 @@ public class SpellController
     private IPlayer player;
     private Camera mainCamera;
     private NavMeshAgent navMeshAgent;
+    private Collider collider;
 
     /*
     *   SpellController - Sets up new SpellController.
@@ -26,7 +27,8 @@ public class SpellController
         this.spell = spell;
         this.player = player;
         mainCamera = Camera.main;
-        navMeshAgent = (spell as MonoBehaviour).gameObject.GetComponent<NavMeshAgent>();
+        navMeshAgent = player.GameObject.GetComponent<NavMeshAgent>();
+        collider = player.GameObject.GetComponent<Collider>();
     }
 
     /*
@@ -39,7 +41,7 @@ public class SpellController
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
         player.MouseOnCast = targetDirection;
-        targetDirection.y = player.myCollider.bounds.center.y;
+        targetDirection.y = collider.bounds.center.y;
         return targetDirection;
     }
 
