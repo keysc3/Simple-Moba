@@ -55,15 +55,13 @@ public class PlayerController
                 myTarget.y = player.Position.y;
                 float distToEnemy = (player.Position - myTarget).magnitude;
                 // If the enemy is in auto range then start autoing.
-                if(distToEnemy < player.unitStats.autoRange.GetValue()){
+                if(distToEnemy <= player.unitStats.autoRange.GetValue()){
                     // Stop navmesh
                     playerMover.Destination = player.Position;
                 }
                 else{
                     // Move the player into range of the target.
-                    Vector3 enemyDest = playerMover.TargetedEnemy.Position;
-                    //enemyDest.y = player.myCollider.bounds.center.y;
-                    playerMover.Destination = enemyDest;
+                    playerMover.Destination = playerMover.TargetedEnemy.Position;
                 }
             }
             else{
