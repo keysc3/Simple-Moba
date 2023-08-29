@@ -15,8 +15,8 @@ public class ScriptableSleep : ScriptableEffect
     /*
     *   InitializeEffect - Initializes a new sleep effect with the objects duration and total amount of damage to deal.
     *   @param spellLevel - int of the casting spells level.
-    *   @param unitCasted - GameObject of the unit that casted the sleep.
-    *   @param unitEffected - GameObject of the unit effected by the sleep.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 2;

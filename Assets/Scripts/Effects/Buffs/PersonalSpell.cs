@@ -19,8 +19,8 @@ public class PersonalSpell : Effect
     *   Spell- Initialize a new spell effect.
     *   @param spellEffect - ScriptableSpell of the spell effect to apply.
     *   @param duration - float of the duration for the spell to last.
-    *   @param unitCasted - GameObject of the unit that casted the spell.
-    *   @param unitEffected - GameObject of the unit that the spell is affecting.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public PersonalSpell(ScriptablePersonalSpell spellEffect, float duration, int stacks, IUnit casted, IUnit effected) : base(spellEffect, duration, casted, effected){
         this.stacks = stacks;

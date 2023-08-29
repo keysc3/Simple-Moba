@@ -15,8 +15,8 @@ public class ScriptablePersonalSpell : ScriptableEffect
     
     /*
     *   InitializeEffect - Initializes a new spell effect with the duration and bonus percent.
-    *   @param unitCasted - GameObject of the unit that casted the spell.
-    *   @param unitEffected - GameObject of the unit effected by the spell.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 0;

@@ -19,8 +19,8 @@ public class Dot : Effect
     *   @param dotEffect - ScriptableDot of the dot effect to apply.
     *   @param totalDamage - float of the total damage to deal over the dots duration.
     *   @param duration - float of the duration for the dot to last.
-    *   @param unitCasted - GameObject of the unit that casted the dot.
-    *   @param - unitEffected - GameObject of the unit that the dot is affecting.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public Dot(ScriptableDot dotEffect, float totalDamage, float duration, IUnit casted, IUnit effected) : base(dotEffect, duration, casted, effected){
         // Get damage to deal on each tick.

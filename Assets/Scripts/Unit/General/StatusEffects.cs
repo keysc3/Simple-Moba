@@ -160,7 +160,7 @@ public class StatusEffects
     /*
     *   CheckForEffectWithSource - Checks for the given effect from the source in the status managers effect list.
     *   @param checkFor - ScriptableObject of the effect to check for.
-    *   @param source - GameObject of the source of the effect.
+    *   @param source - IUnit of the source of the effect.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
     public bool CheckForEffectWithSource(ScriptableEffect checkFor, IUnit source){
@@ -285,7 +285,7 @@ public class StatusEffects
     /*
     *   RemoveEffect - Removes an effect from the status effect list.
     *   @param effectType - ScriptableEffect of the status effect remove.
-    *   @param casted - GameObject of the effects caster.
+    *   @param casted - IUnit of the effects caster.
     */
     public void RemoveEffect(ScriptableEffect effectType, IUnit casted){
         for(int i = 0; i < statusEffects.Count; i++){

@@ -20,8 +20,8 @@ public class Charm : Effect
     *   Charm - Initialize a new charm effect.
     *   @param charmEffect - ScriptableCharm of the charm effect to apply.
     *   @param duration - float of the duration for the charm to last.
-    *   @param unitCasted - GameObject of the unit that casted the charm.
-    *   @param - unitEffected - GameObject of the unit that the charm is affecting.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, IUnit casted, IUnit effected) : base(charmEffect, duration, casted, effected){
         this.spellLevel = spellLevel;

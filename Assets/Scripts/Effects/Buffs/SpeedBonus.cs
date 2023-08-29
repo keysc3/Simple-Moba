@@ -22,8 +22,8 @@ public class SpeedBonus : Effect
     *   Slow - Initialize a new speed bonus effect.
     *   @param slowEffect - ScriptableSpeedBonus of the speed bonus effect to apply.
     *   @param duration - float of the duration for the speed bonus to last.
-    *   @param unitCasted - GameObject of the unit that casted the speed bonus.
-    *   @param - unitEffected - GameObject of the unit that the speed bonus is affecting.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public SpeedBonus(ScriptableSpeedBonus speedBonusEffect, float duration, float bonusPercent, IUnit casted, IUnit effected) : base(speedBonusEffect, duration, casted, effected){
         this.bonusPercent = bonusPercent;

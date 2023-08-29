@@ -16,8 +16,8 @@ public class Sleep : Effect
     *   Sleep - Initialize a new sleep effect.
     *   @param sleepEffect - ScriptableSleep of the sleep effect to apply.
     *   @param duration - float of the duration for the sleep to last.
-    *   @param unitCasted - GameObject of the unit that casted the sleep.
-    *   @param unitEffected - GameObject of the unit that the sleeep is affecting.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public Sleep(ScriptableSleep sleepEffect, float duration, IUnit casted, IUnit effected) : base(sleepEffect, duration, casted, effected){
         effectedNavMeshAgent = effected.GameObject.GetComponent<NavMeshAgent>();

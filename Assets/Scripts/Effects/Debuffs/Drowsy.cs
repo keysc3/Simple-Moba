@@ -18,8 +18,8 @@ public class Drowsy : Effect
     *   Drowsy - Initialize a new drowsy effect.
     *   @param dotEffect - ScriptableDrowsy of the drowsy effect to apply.
     *   @param duration - float of the duration for the drowsy to last.
-    *   @param unitCasted - GameObject of the unit that casted the drowsy.
-    *   @param - unitEffected - GameObject of the unit that the drowsy is affecting.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public Drowsy(ScriptableDrowsy drowsyEffect, float duration, int spellLevel, IUnit casted, IUnit effected) : base(drowsyEffect, duration, casted, effected){
         this.spellLevel = spellLevel;

@@ -15,8 +15,8 @@ public class ScriptableSpeedBonus : ScriptableEffect
 
     /*
     *   InitializeEffect - Initializes a new speed bonus effect with the duration and bonus percent.
-    *   @param unitCasted - GameObject of the unit that casted the speed bonus.
-    *   @param unitEffected - GameObject of the unit effected by the speed bonus.
+    *   @param casted - IUnit of the unit that caused the effect.
+    *   @param effected - IUnit of the unit that is being affected by the effect.
     */
     public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 0;
