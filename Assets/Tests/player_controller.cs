@@ -280,4 +280,23 @@ public class player_controller
         // Assert
         Assert.AreEqual(new Vector3(14f, 2f, 6f), playerMover.Destination);
     }
+
+    [Test]
+    public void sets_targeted_enemy_to_null_and_destination_to_player_position(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockUnit unit = new MockUnit();
+
+        player.Position = new Vector3(5f, 4f, 3f);
+        playerMover.TargetedEnemy = unit;
+        playerMover.Destination = new Vector3(10f, 9f, 8f);
+
+        // Act
+        pc.StopPlayer();
+
+        // Assert
+        Assert.AreEqual((nullUnit, new Vector3(5f, 4f, 3f)), (playerMover.TargetedEnemy, playerMover.Destination));
+    }
 }
