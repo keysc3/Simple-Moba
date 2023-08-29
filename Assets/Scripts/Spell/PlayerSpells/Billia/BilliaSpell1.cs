@@ -152,7 +152,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         if(SpellLevel >= 0 && passiveStacks < spellData.passiveMaxStacks){
             // Create a new speed bonus.
             float bonusPercent = spellData.passiveSpeed[SpellLevel];
-            SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(SpellLevel, gameObject, gameObject);
+            SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(SpellLevel, player, player);
             speedBonus.BonusPercent = bonusPercent;
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);

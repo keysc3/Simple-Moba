@@ -85,7 +85,7 @@ public class BilliaSpell4 : Spell, IHasCast
             IUnit unit = enemy.GetComponent<IUnit>();
             if(unit is IPlayer){
                 // Add drowsy to enemy player and update the bonus damage delegate.
-                Drowsy newDrowsy = (Drowsy) spellData.drowsy.InitializeEffect(SpellLevel, gameObject, enemy);
+                Drowsy newDrowsy = (Drowsy) spellData.drowsy.InitializeEffect(SpellLevel, player, unit);
                 unit.statusEffects.AddEffect(newDrowsy);
                 unit.bonusDamage += Spell_4_SleepProc;
                 // Animate the drowsy effect.
@@ -94,7 +94,7 @@ public class BilliaSpell4 : Spell, IHasCast
                 BilliaDrowsyVisual visualScript = drowsyObject.GetComponent<BilliaDrowsyVisual>();
                 visualScript.drowsyDuration = newDrowsy.EffectDuration;
                 visualScript.drowsy = spellData.drowsy;
-                visualScript.source = gameObject;
+                visualScript.source = player;
             }
         }
     }
@@ -144,10 +144,10 @@ public class BilliaSpell4 : Spell, IHasCast
         if(unit is IDamageable){
             // Dots do not proc the sleep.
             if(!isDot){
-                if(unit.statusEffects.CheckForEffectWithSource(spellData.drowsy.sleep, gameObject)){
+                if(unit.statusEffects.CheckForEffectWithSource(spellData.drowsy.sleep, player)){
                     float magicDamage = championStats.magicDamage.GetValue();
                     // Remove sleep, deal damage and remove function from delegate.
-                    unit.statusEffects.RemoveEffect(spellData.drowsy.sleep, gameObject);
+                    unit.statusEffects.RemoveEffect(spellData.drowsy.sleep, player);
                     unit.bonusDamage -= Spell_4_SleepProc;
                     ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
                 }

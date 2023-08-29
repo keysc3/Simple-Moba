@@ -12,7 +12,7 @@ public class BilliaDrowsyVisual : MonoBehaviour
 {
     public float drowsyDuration;
     public ScriptableDrowsy drowsy;
-    public GameObject source;
+    public IUnit source;
     private Image drowsyVisual;
     private RectTransform rectTransform;
     private StatusEffects statusEffects;

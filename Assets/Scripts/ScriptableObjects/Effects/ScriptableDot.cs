@@ -20,8 +20,8 @@ public class ScriptableDot : ScriptableEffect
     *   @param unitCasted - GameObject of the unit that casted the charm.
     *   @param unitEffected - GameObject of the unit effected by the charm.
     */
-    public Effect InitializeEffect(float totalDamage, int spellLevel, GameObject unitCasted, GameObject unitEffected){
+    public Effect InitializeEffect(float totalDamage, int spellLevel, IUnit casted, IUnit effected){
         ccValue = 0;
-        return new Dot(this, totalDamage, duration[spellLevel], unitCasted, unitEffected);
+        return new Dot(this, totalDamage, duration[spellLevel], casted, effected);
     }
 }

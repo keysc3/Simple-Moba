@@ -117,7 +117,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
     */
     private IEnumerator Spell_4_Start(){
-        spell4Effect = (PersonalSpell) spellData.spell4.InitializeEffect(SpellLevel, gameObject, gameObject);
+        spell4Effect = (PersonalSpell) spellData.spell4.InitializeEffect(SpellLevel, player, player);
         player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
         spell_4_duration = spellData.duration;

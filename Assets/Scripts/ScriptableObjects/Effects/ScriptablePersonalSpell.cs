@@ -18,8 +18,8 @@ public class ScriptablePersonalSpell : ScriptableEffect
     *   @param unitCasted - GameObject of the unit that casted the spell.
     *   @param unitEffected - GameObject of the unit effected by the spell.
     */
-    public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
+    public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 0;
-        return new PersonalSpell(this, duration[spellLevel], stacks, unitCasted, unitEffected);
+        return new PersonalSpell(this, duration[spellLevel], stacks, casted, effected);
     }
 }

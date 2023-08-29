@@ -35,7 +35,7 @@ public class BilliaPassive : Spell, IHasCallback
     *   @param spellHit - Spell that has hit the GameObject.
     */
     public void Passive(IUnit unit, ISpell spellHit){
-        unit.statusEffects.AddEffect(spellData.passiveDot.InitializeEffect(30f, 0, gameObject, (unit as MonoBehaviour).gameObject));
+        unit.statusEffects.AddEffect(spellData.passiveDot.InitializeEffect(30f, 0, player, unit));
         if(!passiveApplied.Contains(unit)){
             passiveApplied.Add(unit);
             StartCoroutine(PassiveHeal(unit));
@@ -48,7 +48,7 @@ public class BilliaPassive : Spell, IHasCallback
     */
     private IEnumerator PassiveHeal(IUnit unit){
         // Check to make sure the dot is still on the unit.
-        while(unit.statusEffects.CheckForEffectWithSource(spellData.passiveDot, gameObject)){
+        while(unit.statusEffects.CheckForEffectWithSource(spellData.passiveDot, player)){
             // Heal the champion amount if unit is a champion.
             if(unit is IPlayer){
                 //Debug.Log("Billia passive found on: " + enemy.name);

@@ -18,8 +18,8 @@ public class ScriptableSleep : ScriptableEffect
     *   @param unitCasted - GameObject of the unit that casted the sleep.
     *   @param unitEffected - GameObject of the unit effected by the sleep.
     */
-    public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
+    public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 2;
-        return new Sleep(this, duration[spellLevel], unitCasted, unitEffected);
+        return new Sleep(this, duration[spellLevel], casted, effected);
     }
 }

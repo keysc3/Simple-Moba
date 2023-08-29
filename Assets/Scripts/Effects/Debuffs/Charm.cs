@@ -12,8 +12,8 @@ public class Charm : Effect
 {
     private int spellLevel;
     private Vector3 currentTarget;
-    private IUnit effectedUnit;
     private NavMeshAgent effectedNavMeshAgent;
+    private Collider effectedCollider;
     public Slow charmSlow { get; private set; }
     
     /*
@@ -23,10 +23,10 @@ public class Charm : Effect
     *   @param unitCasted - GameObject of the unit that casted the charm.
     *   @param - unitEffected - GameObject of the unit that the charm is affecting.
     */
-    public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(charmEffect, duration, unitCasted, unitEffected){
+    public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, IUnit casted, IUnit effected) : base(charmEffect, duration, casted, effected){
         this.spellLevel = spellLevel;
-        effectedUnit = effected.GetComponent<IUnit>();
-        effectedNavMeshAgent = effected.GetComponent<NavMeshAgent>();
+        effectedNavMeshAgent = effected.GameObject.GetComponent<NavMeshAgent>();
+        effectedCollider = effected.GameObject.GetComponent<Collider>();
         if(((ScriptableCharm) effectType).slow != null)
             charmSlow = (Slow) ((ScriptableCharm) effectType).slow.InitializeEffect(spellLevel, casted, effected);
     }
@@ -35,17 +35,17 @@ public class Charm : Effect
     *   StartEffect - Start the charm effect.
     */
     public override void StartEffect(){
-        if(effectedUnit != null){
+        if(effected != null){
             // If the charmed unit ia a champion disable their controls.
-            if(effectedUnit is IPlayer){
-                effected.GetComponent<PlayerControllerBehaviour>().enabled = false;
-                effected.GetComponent<SpellInputBehaviour>().enabled = false;
+            if(effected is IPlayer){
+                effected.GameObject.GetComponent<PlayerControllerBehaviour>().enabled = false;
+                effected.GameObject.GetComponent<SpellInputBehaviour>().enabled = false;
             }
             // Reset the units current path.
             if(effectedNavMeshAgent != null)
                 effectedNavMeshAgent.ResetPath();
             if(charmSlow != null)
-                effectedUnit.statusEffects.AddEffect(charmSlow);
+                effected.statusEffects.AddEffect(charmSlow);
         }
     }
 
@@ -53,12 +53,12 @@ public class Charm : Effect
     *   EndEffect - End the charm effect.
     */
     public override void EndEffect(){
-        if(effectedUnit != null){
-            if(effectedUnit is IPlayer){
+        if(effected != null){
+            if(effected is IPlayer){
                 // Give controls back if charmed is active GameObject.
-                if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == effectedUnit){
-                    effected.GetComponent<PlayerControllerBehaviour>().enabled = true;
-                    effected.GetComponent<SpellInputBehaviour>().enabled = true;
+                if(ActiveChampion.instance.players[ActiveChampion.instance.ActiveChamp] == effected){
+                    effected.GameObject.GetComponent<PlayerControllerBehaviour>().enabled = true;
+                    effected.GameObject.GetComponent<SpellInputBehaviour>().enabled = true;
                 }
             }
             // Reset the path and speed from the charm effect.
@@ -71,15 +71,15 @@ public class Charm : Effect
     *   EffectTick - Tick for the charms effect.
     */
     public override void EffectTick(){
-        effectedNavMeshAgent.destination = casted.transform.position;
+        effectedNavMeshAgent.destination = casted.Position;
         Vector3 nextTarget;
         // If a path is set.
         if(effectedNavMeshAgent.hasPath){
             nextTarget = effectedNavMeshAgent.steeringTarget;
             // If a new target location exists set the target and look at the target location.
             if(currentTarget != nextTarget){
-                nextTarget.y = effectedUnit.myCollider.bounds.center.y;
-                effected.transform.LookAt(nextTarget);
+                nextTarget.y = effectedCollider.bounds.center.y;
+                effected.GameObject.transform.LookAt(nextTarget);
                 currentTarget = nextTarget;
             }
         } 

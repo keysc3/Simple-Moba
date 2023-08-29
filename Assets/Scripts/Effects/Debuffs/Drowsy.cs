@@ -10,7 +10,6 @@ using UnityEngine;
 public class Drowsy : Effect
 {
     private int spellLevel;
-    private IUnit effectedUnit;
     private float reducedAmount;
     public Slow drowsySlow { get; private set; }
     public Sleep drowsySleep { get; private set; }
@@ -22,9 +21,8 @@ public class Drowsy : Effect
     *   @param unitCasted - GameObject of the unit that casted the drowsy.
     *   @param - unitEffected - GameObject of the unit that the drowsy is affecting.
     */
-    public Drowsy(ScriptableDrowsy drowsyEffect, float duration, int spellLevel, GameObject unitCasted, GameObject unitEffected) : base(drowsyEffect, duration, unitCasted, unitEffected){
+    public Drowsy(ScriptableDrowsy drowsyEffect, float duration, int spellLevel, IUnit casted, IUnit effected) : base(drowsyEffect, duration, casted, effected){
         this.spellLevel = spellLevel;
-        effectedUnit = effected.GetComponent<IUnit>();
         if(((ScriptableDrowsy) effectType).slow != null)
             drowsySlow = (Slow) ((ScriptableDrowsy) effectType).slow.InitializeEffect(spellLevel, casted, effected);
         if(((ScriptableDrowsy) effectType).sleep != null)
@@ -35,9 +33,9 @@ public class Drowsy : Effect
     *   StartEffect - Start the drowsy effect.
     */
     public override void StartEffect(){
-        if(effectedUnit != null){
+        if(effected != null){
             if(drowsySlow != null)
-                effectedUnit.statusEffects.AddEffect(drowsySlow);
+                effected.statusEffects.AddEffect(drowsySlow);
         }
     }
 
@@ -45,9 +43,9 @@ public class Drowsy : Effect
     *   EndEffect - End the drowsy effect.
     */
     public override void EndEffect(){
-        if(effectedUnit != null){
+        if(effected != null){
             if(drowsySleep != null)
-                effectedUnit.statusEffects.AddEffect(drowsySleep);
+                effected.statusEffects.AddEffect(drowsySleep);
         }
     }
 }

@@ -22,7 +22,7 @@ public class PersonalSpell : Effect
     *   @param unitCasted - GameObject of the unit that casted the spell.
     *   @param unitEffected - GameObject of the unit that the spell is affecting.
     */
-    public PersonalSpell(ScriptablePersonalSpell spellEffect, float duration, int stacks, GameObject unitCasted, GameObject unitEffected) : base(spellEffect, duration, unitCasted, unitEffected){
+    public PersonalSpell(ScriptablePersonalSpell spellEffect, float duration, int stacks, IUnit casted, IUnit effected) : base(spellEffect, duration, casted, effected){
         this.stacks = stacks;
     }
 }

@@ -18,8 +18,8 @@ public class ScriptableSpeedBonus : ScriptableEffect
     *   @param unitCasted - GameObject of the unit that casted the speed bonus.
     *   @param unitEffected - GameObject of the unit effected by the speed bonus.
     */
-    public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
+    public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 0;
-        return new SpeedBonus(this, duration[spellLevel], bonusPercent[spellLevel], unitCasted, unitEffected);
+        return new SpeedBonus(this, duration[spellLevel], bonusPercent[spellLevel], casted, effected);
     }
 }

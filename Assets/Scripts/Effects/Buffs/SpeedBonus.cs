@@ -25,7 +25,7 @@ public class SpeedBonus : Effect
     *   @param unitCasted - GameObject of the unit that casted the speed bonus.
     *   @param - unitEffected - GameObject of the unit that the speed bonus is affecting.
     */
-    public SpeedBonus(ScriptableSpeedBonus speedBonusEffect, float duration, float bonusPercent, GameObject unitCasted, GameObject unitEffected) : base(speedBonusEffect, duration, unitCasted, unitEffected){
+    public SpeedBonus(ScriptableSpeedBonus speedBonusEffect, float duration, float bonusPercent, IUnit casted, IUnit effected) : base(speedBonusEffect, duration, casted, effected){
         this.bonusPercent = bonusPercent;
     }
 }

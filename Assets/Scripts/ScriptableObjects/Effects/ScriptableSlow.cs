@@ -18,8 +18,8 @@ public class ScriptableSlow : ScriptableEffect
     *   @param unitCasted - GameObject of the unit that casted the slow.
     *   @param unitEffected - GameObject of the unit effected by the slow.
     */
-    public Effect InitializeEffect(int spellLevel, GameObject unitCasted, GameObject unitEffected){
+    public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 0;
-        return new Slow(this, duration[spellLevel], slowPercent[spellLevel], unitCasted, unitEffected);
+        return new Slow(this, duration[spellLevel], slowPercent[spellLevel], casted, effected);
     }
 }

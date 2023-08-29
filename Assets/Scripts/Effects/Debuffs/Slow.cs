@@ -25,7 +25,7 @@ public class Slow : Effect
     *   @param unitCasted - GameObject of the unit that casted the slow.
     *   @param - unitEffected - GameObject of the unit that the slow is affecting.
     */
-    public Slow(ScriptableSlow slowEffect, float duration, float slowPercent, GameObject unitCasted, GameObject unitEffected) : base(slowEffect, duration, unitCasted, unitEffected){
+    public Slow(ScriptableSlow slowEffect, float duration, float slowPercent, IUnit casted, IUnit effected) : base(slowEffect, duration, casted, effected){
         this.slowPercent = slowPercent;
     }
 

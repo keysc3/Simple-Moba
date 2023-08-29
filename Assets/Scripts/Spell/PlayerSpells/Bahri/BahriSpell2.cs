@@ -111,7 +111,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                             // Only want to target alive units.
                             if(!enemyUnit.IsDead && enemyUnit != player){
                                 // If a player is currently under spell 3 effects, prioritize that player.
-                                if(enemyUnit.statusEffects.CheckForEffectWithSource(spellData.charm, gameObject)){
+                                if(enemyUnit.statusEffects.CheckForEffectWithSource(spellData.charm, player)){
                                     target = enemy.gameObject;
                                     break;
                                 }
@@ -173,7 +173,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         float timer = 0.0f;
         int spellLevel = SpellLevel;
         // Create and add a new speed bonus effect.
-        SpeedBonus speedBonus = (SpeedBonus) spellData.speedBonus.InitializeEffect(spellLevel, gameObject, gameObject);
+        SpeedBonus speedBonus = (SpeedBonus) spellData.speedBonus.InitializeEffect(spellLevel, player, player);
         player.statusEffects.AddEffect(speedBonus);
         // While speed boost is still active.
         while (timer < spellData.speedBonus.duration[spellLevel]){

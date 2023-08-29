@@ -101,7 +101,7 @@ public class StatusEffects
             }
         }
         // Add UI element.
-        NewStatusEffectUIElement((IUnit) effect.effected.GetComponent<IUnit>(), effect);
+        NewStatusEffectUIElement(effect.effected, effect);
     }
 
     /*
@@ -163,7 +163,7 @@ public class StatusEffects
     *   @param source - GameObject of the source of the effect.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectWithSource(ScriptableEffect checkFor, GameObject source){
+    public bool CheckForEffectWithSource(ScriptableEffect checkFor, IUnit source){
         foreach(Effect effect in statusEffects){
             if(effect.casted == source && effect.effectType.GetType() == checkFor.GetType())
                 return true;
@@ -287,7 +287,7 @@ public class StatusEffects
     *   @param effectType - ScriptableEffect of the status effect remove.
     *   @param casted - GameObject of the effects caster.
     */
-    public void RemoveEffect(ScriptableEffect effectType, GameObject casted){
+    public void RemoveEffect(ScriptableEffect effectType, IUnit casted){
         for(int i = 0; i < statusEffects.Count; i++){
             if(effectType.GetType() == statusEffects[i].effectType.GetType() && casted == statusEffects[i].casted){
                 Effect removed = statusEffects[i];
