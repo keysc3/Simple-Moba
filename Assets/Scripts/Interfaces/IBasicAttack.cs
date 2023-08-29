@@ -16,5 +16,5 @@ public interface IBasicAttack
     float PhysicalDamage { get; }
     //string RangeType { get; }
 
-    void Attack(GameObject target);
+    void Attack(IUnit target);
 }

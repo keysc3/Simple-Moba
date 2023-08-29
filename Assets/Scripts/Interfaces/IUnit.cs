@@ -23,4 +23,6 @@ public interface IUnit
     //GameObject playerBar { get; set; }
     bool IsDead { get; }
     BonusDamage bonusDamage { get; set; }
+    GameObject GameObject { get; }
+    Vector3 Position { get; set; }
 }
