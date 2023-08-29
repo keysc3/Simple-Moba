@@ -159,4 +159,125 @@ public class player_controller
         // Assert
         Assert.AreEqual(new Vector3(3f, 2f, 1f), playerMover.CurrentTarget);
     }
+    
+    [Test]
+    public void does_not_set_destination_from_null_target_enemy(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+
+        playerMover.Destination = new Vector3(10f, 9f, 8f);
+
+        // Act
+        pc.MovePlayerToEnemy();
+
+        // Assert
+        Assert.AreEqual(new Vector3(10f, 9f, 8f), playerMover.Destination);
+    }
+
+    [Test]
+    public void does_not_set_destination_from_is_casting_true(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockUnit unit = new MockUnit();
+
+        player.IsCasting = true;
+        playerMover.TargetedEnemy = unit;
+        playerMover.Destination = new Vector3(10f, 9f, 8f);
+
+        // Act
+        pc.MovePlayerToEnemy();
+
+        // Assert
+        Assert.AreEqual(new Vector3(10f, 9f, 8f), playerMover.Destination);
+    }
+
+    [Test]
+    public void sets_destination_to_player_position_and_targeted_enemy_to_null_from_dead_target(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockUnit unit = new MockUnit();
+
+        player.Position = new Vector3(20f, 15f, 10f);
+        unit.IsDead = true;
+        playerMover.TargetedEnemy = unit;
+        playerMover.Destination = new Vector3(10f, 9f, 8f);
+
+        // Act
+        pc.MovePlayerToEnemy();
+
+        // Assert
+        Assert.AreEqual(new Vector3(20f, 15f, 10f), playerMover.Destination);
+    }
+
+    [Test]
+    public void sets_destination_to_player_position_from_player_less_than_max_range_from_target(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockUnit unit = new MockUnit();
+
+        unit.Position = new Vector3(5f, 5f, 2f);
+        player.unitStats = new UnitStats(player.SUnit);
+        player.unitStats.autoRange.BaseValue = 5.1f;
+        player.Position = new Vector3(10f, 5f, 2f);
+        playerMover.TargetedEnemy = unit;
+        playerMover.Destination = new Vector3(10f, 9f, 8f);
+
+        // Act
+        pc.MovePlayerToEnemy();
+
+        // Assert
+        Assert.AreEqual(new Vector3(10f, 5f, 2f), playerMover.Destination);
+    }
+
+    [Test]
+    public void sets_destination_to_target_enemy_position_from_player_at_max_range_from_target(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockUnit unit = new MockUnit();
+
+        unit.Position = new Vector3(4f, 9f, 3f);
+        player.unitStats = new UnitStats(player.SUnit);
+        player.unitStats.autoRange.BaseValue = 1f;
+        player.Position = new Vector3(4f, 8f, 3f);
+        playerMover.TargetedEnemy = unit;
+        playerMover.Destination = new Vector3(10f, 9f, 8f);
+
+        // Act
+        pc.MovePlayerToEnemy();
+
+        // Assert
+        Assert.AreEqual(new Vector3(4f, 8f, 3f), playerMover.Destination);
+    }
+
+    [Test]
+    public void sets_destination_to_target_enemy_position_from_player_out_of_range_of_target(){
+        // Arrange
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        PlayerController pc = new PlayerController(playerMover, player);
+        MockUnit unit = new MockUnit();
+
+        unit.Position = new Vector3(14f, 2f, 6f);
+        player.unitStats = new UnitStats(player.SUnit);
+        player.unitStats.autoRange.BaseValue = 3.9f;
+        player.Position = new Vector3(14f, 2f, 10f);
+        playerMover.TargetedEnemy = unit;
+        playerMover.Destination = new Vector3(10f, 9f, 8f);
+
+        // Act
+        pc.MovePlayerToEnemy();
+
+        // Assert
+        Assert.AreEqual(new Vector3(14f, 2f, 6f), playerMover.Destination);
+    }
 }
