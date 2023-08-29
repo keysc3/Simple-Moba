@@ -10,16 +10,8 @@ using UnityEngine.AI;
 */
 public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
 {
-    private GameObject targetedEnemy;
-    public GameObject TargetedEnemy { 
-        get => targetedEnemy;
-        set{
-            targetedEnemy = value;
-            if(value == null)
-                navMeshAgent.ResetPath();
-        }
-    }
-    private Camera mainCamera;
+    public IUnit TargetedEnemy { get; set; }
+    public GameObject PlayerObj { get => gameObject; }
     public Vector3 Destination { 
         get => navMeshAgent.destination; 
         set => navMeshAgent.destination = value;
@@ -29,26 +21,33 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         get => currentTarget; 
         set {
             currentTarget = value;
-            if(player.myCollider != null)
-                currentTarget.y = player.myCollider.bounds.center.y;
+            if(myCollider != null)
+                currentTarget.y = myCollider.bounds.center.y;
             transform.LookAt(currentTarget);
         }
     }
-    public Vector3 Position { get => transform.position; set => transform.position = value; }
-    public float Range { get => player.unitStats.autoRange.GetValue(); }
+    public Vector3 NextDestination { 
+        get {
+            if(navMeshAgent.hasPath)
+                return navMeshAgent.steeringTarget;
+            else
+                return transform.position;
+        }
+    }
 
+    private Camera mainCamera;
     private PlayerController playerController;
     private NavMeshAgent navMeshAgent;
     private PlayerSpells playerSpells;
-    private IPlayer player;
+    private Collider myCollider;
 
     // Called when the script instance is being loaded.
     private void Awake(){
+        myCollider = GetComponent<Collider>();
         playerSpells = GetComponent<PlayerSpells>();
-        playerController = new PlayerController(this);
+        playerController = new PlayerController(this, GetComponent<IPlayer>());
         navMeshAgent = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
-        player = GetComponent<IPlayer>();
     }
 
     // Start is called before the first frame update.
@@ -64,33 +63,21 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
             // Set the players destination.
             if(Input.GetMouseButtonDown(1)){
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hitInfo;
-                    if(Physics.Raycast(ray, out hitInfo)){
-                        playerController.RightClick(hitInfo, gameObject);
-                    }
+                RaycastHit hitInfo;
+                if(Physics.Raycast(ray, out hitInfo)){
+                    playerController.RightClick(hitInfo.transform.GetComponent<IUnit>(), hitInfo.point);
+                }
             }
 
             // Stop player if they are at their destination or stop input received. 
             if(navMeshAgent.hasPath){
-                if(transform.position == navMeshAgent.destination || Input.GetKeyDown(KeyCode.S)){
-                    TargetedEnemy = null;
-                    navMeshAgent.ResetPath();
-                }
+                if(Input.GetKeyDown(KeyCode.S))
+                    playerController.StopPlayer();
             }
         }
-
         // Point players forward at the direction they are cast or moving.
-        // The player should never be casting something if currentspell is null but just to be safe check for null.
-        if(player.IsCasting && player.CurrentCastedSpell != null && player.CurrentCastedSpell.CanMove)
-            playerController.PlayerLookDirection(player.MouseOnCast);
-        else if(navMeshAgent.hasPath)
-            playerController.PlayerLookDirection(navMeshAgent.steeringTarget);
-
-        if(TargetedEnemy != null && !player.IsCasting){
-            if(!TargetedEnemy.GetComponent<IUnit>().IsDead)
-                playerController.MovePlayerToEnemy();
-            else
-                TargetedEnemy = null;
-        }
+        playerController.PlayerLookDirection();
+        // Move player towards target.
+        playerController.MovePlayerToEnemy();
     }
 }

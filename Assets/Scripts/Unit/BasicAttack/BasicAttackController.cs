@@ -30,11 +30,13 @@ public class BasicAttackController
     */
     public bool CanAuto(float currentTime){
         if(playerMover.TargetedEnemy != null && !player.IsCasting){
+            if(playerMover.TargetedEnemy.IsDead)
+                return false;
             //Vector3 myTarget = target.transform.position;
             //myTarget.y = 0.0f;
-            float distToEnemy = (playerMover.Position - playerMover.TargetedEnemy.transform.position).magnitude;
+            float distToEnemy = (player.Position - playerMover.TargetedEnemy.Position).magnitude;
             // If the enemy is in auto range then start autoing.
-            if(distToEnemy < playerMover.Range){
+            if(distToEnemy < player.unitStats.autoRange.GetValue()){
                 if(currentTime >  basicAttack.NextAuto && !basicAttack.WindingUp){
                     return true;
                 }
@@ -53,7 +55,7 @@ public class BasicAttackController
         float windUpTime = (1.0f/basicAttack.AttackSpeed) * basicAttack.AutoWindUp;
         Debug.Log("Wind up time: " + windUpTime);
         while(basicAttack.WindingUp && timer <= windUpTime ){
-            if(playerMover.TargetedEnemy == null || player.IsCasting){
+            if(playerMover.TargetedEnemy.IsDead || playerMover.TargetedEnemy == null || player.IsCasting){
                 basicAttack.WindingUp = false;
                 yield break;
             }
@@ -69,10 +71,11 @@ public class BasicAttackController
 
     /*
     *   AttackHit - Apply basic attack damage.
-    *   @param target - GameObject of the target to attack.
+    *   @param target - IUnit of the target to attack.
     */
-    public void AttackHit(GameObject target){
+    public void AttackHit(IUnit target){
         float physicalDamage = basicAttack.PhysicalDamage;
-        target.GetComponent<IDamageable>().TakeDamage(physicalDamage, "physical", target.GetComponent<IUnit>(), false);
+        if(target is IDamageable)
+            ((IDamageable) target).TakeDamage(physicalDamage, "physical", player, false);
     }
 }

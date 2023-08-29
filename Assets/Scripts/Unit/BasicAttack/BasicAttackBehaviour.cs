@@ -41,7 +41,7 @@ public class BasicAttackBehaviour : MonoBehaviour, IBasicAttack
 
     /*
     *   Attack - Method for attacking a target with a basic attack.
-    *   @param target - GameObject of the target.
+    *   @param target - IUnit of the target.
     */
-    public virtual void Attack(GameObject target){}
+    public virtual void Attack(IUnit target){}
 }
