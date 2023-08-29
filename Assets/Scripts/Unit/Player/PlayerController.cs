@@ -52,7 +52,7 @@ public class PlayerController
             if(!playerMover.TargetedEnemy.IsDead){
                 // Get the targets distance from the player.
                 Vector3 myTarget = playerMover.TargetedEnemy.Position;
-                myTarget.y = 0.0f;
+                myTarget.y = player.Position.y;
                 float distToEnemy = (player.Position - myTarget).magnitude;
                 // If the enemy is in auto range then start autoing.
                 if(distToEnemy < player.unitStats.autoRange.GetValue()){
