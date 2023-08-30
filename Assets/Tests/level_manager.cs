@@ -128,6 +128,46 @@ public class level_manager
         // Assert
         Assert.AreEqual(0, player.levelManager.spellLevels["Spell_2"]);
     }
+
+    [Test]
+    public void gets_respawn_time_from_player_under_level_7(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 4);
+
+        // Act
+        float respawnTime = player.levelManager.RespawnTime();
+
+        // Assert
+        Assert.AreEqual(12f, respawnTime);
+    }
+
+    [Test]
+    public void gets_respawn_time_from_player_at_level_7(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 7);
+
+        // Act
+        float respawnTime = player.levelManager.RespawnTime();
+
+        // Assert
+        Assert.AreEqual(21f, respawnTime);
+    }
+
+    [Test]
+    public void gets_respawn_time_from_player_above_level_7(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 15);
+
+        // Act
+        float respawnTime = player.levelManager.RespawnTime();
+
+        // Assert
+        Assert.AreEqual(45f, respawnTime);
+    }
+
 }
 
 public class FloatComparer : IEqualityComparer<float>{
