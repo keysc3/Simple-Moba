@@ -93,6 +93,19 @@ public class LevelManager
         SpellLevelPoints += 1;
     }
 
+    public LevelManager(IUnit unit, int startingLevel){
+        levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
+        _unit = unit;
+        // Set up spell levels dictionary.
+        for(int i = 0; i < 4; i++)
+            spellLevels.Add("Spell_" + (i+1), 0);
+        if(unit is IPlayer)
+            if(((IPlayer) unit).score != null)
+                ((IPlayer) unit).score.takedownCallback += GainXP;
+        Level = startingLevel;
+        SpellLevelPoints += startingLevel;
+    }
+
     /*
     *   Gain XPTester - Add xp to the champions total. Used for testing with a key input.
     *   @param gained - float of the amount of xp to add.
@@ -188,7 +201,7 @@ public class LevelManager
     }
 
     /*
-    *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
+    *   LevelUpSkill - Calls a level up request for pressed spell and calls level up animation method.
     *   @param currentTime - float of current game time.
     */
     public void LevelUpSkill(float currentTime){
