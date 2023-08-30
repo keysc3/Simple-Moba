@@ -109,24 +109,140 @@ public class level_manager
         player.levelManager = new LevelManager(player);
         
         // Act
-        player.levelManager.SpellLevelUp("Spell_3");
+        player.levelManager.SpellLevelUpRequest("Spell_3");
 
         // Assert
         Assert.AreEqual(1, player.levelManager.spellLevels["Spell_3"]);
     }
 
     [Test]
-    public void does_not_level_up_spell_2_to_level_1(){
+    public void does_not_level_up_spell_1_past_max_level(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        int maxSpellLevel = levelInfo.maxSpellLevel;
+        player.levelManager = new LevelManager(player, maxSpellLevel);
+        
+        // Act
+        for(int i = 0; i < maxSpellLevel+1; i++){
+            player.levelManager.SpellLevelUpRequest("Spell_1");
+        }
+
+        // Assert
+        Assert.AreEqual(maxSpellLevel, player.levelManager.spellLevels["Spell_1"]);
+    }
+
+    [Test]
+    public void does_not_level_up_spell_2_to_level_1_from_insufficient_skill_points(){
         // Arrange
         MockPlayer player = new MockPlayer();
         player.levelManager = new LevelManager(player);
-        player.levelManager.SpellLevelUp("Spell_3");
+        player.levelManager.SpellLevelUpRequest("Spell_3");
 
         // Act
-        player.levelManager.SpellLevelUp("Spell_2");
+        player.levelManager.SpellLevelUpRequest("Spell_2");
 
         // Assert
         Assert.AreEqual(0, player.levelManager.spellLevels["Spell_2"]);
+    }
+
+    [Test]
+    public void does_not_level_spell_4_to_level_1_from_invalid_level_requirements(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 4);
+
+        // Act
+        player.levelManager.SpellLevelUpRequest("Spell_4");
+
+        // Assert
+        Assert.AreEqual(0, player.levelManager.spellLevels["Spell_4"]);
+    }
+
+    [Test]
+    public void levels_spell_4_to_level_1(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 6);
+
+        // Act
+        player.levelManager.SpellLevelUpRequest("Spell_4");
+
+        // Assert
+        Assert.AreEqual(1, player.levelManager.spellLevels["Spell_4"]);
+    }
+
+    [Test]
+    public void does_not_level_spell_4_to_level_2_from_invalid_level_requirements(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 10);
+
+        // Act
+        player.levelManager.SpellLevelUpRequest("Spell_4");
+        player.levelManager.SpellLevelUpRequest("Spell_4");
+
+        // Assert
+        Assert.AreEqual(1, player.levelManager.spellLevels["Spell_4"]);
+    }
+
+    [Test]
+    public void levels_spell_4_to_level_2(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 11);
+
+        // Act
+        player.levelManager.SpellLevelUpRequest("Spell_4");
+        player.levelManager.SpellLevelUpRequest("Spell_4");
+
+        // Assert
+        Assert.AreEqual(2, player.levelManager.spellLevels["Spell_4"]);
+    }
+
+    [Test]
+    public void does_not_level_spell_4_to_level_3_from_invalid_level_requirements(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 15);
+
+        // Act
+        for(int i = 0; i < 3; i++){
+            player.levelManager.SpellLevelUpRequest("Spell_4");
+        }
+
+        // Assert
+        Assert.AreEqual(2, player.levelManager.spellLevels["Spell_4"]);
+    }
+
+    [Test]
+    public void levels_spell_4_to_level_3(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player, 16);
+
+        // Act
+        for(int i = 0; i < 3; i++){
+            player.levelManager.SpellLevelUpRequest("Spell_4");
+        }
+
+        // Assert
+        Assert.AreEqual(3, player.levelManager.spellLevels["Spell_4"]);
+    }
+
+    [Test]
+    public void does_not_level_up_spell_4_past_max_level(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        int maxUltLevel = levelInfo.maxUltLevel;
+        player.levelManager = new LevelManager(player, 17);
+        
+        // Act
+        for(int i = 0; i < maxUltLevel+1; i++){
+            player.levelManager.SpellLevelUpRequest("Spell_4");
+        }
+
+        // Assert
+        Assert.AreEqual(maxUltLevel, player.levelManager.spellLevels["Spell_4"]);
     }
 
     [Test]
