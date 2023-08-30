@@ -42,31 +42,21 @@ public class level_manager
     }
 
     [Test]
-    public void level_up_from_level_one_to_three_without_unit_stats()
+    public void level_up_from_level_one_to_three_using_constructor_without_unit_stats()
     {
         // Arrange
         MockPlayer player = new MockPlayer();
-        MockPlayer enemy = new MockPlayer();
         player.levelManager = new LevelManager(player);
-        enemy.levelManager = new LevelManager(enemy);
-        float totalXP = 0f;
-        float totalNeeded = levelInfo.requiredXP[1] + levelInfo.requiredXP[2];
-        int iterations = 0;
 
         // Act
-        while(totalXP < totalNeeded){
-            player.levelManager.GainXP(enemy);
-            totalXP += levelInfo.championKillXP[0];
-            iterations++;
-        }
+        player.levelManager = new LevelManager(player, 3);
 
         // Assert
-        float currentXP = (levelInfo.championKillXP[0] * iterations) - totalNeeded;
-        Assert.AreEqual((3, currentXP), (player.levelManager.Level, player.levelManager.CurrentXP));
+        Assert.AreEqual((3, 3, 0f), (player.levelManager.Level, player.levelManager.SpellLevelPoints, player.levelManager.CurrentXP));
     }
 
     [Test]
-    public void update_unit_stats_from_leveling_from_one_to_four()
+    public void update_unit_stats_from_leveling_from_one_to_four_with_constructor()
     {
         // Arrange
         MockPlayer player = new MockPlayer();
@@ -74,25 +64,15 @@ public class level_manager
         ((ScriptableChampion) player.SUnit).manaGrowth = 21f;
         ((ScriptableChampion) player.SUnit).physicalDamageGrowth = 5.2f;
         ((ScriptableChampion) player.SUnit).attackSpeedGrowth = 1.8f;
-        player.levelManager = new LevelManager(player);
         player.unitStats = new ChampionStats((ScriptableChampion) player.SUnit);
         player.unitStats.maxHealth.BaseValue = 100f;
         player.unitStats.CurrentHealth = 60f;
         ((ChampionStats) player.unitStats).maxMana.BaseValue = 50f;
         ((ChampionStats) player.unitStats).CurrentMana = 26f;
         player.unitStats.physicalDamage.BaseValue = 39f;
-
-        MockPlayer enemy = new MockPlayer();
-        enemy.levelManager = new LevelManager(enemy);
-
-        float totalXP = 0f;
-        float totalNeeded = levelInfo.requiredXP[1] + levelInfo.requiredXP[2] + levelInfo.requiredXP[3];
         
         // Act
-        while(totalXP < totalNeeded){
-            player.levelManager.GainXP(enemy);
-            totalXP += levelInfo.championKillXP[0];
-        }
+        player.levelManager = new LevelManager(player, 4);
         
         // Assert
         List<float> expected = new List<float>(){242.695f, 202.695f, 97.565f, 73.565f, 50.778f, 4.077f};
@@ -100,6 +80,15 @@ public class level_manager
         ((ChampionStats) player.unitStats).maxMana.BaseValue, ((ChampionStats) player.unitStats).CurrentMana, player.unitStats.physicalDamage.BaseValue, 
         player.unitStats.bonusAttackSpeed.BaseValue};
         Assert.IsTrue(expected.SequenceEqual(actual, new FloatComparer()));
+    }
+
+    [Test]
+    public void tester(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        MockPlayer enemy = new MockPlayer();
+        player.levelManager = new LevelManager(player, 6);
+        Debug.Log(player.levelManager.Level + " " + player.levelManager.SpellLevelPoints + " " + player.levelManager.CurrentXP);
     }
 }
 

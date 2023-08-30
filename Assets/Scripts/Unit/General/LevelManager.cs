@@ -102,8 +102,15 @@ public class LevelManager
         if(unit is IPlayer)
             if(((IPlayer) unit).score != null)
                 ((IPlayer) unit).score.takedownCallback += GainXP;
-        Level = startingLevel;
-        SpellLevelPoints += startingLevel;
+        SpellLevelPoints += 1;
+        if(startingLevel < 1)
+            startingLevel = 1;
+        else if(startingLevel > 18)
+            startingLevel = 18;
+        for(int i = 1; i < startingLevel; i++){
+            CurrentXP = levelInfo.requiredXP[i];
+            LevelUp();
+        }
     }
 
     /*
@@ -138,7 +145,7 @@ public class LevelManager
     *   LevelUp - Level up the champion. This includes increasing level, spell levels points, next level xp, and champion stats.
     *
     */
-    public void LevelUp(){
+    private void LevelUp(){
         // Keep any overflow xp for the next.
         CurrentXP = CurrentXP - levelInfo.requiredXP[Level];
         // Increase level and required amount for the next level.
