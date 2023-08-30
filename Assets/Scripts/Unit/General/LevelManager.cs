@@ -218,16 +218,16 @@ public class LevelManager
                 // If first spell level up key bind pressed and it is not at max level then level it.
                 if(Input.GetKey(KeyCode.LeftControl)){
                     if(Input.GetKeyDown(KeyCode.Q))
-                        SpellLevelUpRequest("Spell_1", "basic");
+                        SpellLevelUpRequest("Spell_1");
                     // If second spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.W))
-                        SpellLevelUpRequest("Spell_2", "basic");
+                        SpellLevelUpRequest("Spell_2");
                     // If third spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.E))
-                        SpellLevelUpRequest("Spell_3", "basic");
+                        SpellLevelUpRequest("Spell_3");
                     // If fourth spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.R))
-                        SpellLevelUpRequest("Spell_4", "ultimate");
+                        SpellLevelUpRequest("Spell_4");
                 }
             }
             // Skill level up available animation.
@@ -238,11 +238,10 @@ public class LevelManager
     /*
     *   SpellLevelUpRequest - Checks if the requested spell can be leveled up and calls the level up method.
     *   @param spell - string of the spell requested to be leveled up.
-    *   @param type - string of the type of spell to distinguish between 5 point vs 3 point spells (basic vs ultimate).
     */
-    private void SpellLevelUpRequest(string spell, string type){
+    public void SpellLevelUpRequest(string spell){
         // Basic ability.
-        if(type == "basic"){
+        if(spell != "Spell_4"){
             if(spellLevels[spell] != levelInfo.maxSpellLevel)
                 SpellLevelUp(spell);
         }
@@ -259,9 +258,9 @@ public class LevelManager
 
     /*
     *   SpellLevelUp - Levels up the given spell and updates the UI.
-    *   @paream spell - string of the spell to be leveled up.
+    *   @param spell - string of the spell to be leveled up.
     */
-    public void SpellLevelUp(string spell){
+    private void SpellLevelUp(string spell){
         if(spellLevelPoints > 0){
             spellLevels[spell] = spellLevels[spell] + 1;
             SpellLevelPoints -= 1;
