@@ -103,12 +103,30 @@ public class level_manager
     }
 
     [Test]
-    public void tester(){
+    public void levels_up_spell_3_to_level_1(){
         // Arrange
         MockPlayer player = new MockPlayer();
-        MockPlayer enemy = new MockPlayer();
-        player.levelManager = new LevelManager(player, 6);
-        Debug.Log(player.levelManager.Level + " " + player.levelManager.Level + " " + player.levelManager.CurrentXP);
+        player.levelManager = new LevelManager(player);
+        
+        // Act
+        player.levelManager.SpellLevelUp("Spell_3");
+
+        // Assert
+        Assert.AreEqual(1, player.levelManager.spellLevels["Spell_3"]);
+    }
+
+    [Test]
+    public void does_not_level_up_spell_2_to_level_1(){
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        player.levelManager = new LevelManager(player);
+        player.levelManager.SpellLevelUp("Spell_3");
+
+        // Act
+        player.levelManager.SpellLevelUp("Spell_2");
+
+        // Assert
+        Assert.AreEqual(0, player.levelManager.spellLevels["Spell_2"]);
     }
 }
 
