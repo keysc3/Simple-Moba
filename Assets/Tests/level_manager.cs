@@ -42,7 +42,7 @@ public class level_manager
     }
 
     [Test]
-    public void level_up_from_level_one_to_three_without_unit_stats()
+    public void validates_overflow_xp_from_level_up()
     {
         // Arrange
         MockPlayer player = new MockPlayer();
@@ -50,19 +50,37 @@ public class level_manager
         player.levelManager = new LevelManager(player);
         enemy.levelManager = new LevelManager(enemy);
         float totalXP = 0f;
-        float totalNeeded = levelInfo.requiredXP[1] + levelInfo.requiredXP[2];
+        float totalNeeded = levelInfo.requiredXP[1];
         int iterations = 0;
 
         // Act
         while(totalXP < totalNeeded){
             player.levelManager.GainXP(enemy);
-            totalXP += levelInfo.championKillXP[0];
+            totalXP += levelInfo.championKillXP[enemy.levelManager.Level - 1];
             iterations++;
         }
 
         // Assert
         float currentXP = (levelInfo.championKillXP[0] * iterations) - totalNeeded;
-        Assert.AreEqual((3, currentXP), (player.levelManager.Level, player.levelManager.CurrentXP));
+        Assert.AreEqual(currentXP, player.levelManager.CurrentXP);
+    }
+
+    [Test]
+    public void level_up_from_level_one_to_three_without_unit_stats()
+    {
+        // Arrange
+        MockPlayer player = new MockPlayer();
+        MockPlayer enemy = new MockPlayer();
+        player.levelManager = new LevelManager(player);
+        enemy.levelManager = new LevelManager(enemy);
+
+        // Act
+        while(player.levelManager.Level < 3){
+            player.levelManager.LevelUp();
+        }
+
+        // Assert
+        Assert.AreEqual((3, 0f), (player.levelManager.Level, player.levelManager.CurrentXP));
     }
 
     [Test]
@@ -84,14 +102,10 @@ public class level_manager
 
         MockPlayer enemy = new MockPlayer();
         enemy.levelManager = new LevelManager(enemy);
-
-        float totalXP = 0f;
-        float totalNeeded = levelInfo.requiredXP[1] + levelInfo.requiredXP[2] + levelInfo.requiredXP[3];
         
         // Act
-        while(totalXP < totalNeeded){
-            player.levelManager.GainXP(enemy);
-            totalXP += levelInfo.championKillXP[0];
+        while(player.levelManager.Level < 4){
+            player.levelManager.LevelUp();
         }
         
         // Assert
