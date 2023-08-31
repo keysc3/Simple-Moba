@@ -54,6 +54,8 @@ public class LevelManager
         get => currentXP;
         private set {
             currentXP = value;
+            if(value >= levelInfo.requiredXP[Level] && Level != levelInfo.maxLevel)
+                LevelUp();
             if(xpSlider != null){
                 if(Level != levelInfo.maxLevel)
                     xpSlider.value = Mathf.Round((currentXP/levelInfo.requiredXP[Level]) * 100f);
@@ -108,7 +110,6 @@ public class LevelManager
         else if(startingLevel > 18)
             startingLevel = 18;
         for(int i = 1; i < startingLevel; i++){
-            CurrentXP = levelInfo.requiredXP[i];
             LevelUp();
         }
     }
@@ -119,10 +120,6 @@ public class LevelManager
     */
     public void GainXPTester(){
         CurrentXP += gainAmount;
-        if(Level != levelInfo.maxLevel){
-            if(CurrentXP >= levelInfo.requiredXP[Level])
-                LevelUp();
-        }
     }
 
     /*
@@ -136,18 +133,18 @@ public class LevelManager
         else
             gained = levelInfo.defaultXP;
         CurrentXP += gained;
-        if(CurrentXP >= levelInfo.requiredXP[Level] && Level != levelInfo.maxLevel){
-            LevelUp();
-        }
     }
 
     /*
     *   LevelUp - Level up the champion. This includes increasing level, spell levels points, next level xp, and champion stats.
     *
     */
-    private void LevelUp(){
+    public void LevelUp(){
         // Keep any overflow xp for the next.
-        CurrentXP = CurrentXP - levelInfo.requiredXP[Level];
+        if(CurrentXP > levelInfo.requiredXP[Level])
+            CurrentXP = CurrentXP - levelInfo.requiredXP[Level];
+        else
+            CurrentXP = 0;
         // Increase level and required amount for the next level.
         Level++;
         //requiredXP += 100.0f;
