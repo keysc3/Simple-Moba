@@ -54,7 +54,7 @@ public class LevelManager
         get => currentXP;
         private set {
             currentXP = value;
-            if(value >= levelInfo.requiredXP[Level] && Level != levelInfo.maxLevel)
+            if(value >= levelInfo.requiredXP[Level])
                 LevelUp();
             if(xpSlider != null){
                 if(Level != levelInfo.maxLevel)
@@ -119,7 +119,8 @@ public class LevelManager
     *   @param gained - float of the amount of xp to add.
     */
     public void GainXPTester(){
-        CurrentXP += gainAmount;
+        if(Level != levelInfo.maxLevel)
+            CurrentXP += gainAmount;
     }
 
     /*
@@ -127,12 +128,14 @@ public class LevelManager
     *   @param killed - IUnit of the killed unit.
     */
     public void GainXP(IUnit killed){
-        float gained;
-        if(killed is IPlayer)
-            gained = levelInfo.championKillXP[((IPlayer) killed).levelManager.Level - 1];
-        else
-            gained = levelInfo.defaultXP;
-        CurrentXP += gained;
+        if(Level != levelInfo.maxLevel){
+            float gained;
+            if(killed is IPlayer)
+                gained = levelInfo.championKillXP[((IPlayer) killed).levelManager.Level - 1];
+            else
+                gained = levelInfo.defaultXP;
+            CurrentXP += gained;
+        }
     }
 
     /*
