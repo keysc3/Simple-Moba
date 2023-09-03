@@ -163,4 +163,41 @@ public class basic_attack
         // Assert
         Assert.AreEqual(true, canAuto);
     }
+
+    [Test]
+    public void basic_attack_hits_non_damageable_unit(){
+         // Arrange
+        MockBasicAttack basicAttack = new MockBasicAttack();
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
+        MockUnit unit = new MockUnit();
+        basicAttack.PhysicalDamage = 10f;
+        unit.GameObject.name = "No damage please";
+
+        // Act
+        controller.AttackHit(unit);
+
+        // Assert
+        Assert.AreEqual("No damage please", unit.GameObject.name);
+    }
+
+    [Test]
+    public void basic_attack_hits_damageable_unit(){
+         // Arrange
+        MockBasicAttack basicAttack = new MockBasicAttack();
+        MockPlayerMover playerMover = new MockPlayerMover();
+        MockPlayer player = new MockPlayer();
+        BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
+        MockPlayer enemy = new MockPlayer();
+        basicAttack.PhysicalDamage = 14f;
+        enemy.GameObject.name = "No damage please";
+
+        // Act
+        controller.AttackHit(enemy);
+
+        // Assert
+        Assert.AreEqual("14", enemy.GameObject.name);
+    }
+
 }
