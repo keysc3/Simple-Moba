@@ -37,7 +37,7 @@ public class BasicAttackController
             float distToEnemy = (player.Position - playerMover.TargetedEnemy.Position).magnitude;
             // If the enemy is in auto range then start autoing.
             if(distToEnemy < player.unitStats.autoRange.GetValue()){
-                if(currentTime >  basicAttack.NextAuto && !basicAttack.WindingUp){
+                if(currentTime >=  basicAttack.NextAuto && !basicAttack.WindingUp){
                     return true;
                 }
             }

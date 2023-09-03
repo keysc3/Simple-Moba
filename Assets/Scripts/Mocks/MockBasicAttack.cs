@@ -6,9 +6,9 @@ public class MockBasicAttack : IBasicAttack
 {
     public bool WindingUp { get; set; }
     public float NextAuto { get; set; }
-    public float AttackSpeed { get; }
-    public float AutoWindUp { get; }
-    public float PhysicalDamage { get; }
+    public float AttackSpeed { get; set; }
+    public float AutoWindUp { get; set; }
+    public float PhysicalDamage { get; set; }
 
     public void Attack(IUnit target){}
 }
