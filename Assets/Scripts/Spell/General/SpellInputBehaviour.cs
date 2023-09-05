@@ -66,7 +66,7 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
         }
         // Left click
         if(Input.GetMouseButtonDown(0)){
-            spellInputController.LeftClick(mainCamera);
+            spellInputController.LeftClick(mainCamera.ScreenPointToRay(Input.mousePosition));
         }
     }
 

@@ -58,7 +58,7 @@ public class SpellInputController
     *   LeftClick - Handles the actions to take when a left click is inputted.
     *   @param mainCamera - Camera to use for ray casting.
     */
-    public void LeftClick(Camera mainCamera){
+    public void LeftClick(Ray ray){
         // If a spell is readied and the input is not from a button click.
         if(spellInput.LastSpellPressed != null && !spellInput.ButtonClick){
             // If readied spell is not instant cast then hide its cast.
@@ -67,7 +67,6 @@ public class SpellInputController
             }
             // Get GameObject the player wants to cast on. 
             if(spellInput.LastSpellPressed is IHasTargetedCast){
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hitInfo;
                 // If the player click hit a GameObject.
                 if(Physics.Raycast(ray, out hitInfo))
@@ -75,7 +74,7 @@ public class SpellInputController
                     ((IHasTargetedCast) spellInput.LastSpellPressed).Cast(hitInfo.collider.gameObject.GetComponent<IUnit>());
             }
             // Cast spell.
-            else{
+            else if(spellInput.LastSpellPressed is IHasCast){
                 ((IHasCast) spellInput.LastSpellPressed).Cast();
             }
             // Unready spell.
