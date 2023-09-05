@@ -15,6 +15,10 @@ public class MockSpell : ISpell
     public Transform spellCDTransform { get; set; }
     public TMP_Text spellCDText { get; set; }
     public Image spellCDImage { get; set; }
-    public void DisplayCast(){}
-    public void HideCast(){}
+    public void DisplayCast(){
+        IsDisplayed = true;
+    }
+    public void HideCast(){
+        IsDisplayed = false;
+    }
 }
