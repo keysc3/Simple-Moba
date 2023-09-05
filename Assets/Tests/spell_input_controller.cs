@@ -306,4 +306,62 @@ public class spell_input_controller
         // Assert
         Assert.AreEqual(KeyCode.None, spellInput.LastButtonPressed);
     }
+
+    // CheckForUnready
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void does_not_unready_spell_from_non_spell_input_due_to_null_last_pressed_spell()
+    {
+        // Arrange
+        MockSpellInput spellInput = new MockSpellInput();
+        MockSpell spell = new  MockSpell();
+        SpellInputController controller = new SpellInputController(spellInput);
+        spellInput.LastButtonPressed = KeyCode.Q;
+
+        // Act
+        controller.CheckForUnready();
+
+        // Assert
+        Assert.AreEqual(KeyCode.Q, spellInput.LastButtonPressed);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void does_not_unready_spell_from_non_spell_input_due_to_no_button_registered()
+    {
+        // Arrange
+        MockSpellInput spellInput = new MockSpellInput();
+        MockSpell spell = new  MockSpell();
+        SpellInputController controller = new SpellInputController(spellInput);
+        spellInput.LastSpellPressed = spell;
+        spellInput.LastButtonPressed = KeyCode.None;
+
+        // Act
+        controller.CheckForUnready();
+
+        // Assert
+        Assert.AreEqual(spell, spellInput.LastSpellPressed);
+    }
+
+    // A Test behaves as an ordinary method
+    [Test]
+    public void unready_spell_from_non_readied_spell_input()
+    {
+        // Arrange
+        MockSpellInput spellInput = new MockSpellInput();
+        MockSpell spell = new  MockSpell();
+        SpellInputController controller = new SpellInputController(spellInput);
+        spell.IsDisplayed = true;
+        spellInput.LastSpellPressed = spell;
+        spellInput.LastButtonPressed = KeyCode.Q;
+
+        // Act
+        controller.CheckForUnready();
+
+        // Assert
+        Tuple<bool, ISpell, KeyCode> expected = new Tuple<bool, ISpell, KeyCode>(false, null, KeyCode.None);
+        Tuple<bool, ISpell, KeyCode> actual = new Tuple<bool, ISpell, KeyCode>(spell.IsDisplayed, spellInput.LastSpellPressed, spellInput.LastButtonPressed);
+        Assert.AreEqual(expected, actual);
+    }
 }

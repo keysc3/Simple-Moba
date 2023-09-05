@@ -84,17 +84,14 @@ public class SpellInputController
     }
 
     /*
-    *   AnyInput - Unready spell if any input is pressed besides the readied spell.
+    *   CheckForUnready - Unready spell if any input is pressed besides the readied spell.
     */
-    public void AnyInput(){
-        // If the input detected is different than the last button press and not left click.
-        if(!Input.GetKeyDown(spellInput.LastButtonPressed) && !Input.GetMouseButtonDown(0)){
-            // If a spell has been readied and the last spell pressed is not a quick cast, then unready the spell.
-            if(spellInput.LastSpellPressed != null && spellInput.LastButtonPressed != KeyCode.None){
-                spellInput.LastSpellPressed.HideCast();
-                spellInput.LastSpellPressed = null;
-                spellInput.LastButtonPressed = KeyCode.None;
-            }
+    public void CheckForUnready(){
+        // If a spell has been readied and the last spell pressed is not a quick cast, then unready the spell.
+        if(spellInput.LastSpellPressed != null && spellInput.LastButtonPressed != KeyCode.None){
+            spellInput.LastSpellPressed.HideCast();
+            spellInput.LastSpellPressed = null;
+            spellInput.LastButtonPressed = KeyCode.None;
         }
     }
 }
