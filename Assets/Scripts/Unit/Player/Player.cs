@@ -10,7 +10,7 @@ using TMPro;
 *
 * @author: Colin Keys
 */
-public class Player : MonoBehaviour, IPlayer, IDamageable
+public class Player : MonoBehaviour, IPlayer
 {
     private bool isDead = false;
     public bool IsDead { 

@@ -8,7 +8,7 @@ using UnityEngine.AI;
 *
 * @author: Colin Keys
 */
-public interface IMinion : IUnit
+public interface IMinion : IUnit, IDamageable
 {
     LevelManager levelManager { get; set; }
     //NavMeshAgent navMeshAgent { get; set; }

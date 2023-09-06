@@ -8,7 +8,7 @@ using UnityEngine.AI;
 *
 * @author: Colin Keys
 */
-public class Minion : MonoBehaviour, IMinion, IDamageable
+public class Minion : MonoBehaviour, IMinion
 {
     private bool isDead = false;
     public bool IsDead { 
