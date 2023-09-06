@@ -98,7 +98,7 @@ public class SpellController
     *   CalculateCooldown - Calculates the cooldown of a spell after applying the champions haste value.
     *   @param baseCD - float of the base cooldown.
     */
-    private float CalculateCooldown(float baseCD){
+    public float CalculateCooldown(float baseCD){
         float reducedCD = baseCD*(100f/(100f+player.unitStats.haste.GetValue()));
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
