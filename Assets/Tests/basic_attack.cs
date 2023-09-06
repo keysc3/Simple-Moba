@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using NSubstitute;
 
 public class basic_attack
 {
@@ -184,20 +185,19 @@ public class basic_attack
 
     [Test]
     public void basic_attack_hits_damageable_unit(){
-         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+        // Arrange
+        IPlayer player = Substitute.For<IPlayer>();
+        IPlayer enemy = Substitute.For<IPlayer>();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = Substitute.For<IPlayerMover>();
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockPlayer enemy = new MockPlayer();
-        basicAttack.PhysicalDamage = 14f;
-        enemy.GameObject.name = "No damage please";
+        basicAttack.PhysicalDamage.Returns(14f);
 
         // Act
         controller.AttackHit(enemy);
 
         // Assert
-        Assert.AreEqual("14", enemy.GameObject.name);
+        enemy.Received().TakeDamage(14f, "physical", player, false);
     }
 
 }
