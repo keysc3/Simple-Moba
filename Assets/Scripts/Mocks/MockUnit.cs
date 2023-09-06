@@ -19,4 +19,8 @@ public class MockUnit : IUnit
     public BonusDamage bonusDamage { get; set; }
     public GameObject GameObject { get; set; } = new GameObject();
     public Vector3 Position { get; set; }
+
+    public void TakeDamage(float damageAmount, string damageType, IUnit damager, bool isDot){
+        
+    }
 }

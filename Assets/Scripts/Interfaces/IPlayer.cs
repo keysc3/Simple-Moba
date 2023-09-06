@@ -8,7 +8,7 @@ using UnityEngine.AI;
 *
 * @author: Colin Keys
 */
-public interface IPlayer : IUnit, IDamageable
+public interface IPlayer : IUnit
 {
     LevelManager levelManager { get; set; }
     Score score { get; set; }

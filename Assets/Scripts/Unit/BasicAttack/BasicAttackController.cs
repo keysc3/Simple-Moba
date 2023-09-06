@@ -75,7 +75,6 @@ public class BasicAttackController
     */
     public void AttackHit(IUnit target){
         float physicalDamage = basicAttack.PhysicalDamage;
-        if(target is IDamageable)
-            ((IDamageable) target).TakeDamage(physicalDamage, "physical", player, false);
+        target.TakeDamage(physicalDamage, "physical", player, false);
     }
 }

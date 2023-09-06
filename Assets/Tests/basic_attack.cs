@@ -166,24 +166,6 @@ public class basic_attack
     }
 
     [Test]
-    public void basic_attack_hits_non_damageable_unit(){
-         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
-        BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockUnit unit = new MockUnit();
-        basicAttack.PhysicalDamage = 10f;
-        unit.GameObject.name = "No damage please";
-
-        // Act
-        controller.AttackHit(unit);
-
-        // Assert
-        Assert.AreEqual("No damage please", unit.GameObject.name);
-    }
-
-    [Test]
     public void basic_attack_hits_damageable_unit(){
         // Arrange
         IPlayer player = Substitute.For<IPlayer>();
@@ -199,5 +181,4 @@ public class basic_attack
         // Assert
         enemy.Received().TakeDamage(14f, "physical", player, false);
     }
-
 }
