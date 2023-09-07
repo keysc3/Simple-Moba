@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using System;
+using NSubstitute;
 
 public class spell_input_controller
 {
@@ -15,18 +16,19 @@ public class spell_input_controller
     public void does_not_cast_unlearned_spell()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockCastableSpell spell = new MockCastableSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum = "Not Casted";
-        spell.IsQuickCast = true;
-        spellInput.SpellLevels.Add(spell.SpellNum, 0);
+        spell.SpellNum.Returns("Not Casted");
+        spell.IsQuickCast.Returns(true);
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 0}};
+        spellInput.SpellLevels.Returns(dict);
         
         // Act
         controller.SpellButtonPressed(KeyCode.Q, spell);
 
         // Assert
-        Assert.AreEqual("Not Casted", spell.SpellNum);
+        ((IHasCast) spell).DidNotReceive().Cast();
     }
 
     // A Test behaves as an ordinary method
@@ -34,19 +36,20 @@ public class spell_input_controller
     public void does_not_cast_spell_on_CD()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockCastableSpell spell = new MockCastableSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum = "Not Casted";
-        spell.IsQuickCast = true;
-        spell.OnCd = true;
-        spellInput.SpellLevels.Add(spell.SpellNum, 1);
+        spell.SpellNum.Returns("Not Casted");
+        spell.IsQuickCast.Returns(true);
+        spell.OnCd.Returns(true);
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spellInput.SpellLevels.Returns(dict);
         
         // Act
         controller.SpellButtonPressed(KeyCode.Q, spell);
 
         // Assert
-        Assert.AreEqual("Not Casted", spell.SpellNum);
+        ((IHasCast) spell).DidNotReceive().Cast();
     }
 
     // A Test behaves as an ordinary method
@@ -54,21 +57,22 @@ public class spell_input_controller
     public void does_not_hide_readied_last_pressed_spells_cast_due_to_same_spell_button_press()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new MockSpell();
-        MockSpell lastPressed = new MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
+        ISpell lastPressed = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
-        lastPressed.IsDisplayed = true;
-        spell.SpellNum = "Not Casted";
-        spellInput.SpellLevels.Add(spell.SpellNum, 1);
-        spellInput.LastSpellPressed = lastPressed;
-        spellInput.LastButtonPressed = KeyCode.Q;
+        lastPressed.IsDisplayed.Returns(true);
+        spell.SpellNum.Returns("Not Casted");
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spellInput.SpellLevels.Returns(dict);
+        spellInput.LastSpellPressed.Returns(lastPressed);
+        spellInput.LastButtonPressed.Returns(KeyCode.Q);
         
         // Act
         controller.SpellButtonPressed(KeyCode.Q, spell);
 
         // Assert
-        Assert.AreEqual(true, lastPressed.IsDisplayed);
+        spell.DidNotReceive().HideCast();
     }
 
     // A Test behaves as an ordinary method
@@ -76,21 +80,22 @@ public class spell_input_controller
     public void hides_last_pressed_spells_cast_due_to_different_spell_button_press()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new MockSpell();
-        MockSpell lastPressed = new MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
+        ISpell lastPressed = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
-        lastPressed.IsDisplayed = true;
-        spell.SpellNum = "Not Casted";
-        spellInput.SpellLevels.Add(spell.SpellNum, 1);
-        spellInput.LastSpellPressed = lastPressed;
-        spellInput.LastButtonPressed = KeyCode.Q;
+        lastPressed.IsDisplayed.Returns(true);
+        spell.SpellNum.Returns("Not Casted");
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spellInput.SpellLevels.Returns(dict);
+        spellInput.LastSpellPressed.Returns(lastPressed);
+        spellInput.LastButtonPressed.Returns(KeyCode.Q);
         
         // Act
         controller.SpellButtonPressed(KeyCode.W, spell);
 
         // Assert
-        Assert.AreEqual(false, lastPressed.IsDisplayed);
+        lastPressed.Received().HideCast();
     }
 
     // A Test behaves as an ordinary method
@@ -98,19 +103,20 @@ public class spell_input_controller
     public void does_not_ready_non_quick_cast_spell_from_different_spell_button_press()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockCastableSpell spell = new MockCastableSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.IsDisplayed = false;
-        spell.SpellNum = "Not Casted";
-        spellInput.SpellLevels.Add(spell.SpellNum, 1);
-        spellInput.LastButtonPressed = KeyCode.Q;
+        spell.SpellNum.Returns("Not Casted");
+        spell.IsDisplayed.Returns(false);
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spellInput.SpellLevels.Returns(dict);
+        spellInput.LastButtonPressed.Returns(KeyCode.Q);
         
         // Act
         controller.SpellButtonPressed(KeyCode.Q, spell);
 
         // Assert
-        Assert.AreEqual(false, spell.IsDisplayed);
+        spell.DidNotReceive().DisplayCast();
     }
 
     // A Test behaves as an ordinary method
@@ -118,19 +124,22 @@ public class spell_input_controller
     public void readies_non_quick_cast_spell_from_spell_button_press()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockCastableSpell spell = new MockCastableSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
+        spell.SpellNum.Returns("Not Casted");
         spell.IsDisplayed = false;
-        spell.SpellNum = "Not Casted";
-        spellInput.SpellLevels.Add(spell.SpellNum, 1);
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spellInput.SpellLevels.Returns(dict);
         spellInput.LastButtonPressed = KeyCode.Q;
+        spell.When(x => x.DisplayCast()).Do(x => spell.IsDisplayed = true);
         
         // Act
         controller.SpellButtonPressed(KeyCode.W, spell);
 
         // Assert
-        Assert.AreEqual((true, KeyCode.W, "Not Casted"), (spell.IsDisplayed, spellInput.LastButtonPressed, spellInput.LastSpellPressed.SpellNum));
+        ((IHasCast) spell).DidNotReceive().Cast();
+        Assert.AreEqual((true, KeyCode.W), (spell.IsDisplayed, spellInput.LastButtonPressed));
     }
 
     // A Test behaves as an ordinary method
@@ -138,19 +147,20 @@ public class spell_input_controller
     public void casts_quick_cast_spell_from_spell_button_press()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockCastableSpell spell = new MockCastableSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.IsQuickCast = true;
-        spell.IsDisplayed = false;
-        spell.SpellNum = "Not Casted";
-        spellInput.SpellLevels.Add(spell.SpellNum, 1);
+        spell.IsQuickCast.Returns(true);
+        spell.IsDisplayed.Returns(false);
+        spell.SpellNum.Returns("Not Casted");
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spellInput.SpellLevels.Returns(dict);
         
         // Act
         controller.SpellButtonPressed(KeyCode.W, spell);
 
         // Assert
-        Assert.AreEqual("Casted", spell.SpellNum);
+        ((IHasCast) spell).Received().Cast();
     }
 
     // A Test behaves as an ordinary method
@@ -158,13 +168,17 @@ public class spell_input_controller
     public void clears_readied_spell_from_quick_cast_spell_cast()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockCastableSpell spell = new MockCastableSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
+        ISpell lastPressed = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.IsQuickCast = true;
-        spell.IsDisplayed = false;
-        spell.SpellNum = "Not Casted";
-        spellInput.SpellLevels.Add(spell.SpellNum, 1);
+        spell.IsQuickCast.Returns(true);
+        spell.IsDisplayed.Returns(false);
+        spell.SpellNum.Returns("Not Casted");
+        spellInput.LastSpellPressed = lastPressed;
+        spellInput.LastButtonPressed = KeyCode.R;
+        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spellInput.SpellLevels.Returns(dict);
         
         // Act
         controller.SpellButtonPressed(KeyCode.W, spell);
@@ -182,9 +196,12 @@ public class spell_input_controller
     public void does_not_unready_spell_from_no_last_spell_pressed()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
         SpellInputController controller = new SpellInputController(spellInput);
+        ISpell nullSpell = null;
+        spellInput.LastSpellPressed.Returns(nullSpell);
         spellInput.LastButtonPressed = KeyCode.Q;
+        
         // Act
         controller.LeftClick(new Ray(Vector3.zero, Vector3.right));
 
@@ -197,12 +214,12 @@ public class spell_input_controller
     public void does_not_unready_spell_from_button_click_left_click()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spellInput.LastSpellPressed = spell;
         spellInput.LastButtonPressed = KeyCode.Q;
-        spellInput.ButtonClick = true;
+        spellInput.LastSpellPressed.Returns(spell);
+        spellInput.ButtonClick.Returns(true);
 
         // Act
         controller.LeftClick(new Ray(Vector3.zero, Vector3.right));
@@ -216,18 +233,18 @@ public class spell_input_controller
     public void hides_non_quick_cast_spells_cast_from_left_click()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.IsDisplayed = true;
-        spellInput.LastSpellPressed = spell;
-        spellInput.LastButtonPressed = KeyCode.Q;
+        spell.IsDisplayed.Returns(true);
+        spellInput.LastSpellPressed.Returns(spell);
+        spellInput.LastButtonPressed.Returns(KeyCode.Q);
 
         // Act
         controller.LeftClick(new Ray(Vector3.zero, Vector3.right));
 
         // Assert
-        Assert.AreEqual(false, spell.IsDisplayed);
+        spell.Received().HideCast();
     }
 
     // A Test behaves as an ordinary method
@@ -235,13 +252,16 @@ public class spell_input_controller
     public void unready_targeted_cast_spell_from_no_target_input()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockTargetedCastSpell spell = new  MockTargetedCastSpell();
-        MockUnit unit = new MockUnit();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasTargetedCast>();
+        IUnit unit = Substitute.For<IUnit>();
         SpellInputController controller = new SpellInputController(spellInput);
-        unit.GameObject.AddComponent<BoxCollider>();
-        spell.SpellNum = "Not Casted";
-        spellInput.LastSpellPressed = spell;
+        GameObject g1 = new GameObject();
+        g1.AddComponent<BoxCollider>();
+        unit.GameObject.Returns(g1);
+        spell.SpellNum.Returns("Not Casted");
+        spellInput.LastButtonPressed = KeyCode.Q;
+        spellInput.LastSpellPressed.Returns(spell);
 
         // Act
         controller.LeftClick(new Ray(Vector3.zero, Vector3.right));
@@ -255,20 +275,22 @@ public class spell_input_controller
     public void casts_targeted_cast_spell()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockTargetedCastSpell spell = new  MockTargetedCastSpell();
-        MockUnit unit = new MockUnit();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasTargetedCast>();
+        IUnit unit = Substitute.For<IUnit>();
         SpellInputController controller = new SpellInputController(spellInput);
-        unit.GameObject.AddComponent<BoxCollider>();
-        unit.GameObject.transform.position = Vector3.zero;
-        spell.SpellNum = "Not Casted";
-        spellInput.LastSpellPressed = spell;
+        GameObject g1 = new GameObject();
+        g1.AddComponent<BoxCollider>();
+        g1.transform.position = Vector3.zero;
+        unit.GameObject.Returns(g1);
+        spell.SpellNum.Returns("Not Casted");
+        spellInput.LastSpellPressed.Returns(spell);
 
         // Act
         controller.LeftClick(new Ray(Vector3.left, Vector3.right));
 
         // Assert
-        Assert.AreEqual("Targeted spell casted", spell.SpellNum);
+        ((IHasTargetedCast) spell).Received().Cast(null);
     }
 
     // A Test behaves as an ordinary method
@@ -276,17 +298,17 @@ public class spell_input_controller
     public void casts_non_quick_cast_spell()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockCastableSpell spell = new  MockCastableSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum = "Not Casted";
-        spellInput.LastSpellPressed = spell;
+        spell.SpellNum.Returns("Not Casted");
+        spellInput.LastSpellPressed.Returns(spell);
 
         // Act
         controller.LeftClick(new Ray(Vector3.zero, Vector3.right));
 
         // Assert
-        Assert.AreEqual("Casted", spell.SpellNum);
+        ((IHasCast) spell).Received().Cast();
     }
 
     // A Test behaves as an ordinary method
@@ -294,10 +316,10 @@ public class spell_input_controller
     public void unready_spell_without_cast()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new  MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spellInput.LastSpellPressed = spell;
+        spellInput.LastSpellPressed.Returns(spell);
         spellInput.LastButtonPressed = KeyCode.Q;
 
         // Act
@@ -314,10 +336,12 @@ public class spell_input_controller
     public void does_not_unready_spell_from_non_spell_input_due_to_null_last_pressed_spell()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new  MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
         spellInput.LastButtonPressed = KeyCode.Q;
+        ISpell nullSpell = null;
+        spellInput.LastSpellPressed.Returns(nullSpell);
 
         // Act
         controller.CheckForUnready();
@@ -331,11 +355,11 @@ public class spell_input_controller
     public void does_not_unready_spell_from_non_spell_input_due_to_no_button_registered()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new  MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
         spellInput.LastSpellPressed = spell;
-        spellInput.LastButtonPressed = KeyCode.None;
+        spellInput.LastButtonPressed.Returns(KeyCode.None);
 
         // Act
         controller.CheckForUnready();
@@ -349,12 +373,13 @@ public class spell_input_controller
     public void unready_spell_from_non_readied_spell_input()
     {
         // Arrange
-        MockSpellInput spellInput = new MockSpellInput();
-        MockSpell spell = new  MockSpell();
+        ISpellInput spellInput = Substitute.For<ISpellInput>();
+        ISpell spell = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
         spell.IsDisplayed = true;
         spellInput.LastSpellPressed = spell;
         spellInput.LastButtonPressed = KeyCode.Q;
+        spell.When(x => x.HideCast()).Do(x => spell.IsDisplayed = false);
 
         // Act
         controller.CheckForUnready();
