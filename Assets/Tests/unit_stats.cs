@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using NSubstitute;
 
 public class unit_stats
 {
@@ -100,8 +101,8 @@ public class unit_stats
         
         List<float> slowValues  = new List<float>(){0.1f, 0.15f, 0.2f, 0.25f, 0.3f};
         List<float> durationValues = new List<float>(){1f, 2f, 3f, 4f, 5f};
-        MockUnit m1 = new MockUnit();
-        MockUnit m2 = new MockUnit();
+        IUnit unit1 = Substitute.For<IUnit>();
+        IUnit unit2 = Substitute.For<IUnit>();
         StatusEffects se = new StatusEffects(null);
         List<Effect> myEffects  = new List<Effect>();
 
@@ -110,7 +111,7 @@ public class unit_stats
             slow.name = "Slow" + i;
             slow.duration.AddRange(durationValues);
             slow.slowPercent.AddRange(slowValues);
-            myEffects.Add((Slow) slow.InitializeEffect((i+2)%slowValues.Count, m1, m2));
+            myEffects.Add((Slow) slow.InitializeEffect((i+2)%slowValues.Count, unit1, unit2));
         }
 
         for(int i = 0; i < 3; i ++){
@@ -140,8 +141,8 @@ public class unit_stats
     *   @return SpeedBonus - New SpeeBonus.
     */
     public SpeedBonus CreateSpeedBonusEffect(string speedBonusName, int index, bool isAdditive, bool isStackable){
-        MockUnit m1 = new MockUnit();
-        MockUnit m2 = new MockUnit();
+        IUnit unit1 = Substitute.For<IUnit>();
+        IUnit unit2 = Substitute.For<IUnit>();
         List<float> sbValues  = new List<float>(){0.1f, 0.15f, 0.2f, 0.25f, 0.3f};
         List<float> durationValues = new List<float>(){1f, 2f, 3f, 4f, 5f};
         ScriptableSpeedBonus sb = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
@@ -150,6 +151,6 @@ public class unit_stats
         sb.isAdditive = isAdditive;
         sb.duration.AddRange(durationValues);
         sb.bonusPercent.AddRange(sbValues);
-        return (SpeedBonus) sb.InitializeEffect(index, m1, m2);
+        return (SpeedBonus) sb.InitializeEffect(index, unit1, unit2);
     } 
 }
