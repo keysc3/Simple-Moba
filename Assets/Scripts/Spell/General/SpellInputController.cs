@@ -36,16 +36,13 @@ public class SpellInputController
                 if(!spellPressed.IsQuickCast){
                     // If Last button press is different new than new button press, ready the spell.
                     if(spellInput.LastButtonPressed != buttonPressed){
-                        spellPressed.DisplayCast();
-                        spellInput.LastButtonPressed = buttonPressed;
-                        spellInput.LastSpellPressed = spellPressed;
+                        ReadySpell(buttonPressed, spellPressed);
                     }
                 }
                 // Cast the spell since it is cast on press.
                 else{
                     ((IHasCast) spellPressed).Cast();
-                    spellInput.LastSpellPressed = null;
-                    spellInput.LastButtonPressed = KeyCode.None;
+                    UnreadySpell();
                 }
             }
         }
@@ -61,10 +58,6 @@ public class SpellInputController
     public void LeftClick(Ray ray){
         // If a spell is readied and the input is not from a button click.
         if(spellInput.LastSpellPressed != null && !spellInput.ButtonClick){
-            // If readied spell is not instant cast then hide its cast.
-            if(!spellInput.LastSpellPressed.IsQuickCast){
-                spellInput.LastSpellPressed.HideCast();
-            }
             // Get GameObject the player wants to cast on. 
             if(spellInput.LastSpellPressed is IHasTargetedCast){
                 RaycastHit hitInfo;
@@ -78,8 +71,7 @@ public class SpellInputController
                 ((IHasCast) spellInput.LastSpellPressed).Cast();
             }
             // Unready spell.
-            spellInput.LastSpellPressed = null;
-            spellInput.LastButtonPressed = KeyCode.None;
+            UnreadySpell();
         }
     }
 
@@ -88,8 +80,21 @@ public class SpellInputController
     */
     public void CheckForUnready(){
         // If a spell has been readied and the last spell pressed is not a quick cast, then unready the spell.
-        if(spellInput.LastSpellPressed != null && spellInput.LastButtonPressed != KeyCode.None){
-            spellInput.LastSpellPressed.HideCast();
+        if(spellInput.LastButtonPressed != KeyCode.None){
+            UnreadySpell();
+        }
+    }
+
+    private void ReadySpell(KeyCode buttonPressed, ISpell spellPressed){
+        spellPressed.DisplayCast();
+        spellInput.LastButtonPressed = buttonPressed;
+        spellInput.LastSpellPressed = spellPressed;
+    }
+
+    private void UnreadySpell(){
+        if(spellInput.LastSpellPressed != null){
+            if(!spellInput.LastSpellPressed.IsQuickCast)
+                spellInput.LastSpellPressed.HideCast();
             spellInput.LastSpellPressed = null;
             spellInput.LastButtonPressed = KeyCode.None;
         }
