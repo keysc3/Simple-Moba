@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
+using NSubstitute;
 
 public class spell_controller
 {
@@ -12,11 +13,12 @@ public class spell_controller
     public void gets_54_cooldown_from_68_base_with_24_haste()
     {
         // Arrange
-        MockPlayer player = new MockPlayer();
-        MockSpell spell = new MockSpell();
+        IPlayer player = CreateMockPlayer();
+        ISpell spell = Substitute.For<ISpell>();
         SpellController controller = new SpellController(spell, player);
-        player.unitStats = new UnitStats(player.SUnit);
-        player.unitStats.haste.BaseValue = 24f;
+        UnitStats unitStats = new UnitStats(ScriptableObject.CreateInstance<ScriptableUnit>());
+        unitStats.haste.BaseValue = 24f;
+        player.unitStats.Returns(unitStats);
 
         // Act
         float final = controller.CalculateCooldown(68f);
@@ -31,8 +33,8 @@ public class spell_controller
     public void sets_children_gameobjects_active()
     {
         // Arrange
-        MockPlayer player = new MockPlayer();
-        MockSpell spell = new MockSpell();
+        IPlayer player = CreateMockPlayer();
+        ISpell spell = Substitute.For<ISpell>();
         SpellController controller = new SpellController(spell, player);
         GameObject parent = new GameObject();
         GameObject child1 = new GameObject();
@@ -55,8 +57,8 @@ public class spell_controller
     public void sets_image_fill_amount()
     {
         // Arrange
-        MockPlayer player = new MockPlayer();
-        MockSpell spell = new MockSpell();
+        IPlayer player = CreateMockPlayer();
+        ISpell spell = Substitute.For<ISpell>();
         SpellController controller = new SpellController(spell, player);
         GameObject g1 = new GameObject();
         Image slider = g1.AddComponent<Image>();
@@ -67,5 +69,11 @@ public class spell_controller
         // Assert
         Assert.AreEqual(0.8f, slider.fillAmount);
 
+    }
+
+    public IPlayer CreateMockPlayer(){
+        IPlayer player = Substitute.For<IPlayer>();
+        player.GameObject.Returns(new GameObject());
+        return player;
     }
 }
