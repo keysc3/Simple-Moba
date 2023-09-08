@@ -92,7 +92,6 @@ public class player
         IPlayer damager2 = CreateDamager();
         damager2.score = new Score(null);
         player.damageTracker = new DamageTracker();
-        player.unitStats.CurrentHealth = 150f;
 
         // Act
         player.TakeDamage(143f, "physical", damager1, false);
