@@ -70,7 +70,8 @@ public class Minion : MonoBehaviour, IMinion
         // If dead then award a creep kill and start the death method.
         if(unitStats.CurrentHealth <= 0f){
             if(damager is IPlayer)
-                ((IPlayer) damager).score.CreepKill(this);
+                if(((IPlayer) damager).score != null)
+                    ((IPlayer) damager).score.CreepKill(this);
             Death();
         }
         // Apply any damage that procs after recieving damage.
@@ -79,7 +80,7 @@ public class Minion : MonoBehaviour, IMinion
         }
     }
 
-    public void Death(){
+    private void Death(){
        isDead = true;
        Destroy(gameObject);
     }
