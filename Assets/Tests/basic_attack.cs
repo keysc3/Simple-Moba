@@ -7,21 +7,24 @@ using NSubstitute;
 
 public class basic_attack
 {
+    private readonly IUnit nullUnit = null;
+
     // A Test behaves as an ordinary method
     [Test]
     public void returns_false_can_auto_from_no_target()
     {
         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = CreateMockPlayerMoverWithTarget(nullUnit);
+        IPlayer player = Substitute.For<IPlayer>();
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
+        player.IsCasting.Returns(false);
 
         // Act
         bool canAuto = controller.CanAuto(1f);
 
         // Assert
-        Assert.AreEqual(false, canAuto);
+        Assert.False(canAuto);
     }
 
     // A Test behaves as an ordinary method
@@ -29,19 +32,18 @@ public class basic_attack
     public void returns_false_can_auto_from_player_casting()
     {
         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+        IPlayer player = Substitute.For<IPlayer>();
+        IUnit unit = Substitute.For<IUnit>();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = CreateMockPlayerMoverWithTarget(unit);
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockUnit unit = new MockUnit();
-        player.IsCasting = true;
-        playerMover.TargetedEnemy = unit;
+        player.IsCasting.Returns(true);
 
         // Act
         bool canAuto = controller.CanAuto(1f);
 
         // Assert
-        Assert.AreEqual(false, canAuto);
+        Assert.False(canAuto);
     }
 
     // A Test behaves as an ordinary method
@@ -49,19 +51,18 @@ public class basic_attack
     public void returns_false_can_auto_from_dead_targeted_enemy()
     {
         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+        IPlayer player = Substitute.For<IPlayer>();
+        IUnit unit = Substitute.For<IUnit>();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = CreateMockPlayerMoverWithTarget(unit);
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockUnit unit = new MockUnit();
-        playerMover.TargetedEnemy = unit;
-        unit.IsDead = true;
+        unit.IsDead.Returns(true);
 
         // Act
         bool canAuto = controller.CanAuto(1f);
 
         // Assert
-        Assert.AreEqual(false, canAuto);
+        Assert.False(canAuto);
     }
 
     // A Test behaves as an ordinary method
@@ -69,23 +70,20 @@ public class basic_attack
     public void returns_false_can_auto_from_out_of_range()
     {
         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+        IPlayer player = CreateMockPlayerWithRange(4.9f);
+        IUnit unit = Substitute.For<IUnit>();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = CreateMockPlayerMoverWithTarget(unit);
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockUnit unit = new MockUnit();
-        player.unitStats = new ChampionStats((ScriptableChampion) player.SUnit);
-        player.unitStats.autoRange.BaseValue = 4.9f;
-        playerMover.TargetedEnemy = unit;
         // Magnitude 5 vector.
-        player.Position = new Vector3(7f, 0f, 9f);
-        unit.Position = new Vector3(4f, 0f, 5f);
+        player.Position.Returns(new Vector3(7f, 0f, 9f));
+        unit.Position.Returns(new Vector3(4f, 0f, 5f));
 
         // Act
         bool canAuto = controller.CanAuto(1f);
 
         // Assert
-        Assert.AreEqual(false, canAuto);
+        Assert.False(canAuto);
     }
 
     // A Test behaves as an ordinary method
@@ -93,24 +91,21 @@ public class basic_attack
     public void returns_false_can_auto_from_next_auto_not_available_yet()
     {
         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+            IPlayer player = CreateMockPlayerWithRange(5.1f);
+        IUnit unit = Substitute.For<IUnit>();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = CreateMockPlayerMoverWithTarget(unit);
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockUnit unit = new MockUnit();
-        basicAttack.NextAuto = 2f;
-        player.unitStats = new ChampionStats((ScriptableChampion) player.SUnit);
-        player.unitStats.autoRange.BaseValue = 5.1f;
-        playerMover.TargetedEnemy = unit;
+        basicAttack.NextAuto.Returns(2f);
         // Magnitude 5 vector.
-        player.Position = new Vector3(7f, 0f, 9f);
-        unit.Position = new Vector3(4f, 0f, 5f);
+        player.Position.Returns(new Vector3(7f, 0f, 9f));
+        unit.Position.Returns(new Vector3(4f, 0f, 5f));
 
         // Act
         bool canAuto = controller.CanAuto(1.9f);
 
         // Assert
-        Assert.AreEqual(false, canAuto);
+        Assert.False(canAuto);
     }
 
     // A Test behaves as an ordinary method
@@ -118,25 +113,22 @@ public class basic_attack
     public void returns_false_can_auto_from_winding_up()
     {
         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+        IPlayer player = CreateMockPlayerWithRange(5.1f);
+        IUnit unit = Substitute.For<IUnit>();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = CreateMockPlayerMoverWithTarget(unit);
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockUnit unit = new MockUnit();
-        basicAttack.NextAuto = 2f;
-        basicAttack.WindingUp = true;
-        player.unitStats = new ChampionStats((ScriptableChampion) player.SUnit);
-        player.unitStats.autoRange.BaseValue = 5.1f;
-        playerMover.TargetedEnemy = unit;
+        basicAttack.NextAuto.Returns(2f);
+        basicAttack.WindingUp.Returns(true);
         // Magnitude 5 vector.
-        player.Position = new Vector3(7f, 0f, 9f);
-        unit.Position = new Vector3(4f, 0f, 5f);
+        player.Position.Returns(new Vector3(7f, 0f, 9f));
+        unit.Position.Returns(new Vector3(4f, 0f, 5f));
 
         // Act
         bool canAuto = controller.CanAuto(2.1f);
 
         // Assert
-        Assert.AreEqual(false, canAuto);
+        Assert.False(canAuto);
     }
 
     // A Test behaves as an ordinary method
@@ -144,25 +136,22 @@ public class basic_attack
     public void returns_true_can_auto()
     {
         // Arrange
-        MockBasicAttack basicAttack = new MockBasicAttack();
-        MockPlayerMover playerMover = new MockPlayerMover();
-        MockPlayer player = new MockPlayer();
+        IPlayer player = CreateMockPlayerWithRange(5.1f);
+        IUnit unit = Substitute.For<IUnit>();
+        IBasicAttack basicAttack = Substitute.For<IBasicAttack>();
+        IPlayerMover playerMover = CreateMockPlayerMoverWithTarget(unit);
         BasicAttackController controller = new BasicAttackController(basicAttack, playerMover, player);
-        MockUnit unit = new MockUnit();
-        basicAttack.NextAuto = 2f;
-        basicAttack.WindingUp = false;
-        player.unitStats = new ChampionStats((ScriptableChampion) player.SUnit);
-        player.unitStats.autoRange.BaseValue = 5.1f;
-        playerMover.TargetedEnemy = unit;
+        basicAttack.NextAuto.Returns(2f);
+        basicAttack.WindingUp.Returns(false);
         // Magnitude 5 vector.
-        player.Position = new Vector3(7f, 0f, 9f);
-        unit.Position = new Vector3(4f, 0f, 5f);
+        player.Position.Returns(new Vector3(7f, 0f, 9f));
+        unit.Position.Returns(new Vector3(4f, 0f, 5f));
 
         // Act
         bool canAuto = controller.CanAuto(2.1f);
 
         // Assert
-        Assert.AreEqual(true, canAuto);
+        Assert.True(canAuto);
     }
 
     [Test]
@@ -180,5 +169,19 @@ public class basic_attack
 
         // Assert
         enemy.Received().TakeDamage(14f, "physical", player, false);
+    }
+
+    private IPlayer CreateMockPlayerWithRange(float range){
+        IPlayer player = Substitute.For<IPlayer>();
+        UnitStats unitStats = new UnitStats(ScriptableObject.CreateInstance<ScriptableUnit>());
+        unitStats.autoRange.BaseValue = range;
+        player.unitStats.Returns(unitStats);
+        return player;
+    }
+
+    private IPlayerMover CreateMockPlayerMoverWithTarget(IUnit target){
+        IPlayerMover playerMover = Substitute.For<IPlayerMover>();
+        playerMover.TargetedEnemy.Returns(target);
+        return playerMover;
     }
 }
