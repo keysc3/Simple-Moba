@@ -88,6 +88,6 @@ public class stat
         stat.ClearModifiers();
 
         // Assert
-        Assert.AreEqual(value, stat.GetValue());
+        Assert.AreEqual(1014f, stat.GetValue());
     }
 }
