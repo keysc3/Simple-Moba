@@ -79,7 +79,7 @@ public class effect
         effect.TimerTick(3.6f);
 
         // Assert
-        Assert.AreEqual(true, effect.isFinished);
+        Assert.True(effect.isFinished);
     }
 
     [Test]
