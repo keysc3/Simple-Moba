@@ -243,10 +243,10 @@ public class status_effects
         se.AddEffect(charm1.charmSlow);
 
         // Act
-        bool b = se.CheckForEffectWithSource(ScriptableObject.CreateInstance<ScriptableCharm>(), unit1);
+        bool hasEffect = se.CheckForEffectWithSource(ScriptableObject.CreateInstance<ScriptableCharm>(), unit1);
     
         // Arrange
-        Assert.AreEqual(true, b);
+        Assert.True(hasEffect);
     }
 
     [Test]
@@ -278,10 +278,10 @@ public class status_effects
         se.AddEffect(sleep1);
 
         // Act
-        bool b = se.CheckForEffectByName(ScriptableObject.CreateInstance<ScriptableDot>(), dot1.effectType.name);
+        bool hasEffect = se.CheckForEffectByName(ScriptableObject.CreateInstance<ScriptableDot>(), dot1.effectType.name);
 
         // Assert
-        Assert.AreEqual(true, b);
+        Assert.True(hasEffect);
     }
 
     [Test]
