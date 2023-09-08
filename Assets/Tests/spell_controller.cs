@@ -48,7 +48,7 @@ public class spell_controller
         controller.SpellCDChildrenSetActive(parent.transform, true);
 
         // Assert
-        Assert.AreEqual((true, true), (child1.activeSelf, child2.activeSelf));
+        Assert.True(child1.activeSelf && child2.activeSelf);
 
     }
 
