@@ -124,13 +124,14 @@ public class Player : MonoBehaviour, IPlayer
         if(!isDead){
             float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
             unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
-            if(damageTracker != null)
+            if(damageTracker != null){
                 damageTracker.AddDamage(damager, damageToTake, damageType);
+            }
             // If dead then award a kill and start the death method.
             if(unitStats.CurrentHealth <= 0f){
                 unitStats.CurrentHealth = 0f;
-                Death();
                 UpdateScores(damager);
+                Death();
             }
             // Apply any damage that procs after recieving damage.
             else{
