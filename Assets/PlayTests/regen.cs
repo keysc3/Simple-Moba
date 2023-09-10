@@ -86,18 +86,3 @@ public class regen
         Assert.AreEqual(51f, unit.unitStats.CurrentHealth);
     }
 }
-
-
-public class MockUnit : IUnit{
-    public ScriptableUnit SUnit { get; set; }
-    public UnitStats unitStats { get; set; }
-    public StatusEffects statusEffects { get; set; }
-    public DamageTracker damageTracker { get; set; }
-    public Inventory inventory { get; set; }
-    public bool IsDead { get; set; }
-    public BonusDamage bonusDamage { get; set; }
-    public GameObject GameObject { get; }
-    public Vector3 Position { get; set; }
-
-    public void TakeDamage(float damageAmount, string damageType, IUnit damager, bool isDot){}
-}
