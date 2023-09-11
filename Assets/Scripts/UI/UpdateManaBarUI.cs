@@ -23,7 +23,8 @@ public class UpdateManaBarUI : MonoBehaviour
     private void Start()
     {
         player = GetComponentInParent<IPlayer>();
-        championStats = (ChampionStats) player.unitStats; 
+        if(player != null)
+            championStats = (ChampionStats) player.unitStats; 
     }
 
     // Update is called once per frame
