@@ -15,14 +15,14 @@ public class user_interface
     {
         // Use the Assert class to test conditions.
         GameObject parent = CreateParentChild();
-        Slider slider = CreateSlider(0.8f, parent);
+        parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
+        Slider slider = CreateSlider(80f, parent);
         MockPlayer player = new MockPlayer();
         player.unitStats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
         UpdateManaUI manaUI = parent.AddComponent<UpdateManaUI>();
-        slider.value = 0.1f;
         // Use yield to skip a frame.
         yield return null;
-        Assert.AreEqual(0.1f, slider.value);
+        Assert.AreEqual(80f, slider.value);
     }
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
@@ -32,6 +32,7 @@ public class user_interface
     {
         // Use the Assert class to test conditions.
         GameObject parent = CreateParentChild();
+        parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(50f, parent);
         MockPlayer player = new MockPlayer();
         player.IsDead = true;
@@ -50,6 +51,7 @@ public class user_interface
     {
         // Use the Assert class to test conditions.
         GameObject parent = CreateParentChild();
+        parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(0.8f, parent);
         MockPlayer player = new MockPlayer();
         ChampionStats stats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
@@ -63,6 +65,55 @@ public class user_interface
         Assert.AreEqual(40f, slider.value);
     }
 
+        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator does_not_update_mana_bar_ui_with_null_player()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateParentChild();
+        Slider slider = CreateSlider(40f, parent.transform.GetChild(0).gameObject);
+        UpdateManaBarUI manaBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateManaBarUI>();
+        // Use yield to skip a frame.
+        yield return null;
+        Assert.AreEqual(40f, slider.value);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator does_not_update_mana_bar_ui_with_dead_player()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateParentChild();
+        MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
+        playerScript.IsDead = true;
+        Slider slider = CreateSlider(35f, parent.transform.GetChild(0).gameObject);
+        UpdateManaBarUI manaBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateManaBarUI>();
+        // Use yield to skip a frame.
+        yield return null;
+        Assert.AreEqual(35f, slider.value);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator updates_mana_bar_ui()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateParentChild();
+        MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
+        Slider slider = CreateSlider(86f, parent.transform.GetChild(0).gameObject);
+        ChampionStats stats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
+        stats.maxMana.BaseValue = 100f;
+        stats.CurrentMana = 15f;
+        playerScript.unitStats = stats;
+        UpdateManaBarUI manaBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateManaBarUI>();
+        // Use yield to skip a frame.
+        yield return null;
+        Assert.AreEqual(15f, slider.value);
+    }
+
     private Slider CreateSlider(float startingValue, GameObject g1){
         Slider slider = g1.AddComponent<Slider>();
         slider.minValue = 0f;
@@ -74,7 +125,6 @@ public class user_interface
     private GameObject CreateParentChild(){
         GameObject parent = new GameObject();
         GameObject child = new GameObject("Value");
-        child.AddComponent<TextMeshProUGUI>();
         child.transform.SetParent(parent.transform);
         return parent;
     }
