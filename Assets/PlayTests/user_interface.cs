@@ -274,6 +274,100 @@ public class user_interface
         Assert.AreEqual(expected, actual);
     }
 
+    // Status Effects UI
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_first_status_effect_ui_position_where_effect_is_debuff()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject, false, player, 10f);
+
+        yield return null;
+
+        Vector2 position = statusEffectObject.GetComponent<RectTransform>().anchoredPosition;
+        Assert.AreEqual(new Vector2(25f, 0f), position);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_first_status_effect_ui_position_where_effect_is_buff()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject, true, player, 10f);
+
+        yield return null;
+        
+        Vector2 position = statusEffectObject.GetComponent<RectTransform>().anchoredPosition;
+        Assert.AreEqual(new Vector2(-25f, 0f), position);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_non_first_status_effect_ui_position_where_effects_are_buffs()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject1 = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject1, true, player, 10f);
+
+        yield return null;
+
+        GameObject statusEffectObject2 = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject2, true, player, 10f);
+
+        yield return null;
+        
+        Vector2 position = statusEffectObject2.GetComponent<RectTransform>().anchoredPosition;
+        Assert.AreEqual(new Vector2(27f, 0f), position);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_non_first_status_effect_ui_position_where_effects_are_debuffs()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject1 = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject1, false, player, 10f);
+
+        yield return null;
+
+        GameObject statusEffectObject2 = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject2, false, player, 10f);
+
+        yield return null;
+        
+        Vector2 position = statusEffectObject2.GetComponent<RectTransform>().anchoredPosition;
+        Assert.AreEqual(new Vector2(-27f, 0f), position);
+    }
+
     private Slider CreateSlider(float startingValue, GameObject g1){
         Slider slider = g1.AddComponent<Slider>();
         slider.minValue = 0f;
@@ -310,5 +404,53 @@ public class user_interface
         championStats.magicResist.BaseValue = 5f;
         championStats.haste.BaseValue = 6f;
         championStats.speed.BaseValue = 7f;
+    }
+
+    private GameObject CreateStatusEffectGameObject(){
+        GameObject statusEffectObject = new GameObject("Effect");
+        GameObject innerContainer = new GameObject("InnerContainer");
+        GameObject sprite = new GameObject("Sprite");
+        GameObject slider = new GameObject("Slider");
+        GameObject text = new GameObject("Value");
+        GameObject background = new GameObject("Background");
+        sprite.AddComponent<Image>();
+        slider.AddComponent<Image>();
+        text.AddComponent<TextMeshProUGUI>();
+        background.AddComponent<Image>();
+        RectTransform rectTransform = statusEffectObject.AddComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(50f, 50f);
+        innerContainer.transform.SetParent(statusEffectObject.transform);
+        sprite.transform.SetParent(innerContainer.transform);
+        slider.transform.SetParent(innerContainer.transform);
+        text.transform.SetParent(innerContainer.transform);
+        background.transform.SetParent(statusEffectObject.transform);
+        return statusEffectObject;
+    }
+
+    private GameObject CreateStatusEffectsContainer(){
+        GameObject parent = new GameObject("Parent");
+        GameObject p1 = new GameObject("Player");
+        GameObject statusEffectsUI = new GameObject("StatusEffects");
+        GameObject buffsContainer = new GameObject("BuffsContainer");
+        GameObject debuffsContainer = new GameObject("DebuffsContainer");
+        p1.transform.SetParent(parent.transform);
+        statusEffectsUI.transform.SetParent(p1.transform);
+        buffsContainer.transform.SetParent(statusEffectsUI.transform);
+        debuffsContainer.transform.SetParent(statusEffectsUI.transform);
+        RectTransform rectTransform = buffsContainer.AddComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(100f, 100f);
+        rectTransform = debuffsContainer.AddComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(100f, 100f);
+        return parent;
+    }
+
+    private void SetupStatusEffectScript(GameObject statusEffectObject, bool isBuff, IPlayer player, float effectDuration){
+        MockUnit unit = new MockUnit();
+        StatusEffectUI script = statusEffectObject.AddComponent<StatusEffectUI>();
+        ScriptableEffect sEffect = ScriptableEffect.CreateInstance(isBuff);
+        Effect effect = new Effect(sEffect, effectDuration, unit, player);
+        script.effect = effect;
+        script.player = player;
+        player.statusEffects.AddEffect(effect);
     }
 }
