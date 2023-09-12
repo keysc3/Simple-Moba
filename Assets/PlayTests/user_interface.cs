@@ -63,7 +63,7 @@ public class user_interface
         Assert.AreEqual((40f, "40/100"), (slider.value, text.text));
     }
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
     public IEnumerator does_not_update_mana_bar_ui_with_null_player()
@@ -165,6 +165,57 @@ public class user_interface
         // Use yield to skip a frame.
         yield return null;
         Assert.AreEqual((98f, "98/100"), (slider.value, text.text));
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator does_not_update_health_bar_ui_with_null_unit()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateParentChild();
+        Slider slider = CreateSlider(62f, parent.transform.GetChild(0).gameObject);
+        UpdateHealthBarUI healthBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateHealthBarUI>();
+        // Use yield to skip a frame.
+        yield return null;
+        Assert.AreEqual(62f, slider.value);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator deactivates_health_bar_ui_from_dead_player()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateParentChild();
+        MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
+        playerScript.IsDead = true;
+        playerScript.playerBar = new GameObject();
+        playerScript.playerBar.SetActive(true);
+        Slider slider = CreateSlider(42f, parent.transform.GetChild(0).gameObject);
+        UpdateHealthBarUI healthBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateHealthBarUI>();
+        // Use yield to skip a frame.
+        yield return null;
+        Assert.AreEqual(false, playerScript.playerBar.activeSelf);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator updates_health_bar_ui()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateParentChild();
+        MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
+        Slider slider = CreateSlider(42f, parent.transform.GetChild(0).gameObject);
+        UpdateHealthBarUI healthBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateHealthBarUI>();
+        ChampionStats stats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
+        stats.maxHealth.BaseValue = 100f;
+        stats.CurrentHealth = 1f;
+        playerScript.unitStats = stats;
+        // Use yield to skip a frame.
+        yield return null;
+        Assert.AreEqual(1f, slider.value);
     }
 
     private Slider CreateSlider(float startingValue, GameObject g1){
