@@ -15,6 +15,7 @@ public class UpdateAllStatsUI : MonoBehaviour
     private Dictionary<string, TMP_Text> statTextComponents = new Dictionary<string, TMP_Text>();
     
     private void Awake(){
+        Debug.Log(transform.childCount);
         for (int i = 0; i < transform.childCount; i++){
             statTextComponents.Add(transform.GetChild(i).name, 
             transform.GetChild(i).Find("Value").GetComponent<TMP_Text>());
@@ -24,7 +25,8 @@ public class UpdateAllStatsUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        championStats = (ChampionStats) player.unitStats;
+        if(player != null)
+            championStats = (ChampionStats) player.unitStats;
     }
 
     // Update is called once per frame
@@ -37,7 +39,7 @@ public class UpdateAllStatsUI : MonoBehaviour
     *   UpdateAllStatsUI - Update the player UIs stats panel.
     */
     private void UpdateStats(){
-        if(statTextComponents.Count == 8 && player != null){
+        if(statTextComponents.Count == 8 && championStats != null){
             UpdateStat("PhysicalDamage", championStats.physicalDamage.GetValue());
             UpdateStat("Armor", championStats.armor.GetValue());
             if(championStats.attackSpeed.GetValue() > 2.5f)
