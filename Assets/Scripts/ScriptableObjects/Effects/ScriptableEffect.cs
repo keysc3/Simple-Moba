@@ -15,4 +15,9 @@ public class ScriptableEffect : ScriptableObject
     [field: SerializeField] public bool isBuff { get; private set; }
     [field: SerializeField] public Sprite sprite { get; private set; }
 
+    public static ScriptableEffect CreateInstance(bool isBuff){
+        ScriptableEffect effect = CreateInstance<ScriptableEffect>();
+        effect.isBuff = isBuff;
+        return effect;
+    }
 }
