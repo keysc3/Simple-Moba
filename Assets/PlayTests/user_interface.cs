@@ -443,6 +443,60 @@ public class user_interface
         Assert.AreEqual(1f, slider.fillAmount);
     }
 
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_stackable_status_effect_slider_to_percent_of_duration_left_from_added_stack()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject, false, player, 0.2f);
+        Effect effect = statusEffectObject.GetComponent<StatusEffectUI>().effect;
+        effect.effectType.isStackable = true;
+
+        player.statusEffects.UpdateEffects(0.01f);
+        yield return new WaitForSeconds(0.01f);
+        
+        Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        Assert.AreEqual(0.95f, slider.fillAmount);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_stackable_status_effect_slider_to_percent_of_duration_left_from_expired_stack()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject, false, player, 0.01f);
+        Effect effect = statusEffectObject.GetComponent<StatusEffectUI>().effect;
+        effect.effectType.isStackable = true;
+        ScriptableEffect sEffect = ScriptableObject.CreateInstance<ScriptableEffect>();
+        Effect effect2 = new Effect(sEffect, 0.01f, new MockUnit(), player);
+        effect2.effectType.isStackable = true;
+        player.statusEffects.AddEffect(effect2);
+        effect.EffectDuration = 0.02f;
+        yield return null;
+        player.statusEffects.UpdateEffects(0.01f);
+        yield return new WaitForSeconds(0.01f);
+        player.statusEffects.UpdateEffects(0.005f);
+        yield return new WaitForSeconds(0.005f);
+        Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        Assert.AreEqual(0.5f, slider.fillAmount);
+    }
+
     private Slider CreateSlider(float startingValue, GameObject g1){
         Slider slider = g1.AddComponent<Slider>();
         slider.minValue = 0f;
