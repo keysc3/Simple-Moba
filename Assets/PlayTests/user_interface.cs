@@ -497,6 +497,33 @@ public class user_interface
         Assert.AreEqual(0.5f, slider.fillAmount);
     }
 
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator updates_status_effects_ui_postion_from_expiring_effect()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject1 = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject1, false, player, 0.01f);
+
+        yield return null;
+
+        GameObject statusEffectObject2 = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject2, false, player, 10f);
+        yield return null;
+        player.statusEffects.UpdateEffects(0.01f);
+        yield return new WaitForSeconds(0.01f);
+        
+        Vector2 position = statusEffectObject2.GetComponent<RectTransform>().anchoredPosition;
+        Assert.AreEqual(new Vector2(25f, 0f), position);
+    }
+
     private Slider CreateSlider(float startingValue, GameObject g1){
         Slider slider = g1.AddComponent<Slider>();
         slider.minValue = 0f;
@@ -577,6 +604,7 @@ public class user_interface
         MockUnit unit = new MockUnit();
         StatusEffectUI script = statusEffectObject.AddComponent<StatusEffectUI>();
         ScriptableEffect sEffect = ScriptableEffect.CreateInstance(isBuff);
+        sEffect.name = "Effect" + effectDuration;
         Effect effect = new Effect(sEffect, effectDuration, unit, player);
         script.effect = effect;
         script.player = player;
