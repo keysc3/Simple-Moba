@@ -14,8 +14,8 @@ public class MockPlayer : IPlayer
     public BonusDamage bonusDamage { get; set; }
     public LevelManager levelManager { get; set; }
     public Score score { get; set; }
-    public GameObject playerUI { get; }
-    public GameObject playerBar { get; }
+    public GameObject playerUI { get; set; }
+    public GameObject playerBar { get; set; }
     public Vector3 MouseOnCast { get; set; }
     public bool IsCasting { get; set; }
     public ISpell CurrentCastedSpell { get; set; }
