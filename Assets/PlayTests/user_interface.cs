@@ -15,13 +15,16 @@ public class user_interface
     [UnityTest]
     public IEnumerator does_not_update_mana_ui_with_null_player()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(80f, parent);
         UpdateManaUI manaUI = parent.AddComponent<UpdateManaUI>();
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(80f, slider.value);
     }
 
@@ -30,7 +33,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator does_not_update_mana_ui_with_dead_player()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(50f, parent);
@@ -39,8 +42,11 @@ public class user_interface
         player.unitStats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
         UpdateManaUI manaUI = parent.AddComponent<UpdateManaUI>();
         manaUI.player = player;
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(50f, slider.value);
     }
 
@@ -49,7 +55,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator updates_mana_ui()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         TMP_Text text = parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(0.8f, parent);
@@ -60,8 +66,11 @@ public class user_interface
         player.unitStats = stats;
         UpdateManaUI manaUI = parent.AddComponent<UpdateManaUI>();
         manaUI.player = player;
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual((40f, "40/100"), (slider.value, text.text));
     }
 
@@ -72,12 +81,15 @@ public class user_interface
     [UnityTest]
     public IEnumerator does_not_update_mana_bar_ui_with_null_player()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         Slider slider = CreateSlider(40f, parent.transform.GetChild(0).gameObject);
         UpdateManaBarUI manaBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateManaBarUI>();
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(40f, slider.value);
     }
 
@@ -86,14 +98,17 @@ public class user_interface
     [UnityTest]
     public IEnumerator does_not_update_mana_bar_ui_with_dead_player()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
         playerScript.IsDead = true;
         Slider slider = CreateSlider(35f, parent.transform.GetChild(0).gameObject);
         UpdateManaBarUI manaBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateManaBarUI>();
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(35f, slider.value);
     }
 
@@ -102,7 +117,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator updates_mana_bar_ui()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
         Slider slider = CreateSlider(86f, parent.transform.GetChild(0).gameObject);
@@ -111,8 +126,11 @@ public class user_interface
         stats.CurrentMana = 15f;
         playerScript.unitStats = stats;
         UpdateManaBarUI manaBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateManaBarUI>();
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(15f, slider.value);
     }
 
@@ -123,13 +141,16 @@ public class user_interface
     [UnityTest]
     public IEnumerator does_not_update_health_ui_with_null_player()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(80f, parent);
         parent.AddComponent<UpdateHealthUI>();
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(80f, slider.value);
     }
 
@@ -138,7 +159,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator updates_health_ui_to_0_current_health_from_dead_player()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(50f, parent);
@@ -147,8 +168,11 @@ public class user_interface
         player.unitStats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
         UpdateHealthUI healthUI = parent.AddComponent<UpdateHealthUI>();
         healthUI.player = player;
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(0f, slider.value);
     }
 
@@ -157,7 +181,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator updates_health_ui_to_current_health_percent()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         TMP_Text text = parent.transform.GetChild(0).gameObject.AddComponent<TextMeshProUGUI>();
         Slider slider = CreateSlider(64f, parent);
@@ -168,8 +192,11 @@ public class user_interface
         player.unitStats = stats;
         UpdateHealthUI healthUI = parent.AddComponent<UpdateHealthUI>();
         healthUI.player = player;
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual((98f, "98/100"), (slider.value, text.text));
     }
 
@@ -180,12 +207,15 @@ public class user_interface
     [UnityTest]
     public IEnumerator does_not_update_health_bar_ui_with_null_unit()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         Slider slider = CreateSlider(62f, parent.transform.GetChild(0).gameObject);
         UpdateHealthBarUI healthBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateHealthBarUI>();
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(62f, slider.value);
     }
 
@@ -194,7 +224,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator deactivates_health_bar_ui_from_dead_player()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
         playerScript.IsDead = true;
@@ -202,8 +232,11 @@ public class user_interface
         playerScript.playerBar.SetActive(true);
         Slider slider = CreateSlider(42f, parent.transform.GetChild(0).gameObject);
         UpdateHealthBarUI healthBarUI = parent.transform.GetChild(0).gameObject.AddComponent<UpdateHealthBarUI>();
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(false, playerScript.playerBar.activeSelf);
     }
 
@@ -212,7 +245,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator updates_health_bar_ui()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateParentChild();
         MockPlayerBehaviour playerScript = parent.AddComponent<MockPlayerBehaviour>();
         Slider slider = CreateSlider(42f, parent.transform.GetChild(0).gameObject);
@@ -221,8 +254,11 @@ public class user_interface
         stats.maxHealth.BaseValue = 100f;
         stats.CurrentHealth = 1f;
         playerScript.unitStats = stats;
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         Assert.AreEqual(1f, slider.value);
     }
 
@@ -233,7 +269,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator updates_stats_with_attack_speed_less_than_max()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateStatsParent();
         UpdateAllStatsUI statsUI = parent.AddComponent<UpdateAllStatsUI>();
         MockPlayer player = new MockPlayer();
@@ -241,8 +277,11 @@ public class user_interface
         SetChampionStats(championStats, 2.3f);
         player.unitStats = championStats;
         statsUI.player = player;
-        // Use yield to skip a frame.
+
+        // Act
         yield return null;
+
+        // Assert
         List<string> actual = new List<string>();
         foreach(Transform child in parent.transform){
             actual.Add(child.Find("Value").GetComponent<TMP_Text>().text);
@@ -256,7 +295,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator updates_stats_with_attack_speed_more_than_max()
     {
-        // Use the Assert class to test conditions.
+        // Arrange
         GameObject parent = CreateStatsParent();
         UpdateAllStatsUI statsUI = parent.AddComponent<UpdateAllStatsUI>();
         MockPlayer player = new MockPlayer();
@@ -264,8 +303,11 @@ public class user_interface
         SetChampionStats(championStats, 2.6f);
         player.unitStats = championStats;
         statsUI.player = player;
-        // Use yield to skip a frame.
+        
+        // Act
         yield return null;
+
+        // Assert
         List<string> actual = new List<string>();
         foreach(Transform child in parent.transform){
             actual.Add(child.Find("Value").GetComponent<TMP_Text>().text);
@@ -281,6 +323,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_first_status_effect_ui_position_where_effect_is_debuff()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
         GameObject playerComp = new GameObject("PlayerBehaviour");
         MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
@@ -290,8 +333,10 @@ public class user_interface
         GameObject statusEffectObject = CreateStatusEffectGameObject();
         SetupStatusEffectScript(statusEffectObject, false, player, 10f);
 
+        // Act
         yield return null;
 
+        // Assert
         Vector2 position = statusEffectObject.GetComponent<RectTransform>().anchoredPosition;
         Assert.AreEqual(new Vector2(25f, 0f), position);
     }
@@ -301,6 +346,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_first_status_effect_ui_position_where_effect_is_buff()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
         GameObject playerComp = new GameObject("PlayerBehaviour");
         MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
@@ -310,8 +356,10 @@ public class user_interface
         GameObject statusEffectObject = CreateStatusEffectGameObject();
         SetupStatusEffectScript(statusEffectObject, true, player, 10f);
 
+        // Act
         yield return null;
         
+        // Assert
         Vector2 position = statusEffectObject.GetComponent<RectTransform>().anchoredPosition;
         Assert.AreEqual(new Vector2(-25f, 0f), position);
     }
@@ -321,6 +369,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_non_first_status_effect_ui_position_where_effects_are_buffs()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -330,7 +379,8 @@ public class user_interface
 
         GameObject statusEffectObject1 = CreateStatusEffectGameObject();
         SetupStatusEffectScript(statusEffectObject1, true, player, 10f);
-
+        
+        // Act
         yield return null;
 
         GameObject statusEffectObject2 = CreateStatusEffectGameObject();
@@ -338,6 +388,7 @@ public class user_interface
 
         yield return null;
         
+        // Assert
         Vector2 position = statusEffectObject2.GetComponent<RectTransform>().anchoredPosition;
         Assert.AreEqual(new Vector2(27f, 0f), position);
     }
@@ -347,6 +398,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_non_first_status_effect_ui_position_where_effects_are_debuffs()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -357,6 +409,7 @@ public class user_interface
         GameObject statusEffectObject1 = CreateStatusEffectGameObject();
         SetupStatusEffectScript(statusEffectObject1, false, player, 10f);
 
+        // Act
         yield return null;
 
         GameObject statusEffectObject2 = CreateStatusEffectGameObject();
@@ -364,6 +417,7 @@ public class user_interface
 
         yield return null;
         
+        // Assert
         Vector2 position = statusEffectObject2.GetComponent<RectTransform>().anchoredPosition;
         Assert.AreEqual(new Vector2(-27f, 0f), position);
     }
@@ -373,6 +427,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_non_stackable_status_effect_slider_to_percent_of_duration_left()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -383,8 +438,11 @@ public class user_interface
         GameObject statusEffectObject = CreateStatusEffectGameObject();
         SetupStatusEffectScript(statusEffectObject, false, player, 0.5f);
         player.statusEffects.UpdateEffects(0.01f);
+
+        // Act
         yield return new WaitForSeconds(0.01f);
         
+        // Assert
         Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
         Assert.AreEqual(0.98f, slider.fillAmount);
     }
@@ -394,6 +452,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_non_stackable_status_effect_text_value()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -410,8 +469,11 @@ public class user_interface
         script.effect = effect;
         script.player = player;
         player.statusEffects.AddEffect(effect);
+
+        // Act
         yield return null;
         
+        // Assert
         TMP_Text text = statusEffectObject.transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
         Assert.AreEqual("5", text.text);
     }
@@ -421,6 +483,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator does_not_change_permanent_effects_slider()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -437,8 +500,11 @@ public class user_interface
         script.player = player;
         player.statusEffects.AddEffect(effect);
         player.statusEffects.UpdateEffects(0.01f);
+
+        // Act
         yield return new WaitForSeconds(0.01f);
         
+        // Assert
         Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
         Assert.AreEqual(1f, slider.fillAmount);
     }
@@ -448,6 +514,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_stackable_status_effect_slider_to_percent_of_duration_left_from_added_stack()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -461,8 +528,11 @@ public class user_interface
         effect.effectType.isStackable = true;
 
         player.statusEffects.UpdateEffects(0.01f);
+
+        // Act
         yield return new WaitForSeconds(0.01f);
         
+        // Assert
         Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
         Assert.AreEqual(0.95f, slider.fillAmount);
     }
@@ -472,6 +542,7 @@ public class user_interface
     [UnityTest]
     public IEnumerator sets_stackable_status_effect_slider_to_percent_of_duration_left_from_expired_stack()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -488,11 +559,15 @@ public class user_interface
         effect2.effectType.isStackable = true;
         player.statusEffects.AddEffect(effect2);
         effect.EffectDuration = 0.02f;
+        
+        // Act
         yield return null;
         player.statusEffects.UpdateEffects(0.01f);
         yield return new WaitForSeconds(0.01f);
         player.statusEffects.UpdateEffects(0.005f);
         yield return new WaitForSeconds(0.005f);
+
+        // Assert
         Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
         Assert.AreEqual(0.5f, slider.fillAmount);
     }
@@ -500,8 +575,9 @@ public class user_interface
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
-    public IEnumerator updates_status_effects_ui_postion_from_expiring_effect()
+    public IEnumerator updates_status_effects_ui_position_from_expiring_effect()
     {
+        // Arrange
         GameObject parent = CreateStatusEffectsContainer();
 
         GameObject playerComp = new GameObject("PlayerBehaviour");
@@ -512,6 +588,7 @@ public class user_interface
         GameObject statusEffectObject1 = CreateStatusEffectGameObject();
         SetupStatusEffectScript(statusEffectObject1, false, player, 0.01f);
 
+        // Act
         yield return null;
 
         GameObject statusEffectObject2 = CreateStatusEffectGameObject();
@@ -520,6 +597,7 @@ public class user_interface
         player.statusEffects.UpdateEffects(0.01f);
         yield return new WaitForSeconds(0.01f);
         
+        // Assert
         Vector2 position = statusEffectObject2.GetComponent<RectTransform>().anchoredPosition;
         Assert.AreEqual(new Vector2(25f, 0f), position);
     }
@@ -564,7 +642,7 @@ public class user_interface
 
     private GameObject CreateStatusEffectGameObject(){
         GameObject statusEffectObject = new GameObject("Effect");
-        GameObject innerContainer = new GameObject("InnerContainer");
+        Transform innerContainer = new GameObject("InnerContainer").transform;
         GameObject sprite = new GameObject("Sprite");
         GameObject slider = new GameObject("Slider");
         GameObject text = new GameObject("Value");
@@ -575,24 +653,24 @@ public class user_interface
         background.AddComponent<Image>();
         RectTransform rectTransform = statusEffectObject.AddComponent<RectTransform>();
         rectTransform.sizeDelta = new Vector2(50f, 50f);
-        innerContainer.transform.SetParent(statusEffectObject.transform);
-        sprite.transform.SetParent(innerContainer.transform);
-        slider.transform.SetParent(innerContainer.transform);
-        text.transform.SetParent(innerContainer.transform);
+        innerContainer.SetParent(statusEffectObject.transform);
+        sprite.transform.SetParent(innerContainer);
+        slider.transform.SetParent(innerContainer);
+        text.transform.SetParent(innerContainer);
         background.transform.SetParent(statusEffectObject.transform);
         return statusEffectObject;
     }
 
     private GameObject CreateStatusEffectsContainer(){
         GameObject parent = new GameObject("Parent");
-        GameObject p1 = new GameObject("Player");
-        GameObject statusEffectsUI = new GameObject("StatusEffects");
+        Transform p1 = new GameObject("Player").transform;
+        Transform statusEffectsUI = new GameObject("StatusEffects").transform;
         GameObject buffsContainer = new GameObject("BuffsContainer");
         GameObject debuffsContainer = new GameObject("DebuffsContainer");
-        p1.transform.SetParent(parent.transform);
-        statusEffectsUI.transform.SetParent(p1.transform);
-        buffsContainer.transform.SetParent(statusEffectsUI.transform);
-        debuffsContainer.transform.SetParent(statusEffectsUI.transform);
+        p1.SetParent(parent.transform);
+        statusEffectsUI.SetParent(p1);
+        buffsContainer.transform.SetParent(statusEffectsUI);
+        debuffsContainer.transform.SetParent(statusEffectsUI);
         RectTransform rectTransform = buffsContainer.AddComponent<RectTransform>();
         rectTransform.sizeDelta = new Vector2(100f, 100f);
         rectTransform = debuffsContainer.AddComponent<RectTransform>();
