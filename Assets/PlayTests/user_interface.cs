@@ -8,6 +8,8 @@ using TMPro;
 
 public class user_interface
 {
+    //Mana UI
+
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
@@ -63,6 +65,8 @@ public class user_interface
         Assert.AreEqual((40f, "40/100"), (slider.value, text.text));
     }
 
+    // Mana Bar UI
+
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
@@ -111,6 +115,8 @@ public class user_interface
         yield return null;
         Assert.AreEqual(15f, slider.value);
     }
+
+    // Health UI
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
@@ -167,6 +173,8 @@ public class user_interface
         Assert.AreEqual((98f, "98/100"), (slider.value, text.text));
     }
 
+    // Health bar UI
+
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
@@ -218,6 +226,54 @@ public class user_interface
         Assert.AreEqual(1f, slider.value);
     }
 
+    // All Stats UI
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator updates_stats_with_attack_speed_less_than_max()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateStatsParent();
+        UpdateAllStatsUI statsUI = parent.AddComponent<UpdateAllStatsUI>();
+        MockPlayer player = new MockPlayer();
+        ChampionStats championStats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
+        SetChampionStats(championStats, 2.3f);
+        player.unitStats = championStats;
+        statsUI.player = player;
+        // Use yield to skip a frame.
+        yield return null;
+        List<string> actual = new List<string>();
+        foreach(Transform child in parent.transform){
+            actual.Add(child.Find("Value").GetComponent<TMP_Text>().text);
+        }
+        List<string> expected =new List<string>(){"0", "1", "2", "2.3", "4", "5", "6", "7"};
+        Assert.AreEqual(expected, actual);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator updates_stats_with_attack_speed_more_than_max()
+    {
+        // Use the Assert class to test conditions.
+        GameObject parent = CreateStatsParent();
+        UpdateAllStatsUI statsUI = parent.AddComponent<UpdateAllStatsUI>();
+        MockPlayer player = new MockPlayer();
+        ChampionStats championStats = new ChampionStats(ScriptableObject.CreateInstance<ScriptableChampion>());
+        SetChampionStats(championStats, 2.6f);
+        player.unitStats = championStats;
+        statsUI.player = player;
+        // Use yield to skip a frame.
+        yield return null;
+        List<string> actual = new List<string>();
+        foreach(Transform child in parent.transform){
+            actual.Add(child.Find("Value").GetComponent<TMP_Text>().text);
+        }
+        List<string> expected =new List<string>(){"0", "1", "2", "2.5", "4", "5", "6", "7"};
+        Assert.AreEqual(expected, actual);
+    }
+
     private Slider CreateSlider(float startingValue, GameObject g1){
         Slider slider = g1.AddComponent<Slider>();
         slider.minValue = 0f;
@@ -231,5 +287,28 @@ public class user_interface
         GameObject child = new GameObject("Value");
         child.transform.SetParent(parent.transform);
         return parent;
+    }
+
+    private GameObject CreateStatsParent(){
+        GameObject parent = new GameObject();
+        List<string> statNames = new List<string>(){"Crit", "PhysicalDamage", "Armor", "AttackSpeed", "MagicDamage", "MagicResist", "Haste", "Speed"};
+        foreach(string stat in statNames){
+            Transform newStat = new GameObject(stat).transform;
+            GameObject value = new GameObject("Value");
+            value.transform.SetParent(newStat);
+            newStat.SetParent(parent.transform);
+            value.AddComponent<TextMeshProUGUI>();
+        }
+        return parent;
+    }
+
+    private void SetChampionStats(ChampionStats championStats, float attackSpeed){
+        championStats.physicalDamage.BaseValue = 1f;
+        championStats.armor.BaseValue = 2f;
+        championStats.attackSpeed.BaseValue = attackSpeed;
+        championStats.magicDamage.BaseValue = 4f;
+        championStats.magicResist.BaseValue = 5f;
+        championStats.haste.BaseValue = 6f;
+        championStats.speed.BaseValue = 7f;
     }
 }
