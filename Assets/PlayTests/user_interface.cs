@@ -368,6 +368,81 @@ public class user_interface
         Assert.AreEqual(new Vector2(-27f, 0f), position);
     }
 
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_non_stackable_status_effect_slider_to_percent_of_duration_left()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject = CreateStatusEffectGameObject();
+        SetupStatusEffectScript(statusEffectObject, false, player, 0.5f);
+        player.statusEffects.UpdateEffects(0.01f);
+        yield return new WaitForSeconds(0.01f);
+        
+        Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        Assert.AreEqual(0.98f, slider.fillAmount);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator sets_non_stackable_status_effect_text_value()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject = CreateStatusEffectGameObject();
+        MockUnit unit = new MockUnit();
+        StatusEffectUI script = statusEffectObject.AddComponent<StatusEffectUI>();
+        ScriptablePersonalSpell sEffect = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
+        PersonalSpell effect = new PersonalSpell(sEffect, 10f, 0, unit, player);
+        effect.Stacks = 5;
+        script.effect = effect;
+        script.player = player;
+        player.statusEffects.AddEffect(effect);
+        yield return null;
+        
+        TMP_Text text = statusEffectObject.transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
+        Assert.AreEqual("5", text.text);
+    }
+
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    [UnityTest]
+    public IEnumerator does_not_change_permanent_effects_slider()
+    {
+        GameObject parent = CreateStatusEffectsContainer();
+
+        GameObject playerComp = new GameObject("PlayerBehaviour");
+        MockPlayerBehaviour player = playerComp.AddComponent<MockPlayerBehaviour>();
+        player.statusEffects = new StatusEffects(null);
+        player.playerUI = parent;
+
+        GameObject statusEffectObject = CreateStatusEffectGameObject();
+        MockUnit unit = new MockUnit();
+        StatusEffectUI script = statusEffectObject.AddComponent<StatusEffectUI>();
+        ScriptablePersonalSpell sEffect = ScriptableObject.CreateInstance<ScriptablePersonalSpell>();
+        PersonalSpell effect = new PersonalSpell(sEffect, -1f, 0, unit, player);
+        script.effect = effect;
+        script.player = player;
+        player.statusEffects.AddEffect(effect);
+        player.statusEffects.UpdateEffects(0.01f);
+        yield return new WaitForSeconds(0.01f);
+        
+        Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();
+        Assert.AreEqual(1f, slider.fillAmount);
+    }
+
     private Slider CreateSlider(float startingValue, GameObject g1){
         Slider slider = g1.AddComponent<Slider>();
         slider.minValue = 0f;
