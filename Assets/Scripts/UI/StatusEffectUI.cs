@@ -53,6 +53,7 @@ public class StatusEffectUI : MonoBehaviour
         }
         // Start effect timer animation coroutine.
         if(effect.effectType.isStackable)
+            // Use player incase GameObject is inactive.
             (player as MonoBehaviour).StartCoroutine(AnimateStackableStatusEffect());
         else
             (player as MonoBehaviour).StartCoroutine(AnimateStatusEffect());
@@ -97,19 +98,19 @@ public class StatusEffectUI : MonoBehaviour
         // Get the timer image component.
         Image slider = transform.Find("InnerContainer/Slider").GetComponent<Image>();
         TMP_Text value = null;
-        if(effect.effectType is ScriptablePersonalSpell)
+        if(effect is PersonalSpell)
             value = transform.Find("InnerContainer/Value").GetComponent<TMP_Text>();
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
-                if(value != null){
-                    value.SetText(((PersonalSpell)effect).Stacks.ToString());
-                    if(effect.EffectDuration == -1f)
-                        yield return null;
-                }
-                // Update status effect timer.
-                elapsedDuration = 1f - effect.effectTimer/effect.EffectDuration;
-                slider.fillAmount = elapsedDuration;
-                yield return null;
+            if(value != null){
+                value.SetText(((PersonalSpell) effect).Stacks.ToString());
+                if(effect.EffectDuration == -1f)
+                    yield return null;
+            }
+            // Update status effect timer.
+            elapsedDuration = 1f - effect.effectTimer/effect.EffectDuration;
+            slider.fillAmount = elapsedDuration;
+            yield return null;
         }
         // Update UI positions based on what position the ended effect was in.
         UpdateStatusEffectsPositions();
