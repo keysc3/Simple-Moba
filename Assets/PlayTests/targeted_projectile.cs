@@ -19,7 +19,7 @@ public class targeted_projectile
         script.TargetUnit = null;
         
         // Act
-        yield return null;
+        yield return new WaitForSeconds(0.01f);
 
         // Assert
         Assert.True(projectile == null);
