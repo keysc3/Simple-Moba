@@ -56,12 +56,18 @@ public class PlayerSpells : MonoBehaviour
     */
     public void AddNewSpell(ISpell newSpell, string num){
         if(newSpell != null){
-            // Remove spell in new spells slot if necessary.
-            if(spells[num] != null){
-                Destroy(spells[num] as MonoBehaviour);
+            // Check if spell num exists already
+            if(spells.ContainsKey(num)){
+                // If the spell num already exists and has an associated spell destroy it.
+                if(spells[num] != null){
+                    Destroy(spells[num] as MonoBehaviour);
+                }
+                // Set new value.
+                spells[num] = newSpell;
             }
-            // Add new spell as key.
-            spells[num] = newSpell;
+            else
+                spells.Add(num, newSpell);
+            // Set spells num.
             newSpell.SpellNum = num;
             // Setup UI buttons.
             SetupSpellButtons(newSpell);
