@@ -26,7 +26,7 @@ public class SpellInputController
     */
     public void SpellButtonPressed(KeyCode buttonPressed, ISpell spellPressed){
         // Only attempt to cast if learned.
-        if(spellInput.SpellLevels[spellPressed.SpellNum] > 0 && !spellPressed.OnCd){
+        if((spellPressed.IsSummonerSpell || spellInput.SpellLevels[spellPressed.SpellNum] > 0) && !spellPressed.OnCd){
             // Hide cast if a spell was readied and new button pressed is different than last.
             if(spellInput.LastSpellPressed != null && spellInput.LastButtonPressed != buttonPressed)
                 spellInput.LastSpellPressed.HideCast();

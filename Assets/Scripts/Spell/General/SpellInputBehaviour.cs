@@ -66,6 +66,10 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
                 spellInputController.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
             }
         }
+        // Spell 4
+        if(Input.GetKeyDown(KeyCode.D)){
+            spellInputController.SpellButtonPressed(KeyCode.D, playerSpells.spells["SummonerSpell_1"]);
+        }
         // Left click
         if(Input.GetMouseButtonDown(0)){
             spellInputController.LeftClick(mainCamera.ScreenPointToRay(Input.mousePosition));
