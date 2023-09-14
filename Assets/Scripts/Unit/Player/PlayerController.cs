@@ -20,17 +20,16 @@ public class PlayerController
     /*
     *   RightClick - Moves the player to the click position if no enemy is targeted, otherwise sets the target.
     */
-    public void RightClick(IUnit hit, Vector3 targetDest){
-        if(hit != null){
+    public void RightClick(IUnit hitUnit, Vector3 hitVec){
+        if(hitUnit != null){
             // If the player clicked an enemy set the target, otherwise set the destination.
-            if(hit.GameObject.tag == "Enemy" && hit != player && !hit.IsDead){
-                playerMover.TargetedEnemy = hit;
+            if(hitUnit.GameObject.tag == "Enemy" && !hitUnit.IsDead){
+                playerMover.TargetedEnemy = hitUnit;
+                return;
             }
         }
-        else{
-            playerMover.TargetedEnemy = null;
-            playerMover.Destination = targetDest;
-        }
+        playerMover.TargetedEnemy = null;
+        playerMover.Destination = hitVec;
     }
 
     /*
@@ -46,34 +45,23 @@ public class PlayerController
     }
 
     /*
-    *   MovePlayerToEnemy - Moves the player into range of their targeted enemy whenever they have one.
+    *   SetPlayerDestinationUsingTarget - Sets the player interfaces destination if a target exists.
     */
-    public void MovePlayerToEnemy(){
+    public void SetPlayerDestinationUsingTarget(){
         if(playerMover.TargetedEnemy != null && !player.IsCasting){
             if(!playerMover.TargetedEnemy.IsDead){
                 // Get the targets distance from the player.
                 Vector3 myTarget = playerMover.TargetedEnemy.Position;
-                myTarget.y = 0.0f;
+                myTarget.y = player.Position.y;
                 float distToEnemy = (player.Position - myTarget).magnitude;
                 // If the enemy is in auto range then start autoing.
-                if(distToEnemy < player.unitStats.autoRange.GetValue()){
+                if(distToEnemy <= player.unitStats.autoRange.GetValue()){
                     // Stop navmesh
                     playerMover.Destination = player.Position;
-                    // If the time since last auto is greater than the next time the player is allowed to auto.
-                    // Make sure player isn't already winding up an auto.
-                    /*if(Time.time > player.basicAttack.nextAuto && !player.basicAttack.windingUp){
-                        player.basicAttack.windingUp = true;
-                        StartCoroutine(player.basicAttack.BasicAttackWindUp());
-                    }*/
                 }
                 else{
-                    // Stop the auto wind up since the enemy is no longer in range.
-                    //StopCoroutine(player.basicAttack.BasicAttackWindUp());
-                    //player.basicAttack.windingUp = false;
                     // Move the player into range of the target.
-                    Vector3 enemyDest = playerMover.TargetedEnemy.Position;
-                    //enemyDest.y = player.myCollider.bounds.center.y;
-                    playerMover.Destination = enemyDest;
+                    playerMover.Destination = playerMover.TargetedEnemy.Position;
                 }
             }
             else{

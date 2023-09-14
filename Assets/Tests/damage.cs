@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using NSubstitute;
 
 public class damage
 {
@@ -10,7 +11,7 @@ public class damage
     [Test]
     public void creates_new_damage_object_with_20_magic_damage(){
         // Arrange
-        IUnit unit1 = new MockUnit();
+        IUnit unit1 = Substitute.For<IUnit>();
 
         // Act
         Damage dmg = new Damage(unit1, 20f, "magic");

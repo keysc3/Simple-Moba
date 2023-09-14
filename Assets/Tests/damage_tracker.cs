@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using NSubstitute;
 
 public class damage_tracker
 {
@@ -12,7 +13,7 @@ public class damage_tracker
     {
         // Arrange
         DamageTracker dt = new DamageTracker();
-        IUnit unit1 = new MockUnit();
+        IUnit unit1 = Substitute.For<IUnit>();
 
         // Act
         dt.AddDamage(unit1, 32f, "magic");
@@ -27,7 +28,7 @@ public class damage_tracker
     {
         // Arrange
         DamageTracker dt = new DamageTracker();
-        IUnit unit1 = new MockUnit();
+        IUnit unit1 = Substitute.For<IUnit>();
         dt.AddDamage(unit1, 323f, "true");
         dt.AddDamage(unit1, 324f, "magic");
         dt.AddDamage(unit1, 325f, "physical");
@@ -47,9 +48,9 @@ public class damage_tracker
         DamageTracker dt = new DamageTracker();
         IPlayer player1 = new MockPlayer();
         IPlayer player2 = new MockPlayer();
-        IUnit unit1 = new MockUnit();
-        IUnit unit2 = new MockUnit();
-        IUnit unit3 = new MockUnit();
+        IUnit unit1 = Substitute.For<IUnit>();
+        IUnit unit2 = Substitute.For<IUnit>();
+        IUnit unit3 = Substitute.For<IUnit>();
 
         dt.AddDamage(player2, 3f, "physical");
         dt.AddDamage(unit1, 1f, "true");

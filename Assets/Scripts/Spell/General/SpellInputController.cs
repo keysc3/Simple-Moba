@@ -36,16 +36,13 @@ public class SpellInputController
                 if(!spellPressed.IsQuickCast){
                     // If Last button press is different new than new button press, ready the spell.
                     if(spellInput.LastButtonPressed != buttonPressed){
-                        spellPressed.DisplayCast();
-                        spellInput.LastButtonPressed = buttonPressed;
-                        spellInput.LastSpellPressed = spellPressed;
+                        ReadySpell(buttonPressed, spellPressed);
                     }
                 }
                 // Cast the spell since it is cast on press.
                 else{
                     ((IHasCast) spellPressed).Cast();
-                    spellInput.LastSpellPressed = null;
-                    spellInput.LastButtonPressed = KeyCode.None;
+                    UnreadySpell();
                 }
             }
         }
@@ -58,16 +55,11 @@ public class SpellInputController
     *   LeftClick - Handles the actions to take when a left click is inputted.
     *   @param mainCamera - Camera to use for ray casting.
     */
-    public void LeftClick(Camera mainCamera){
+    public void LeftClick(Ray ray){
         // If a spell is readied and the input is not from a button click.
         if(spellInput.LastSpellPressed != null && !spellInput.ButtonClick){
-            // If readied spell is not instant cast then hide its cast.
-            if(!spellInput.LastSpellPressed.IsQuickCast){
-                spellInput.LastSpellPressed.HideCast();
-            }
             // Get GameObject the player wants to cast on. 
             if(spellInput.LastSpellPressed is IHasTargetedCast){
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hitInfo;
                 // If the player click hit a GameObject.
                 if(Physics.Raycast(ray, out hitInfo))
@@ -75,27 +67,36 @@ public class SpellInputController
                     ((IHasTargetedCast) spellInput.LastSpellPressed).Cast(hitInfo.collider.gameObject.GetComponent<IUnit>());
             }
             // Cast spell.
-            else{
+            else if(spellInput.LastSpellPressed is IHasCast){
                 ((IHasCast) spellInput.LastSpellPressed).Cast();
             }
             // Unready spell.
-            spellInput.LastSpellPressed = null;
-            spellInput.LastButtonPressed = KeyCode.None;
+            UnreadySpell();
         }
     }
 
     /*
-    *   AnyInput - Unready spell if any input is pressed besides the readied spell.
+    *   CheckForUnready - Unready spell if any input is pressed besides the readied spell.
     */
-    public void AnyInput(){
-        // If the input detected is different than the last button press and not left click.
-        if(!Input.GetKeyDown(spellInput.LastButtonPressed) && !Input.GetMouseButtonDown(0)){
-            // If a spell has been readied and the last spell pressed is not a quick cast, then unready the spell.
-            if(spellInput.LastSpellPressed != null && spellInput.LastButtonPressed != KeyCode.None){
+    public void CheckForUnready(){
+        // If a spell has been readied and the last spell pressed is not a quick cast, then unready the spell.
+        if(spellInput.LastButtonPressed != KeyCode.None){
+            UnreadySpell();
+        }
+    }
+
+    private void ReadySpell(KeyCode buttonPressed, ISpell spellPressed){
+        spellPressed.DisplayCast();
+        spellInput.LastButtonPressed = buttonPressed;
+        spellInput.LastSpellPressed = spellPressed;
+    }
+
+    private void UnreadySpell(){
+        if(spellInput.LastSpellPressed != null){
+            if(!spellInput.LastSpellPressed.IsQuickCast)
                 spellInput.LastSpellPressed.HideCast();
-                spellInput.LastSpellPressed = null;
-                spellInput.LastButtonPressed = KeyCode.None;
-            }
+            spellInput.LastSpellPressed = null;
+            spellInput.LastButtonPressed = KeyCode.None;
         }
     }
 }

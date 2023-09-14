@@ -25,7 +25,8 @@ public class UpdateManaUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        championStats = (ChampionStats) player.unitStats; 
+        if(player != null)
+            championStats = (ChampionStats) player.unitStats; 
     }
 
     // Update is called once per frame

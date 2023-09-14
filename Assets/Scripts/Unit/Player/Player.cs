@@ -10,7 +10,7 @@ using TMPro;
 *
 * @author: Colin Keys
 */
-public class Player : MonoBehaviour, IPlayer, IDamageable
+public class Player : MonoBehaviour, IPlayer
 {
     private bool isDead = false;
     public bool IsDead { 
@@ -124,11 +124,14 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
         if(!isDead){
             float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
             unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
-            //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
+            if(damageTracker != null){
+                damageTracker.AddDamage(damager, damageToTake, damageType);
+            }
             // If dead then award a kill and start the death method.
             if(unitStats.CurrentHealth <= 0f){
-                Death();
+                unitStats.CurrentHealth = 0f;
                 UpdateScores(damager);
+                Death();
             }
             // Apply any damage that procs after recieving damage.
             else{
@@ -138,16 +141,21 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     }
 
     /*
-    *   UpdateScores - Update the scores of the players involved in a kill.
+    *   UpdateScores - Update the scores of the every unit involved in a kill.
     *   @param damager - IUnit of the killing player.
     */
     private void UpdateScores(IUnit damager){
+        if(score != null)
+            score.Death();
         if(damager is IPlayer){
             IPlayer killer = (IPlayer) damager;
-            killer.score.ChampionKill(this);
+            if(killer.score != null)
+                killer.score.ChampionKill(this);
             // Grant any assists if the unit is a champion.
-            foreach(IPlayer assister in damageTracker.CheckForAssists(killer, Time.time)){
-                assister.score.Assist(this);
+            if(damageTracker != null){
+                foreach(IPlayer assister in damageTracker.CheckForAssists(killer, Time.time)){
+                    assister.score.Assist(this);
+                }
             }
         }
     }
@@ -157,26 +165,35 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     */
     private void Death(){
         isDead = true;
-        score.Death();
+        if(statusEffects != null)
+            statusEffects.ResetEffects();
+        if(damageTracker != null)
+            damageTracker.ResetDamageTracker();
         // Disable all combat and movement controls.
-        playerController.enabled = false; 
-        playerSpellInput.enabled = false;
-        navMeshAgent.ResetPath();
-        navMeshAgent.enabled = false;
+        if(playerController != null)
+            playerController.enabled = false; 
+        if(playerSpellInput != null)
+            playerSpellInput.enabled = false;
+        if(navMeshAgent != null){
+            navMeshAgent.ResetPath();
+            navMeshAgent.enabled = false;
+        }
         // Disable collider and remove status effects.
-        myCollider.enabled = false;
-        statusEffects.ResetEffects();
+        if(myCollider != null)
+            myCollider.enabled = false;
         // Handle champion death clean up.
-        playerSpells.OnDeathSpellCleanUp();
-        rend.material = dead;
-        damageTracker.ResetDamageTracker();
-        StartCoroutine(RespawnTimer(levelManager.RespawnTime()));
+        if(playerSpells != null)
+            playerSpells.OnDeathSpellCleanUp();
+        if(rend != null)
+            rend.material = dead;
+        if(levelManager != null)
+            StartCoroutine(RespawnTimer(levelManager.RespawnTime()));
     }
 
     /*
     *   Respawn - Respawn the player by enabling functionality, resetting stats, and moving to respawn location.
     */
-    public void Respawn(){
+    private void Respawn(){
         navMeshAgent.enabled = true;
         // If active champion then enable controls.
         if(ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp] == gameObject){
@@ -221,7 +238,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     *   CreateNewPlayerUI - Creates a new player UI.
     *   @return GameObject - New player UI.
     */
-    public GameObject CreateNewPlayerUI(){
+    private GameObject CreateNewPlayerUI(){
         GameObject newPlayerUI = null;
         if(playerUIPrefab != null){
             newPlayerUI = (GameObject) Instantiate(playerUIPrefab, playerUIPrefab.transform.position, playerUIPrefab.transform.rotation);
@@ -247,7 +264,7 @@ public class Player : MonoBehaviour, IPlayer, IDamageable
     *   CreateNewPlayerBar - Creates a new player bar.
     *   @return GameObject - New player bar.
     */
-    public GameObject CreateNewPlayerBar(){
+    private GameObject CreateNewPlayerBar(){
         GameObject newPlayerBar = null;
         if(playerBarPrefab != null){
             newPlayerBar = (GameObject) Instantiate(playerBarPrefab, playerBarPrefab.transform.position, playerBarPrefab.transform.rotation);

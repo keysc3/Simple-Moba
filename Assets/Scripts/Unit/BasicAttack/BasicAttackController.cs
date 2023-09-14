@@ -37,7 +37,7 @@ public class BasicAttackController
             float distToEnemy = (player.Position - playerMover.TargetedEnemy.Position).magnitude;
             // If the enemy is in auto range then start autoing.
             if(distToEnemy < player.unitStats.autoRange.GetValue()){
-                if(currentTime >  basicAttack.NextAuto && !basicAttack.WindingUp){
+                if(currentTime >=  basicAttack.NextAuto && !basicAttack.WindingUp){
                     return true;
                 }
             }
@@ -55,7 +55,7 @@ public class BasicAttackController
         float windUpTime = (1.0f/basicAttack.AttackSpeed) * basicAttack.AutoWindUp;
         Debug.Log("Wind up time: " + windUpTime);
         while(basicAttack.WindingUp && timer <= windUpTime ){
-            if(playerMover.TargetedEnemy.IsDead || playerMover.TargetedEnemy == null || player.IsCasting){
+            if(playerMover.TargetedEnemy == null || player.IsCasting || playerMover.IsMoving){
                 basicAttack.WindingUp = false;
                 yield break;
             }
@@ -75,7 +75,6 @@ public class BasicAttackController
     */
     public void AttackHit(IUnit target){
         float physicalDamage = basicAttack.PhysicalDamage;
-        if(target is IDamageable)
-            ((IDamageable) target).TakeDamage(physicalDamage, "physical", player, false);
+        target.TakeDamage(physicalDamage, "physical", player, false);
     }
 }

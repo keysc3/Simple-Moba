@@ -54,6 +54,8 @@ public class LevelManager
         get => currentXP;
         private set {
             currentXP = value;
+            if(value >= levelInfo.requiredXP[Level])
+                LevelUp();
             if(xpSlider != null){
                 if(Level != levelInfo.maxLevel)
                     xpSlider.value = Mathf.Round((currentXP/levelInfo.requiredXP[Level]) * 100f);
@@ -88,35 +90,51 @@ public class LevelManager
         for(int i = 0; i < 4; i++)
             spellLevels.Add("Spell_" + (i+1), 0);
         if(unit is IPlayer)
-            ((IPlayer) unit).score.takedownCallback += GainXP; 
+            if(((IPlayer) unit).score != null)
+                ((IPlayer) unit).score.takedownCallback += GainXP; 
         SpellLevelPoints += 1;
     }
 
+    public LevelManager(IUnit unit, int startingLevel){
+        levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
+        _unit = unit;
+        // Set up spell levels dictionary.
+        for(int i = 0; i < 4; i++)
+            spellLevels.Add("Spell_" + (i+1), 0);
+        if(unit is IPlayer)
+            if(((IPlayer) unit).score != null)
+                ((IPlayer) unit).score.takedownCallback += GainXP;
+        SpellLevelPoints += 1;
+        if(startingLevel < 1)
+            startingLevel = 1;
+        else if(startingLevel > 18)
+            startingLevel = 18;
+        for(int i = 1; i < startingLevel; i++){
+            LevelUp();
+        }
+    }
+
     /*
-    *   GainXPTester - Add xp to the champions total. Used for testing with a key input.
+    *   Gain XPTester - Add xp to the champions total. Used for testing with a key input.
     *   @param gained - float of the amount of xp to add.
     */
     public void GainXPTester(){
-        CurrentXP += gainAmount;
-        if(Level != levelInfo.maxLevel){
-            if(CurrentXP >= levelInfo.requiredXP[Level])
-                LevelUp();
-        }
+        if(Level != levelInfo.maxLevel)
+            CurrentXP += gainAmount;
     }
 
     /*
     *   GainXP - Add xp to the champions total.
     *   @param killed - IUnit of the killed unit.
     */
-    private void GainXP(IUnit killed){
-        float gained;
-        if(killed is IPlayer)
-            gained = levelInfo.championKillXP[((IPlayer) killed).levelManager.Level - 1];
-        else
-            gained = 30f;
-        CurrentXP += gained;
-        if(CurrentXP >= levelInfo.requiredXP[Level - 1] && Level != levelInfo.maxLevel){
-            LevelUp();
+    public void GainXP(IUnit killed){
+        if(Level != levelInfo.maxLevel){
+            float gained;
+            if(killed is IPlayer)
+                gained = levelInfo.championKillXP[((IPlayer) killed).levelManager.Level - 1];
+            else
+                gained = levelInfo.defaultXP;
+            CurrentXP += gained;
         }
     }
 
@@ -124,9 +142,12 @@ public class LevelManager
     *   LevelUp - Level up the champion. This includes increasing level, spell levels points, next level xp, and champion stats.
     *
     */
-    private void LevelUp(){
+    public void LevelUp(){
         // Keep any overflow xp for the next.
-        CurrentXP = CurrentXP - levelInfo.requiredXP[Level];
+        if(CurrentXP > levelInfo.requiredXP[Level])
+            CurrentXP = CurrentXP - levelInfo.requiredXP[Level];
+        else
+            CurrentXP = 0;
         // Increase level and required amount for the next level.
         Level++;
         //requiredXP += 100.0f;
@@ -135,7 +156,8 @@ public class LevelManager
         SpellLevelPoints += 1;
         // Increase the champions base stats.
         if(_unit is IPlayer)
-            IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
+            if(_unit.unitStats != null)
+                IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
     }
 
     /*
@@ -178,7 +200,7 @@ public class LevelManager
     }
 
     /*
-    *   GrowthAmountCalculationAtkSpd - Calculates the amount to increase a stat for a new level by base on the growth multiplier for that stat.
+    *   GrowthAmountCalculationAtkSpd - Calculates the amount to increase attack speed by based on level from level up.
     *   @param growthStat - float of the growth value of the stat.
     */
     private float GrowthAmountCalculationAtkSpd(float growthStat){
@@ -186,7 +208,7 @@ public class LevelManager
     }
 
     /*
-    *   LevelUpSkill - Coroutine for leveling up the champions spell when given a skill point.Up to 5 levels for basic abilities and 3 for ultimate.
+    *   LevelUpSkill - Calls a level up request for pressed spell and calls level up animation method.
     *   @param currentTime - float of current game time.
     */
     public void LevelUpSkill(float currentTime){
@@ -196,16 +218,16 @@ public class LevelManager
                 // If first spell level up key bind pressed and it is not at max level then level it.
                 if(Input.GetKey(KeyCode.LeftControl)){
                     if(Input.GetKeyDown(KeyCode.Q))
-                        SpellLevelUpRequest("Spell_1", "basic");
+                        SpellLevelUpRequest("Spell_1");
                     // If second spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.W))
-                        SpellLevelUpRequest("Spell_2", "basic");
+                        SpellLevelUpRequest("Spell_2");
                     // If third spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.E))
-                        SpellLevelUpRequest("Spell_3", "basic");
+                        SpellLevelUpRequest("Spell_3");
                     // If fourth spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.R))
-                        SpellLevelUpRequest("Spell_4", "ultimate");
+                        SpellLevelUpRequest("Spell_4");
                 }
             }
             // Skill level up available animation.
@@ -216,11 +238,10 @@ public class LevelManager
     /*
     *   SpellLevelUpRequest - Checks if the requested spell can be leveled up and calls the level up method.
     *   @param spell - string of the spell requested to be leveled up.
-    *   @param type - string of the type of spell to distinguish between 5 point vs 3 point spells (basic vs ultimate).
     */
-    private void SpellLevelUpRequest(string spell, string type){
+    public void SpellLevelUpRequest(string spell){
         // Basic ability.
-        if(type == "basic"){
+        if(spell != "Spell_4"){
             if(spellLevels[spell] != levelInfo.maxSpellLevel)
                 SpellLevelUp(spell);
         }
@@ -237,9 +258,9 @@ public class LevelManager
 
     /*
     *   SpellLevelUp - Levels up the given spell and updates the UI.
-    *   @paream spell - string of the spell to be leveled up.
+    *   @param spell - string of the spell to be leveled up.
     */
-    public void SpellLevelUp(string spell){
+    private void SpellLevelUp(string spell){
         if(spellLevelPoints > 0){
             spellLevels[spell] = spellLevels[spell] + 1;
             SpellLevelPoints -= 1;

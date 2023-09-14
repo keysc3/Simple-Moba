@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using NSubstitute;
 
 /*
 * Purpose: Tests for the Score class.
@@ -17,11 +18,11 @@ public class score
     [Test]
     public void adds_1_champion_kill_with_null_takedown_callback(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
 
         // Act
-        score.ChampionKill(mockUnit);
+        score.ChampionKill(unit);
 
         // Assert
         Assert.AreEqual(1, score.Kills);
@@ -31,18 +32,18 @@ public class score
     *   Adds one kill with the takedown callback not being null. Should have used the callback.
     */
     [Test]
-    public void adds_champion_kill_with_takedown_callback_change_gameobject_name(){
+    public void adds_champion_kill_with_takedown_callback_that_changes_bool(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
-        mockUnit.SUnit.name = "tempName";
-        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
+        bool wasCalled = false;
+        score.takedownCallback += (unit) => wasCalled = true;
         
         // Act
-        score.ChampionKill(mockUnit);
+        score.ChampionKill(unit);
 
         // Assert
-        Assert.AreEqual("Takedown Callback executed.", mockUnit.SUnit.name);
+        Assert.True(wasCalled);
     }
 
     /*
@@ -51,18 +52,18 @@ public class score
     [Test]
     public void adds_2_champion_kills_with_takedown_callback(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
-        mockUnit.SUnit.name = "tempName";
+        int calls = 0;
 
-        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
+        score.takedownCallback += (unit) => calls++;
         
         // Act
-        score.ChampionKill(mockUnit);
-        score.ChampionKill(mockUnit);
+        score.ChampionKill(unit);
+        score.ChampionKill(unit);
 
         // Assert
-        Assert.AreEqual(2, score.Kills);
+        Assert.AreEqual((2, 2), (score.Kills, calls));
     }
 
     /*
@@ -71,11 +72,11 @@ public class score
     [Test]
     public void adds_1_assist_with_null_takedown_callback(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
 
         // Act
-        score.Assist(mockUnit);
+        score.Assist(unit);
 
         // Assert
         Assert.AreEqual(1, score.Assists);
@@ -85,18 +86,19 @@ public class score
     *   Adds one assist with the takedown callback not being null. Should have used the callback.
     */
     [Test]
-    public void adds_assist_with_takedown_callback_change_gameobject_name(){
+    public void adds_assist_with_takedown_callback_that_changes_bool(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
-        mockUnit.SUnit.name = "tempName";
-        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
+        bool wasCalled = false;
+
+        score.takedownCallback += (unit) => wasCalled = true;
         
         // Act
-        score.Assist(mockUnit);
+        score.Assist(unit);
 
         // Assert
-        Assert.AreEqual("Takedown Callback executed.", mockUnit.SUnit.name);
+        Assert.True(wasCalled);
     }
 
     /*
@@ -105,13 +107,13 @@ public class score
     [Test]
     public void adds_2_assists_with_takedown_callback(){
         // Arrange
-        MockUnit mockUnit1 = new MockUnit();
-        MockUnit mockUnit2 = new MockUnit();
+        IUnit unit1 = Substitute.For<IUnit>();
+        IUnit unit2 = Substitute.For<IUnit>();
         Score score = new Score(null);
         
         // Act
-        score.Assist(mockUnit1);
-        score.Assist(mockUnit2);
+        score.Assist(unit1);
+        score.Assist(unit2);
 
         // Assert
         Assert.AreEqual(2, score.Assists);
@@ -123,11 +125,11 @@ public class score
     [Test]
     public void adds_1_creep_kill_with_null_takedown_callback(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
 
         // Act
-        score.CreepKill(mockUnit);
+        score.CreepKill(unit);
 
         // Assert
         Assert.AreEqual(1, score.CS);
@@ -137,19 +139,19 @@ public class score
     *   Adds one cs with the takedown callback not being null. Should have used the callback.
     */
     [Test]
-    public void adds_creep_kill_with_takedown_callback_change_gameobject_name(){
+    public void adds_creep_kill_with_takedown_callback_that_changes_bool(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
-        mockUnit.SUnit.name = "tempName";
+        bool wasCalled = false;
 
-        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
+        score.takedownCallback += (unit) => wasCalled = true;
         
         // Act
-        score.CreepKill(mockUnit);
+        score.CreepKill(unit);
 
         // Assert
-        Assert.AreEqual("Takedown Callback executed.", mockUnit.SUnit.name);
+        Assert.True(wasCalled);
     }
 
     /*
@@ -158,18 +160,18 @@ public class score
     [Test]
     public void adds_2_creep_kills_with_takedown_callback(){
         // Arrange
-        MockUnit mockUnit = new MockUnit();
+        IUnit unit = Substitute.For<IUnit>();
         Score score = new Score(null);
-        mockUnit.SUnit.name = "tempName";
+        int calls = 0;
 
-        score.takedownCallback += (mockUnit) => mockUnit.SUnit.name = "Takedown Callback executed.";
+        score.takedownCallback += (unit) => calls++;
         
         // Act
-        score.CreepKill(mockUnit);
-        score.CreepKill(mockUnit);
+        score.CreepKill(unit);
+        score.CreepKill(unit);
 
         // Assert
-        Assert.AreEqual(2, score.CS);
+        Assert.AreEqual((2, 2), (score.CS, calls));
     }
 
     /*

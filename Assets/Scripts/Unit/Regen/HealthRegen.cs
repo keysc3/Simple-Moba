@@ -46,6 +46,7 @@ public class HealthRegen : MonoBehaviour
     // Start is called before the first frame update.
     private void Start()
     {
+        HealthToRegen = Mathf.Round(unit.unitStats.HP5.GetValue()/10.0f);
         StartCoroutine(RegenHealth());
     }
 
@@ -59,17 +60,19 @@ public class HealthRegen : MonoBehaviour
     */
     private IEnumerator RegenHealth(){
         while(gameObject){
-            // 0.5s intervals over 5s = 10 increments.
-            float maxHealth = unit.unitStats.maxHealth.GetValue();
-            float currentHealth = unit.unitStats.CurrentHealth;
-            // If not at max mana and not dead then regen health.
-            if(currentHealth < maxHealth && !unit.IsDead){
-                currentHealth += HealthToRegen;
-                // If regen goes over max health set current health to max.
-                if(currentHealth > maxHealth)
-                    currentHealth = maxHealth;
-                // Set health and only regen every 0.5s.
-                unit.unitStats.CurrentHealth = currentHealth;
+            if(Unit != null){
+                // 0.5s intervals over 5s = 10 increments.
+                float maxHealth = unit.unitStats.maxHealth.GetValue();
+                float currentHealth = unit.unitStats.CurrentHealth;
+                // If not at max health and not dead then regen health.
+                if(currentHealth < maxHealth && !unit.IsDead){
+                    currentHealth += HealthToRegen;
+                    // If regen goes over max health set current health to max.
+                    if(currentHealth > maxHealth)
+                        currentHealth = maxHealth;
+                    // Set health and only regen every 0.5s.
+                    unit.unitStats.CurrentHealth = currentHealth;
+                }
             }
             yield return new WaitForSeconds(0.5f);
         }

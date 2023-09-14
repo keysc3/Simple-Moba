@@ -8,7 +8,7 @@ using UnityEngine;
 */
 public delegate void BonusDamage(IUnit toDamage, bool isDot);
 
-public interface IUnit
+public interface IUnit: IDamageable
 {
     ScriptableUnit SUnit { get; }
     UnitStats unitStats { get; set; }

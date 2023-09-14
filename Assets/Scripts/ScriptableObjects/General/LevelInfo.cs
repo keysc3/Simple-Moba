@@ -11,6 +11,7 @@ using UnityEngine;
 public class LevelInfo : ScriptableObject
 {
     public int maxLevel { get; private set; } = 18;
+    public float defaultXP { get; private set; } = 30f;
     public List<float> championKillXP { get; private set; } = new List<float>(){42f, 114f, 144f, 174f, 204f, 234f, 308f, 392f, 486f, 
     590f, 640f, 690f, 740f, 790f, 840f, 890f, 940f, 990f};
     public List<float> requiredXP { get; private set; } = new List<float>(){0f, 280f, 380f, 480f, 580f, 680f, 780f, 880f, 980f, 1080f, 

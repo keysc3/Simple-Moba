@@ -37,6 +37,6 @@ public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
         if(spellInput != null)
             spellInput.ButtonClick = true;
         if(levelManager != null)
-            levelManager.SpellLevelUp(spell);
+            levelManager.SpellLevelUpRequest(spell);
     }
 }
