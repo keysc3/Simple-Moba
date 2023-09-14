@@ -99,7 +99,15 @@ public class SpellController
     *   @param baseCD - float of the base cooldown.
     */
     public float CalculateCooldown(float baseCD){
-        float reducedCD = baseCD*(100f/(100f+player.unitStats.haste.GetValue()));
+        float reducedCD;
+        float haste;
+        reducedCD = baseCD*(100f/(100f+player.unitStats.haste.GetValue()));
+        if(!spell.IsSummonerSpell){
+            haste = player.unitStats.haste.GetValue();
+        }
+        else
+            //TODO: Implement summoner spell haste.
+            haste = 0f;
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
 

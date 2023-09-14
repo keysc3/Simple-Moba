@@ -23,6 +23,7 @@ public class Spell : MonoBehaviour, ISpell
     public bool CanMove { get; set; } = false;
     public bool IsQuickCast { get; set; } = false;
     public bool IsDisplayed { get; set; } = false;
+    public bool IsSummonerSpell { get; set; } = false;
     private string spellNum;
     public string SpellNum { 
         get => spellNum;
