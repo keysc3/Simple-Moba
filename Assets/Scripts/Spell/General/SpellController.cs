@@ -138,4 +138,31 @@ public class SpellController
             imageSlider.fillAmount = fill;
         }
     }
+
+    public Vector3 GetPositionOnWalkableNavMesh(Vector3 targetPosition, bool fullClear){
+        Debug.DrawLine(targetPosition - (Vector3.up*2), targetPosition + (Vector3.up*10), Color.red, 30f);
+        // Initalize variables 
+        NavMeshHit meshHit;
+        Vector3 finalPosition = player.Position;
+        int walkableMask = 1 << NavMesh.GetAreaFromName("Walkable");
+        // Sample for a point on the walkable navmesh within 4 units of target position.
+        if(NavMesh.SamplePosition(targetPosition, out meshHit, 4.0f, walkableMask)){
+            finalPosition = meshHit.position;
+            Debug.DrawLine(finalPosition, finalPosition + (Vector3.up*10), Color.blue, 30f);
+            finalPosition.y = targetPosition.y;
+            if(fullClear){
+                // If finalPosition does not equal targetPosition, then the targetPosition was not on a walkable area.
+                if(targetPosition != finalPosition){
+                    // Raycast between the target position and the players current position.
+                    // If the ray hits any NavMesh areas besides walkableArea then the RayCast returns true.
+                    // The Raycast should always return true because we know the target position is not a walkable area.
+                    if(NavMesh.Raycast(player.Position, targetPosition, out meshHit, walkableMask)){
+                        // Use the value returned in meshHit to set a new target position on a walkable area in the direction of the original target position.
+                        finalPosition = new Vector3(meshHit.position.x, targetPosition.y, meshHit.position.z);
+                    }
+                }
+            }
+        }
+        return finalPosition;
+    }
 }
