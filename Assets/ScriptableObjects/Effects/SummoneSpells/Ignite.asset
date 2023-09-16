@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53fb6c84e7a4c364e80ae65bd49c4581, type: 3}
+  m_Name: Ignite
+  m_EditorClassIdentifier: 
+  <duration>k__BackingField:
+  - 5
+  isStackable: 0
+  <ccValue>k__BackingField: 0
+  <isBuff>k__BackingField: 0
+  <sprite>k__BackingField: {fileID: 0}
+  <damageType>k__BackingField: true
+  <tickRate>k__BackingField: 1
