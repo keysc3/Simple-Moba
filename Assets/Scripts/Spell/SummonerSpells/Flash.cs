@@ -9,6 +9,12 @@ public class Flash : Spell, IHasCast
     new private FlashData spellData;
     private NavMeshAgent navMeshAgent;
 
+    // Called when the script instance is being loaded.
+    protected override void Awake(){
+        base.Awake();
+        IsSummonerSpell = true;
+    }
+
     // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
@@ -17,7 +23,6 @@ public class Flash : Spell, IHasCast
             SpellNum = spellData.defaultSpellNum;
         navMeshAgent = GetComponent<NavMeshAgent>();
         IsQuickCast = true;
-        IsSummonerSpell = true;
     }
 
     /*
