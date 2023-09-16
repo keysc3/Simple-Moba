@@ -1243,7 +1243,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4191523344808481094
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13462,6 +13462,7 @@ GameObject:
   - component: {fileID: 6319293801013490314}
   - component: {fileID: 2318802963796851028}
   - component: {fileID: 6010621276589638705}
+  - component: {fileID: 4415685090109863680}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -13571,6 +13572,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4415685090109863680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6077060256122303778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d744105a9d84243917cd9f1e23d3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyCode: 0
 --- !u!1 &6126781098922738608
 GameObject:
   m_ObjectHideFlags: 0
@@ -18193,7 +18207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1120492122582154195
 RectTransform:
   m_ObjectHideFlags: 0
