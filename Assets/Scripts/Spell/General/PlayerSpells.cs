@@ -93,8 +93,8 @@ public class PlayerSpells : MonoBehaviour
             SpellButton spellButton = spellsContainer.Find(num + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
             spellButton.spell = newSpell;
             //TODO: Change this to not be hardcoded using a proper keybind/input system?
-            List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.D};
-            List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4", "SummonerSpell_1"};
+            List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.D, KeyCode.F};
+            List<string> spellNames = new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4", "SummonerSpell_1", "SummonerSpell_2"};
             int index = spellNames.FindIndex(name => name == num);
             if(index != -1)
                 spellButton.keyCode = inputs[index];

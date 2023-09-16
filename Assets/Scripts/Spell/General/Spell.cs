@@ -28,7 +28,7 @@ public class Spell : MonoBehaviour, ISpell
     public string SpellNum { 
         get => spellNum;
         set {
-            if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"}.Contains(value)){
+            if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4","SummonerSpell_1","SummonerSpell_2"}.Contains(value)){
                 spellNum = value;
                 if(player != null && player.playerUI != null){
                     spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value + "_Container/SpellContainer/Spell/CD");

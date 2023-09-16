@@ -31,7 +31,7 @@ public class SpellInputController
             if(spellInput.LastSpellPressed != null && spellInput.LastButtonPressed != buttonPressed)
                 spellInput.LastSpellPressed.HideCast();
             // If pressed spell is a castable spell.
-            if(spellPressed is IHasCast){
+            if(spellPressed is IHasCast || spellPressed is IHasTargetedCast){
                 // If spell is not cast on press.
                 if(!spellPressed.IsQuickCast){
                     // If Last button press is different new than new button press, ready the spell.
@@ -62,9 +62,14 @@ public class SpellInputController
             if(spellInput.LastSpellPressed is IHasTargetedCast){
                 RaycastHit hitInfo;
                 // If the player click hit a GameObject.
-                if(Physics.Raycast(ray, out hitInfo))
-                    // Handle GamObject checking in the spell.
-                    ((IHasTargetedCast) spellInput.LastSpellPressed).Cast(hitInfo.collider.gameObject.GetComponent<IUnit>());
+                if(Physics.Raycast(ray, out hitInfo)){
+                    // Handle Unit checking in the spell.
+                    IUnit hit = hitInfo.collider.gameObject.GetComponent<IUnit>();
+                    if(hit != null)
+                        ((IHasTargetedCast) spellInput.LastSpellPressed).Cast(hit);
+                    else
+                        Debug.Log("No unit selected.");
+                }
             }
             // Cast spell.
             else if(spellInput.LastSpellPressed is IHasCast){
@@ -86,16 +91,18 @@ public class SpellInputController
     }
 
     private void ReadySpell(KeyCode buttonPressed, ISpell spellPressed){
+        Debug.Log("readied");
         spellPressed.DisplayCast();
         spellInput.LastButtonPressed = buttonPressed;
         spellInput.LastSpellPressed = spellPressed;
     }
 
-    private void UnreadySpell(){
+    public void UnreadySpell(){
         if(spellInput.LastSpellPressed != null){
             if(!spellInput.LastSpellPressed.IsQuickCast)
                 spellInput.LastSpellPressed.HideCast();
-            spellInput.LastSpellPressed = null;
+            if(!(spellInput.LastSpellPressed is IHasTargetedCast))
+                spellInput.LastSpellPressed = null;
             spellInput.LastButtonPressed = KeyCode.None;
         }
     }
