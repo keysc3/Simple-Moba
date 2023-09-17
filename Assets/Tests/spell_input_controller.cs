@@ -277,12 +277,14 @@ public class spell_input_controller
         // Arrange
         ISpellInput spellInput = Substitute.For<ISpellInput>();
         ISpell spell = Substitute.For<ISpell, IHasTargetedCast>();
-        IUnit unit = Substitute.For<IUnit>();
+        //IUnit unit = Substitute.For<IUnit>();
         SpellInputController controller = new SpellInputController(spellInput);
         GameObject g1 = new GameObject();
         g1.AddComponent<BoxCollider>();
+        g1.AddComponent<MockPlayerBehaviour>();
+        IUnit unit = g1.GetComponent<IUnit>();
         g1.transform.position = Vector3.zero;
-        unit.GameObject.Returns(g1);
+        //unit.GameObject.Returns(g1);
         spell.SpellNum.Returns("Not Casted");
         spellInput.LastSpellPressed.Returns(spell);
 
@@ -290,7 +292,7 @@ public class spell_input_controller
         controller.LeftClick(new Ray(Vector3.left, Vector3.right));
 
         // Assert
-        ((IHasTargetedCast) spell).Received().Cast(null);
+        ((IHasTargetedCast) spell).Received().Cast(unit);
     }
 
     // A Test behaves as an ordinary method
