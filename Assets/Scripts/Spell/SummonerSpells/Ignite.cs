@@ -40,28 +40,28 @@ public class Ignite : Spell, IHasTargetedCast
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(IUnit unit){
+    public void AttemptCast(IUnit unit){
         if(!player.IsCasting){
             if(unit is IPlayer){
-                if(CheckInRange(unit)){
-                    ApplySpell(unit);
+                if(spellController.CheckInRange(unit, spellData.maxMagnitude)){
+                    Cast(unit);
                 }
                 else{
-                    StartCoroutine(MoveTowardsTarget(unit));
+                    StartCoroutine(spellController.MoveTowardsSpellTarget(unit, spellData.maxMagnitude));
                 }
             }
         }
     }
 
-    private bool CheckInRange(IUnit unit){
-        float distToTarget = (transform.position - unit.Position).magnitude;
-        return distToTarget <= spellData.maxMagnitude;
-    }
-
-    private void ApplySpell(IUnit unit){
+    public void Cast(IUnit unit){
         unit.statusEffects.AddEffect(spellData.dot.InitializeEffect(CalculateTotalDamage(), 0, player, unit));
         OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[0]));
+    }
+
+    /*private bool CheckInRange(IUnit unit){
+        float distToTarget = (transform.position - unit.Position).magnitude;
+        return distToTarget <= spellData.maxMagnitude;
     }
 
     private IEnumerator MoveTowardsTarget(IUnit unit){
@@ -78,7 +78,7 @@ public class Ignite : Spell, IHasTargetedCast
         }
         navMeshAgent.ResetPath();
         ApplySpell(unit);
-    }
+    }*/
 
     private float CalculateTotalDamage(){
         return 50f + (20f * player.levelManager.Level);

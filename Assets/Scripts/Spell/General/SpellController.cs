@@ -14,6 +14,7 @@ public class SpellController
 {
     private ISpell spell;
     private IPlayer player;
+    private ISpellInput spellInput;
     private Camera mainCamera;
     private NavMeshAgent navMeshAgent;
     private Collider collider;
@@ -27,6 +28,7 @@ public class SpellController
         this.spell = spell;
         this.player = player;
         mainCamera = Camera.main;
+        spellInput = player.GameObject.GetComponent<ISpellInput>();
         navMeshAgent = player.GameObject.GetComponent<NavMeshAgent>();
         collider = player.GameObject.GetComponent<Collider>();
     }
@@ -164,5 +166,24 @@ public class SpellController
             }
         }
         return finalPosition;
+    }
+
+    public bool CheckInRange(IUnit unit, float maxMagnitude){
+        float distToTarget = (player.Position - unit.Position).magnitude;
+        return distToTarget <= maxMagnitude;
+    }
+
+    public IEnumerator MoveTowardsSpellTarget(IUnit unit, float maxMagnitude){
+        while(!CheckInRange(unit, maxMagnitude)){
+            if(spellInput.LastSpellPressed != spell && spellInput.LastSpellPressed == null){
+                if(!Input.GetMouseButtonDown(1))
+                    navMeshAgent.ResetPath();
+                yield break;
+            }
+            navMeshAgent.destination = unit.Position;
+            yield return null;
+        }
+        navMeshAgent.ResetPath();
+        ((IHasTargetedCast) spell).Cast(unit);
     }
 }

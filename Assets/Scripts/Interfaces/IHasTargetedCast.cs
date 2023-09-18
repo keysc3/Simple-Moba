@@ -9,5 +9,6 @@ using UnityEngine;
 */
 public interface IHasTargetedCast
 {
+    void AttemptCast(IUnit unit);
     void Cast(IUnit unit);
 }

@@ -66,7 +66,7 @@ public class SpellInputController
                     // Handle Unit checking in the spell.
                     IUnit hit = hitInfo.collider.gameObject.GetComponent<IUnit>();
                     if(hit != null)
-                        ((IHasTargetedCast) spellInput.LastSpellPressed).Cast(hit);
+                        ((IHasTargetedCast) spellInput.LastSpellPressed).AttemptCast(hit);
                     else
                         Debug.Log("No unit selected.");
                 }
