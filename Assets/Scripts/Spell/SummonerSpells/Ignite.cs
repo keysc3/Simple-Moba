@@ -38,7 +38,7 @@ public class Ignite : Spell, IHasTargetedCast
     }
 
     /*
-    *   Cast - Casts the spell.
+    *   AttemptCast - Checks to see if the spell can be cast.
     */
     public void AttemptCast(IUnit unit){
         if(!player.IsCasting){
@@ -53,33 +53,19 @@ public class Ignite : Spell, IHasTargetedCast
         }
     }
 
+    /*
+    *   Cast - Casts the spell.
+    */
     public void Cast(IUnit unit){
         unit.statusEffects.AddEffect(spellData.dot.InitializeEffect(CalculateTotalDamage(), 0, player, unit));
         OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[0]));
     }
 
-    /*private bool CheckInRange(IUnit unit){
-        float distToTarget = (transform.position - unit.Position).magnitude;
-        return distToTarget <= spellData.maxMagnitude;
-    }
-
-    private IEnumerator MoveTowardsTarget(IUnit unit){
-        Debug.Log(CheckInRange(unit));
-        while(!CheckInRange(unit)){
-            Debug.Log("Here: " + CheckInRange(unit));
-            if(spellInput.LastSpellPressed != (ISpell) this && spellInput.LastSpellPressed == null){
-                if(!Input.GetMouseButtonDown(1))
-                    navMeshAgent.ResetPath();
-                yield break;
-            }
-            navMeshAgent.destination = unit.Position;
-            yield return null;
-        }
-        navMeshAgent.ResetPath();
-        ApplySpell(unit);
-    }*/
-
+    /*
+    * CalculateTotalDamage - Calculates the amount of damage the spell will do.
+    * @return float - float of the amount of damage the spell with deal.
+    */
     private float CalculateTotalDamage(){
         return 50f + (20f * player.levelManager.Level);
     }
