@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements the flash summoner spell. Moves the player a short distance in the cast direction.
+* If the target position is a non walkable area the player will be moved to the closest walkable area.
+*
+* @author: Colin Keys
+*/
 public class Flash : Spell, IHasCast
 {
     new private FlashData spellData;

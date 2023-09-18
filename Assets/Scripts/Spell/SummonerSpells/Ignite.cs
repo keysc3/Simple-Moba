@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements the ignite summoner spell. Cast on a target to deal true damage over an amount of time.
+*
+* @author: Colin Keys
+*/
 public class Ignite : Spell, IHasTargetedCast
 {
     new private IgniteData spellData;
