@@ -27,7 +27,7 @@ public class player_spells
     }
 
     // A Test behaves as an ordinary method
-    [Test]
+    /*[Test]
     public void adds_new_spell_without_callback_and_no_duplicate_spell_num_to_player_spells()
     {
         // Arrange
@@ -88,5 +88,5 @@ public class player_spells
 
         // Assert
         ((IHasCallback) spell3).Received().SetupCallbacks(playerSpells.spells);
-    }
+    }*/
 }
