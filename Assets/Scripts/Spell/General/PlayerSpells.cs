@@ -54,8 +54,11 @@ public class PlayerSpells : MonoBehaviour
     *   @param newSpell - ISpell of the spell being setup and added.
     *   @param num - string of the spells num.
     */
-    public void AddNewSpell(ISpell newSpell, string num){
+    public void AddNewSpell(System.Type newSpell, string num, SpellData spellData){
         if(newSpell != null){
+            Spell spell = (Spell) gameObject.AddComponent(newSpell);
+            spell.spellData = spellData;
+            ISpell spellInterface = (ISpell) spell;
             // Check if spell num exists already
             if(spells.ContainsKey(num)){
                 // If the spell num already exists and has an associated spell destroy it.
@@ -63,17 +66,17 @@ public class PlayerSpells : MonoBehaviour
                     Destroy(spells[num] as MonoBehaviour);
                 }
                 // Set new value.
-                spells[num] = newSpell;
+                spells[num] = spellInterface;
             }
             else
-                spells.Add(num, newSpell);
+                spells.Add(num, spellInterface);
             // Set spells num.
-            newSpell.SpellNum = num;
+            spellInterface.SpellNum = num;
             // Setup UI buttons.
-            SetupSpellButtons(newSpell);
+            SetupSpellButtons(spellInterface);
             // Setup any callbacks.
-            if(newSpell is IHasCallback){
-                ((IHasCallback) newSpell).SetupCallbacks(spells);
+            if(spellInterface is IHasCallback){
+                ((IHasCallback) spellInterface).SetupCallbacks(spells);
             }
         }
     }

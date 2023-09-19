@@ -39,7 +39,7 @@ public class Spell : MonoBehaviour, ISpell
         }
     }
     public int SpellLevel { get => player.levelManager.spellLevels[SpellNum]-1; }
-    [field: SerializeField] public SpellData spellData { get; protected set; }
+    [field: SerializeField] public SpellData spellData { get; set; }
     protected ChampionStats championStats;
     protected Camera mainCamera;
     protected IPlayer player;
