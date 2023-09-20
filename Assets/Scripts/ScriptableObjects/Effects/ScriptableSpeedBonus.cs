@@ -10,7 +10,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects/SpeedBonus")]
 public class ScriptableSpeedBonus : ScriptableEffect
 {
-    [field: SerializeField] public List<float> bonusPercent { get; private set; } = new List<float>();
     public bool isAdditive;
 
     /*
@@ -18,8 +17,8 @@ public class ScriptableSpeedBonus : ScriptableEffect
     *   @param casted - IUnit of the unit that caused the effect.
     *   @param effected - IUnit of the unit that is being affected by the effect.
     */
-    public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
+    public Effect InitializeEffect(int spellLevel, float bonusPercent, IUnit casted, IUnit effected){
         ccValue = 0;
-        return new SpeedBonus(this, duration[spellLevel], bonusPercent[spellLevel], casted, effected);
+        return new SpeedBonus(this, duration[spellLevel], bonusPercent, casted, effected);
     }
 }

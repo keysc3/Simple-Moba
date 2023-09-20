@@ -150,7 +150,6 @@ public class unit_stats
         sb.isStackable = isStackable;
         sb.isAdditive = isAdditive;
         sb.duration.AddRange(durationValues);
-        sb.bonusPercent.AddRange(sbValues);
-        return (SpeedBonus) sb.InitializeEffect(index, unit1, unit2);
+        return (SpeedBonus) sb.InitializeEffect(index, sbValues[index], unit1, unit2);
     } 
 }
