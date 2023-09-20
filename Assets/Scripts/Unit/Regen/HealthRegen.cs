@@ -38,21 +38,17 @@ public class HealthRegen : MonoBehaviour
 
     private TMP_Text healthRegenText;
 
-    // Called when the script instance is being loaded.
-    private void Awake(){
-        Unit = GetComponent<IUnit>();
-    }
-
     // Start is called before the first frame update.
     private void Start()
     {
-        HealthToRegen = Mathf.Round(unit.unitStats.HP5.GetValue()/10.0f);
+        Unit = GetComponent<IUnit>();
+        //HealthToRegen = unit.unitStats.HP5.GetValue()/10.0f;
         StartCoroutine(RegenHealth());
     }
 
     // Called once per frame.
     private void Update(){
-        HealthToRegen = Mathf.Round(unit.unitStats.HP5.GetValue()/10.0f);
+        HealthToRegen = unit.unitStats.HP5.GetValue()/10.0f;
     }
 
     /*
@@ -66,6 +62,7 @@ public class HealthRegen : MonoBehaviour
                 float currentHealth = unit.unitStats.CurrentHealth;
                 // If not at max health and not dead then regen health.
                 if(currentHealth < maxHealth && !unit.IsDead){
+                    Debug.Log($"REGENNING: {HealthToRegen}");
                     currentHealth += HealthToRegen;
                     // If regen goes over max health set current health to max.
                     if(currentHealth > maxHealth)

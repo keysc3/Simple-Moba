@@ -38,22 +38,18 @@ public class ManaRegen : MonoBehaviour
     
     private TMP_Text manaRegenText;
     private ChampionStats championStats;
-    
-    // Called when the script instance is being loaded.
-    private void Awake(){
-        Unit = GetComponent<IUnit>();
-    }
 
     // Start is called before the first frame update.
     private void Start()
     {
+        Unit = GetComponent<IUnit>();
         championStats = (ChampionStats) unit.unitStats;
         StartCoroutine(RegenMana());
     }
 
     // Called once per frame.
     private void Update(){
-        ManaToRegen = Mathf.Round(championStats.HP5.GetValue()/10.0f);
+        ManaToRegen = championStats.HP5.GetValue()/10.0f;
     }
 
     /*
