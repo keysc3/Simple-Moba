@@ -15,7 +15,6 @@ public class UpdateAllStatsUI : MonoBehaviour
     private Dictionary<string, TMP_Text> statTextComponents = new Dictionary<string, TMP_Text>();
     
     private void Awake(){
-        Debug.Log(transform.childCount);
         for (int i = 0; i < transform.childCount; i++){
             statTextComponents.Add(transform.GetChild(i).name, 
             transform.GetChild(i).Find("Value").GetComponent<TMP_Text>());

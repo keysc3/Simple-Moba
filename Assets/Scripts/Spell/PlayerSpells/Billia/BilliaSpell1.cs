@@ -239,7 +239,6 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
             IDamageable damageMethod = (IDamageable) unit;
             Spell_1_PassiveProc(unit, this);
             float magicDamage = championStats.magicDamage.GetValue();
-            Debug.Log($"Hitbox hit: {radius}.");
             if(radius == "inner")
                 damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), "magic", player, false);   
             else{
