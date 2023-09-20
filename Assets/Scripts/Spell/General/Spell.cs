@@ -50,12 +50,13 @@ public class Spell : MonoBehaviour, ISpell
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
         mainCamera = Camera.main;
-        spellController = new SpellController(this, player);
+        //spellController = new SpellController(this, player);
         myCollider = GetComponent<Collider>();
     }
 
     // Start is called before the first frame update
     protected virtual void Start(){
+        spellController = new SpellController(this, player);
         championStats = (ChampionStats) player.unitStats;
     }
     /*

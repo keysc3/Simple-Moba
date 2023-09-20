@@ -18,6 +18,9 @@ public class SpellController
     private Camera mainCamera;
     private NavMeshAgent navMeshAgent;
     private Collider collider;
+    private GameObject castBar;
+    private Slider castBarSlider;
+    private TMP_Text castBarText;
 
     /*
     *   SpellController - Sets up new SpellController.
@@ -31,6 +34,11 @@ public class SpellController
         spellInput = player.GameObject.GetComponent<ISpellInput>();
         navMeshAgent = player.GameObject.GetComponent<NavMeshAgent>();
         collider = player.GameObject.GetComponent<Collider>();
+        if(player.playerUI != null){
+            castBar = player.playerUI.transform.Find("Player/CastbarContainer").gameObject;
+            castBarSlider = castBar.transform.Find("Castbar").GetComponent<Slider>();
+            castBarText = castBar.transform.Find("Spell").GetComponent<TMP_Text>();
+        }
     }
 
     /*
@@ -55,8 +63,14 @@ public class SpellController
         float timer = 0.0f;
         player.IsCasting = true;
         player.CurrentCastedSpell = spell;
+        if(castTime > 0 && castBar != null){
+            castBar.SetActive(true);
+            castBarText.text = spell.spellData.name;
+        }
         // While still casting spell stop the player.
-        while(timer <= castTime){
+        while(timer < castTime){
+            if(castBarSlider != null)
+                castBarSlider.value = Mathf.Clamp(timer/castTime, 0f, 1f);
             if(!spell.CanMove){
                 if(navMeshAgent != null){
                     if(!navMeshAgent.isStopped)
@@ -66,6 +80,8 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
+        if(castTime > 0 && castBar != null)
+            castBar.SetActive(false);
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
         if(navMeshAgent != null)
@@ -81,7 +97,7 @@ public class SpellController
         spell_cd = CalculateCooldown(spell_cd);
         float spell_timer = 0.0f;
         // While spell is still on CD
-        while(spell_timer <= spell_cd){
+        while(spell_timer < spell_cd){
             spell_timer += Time.deltaTime;
             if(spell.spellCDTransform != null){
                 // Update the UI cooldown text and slider.
