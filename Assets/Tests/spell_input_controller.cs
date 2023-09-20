@@ -292,7 +292,7 @@ public class spell_input_controller
         controller.LeftClick(new Ray(Vector3.left, Vector3.right));
 
         // Assert
-        ((IHasTargetedCast) spell).Received().Cast(unit);
+        ((IHasTargetedCast) spell).Received().AttemptCast(unit);
     }
 
     // A Test behaves as an ordinary method

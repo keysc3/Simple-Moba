@@ -27,7 +27,7 @@ public class player_spells
     }
 
     // A Test behaves as an ordinary method
-    /*[Test]
+    [Test]
     public void adds_new_spell_without_callback_and_no_duplicate_spell_num_to_player_spells()
     {
         // Arrange
@@ -41,7 +41,7 @@ public class player_spells
         playerSpells.spells = new Dictionary<string, ISpell>(){{"Spell_1", spell1}, {"Spell_2", spell2}};
         
         // Act
-        playerSpells.AddNewSpell(spell3, "Spell_3");
+        playerSpells.SetupSpell(spell3, "Spell_3");
 
         // Assert
         Assert.True(playerSpells.spells.ContainsKey("Spell_3"));
@@ -63,7 +63,7 @@ public class player_spells
         LogAssert.Expect(LogType.Error, "Destroy may not be called from edit mode! Use DestroyImmediate instead.\nDestroying an object in edit mode destroys it permanently.");
 
         // Act
-        playerSpells.AddNewSpell(spell3, "Spell_2");
+        playerSpells.SetupSpell(spell3, "Spell_2");
 
         // Assert
         Assert.AreEqual(playerSpells.spells["Spell_2"], spell3);
@@ -84,9 +84,9 @@ public class player_spells
         playerSpells.spells = new Dictionary<string, ISpell>(){{"Spell_1", spell1}, {"Spell_2", spell2}};
 
         // Act
-        playerSpells.AddNewSpell(spell3, "Spell_3");
+        playerSpells.SetupSpell(spell3, "Spell_3");
 
         // Assert
         ((IHasCallback) spell3).Received().SetupCallbacks(playerSpells.spells);
-    }*/
+    }
 }
