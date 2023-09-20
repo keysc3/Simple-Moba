@@ -2270,6 +2270,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1331981380}
     m_Modifications:
+    - target: {fileID: 2912320028400402585, guid: 0764377be9fe6994984fdf29d92f64b7, type: 3}
+      propertyPath: sUnit
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
     - target: {fileID: 8310896156975719262, guid: 0764377be9fe6994984fdf29d92f64b7, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -3881,6 +3885,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bahri
       objectReference: {fileID: 0}
+    - target: {fileID: 5538618006549796756, guid: 81bc33484846d7749b056e314192e53a, type: 3}
+      propertyPath: sUnit
+      value: 
+      objectReference: {fileID: 11400000, guid: d893ab053d4d77e44b04329c35463f73, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bc33484846d7749b056e314192e53a, type: 3}
 --- !u!1 &1859733416
