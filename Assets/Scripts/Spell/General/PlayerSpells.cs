@@ -50,15 +50,25 @@ public class PlayerSpells : MonoBehaviour
     }
 
     /*
-    *   AddNewSpell - Setup for adding a new spell to the spells dictionary.
+    *   AddNewSpell - Adds the spell script to the player and calls the setup method.
     *   @param newSpell - ISpell of the spell being setup and added.
     *   @param num - string of the spells num.
+    *   @param spellData - SpellData the spell will use.
     */
     public void AddNewSpell(System.Type newSpell, string num, SpellData spellData){
         if(newSpell != null){
             Spell spell = (Spell) gameObject.AddComponent(newSpell);
             spell.spellData = spellData;
-            ISpell spellInterface = (ISpell) spell;
+            SetupSpell((ISpell) spell, num);
+        }
+    }
+    /*
+    *   SetupSpell - Setup for adding a new spell to the spells dictionary.
+    *   @param newSpell - ISpell of the spell being setup and added.
+    *   @param num - string of the spells num.
+    */
+    public void SetupSpell(ISpell newSpell, string num){
+        if(newSpell != null){
             // Check if spell num exists already
             if(spells.ContainsKey(num)){
                 // If the spell num already exists and has an associated spell destroy it.
@@ -66,17 +76,17 @@ public class PlayerSpells : MonoBehaviour
                     Destroy(spells[num] as MonoBehaviour);
                 }
                 // Set new value.
-                spells[num] = spellInterface;
+                spells[num] = newSpell;
             }
             else
-                spells.Add(num, spellInterface);
+                spells.Add(num, newSpell);
             // Set spells num.
-            spellInterface.SpellNum = num;
+            newSpell.SpellNum = num;
             // Setup UI buttons.
-            SetupSpellButtons(spellInterface);
+            SetupSpellButtons(newSpell);
             // Setup any callbacks.
-            if(spellInterface is IHasCallback){
-                ((IHasCallback) spellInterface).SetupCallbacks(spells);
+            if(newSpell is IHasCallback){
+                ((IHasCallback) newSpell).SetupCallbacks(spells);
             }
         }
     }
