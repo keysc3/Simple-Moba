@@ -87,10 +87,10 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
-            StartCoroutine(spellController.CastTime(spellData.castTime));
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
-            StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
+            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
+            StartCoroutine(spellController.CastTime(spellData.castTime));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
@@ -116,12 +116,12 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   @param billiaTargetPosition - Vector3 of the position to move Billia to.
     *   @param targetPosition - Vector3 of the center of the spell.
     */
-    private IEnumerator Spell_2_Cast(Vector3 billiaTargetPosition, Vector3 targetPosition){
+    /*private IEnumerator Spell_2_Cast(Vector3 billiaTargetPosition, Vector3 targetPosition){
         while(player.IsCasting)
             yield return null;
         // Apply the dash.
         StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
-    }
+    }*/
 
     /*
     *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
