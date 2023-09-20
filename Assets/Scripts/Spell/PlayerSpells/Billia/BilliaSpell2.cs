@@ -112,18 +112,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     }
 
     /*
-    *   Spell_2_Cast - Handles cast time and dash initialization of Spell 2.
-    *   @param billiaTargetPosition - Vector3 of the position to move Billia to.
-    *   @param targetPosition - Vector3 of the center of the spell.
-    */
-    /*private IEnumerator Spell_2_Cast(Vector3 billiaTargetPosition, Vector3 targetPosition){
-        while(player.IsCasting)
-            yield return null;
-        // Apply the dash.
-        StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
-    }*/
-
-    /*
     *   Spell_2_Dash - Moves Billia to the target offset position from the spell casts position.
     *   @param targetPosition - Vector3 of the position to move Billia to.
     *   @param spellTargetPosition - Vector3 of the center of the spell.
@@ -199,11 +187,18 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-        float magicDamage = championStats.magicDamage.GetValue();
-            if(radius == "inner")
-                ((IDamageable) unit).TakeDamage((spellData.baseDamage[SpellLevel] + magicDamage) * 2f, "magic", player, false);   
-            else
-                ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
+            ((IDamageable) unit).TakeDamage(TotalDamage(unit), "magic", player, false);   
         }
+    }
+
+    private float TotalDamage(IUnit unit){
+        float damage;
+        if(unit is IMinion)
+            damage = spellData.minionDamage[SpellLevel] + (0.175f * player.unitStats.magicDamage.GetValue());
+        else
+            damage = spellData.baseDamage[SpellLevel] + (0.35f * player.unitStats.magicDamage.GetValue());
+        if(radius == "inner")
+            damage *= 2f;
+        return damage;
     }
 }

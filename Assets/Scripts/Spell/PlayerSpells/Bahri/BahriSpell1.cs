@@ -106,18 +106,15 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            IDamageable damageMethod = (IDamageable) unit;
-            float magicDamage = championStats.magicDamage.GetValue();
-            float damageValue = 0;
             // Only want to hit an enemy once per way.
             if(!enemiesHit.Contains(unit)){
-                damageValue = spellData.baseDamage[SpellLevel] + magicDamage;
+                float damageValue = spellData.baseDamage[SpellLevel] + (0.45f * championStats.magicDamage.GetValue());
                 // Magic damage on first part then true damage on return.
                 if(!returning){
-                    damageMethod.TakeDamage(damageValue, "magic", player, false);
+                    ((IDamageable) unit).TakeDamage(damageValue, "magic", player, false);
                 }
                 else{
-                    damageMethod.TakeDamage(damageValue, "true", player, false);
+                    ((IDamageable) unit).TakeDamage(damageValue, "true", player, false);
                 }
                 enemiesHit.Add(unit);
             }

@@ -151,9 +151,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         passiveStackSpells.Add(spellHit);
         if(SpellLevel >= 0 && passiveStacks < spellData.passiveMaxStacks){
             // Create a new speed bonus.
-            float bonusPercent = spellData.passiveSpeed[SpellLevel];
-            SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(SpellLevel, player, player);
-            speedBonus.BonusPercent = bonusPercent;
+            SpeedBonus speedBonus = (SpeedBonus) spellData.passiveSpeedBonus.InitializeEffect(SpellLevel, TotalSpeedBonus(), player, player);
             player.statusEffects.AddEffect(speedBonus);
             passiveEffectTracker.Add(speedBonus);
             passiveStacks += 1;
@@ -161,6 +159,10 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         if(passiveStacks > 1){
             ResetSpell_1_PassiveTimers();
         }
+    }
+
+    private float TotalSpeedBonus(){
+        return spellData.passiveSpeed[SpellLevel] + (0.03f * Mathf.Floor(player.unitStats.magicDamage.GetValue()/100f));
     }
 
     /*
@@ -237,11 +239,12 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
             IDamageable damageMethod = (IDamageable) unit;
             Spell_1_PassiveProc(unit, this);
             float magicDamage = championStats.magicDamage.GetValue();
+            Debug.Log($"Hitbox hit: {radius}.");
             if(radius == "inner")
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);   
+                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), "magic", player, false);   
             else{
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "true", player, false);
+                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), "magic", player, false);
+                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), "true", player, false);
             }
         }
     }

@@ -35,11 +35,17 @@ public class BilliaPassive : Spell, IHasCallback
     *   @param spellHit - Spell that has hit the GameObject.
     */
     public void Passive(IUnit unit, ISpell spellHit){
-        unit.statusEffects.AddEffect(spellData.passiveDot.InitializeEffect(30f, 0, player, unit));
+        unit.statusEffects.AddEffect(spellData.passiveDot.InitializeEffect(TotalPassiveDamage(unit), 0, player, unit));
         if(!passiveApplied.Contains(unit)){
             passiveApplied.Add(unit);
             StartCoroutine(PassiveHeal(unit));
         }
+    }
+
+    private float TotalPassiveDamage(IUnit unit){
+        float percentHealthDamage = unit.unitStats.maxHealth.GetValue() * 0.05f;
+        float magicDamage = 0.015f * Mathf.Floor(player.unitStats.magicDamage.GetValue()/100f);
+        return percentHealthDamage + magicDamage;
     }
 
     /*

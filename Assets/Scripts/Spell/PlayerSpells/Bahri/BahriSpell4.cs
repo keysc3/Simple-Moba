@@ -273,8 +273,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            float magicDamage = championStats.magicDamage.GetValue();
-            ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
+            ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.35f * championStats.magicDamage.GetValue()), "magic", player, false);
         }
     }
 }
