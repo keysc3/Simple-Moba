@@ -33,8 +33,7 @@ public class Ghost : Spell, IHasCast
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        spellData.speedBonus.bonusPercent[0] = CalculateSpeedBonus();
-        player.statusEffects.AddEffect(spellData.speedBonus.InitializeEffect(0, player, player));
+        player.statusEffects.AddEffect(spellData.speedBonus.InitializeEffect(0, CalculateSpeedBonus(), player, player));
         OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[0]));
     }
