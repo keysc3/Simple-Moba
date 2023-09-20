@@ -16,4 +16,5 @@ public class BilliaSpell2Data : SpellData
     [field: SerializeField] public float maxMagnitude { get; private set; }
     [field: SerializeField] public float dashOffset { get; private set; }
     [field: SerializeField] public float dashTime { get; private set; }
+    [field: SerializeField] public List<float> minionDamage { get; private set; }
 }

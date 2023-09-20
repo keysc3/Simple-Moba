@@ -16,17 +16,17 @@ MonoBehaviour:
   <defaultSpellNum>k__BackingField: Spell_4
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField:
-  - 5
-  - 6
-  - 7
+  - 60
+  - 90
+  - 120
   <baseCd>k__BackingField:
-  - 5
-  - 4
-  - 3
+  - 130
+  - 105
+  - 80
   <baseMana>k__BackingField:
-  - 6
-  - 8
-  - 10
+  - 100
+  - 100
+  - 100
   <missile>k__BackingField: {fileID: 6906369101127838927, guid: 07c9b54d99da0494cb7f433b9f73e91b, type: 3}
   <spell4>k__BackingField: {fileID: 11400000, guid: 4736469b3c8781d4f88ddd2de1be352b, type: 2}
   <maxMagnitude>k__BackingField: 3.5

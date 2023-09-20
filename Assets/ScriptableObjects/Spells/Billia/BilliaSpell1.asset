@@ -16,17 +16,17 @@ MonoBehaviour:
   <defaultSpellNum>k__BackingField: Spell_1
   <castTime>k__BackingField: 0.25
   <baseDamage>k__BackingField:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
+  - 35
+  - 45
+  - 55
+  - 65
+  - 75
   <baseCd>k__BackingField:
+  - 6
+  - 5.5
   - 5
+  - 4.5
   - 4
-  - 3
-  - 2
-  - 1
   <baseMana>k__BackingField:
   - 2
   - 4

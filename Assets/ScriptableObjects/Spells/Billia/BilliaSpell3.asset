@@ -16,23 +16,23 @@ MonoBehaviour:
   <defaultSpellNum>k__BackingField: Spell_3
   <castTime>k__BackingField: 0.4
   <baseDamage>k__BackingField:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
+  - 70
+  - 95
+  - 120
+  - 145
+  - 170
   <baseCd>k__BackingField:
-  - 5
-  - 4
-  - 3
-  - 2
-  - 1
+  - 14
+  - 14
+  - 14
+  - 14
+  - 14
   <baseMana>k__BackingField:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - 70
+  - 70
+  - 70
+  - 70
+  - 70
   <visualPrefab>k__BackingField: {fileID: 484404483246906668, guid: 76f33d688ebfd79458b523d051e26fa0, type: 3}
   <slowEffect>k__BackingField: {fileID: 11400000, guid: 1033d164f757ea5489657bdefbbf368e, type: 2}
   <maxLobMagnitude>k__BackingField: 3.5

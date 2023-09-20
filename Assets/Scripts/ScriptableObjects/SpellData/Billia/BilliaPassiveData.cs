@@ -11,7 +11,4 @@ using UnityEngine;
 public class BilliaPassiveData : SpellData
 {
     [field: SerializeField] public ScriptableDot passiveDot { get; private set; }
-    [field: SerializeField] public List<float> baseChampionHeal { get; private set; }
-    [field: SerializeField] public List<float> baseLargeMonsterHeal { get; private set; }
-    
 }
