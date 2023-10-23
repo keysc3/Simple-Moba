@@ -39,8 +39,10 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
         // If any input is detected.
         if(Input.anyKeyDown){
             // If the input detected is different than the last button press and not left click.
-            if(!Input.GetKeyDown(LastButtonPressed) && !Input.GetMouseButtonDown(0))
-                spellInputController.CheckForUnready();
+            if(!Input.GetKeyDown(LastButtonPressed) && !Input.GetMouseButtonDown(0)){
+                spellInputController.UnreadySpell();
+                LastSpellPressed = null;
+            }
         }
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
@@ -65,6 +67,15 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
             if(!Input.GetKey(KeyCode.LeftControl)){
                 spellInputController.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
             }
+        }
+        // Summoner Spell 1
+        if(Input.GetKeyDown(KeyCode.D)){
+            spellInputController.SpellButtonPressed(KeyCode.D, playerSpells.spells["SummonerSpell_1"]);
+        }
+        // Summoner Spell 2
+        if(Input.GetKeyDown(KeyCode.F)){
+            Debug.Log("input received.");
+            spellInputController.SpellButtonPressed(KeyCode.F, playerSpells.spells["SummonerSpell_2"]);
         }
         // Left click
         if(Input.GetMouseButtonDown(0)){

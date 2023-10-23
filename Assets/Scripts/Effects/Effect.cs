@@ -72,7 +72,6 @@ public class Effect
         // Persistent effects have duration -1.
         if(effectDuration != -1f){
             effectTimer += delta;
-            Debug.Log("EffectTimer: " + effectTimer + " " + "EffectDuration: " + effectDuration);
             if(effectTimer >= effectDuration){
                 if(isActivated)
                     EndEffect();

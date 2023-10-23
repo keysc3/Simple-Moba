@@ -10,6 +10,7 @@ public class MockSpellBehaviour : MonoBehaviour, ISpell
     public bool CanMove { get; set; }
     public bool IsQuickCast { get; set; }
     public bool IsDisplayed { get; set; }
+    public bool IsSummonerSpell { get; set; }
     public string SpellNum { get; set; }
     public SpellData spellData { get; set; }
     public Transform spellCDTransform { get; set; }

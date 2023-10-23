@@ -168,27 +168,8 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         if(targetPosition.magnitude > spellData.maxMagnitude)
             targetPosition = transform.position + (targetPosition.normalized * spellData.maxMagnitude);
         else
-            targetPosition = transform.position + (targetDirection - transform.position);
-        // Initalize variables 
-        NavMeshHit meshHit;
-        int walkableMask = 1 << NavMesh.GetAreaFromName("Walkable");
-        // Sample for a point on the walkable navmesh within 4 units of target position.
-        if(NavMesh.SamplePosition(targetPosition, out meshHit, 4.0f, walkableMask)){
-            Vector3 temp = meshHit.position;
-            temp.y = targetPosition.y;
-            // If temp does not equal targetPosition, then the targetPosition was not on a walkable area.
-            if(targetPosition != temp){
-                // Raycast between the target position and the players current position.
-                // If the ray hits any NavMesh areas besides walkableArea then the RayCast returns true.
-                // The Raycast should always return true because we know the target position is not a walkable area.
-                if(NavMesh.Raycast(transform.position, targetPosition, out meshHit, walkableMask)){
-                    // Use the value returned in meshHit to set a new target position on a walkable area in the direction of the original target position.
-                    temp = targetPosition;
-                    targetPosition = meshHit.position;
-                    targetPosition.y = temp.y;
-                }
-            }
-        }
+            targetPosition += transform.position;
+        targetPosition = spellController.GetPositionOnWalkableNavMesh(targetPosition, true);
         // Start coroutines to handle the spells cast time and animation.
         StartCoroutine(Spell_4_Speed(targetPosition));
         canRecast = false;
@@ -292,8 +273,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            float magicDamage = championStats.magicDamage.GetValue();
-            ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
+            ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.35f * championStats.magicDamage.GetValue()), "magic", player, false);
         }
     }
 }

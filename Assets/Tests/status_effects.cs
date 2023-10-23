@@ -105,8 +105,7 @@ public class status_effects
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
         speedBonus.duration.AddRange(durationValues);
-        speedBonus.bonusPercent.AddRange(slowValues);
-        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(1, unit1, unit2);
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(1, 1f, unit1, unit2);
 
         ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
         dot.name = "Dot1";
@@ -146,8 +145,7 @@ public class status_effects
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
         speedBonus.duration.AddRange(durationValues);
-        speedBonus.bonusPercent.AddRange(slowValues);
-        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(4, unit1, unit2);
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(4, 1f, unit1, unit2);
 
         ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
         dot.name = "Dot1";
@@ -258,8 +256,7 @@ public class status_effects
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
         speedBonus.duration.AddRange(durationValues);
-        speedBonus.bonusPercent.AddRange(slowValues);
-        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(4, unit1, unit2);
+        SpeedBonus speedBonus1 = (SpeedBonus) speedBonus.InitializeEffect(4, 1f, unit1, unit2);
 
         ScriptableDot dot = ScriptableObject.CreateInstance<ScriptableDot>();
         dot.name = "Dot1";
@@ -296,8 +293,7 @@ public class status_effects
         ScriptableSpeedBonus speedBonus = ScriptableObject.CreateInstance<ScriptableSpeedBonus>();
         speedBonus.name = "SpeedBonus1";
         speedBonus.duration.AddRange(durationValues);
-        speedBonus.bonusPercent.AddRange(slowValues);
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
     
         ScriptableDrowsy drowsy = ScriptableDrowsy.CreateInstance<ScriptableDrowsy>();
         drowsy.name = "Drowsy1";
@@ -343,10 +339,9 @@ public class status_effects
         speedBonus.name = "SpeedBonus1";
         speedBonus.isStackable = true;
         speedBonus.duration.AddRange(durationValues);
-        speedBonus.bonusPercent.AddRange(slowValues);
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f,unit1, unit2));
 
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(4, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(4, 1f, unit1, unit2));
 
         ScriptableCharm charm = ScriptableObject.CreateInstance<ScriptableCharm>();
         charm.name = "Charm1";
@@ -383,12 +378,11 @@ public class status_effects
         speedBonus.name = "SpeedBonus1";
         speedBonus.isStackable = true;
         speedBonus.duration.AddRange(durationValues);
-        speedBonus.bonusPercent.AddRange(slowValues);
 
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
         myEffects.Add(CreateSlowEffect("Slow1", 3));
 
         myEffects[0].TimerTick(0.5f);
@@ -477,11 +471,10 @@ public class status_effects
         speedBonus.name = "SpeedBonus1";
         speedBonus.isStackable = true;
         speedBonus.duration.AddRange(durationValues);
-        speedBonus.bonusPercent.AddRange(slowValues);
 
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
-        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
+        myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
 
         StatusEffects se = new StatusEffects(null);
 

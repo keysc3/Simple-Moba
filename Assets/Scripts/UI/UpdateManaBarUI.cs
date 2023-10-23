@@ -34,7 +34,7 @@ public class UpdateManaBarUI : MonoBehaviour
             // If the champion is dead.
             if(!player.IsDead){
                 // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
-                float manaPercent = Mathf.Round((championStats.CurrentMana/championStats.maxMana.GetValue()) * 100);
+                float manaPercent = Mathf.Clamp(championStats.CurrentMana/championStats.maxMana.GetValue(), 0f, 1f);
                 // Set the fill based on players mana percent.
                 mana.value = manaPercent;
             }

@@ -145,11 +145,10 @@ public class BilliaSpell4 : Spell, IHasCast
             // Dots do not proc the sleep.
             if(!isDot){
                 if(unit.statusEffects.CheckForEffectWithSource(spellData.drowsy.sleep, player)){
-                    float magicDamage = championStats.magicDamage.GetValue();
                     // Remove sleep, deal damage and remove function from delegate.
                     unit.statusEffects.RemoveEffect(spellData.drowsy.sleep, player);
                     unit.bonusDamage -= Spell_4_SleepProc;
-                    ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
+                    ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.4f * championStats.magicDamage.GetValue()), "magic", player, false);
                 }
                 // If effect fell off before damage was dealt, remove the bonus damage method.
                 else{

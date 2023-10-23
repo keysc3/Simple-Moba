@@ -41,7 +41,7 @@ public class BahriPassive : Spell
         // Heal off champion kill
         if(killed is IPlayer){
             healAmount = ((90f / 17f) * (float)(player.levelManager.Level - 1)) + 75f;
-            championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
+            championStats.CurrentHealth = championStats.CurrentHealth + healAmount + (0.3f * championStats.magicDamage.GetValue());
             Debug.Log("Healed " + healAmount + " health from champion kill.");
         }
         // Heal off minion/monster kills if at 9 stacks.
@@ -50,7 +50,7 @@ public class BahriPassive : Spell
             passive.Stacks = passiveStacks;
             if(passiveStacks == 9){
                 healAmount = ((60f / 17f) * (float)(player.levelManager.Level - 1)) + 35f;
-                championStats.CurrentHealth = championStats.CurrentHealth + healAmount + championStats.magicDamage.GetValue();
+                championStats.CurrentHealth = championStats.CurrentHealth + healAmount + (0.2f * championStats.magicDamage.GetValue());
                 passiveStacks = 0;
                 Debug.Log("Healed " + healAmount + " health from minion/monster kill.");
             }

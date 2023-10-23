@@ -30,7 +30,7 @@ public class UpdateHealthBarUI : MonoBehaviour
             // If the unit is not dead.
             if(!unit.IsDead){
                 // Get the health percent the unit is at and set the health bar text to currenthp/maxhp.
-                float healthPercent = Mathf.Round((unit.unitStats.CurrentHealth/unit.unitStats.maxHealth.GetValue()) * 100);
+                float healthPercent = Mathf.Clamp(unit.unitStats.CurrentHealth/unit.unitStats.maxHealth.GetValue(), 0f, 1f);
                 // Set the fill based on units health percent.
                 health.value = healthPercent;
             }

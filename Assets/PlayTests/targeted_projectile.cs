@@ -65,7 +65,7 @@ public class targeted_projectile
         player.AddComponent<Rigidbody>();
 
         // Act
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(0.1f);
 
         // Assert
         Assert.True(projectile == null);

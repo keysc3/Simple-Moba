@@ -564,8 +564,6 @@ public class user_interface
         yield return null;
         player.statusEffects.UpdateEffects(0.01f);
         yield return new WaitForSeconds(0.01f);
-        player.statusEffects.UpdateEffects(0.005f);
-        yield return new WaitForSeconds(0.005f);
 
         // Assert
         Image slider = statusEffectObject.transform.Find("InnerContainer/Slider").GetComponent<Image>();

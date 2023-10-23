@@ -87,10 +87,10 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
-            StartCoroutine(spellController.CastTime(spellData.castTime));
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
-            StartCoroutine(Spell_2_Cast(billiaTargetPosition, targetPosition));
+            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
+            StartCoroutine(spellController.CastTime(spellData.castTime));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
@@ -109,18 +109,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         float yScale = visualHitbox.transform.GetChild(0).localScale.y;
         visualHitbox.transform.GetChild(0).localScale = new Vector3(spellData.innerRadius * 2f, yScale, spellData.innerRadius * 2f);
         visualHitbox.transform.GetChild(1).localScale = new Vector3(spellData.outerRadius * 2f, yScale, spellData.outerRadius * 2f);
-    }
-
-    /*
-    *   Spell_2_Cast - Handles cast time and dash initialization of Spell 2.
-    *   @param billiaTargetPosition - Vector3 of the position to move Billia to.
-    *   @param targetPosition - Vector3 of the center of the spell.
-    */
-    private IEnumerator Spell_2_Cast(Vector3 billiaTargetPosition, Vector3 targetPosition){
-        while(player.IsCasting)
-            yield return null;
-        // Apply the dash.
-        StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
     }
 
     /*
@@ -199,11 +187,18 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-        float magicDamage = championStats.magicDamage.GetValue();
-            if(radius == "inner")
-                ((IDamageable) unit).TakeDamage((spellData.baseDamage[SpellLevel] + magicDamage) * 2f, "magic", player, false);   
-            else
-                ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + magicDamage, "magic", player, false);
+            ((IDamageable) unit).TakeDamage(TotalDamage(unit), "magic", player, false);   
         }
+    }
+
+    private float TotalDamage(IUnit unit){
+        float damage;
+        if(unit is IMinion)
+            damage = spellData.minionDamage[SpellLevel] + (0.175f * player.unitStats.magicDamage.GetValue());
+        else
+            damage = spellData.baseDamage[SpellLevel] + (0.35f * player.unitStats.magicDamage.GetValue());
+        if(radius == "inner")
+            damage *= 2f;
+        return damage;
     }
 }

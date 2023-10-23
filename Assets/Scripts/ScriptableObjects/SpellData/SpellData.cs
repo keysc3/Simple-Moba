@@ -7,6 +7,7 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
+[CreateAssetMenu(fileName = "Spell", menuName = "Spell/Base")]
 public class SpellData : ScriptableObject
 {
     [field: SerializeField] public Sprite sprite { get; private set; }

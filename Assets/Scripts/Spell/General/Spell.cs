@@ -23,11 +23,12 @@ public class Spell : MonoBehaviour, ISpell
     public bool CanMove { get; set; } = false;
     public bool IsQuickCast { get; set; } = false;
     public bool IsDisplayed { get; set; } = false;
+    public bool IsSummonerSpell { get; set; } = false;
     private string spellNum;
     public string SpellNum { 
         get => spellNum;
         set {
-            if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4"}.Contains(value)){
+            if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4","SummonerSpell_1","SummonerSpell_2"}.Contains(value)){
                 spellNum = value;
                 if(player != null && player.playerUI != null){
                     spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value + "_Container/SpellContainer/Spell/CD");
@@ -38,7 +39,7 @@ public class Spell : MonoBehaviour, ISpell
         }
     }
     public int SpellLevel { get => player.levelManager.spellLevels[SpellNum]-1; }
-    [field: SerializeField] public SpellData spellData { get; protected set; }
+    [field: SerializeField] public SpellData spellData { get; set; }
     protected ChampionStats championStats;
     protected Camera mainCamera;
     protected IPlayer player;
@@ -49,12 +50,13 @@ public class Spell : MonoBehaviour, ISpell
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
         mainCamera = Camera.main;
-        spellController = new SpellController(this, player);
+        //spellController = new SpellController(this, player);
         myCollider = GetComponent<Collider>();
     }
 
     // Start is called before the first frame update
     protected virtual void Start(){
+        spellController = new SpellController(this, player);
         championStats = (ChampionStats) player.unitStats;
     }
     /*

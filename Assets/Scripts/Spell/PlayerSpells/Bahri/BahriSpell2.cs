@@ -173,14 +173,14 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         float timer = 0.0f;
         int spellLevel = SpellLevel;
         // Create and add a new speed bonus effect.
-        SpeedBonus speedBonus = (SpeedBonus) spellData.speedBonus.InitializeEffect(spellLevel, player, player);
+        SpeedBonus speedBonus = (SpeedBonus) spellData.speedBonus.InitializeEffect(spellLevel, spellData.bonusSpeedPercent, player, player);
         player.statusEffects.AddEffect(speedBonus);
         // While speed boost is still active.
         while (timer < spellData.speedBonus.duration[spellLevel]){
             // Calculate the fraction of the speed boosts duration that has passed.
             float timePassed = timer/spellData.speedBonus.duration[spellLevel];
             // Decay the speed bonus based on time since activated.
-            float newBonus = Mathf.SmoothStep(spellData.speedBonus.bonusPercent[spellLevel], 0f, timePassed);
+            float newBonus = Mathf.SmoothStep(spellData.bonusSpeedPercent, 0f, timePassed);
             speedBonus.BonusPercent = newBonus;
             timer += Time.deltaTime;
             yield return null;
@@ -194,11 +194,10 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            float magicDamage = championStats.magicDamage.GetValue();
-            float finalDamage = spellData.baseDamage[SpellLevel] + magicDamage;
+            float finalDamage = spellData.baseDamage[SpellLevel] + (0.3f * championStats.magicDamage.GetValue());
             // Reduce damage of spell if hitting the same target more than once.
             if(enemiesHit.Contains(unit)){
-                finalDamage = Mathf.Round(finalDamage * spellData.multiplier);
+                finalDamage = finalDamage * spellData.multiplier;
             }
             ((IDamageable) unit).TakeDamage(finalDamage, "magic", player, false);
             enemiesHit.Add(unit);

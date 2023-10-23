@@ -16,6 +16,7 @@ public interface ISpell
     bool CanMove { get; set; }
     bool IsQuickCast { get; set; }
     bool IsDisplayed { get; set; }
+    bool IsSummonerSpell { get; set; }
     string SpellNum { get; set; }
 
     SpellData spellData { get; }

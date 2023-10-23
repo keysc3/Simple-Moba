@@ -140,7 +140,7 @@ public class StatusEffectUI : MonoBehaviour
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
             // Get how many stacks the effect has.
-            int newStacks = statusEffects.GetEffectsByType(effect.effectType.GetType()).Count;
+            int newStacks = statusEffects.GetEffectsByName(effect.effectType.name).Count;
             // If stacks aren't equal then a stack expired or was added.
             if(stacks != newStacks){
                 // Set the stacks text and get the next expiring stack to display.
