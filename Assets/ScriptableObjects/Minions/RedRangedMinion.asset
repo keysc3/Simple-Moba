@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <name>k__BackingField: RedRangedMinion
   <icon>k__BackingField: {fileID: 0}
-  <baseHealth>k__BackingField: 50
+  <baseHealth>k__BackingField: 400
   <magicDamage>k__BackingField: 0
   <physicalDamage>k__BackingField: 5
   <speed>k__BackingField: 3.5

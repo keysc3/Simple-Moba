@@ -3438,6 +3438,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2365348721444662711, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2365348721444662711, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
+      propertyPath: m_MaxValue
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4067613685028727936, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
       propertyPath: m_Name
       value: RedMinion
