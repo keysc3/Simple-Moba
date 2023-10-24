@@ -90,6 +90,8 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     private IEnumerator Spell_3_Lob(Vector3 targetPosition, Vector3 targetDirection){
         // Create spell object.
         GameObject seed = (GameObject) Instantiate(spellData.visualPrefab, transform.position, Quaternion.identity);
+        // Look at roll direction.
+        seed.transform.LookAt(seed.transform.position + targetDirection);
         BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponent<BilliaSpell3Trigger>();
         billiaSpell3Trigger.billiaSpell3 = this;
         billiaSpell3Trigger.casted = gameObject;
@@ -134,9 +136,6 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     */
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
-        // Set inital seed position.
-        // Look at roll direction.
-        seed.transform.LookAt(seed.transform.position + targetDirection);
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         // Check for lob landing hits.
         List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seed.transform.position, 
