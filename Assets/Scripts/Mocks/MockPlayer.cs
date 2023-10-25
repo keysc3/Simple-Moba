@@ -22,7 +22,7 @@ public class MockPlayer : IPlayer
     public GameObject GameObject { get; set; } = new GameObject();
     public Vector3 Position { get; set; }
 
-    public void TakeDamage(float damageAmount, string damageType, IUnit damager, bool isDot){
+    public void TakeDamage(float damageAmount, DamageType damageType, IUnit damager, bool isDot){
         
     }
 }

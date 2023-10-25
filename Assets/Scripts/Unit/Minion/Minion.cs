@@ -63,7 +63,7 @@ public class Minion : MonoBehaviour, IMinion
     *   @param damager - IUnit of the damage source.
     *   @param isDot - bool if the damage was from a dot.
     */
-    public void TakeDamage(float incomingDamage, string damageType, IUnit damager, bool isDot){
+    public void TakeDamage(float incomingDamage, DamageType damageType, IUnit damager, bool isDot){
         float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
         unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
         //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);

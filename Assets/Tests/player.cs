@@ -16,7 +16,7 @@ public class player
         IPlayer damager = CreateDamager();
 
         // Act
-        player.TakeDamage(10f, "true", damager, false);
+        player.TakeDamage(10f, DamageType.True, damager, false);
 
         // Assert
         Assert.AreEqual(90f, player.unitStats.CurrentHealth);
@@ -29,12 +29,12 @@ public class player
         IPlayer damager = CreateDamager();
         void damageMethod(IUnit unit, bool isDot){ 
             unit.bonusDamage -= damageMethod;
-            unit.TakeDamage(112f, "magic", damager, isDot); 
+            unit.TakeDamage(112f, DamageType.Magic, damager, isDot); 
         }
         player.bonusDamage += damageMethod;
 
         // Act
-        player.TakeDamage(14f, "magic", damager, false);
+        player.TakeDamage(14f, DamageType.Magic, damager, false);
 
         // Assert
         Assert.AreEqual(138f, player.unitStats.CurrentHealth);
@@ -48,7 +48,7 @@ public class player
         player.unitStats.CurrentHealth = 1f;
 
         // Act
-        player.TakeDamage(321f, "true", damager, false);
+        player.TakeDamage(321f, DamageType.True, damager, false);
 
         // Assert
         Assert.AreEqual(0, player.unitStats.CurrentHealth);
@@ -62,7 +62,7 @@ public class player
         player.unitStats.CurrentHealth = 20f;
 
         // Act
-        player.TakeDamage(143f, "physical", damager, false);
+        player.TakeDamage(143f, DamageType.Physical, damager, false);
 
         // Assert
         Assert.True(player.IsDead);
@@ -77,7 +77,7 @@ public class player
         player.unitStats.CurrentHealth = 20f;
 
         // Act
-        player.TakeDamage(143f, "physical", damager, false);
+        player.TakeDamage(143f, DamageType.Physical, damager, false);
 
         // Assert
         Assert.AreEqual(1, damager.score.Kills);
@@ -94,8 +94,8 @@ public class player
         player.damageTracker = new DamageTracker();
 
         // Act
-        player.TakeDamage(143f, "physical", damager1, false);
-        player.TakeDamage(37f, "physical", damager2, false);
+        player.TakeDamage(143f, DamageType.Physical, damager1, false);
+        player.TakeDamage(37f, DamageType.Physical, damager2, false);
 
         // Assert
         Assert.AreEqual((1, 0, 0, 1), (damager2.score.Kills, damager2.score.Assists, damager1.score.Kills, damager1.score.Assists));

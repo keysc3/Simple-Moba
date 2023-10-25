@@ -187,7 +187,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            ((IDamageable) unit).TakeDamage(TotalDamage(unit), "magic", player, false);   
+            ((IDamageable) unit).TakeDamage(TotalDamage(unit), DamageType.Magic, player, false);   
         }
     }
 

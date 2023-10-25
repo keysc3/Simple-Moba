@@ -25,7 +25,7 @@ public class damage_calculator : ScriptableObject
         float magicResist = 23f;
         to.magicResist.BaseValue = magicResist;
         float incomingDamage = 80f;
-        string damageType = "magic";
+        DamageType damageType = DamageType.Magic;
 
         // Act
         float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
@@ -48,7 +48,7 @@ public class damage_calculator : ScriptableObject
         float armor = 72f;
         to.armor.BaseValue = armor;
         float incomingDamage = 121f;
-        string damageType = "physical";
+        DamageType damageType = DamageType.Physical;
 
         // Act
         float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
@@ -72,7 +72,7 @@ public class damage_calculator : ScriptableObject
         to.armor.BaseValue = armor;
         float magicResist = 23f;
         to.magicResist.BaseValue = magicResist;
-        string damageType = "true";
+        DamageType damageType = DamageType.True;
         float incomingDamage = 81f;
 
         // Act
@@ -93,28 +93,8 @@ public class damage_calculator : ScriptableObject
         ScriptableUnit unit2 = ScriptableObject.CreateInstance<ScriptableUnit>();
         UnitStats from = new UnitStats(unit1);
         UnitStats to = new UnitStats(unit2);
-        string damageType = "true";
+        DamageType damageType = DamageType.True;
         float incomingDamage = -(2f);
-
-        // Act
-        float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);
-
-        // Assert
-        Assert.AreEqual(0f, finalDamage);
-    }
-
-    /*
-    *   Sets the damage to deal to something from an invalid damage type. Should be 0.
-    */
-    [Test]
-    public void sets_damage_to_0_from_invalid_damage_type(){
-        // Arrange
-        ScriptableUnit unit1 = ScriptableObject.CreateInstance<ScriptableUnit>();
-        ScriptableUnit unit2 = ScriptableObject.CreateInstance<ScriptableUnit>();
-        UnitStats from = new UnitStats(unit1);
-        UnitStats to = new UnitStats(unit2);
-        string damageType = "goofball";
-        float incomingDamage = 50f;
 
         // Act
         float finalDamage = DamageCalculator.CalculateDamage(incomingDamage, damageType, from, to);

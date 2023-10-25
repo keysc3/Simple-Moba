@@ -17,7 +17,7 @@ public class minion
         minion.unitStats.CurrentHealth = 20f;
 
         // Act
-        minion.TakeDamage(15f, "magic", damager, false);
+        minion.TakeDamage(15f, DamageType.Magic, damager, false);
 
         // Assert
         Assert.AreEqual(5f, minion.unitStats.CurrentHealth);
@@ -32,7 +32,7 @@ public class minion
         LogAssert.Expect(LogType.Error, "Destroy may not be called from edit mode! Use DestroyImmediate instead.\nDestroying an object in edit mode destroys it permanently.");
 
         // Act
-        minion.TakeDamage(20f, "true", damager, false);
+        minion.TakeDamage(20f, DamageType.True, damager, false);
 
         // Assert
         Assert.True(minion.IsDead);
@@ -48,7 +48,7 @@ public class minion
         LogAssert.Expect(LogType.Error, "Destroy may not be called from edit mode! Use DestroyImmediate instead.\nDestroying an object in edit mode destroys it permanently.");
 
         // Act
-        minion.TakeDamage(143f, "physical", damager, false);
+        minion.TakeDamage(143f, DamageType.Physical, damager, false);
 
         // Assert
         Assert.AreEqual(1, damager.score.CS);

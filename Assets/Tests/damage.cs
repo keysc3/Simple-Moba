@@ -14,10 +14,10 @@ public class damage
         IUnit unit1 = Substitute.For<IUnit>();
 
         // Act
-        Damage dmg = new Damage(unit1, 20f, "magic");
+        Damage dmg = new Damage(unit1, 20f, DamageType.Magic);
 
         // Assert
-        Assert.AreEqual((unit1, 20f, "magic"), (dmg.from, dmg.amount, dmg.type));
+        Assert.AreEqual((unit1, 20f, DamageType.Magic), (dmg.from, dmg.amount, dmg.type));
 
     }
 }

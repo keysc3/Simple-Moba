@@ -240,10 +240,10 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
             Spell_1_PassiveProc(unit, this);
             float magicDamage = championStats.magicDamage.GetValue();
             if(radius == "inner")
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), "magic", player, false);   
+                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), DamageType.Magic, player, false);   
             else{
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), "magic", player, false);
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), "true", player, false);
+                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), DamageType.Magic, player, false);
+                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), DamageType.True, player, false);
             }
         }
     }

@@ -199,7 +199,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
             if(enemiesHit.Contains(unit)){
                 finalDamage = finalDamage * spellData.multiplier;
             }
-            ((IDamageable) unit).TakeDamage(finalDamage, "magic", player, false);
+            ((IDamageable) unit).TakeDamage(finalDamage, DamageType.Magic, player, false);
             enemiesHit.Add(unit);
         }
     }

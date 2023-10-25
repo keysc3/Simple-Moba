@@ -38,7 +38,7 @@ MonoBehaviour:
   <maxLobMagnitude>k__BackingField: 3.5
   <lobTime>k__BackingField: 0.5
   <seedSpeed>k__BackingField: 5
-  <seedRotation>k__BackingField: 270
+  <seedRotation>k__BackingField: 300
   <seedConeAngle>k__BackingField: 90
   <seedConeRadius>k__BackingField: 3
   <lobLandHitbox>k__BackingField: 1.2
