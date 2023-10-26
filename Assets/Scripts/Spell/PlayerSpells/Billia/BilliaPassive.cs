@@ -18,9 +18,6 @@ public class BilliaPassive : Spell, IHasCallback
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaPassiveData) base.spellData;
-        if(SpellNum == null){
-            SpellNum = spellData.defaultSpellNum;
-        }
     }
 
     public void OnDisable(){
@@ -79,9 +76,9 @@ public class BilliaPassive : Spell, IHasCallback
     *   SetupCallbacks - Sets up the necessary callbacks for the spell.
     *   @param spells - Dictionary of the current spells.
     */
-    public void SetupCallbacks(Dictionary<string, ISpell> spells){
+    public void SetupCallbacks(Dictionary<SpellType, ISpell> spells){
         // If the Spell is a DamageSpell then add this spells passive proc to its spell hit callback.
-        foreach(KeyValuePair<string, ISpell> entry in spells){
+        foreach(KeyValuePair<SpellType, ISpell> entry in spells){
             if(entry.Value is IHasHit){
                 ((IHasHit) entry.Value).spellHitCallback += Passive;
                 callbackSet.Add(entry.Value);

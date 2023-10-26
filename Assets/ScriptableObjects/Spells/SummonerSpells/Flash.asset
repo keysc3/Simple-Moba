@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Flash
   m_EditorClassIdentifier: 
   <sprite>k__BackingField: {fileID: 21300000, guid: 3dbb918619b5c6a409d2604bb2ab5731, type: 3}
-  <defaultSpellNum>k__BackingField: SummonerSpell_1
+  <defaultSpellNum>k__BackingField: 6
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField: []
   <baseCd>k__BackingField:

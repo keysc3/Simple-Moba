@@ -22,9 +22,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaSpell2Data) base.spellData;
-        if(SpellNum == null){
-            SpellNum = spellData.defaultSpellNum;
-        }
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 

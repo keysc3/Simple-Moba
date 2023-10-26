@@ -47,8 +47,6 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell4Data) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
         if(player.playerUI != null){

@@ -7,7 +7,7 @@ public class SpellDropdown : MonoBehaviour
 {
     public List<SpellData> spellData = new List<SpellData>();
     public List<System.Type> spells = new List<System.Type>(){typeof(Flash), typeof(Ignite), typeof(Ghost)};
-    public string spellNum;
+    public SpellType spellNum;
 
     public void OnValueChanged(TMP_Dropdown dropDown){
         GameObject activePlayer = ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp];

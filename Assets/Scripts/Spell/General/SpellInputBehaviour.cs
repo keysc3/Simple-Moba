@@ -14,8 +14,8 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     public KeyCode LastButtonPressed { get; set; } = KeyCode.None;
 
     private SpellInputController spellInputController;
-    private Dictionary<string, int> spellLevels;
-    public Dictionary<string, int> SpellLevels { get => levelManager.spellLevels; }
+    private Dictionary<SpellType, int> spellLevels;
+    public Dictionary<SpellType, int> SpellLevels { get => levelManager.spellLevels; }
     private LevelManager levelManager;
     private PlayerSpells playerSpells;
     private Camera mainCamera;
@@ -47,35 +47,35 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
         // Spell 1
         if(Input.GetKeyDown(KeyCode.Q)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInputController.SpellButtonPressed(KeyCode.Q, playerSpells.spells["Spell_1"]);
+                spellInputController.SpellButtonPressed(KeyCode.Q, playerSpells.spells[SpellType.Spell1]);
             }
         }
         // Spell 2
         if(Input.GetKeyDown(KeyCode.W)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInputController.SpellButtonPressed(KeyCode.W, playerSpells.spells["Spell_2"]);
+                spellInputController.SpellButtonPressed(KeyCode.W, playerSpells.spells[SpellType.Spell2]);
             }
         }
         // Spell 3
         if(Input.GetKeyDown(KeyCode.E)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInputController.SpellButtonPressed(KeyCode.E, playerSpells.spells["Spell_3"]);
+                spellInputController.SpellButtonPressed(KeyCode.E, playerSpells.spells[SpellType.Spell3]);
             }
         }
         // Spell 4
         if(Input.GetKeyDown(KeyCode.R)){
             if(!Input.GetKey(KeyCode.LeftControl)){
-                spellInputController.SpellButtonPressed(KeyCode.R, playerSpells.spells["Spell_4"]);
+                spellInputController.SpellButtonPressed(KeyCode.R, playerSpells.spells[SpellType.Spell4]);
             }
         }
         // Summoner Spell 1
         if(Input.GetKeyDown(KeyCode.D)){
-            spellInputController.SpellButtonPressed(KeyCode.D, playerSpells.spells["SummonerSpell_1"]);
+            spellInputController.SpellButtonPressed(KeyCode.D, playerSpells.spells[SpellType.SummonerSpell1]);
         }
         // Summoner Spell 2
         if(Input.GetKeyDown(KeyCode.F)){
             Debug.Log("input received.");
-            spellInputController.SpellButtonPressed(KeyCode.F, playerSpells.spells["SummonerSpell_2"]);
+            spellInputController.SpellButtonPressed(KeyCode.F, playerSpells.spells[SpellType.SummonerSpell2]);
         }
         // Left click
         if(Input.GetMouseButtonDown(0)){

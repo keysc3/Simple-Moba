@@ -19,9 +19,9 @@ public class spell_input_controller
         ISpellInput spellInput = Substitute.For<ISpellInput>();
         ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spell.IsQuickCast.Returns(true);
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 0}};
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 0}};
         spellInput.SpellLevels.Returns(dict);
         
         // Act
@@ -39,10 +39,10 @@ public class spell_input_controller
         ISpellInput spellInput = Substitute.For<ISpellInput>();
         ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spell.IsQuickCast.Returns(true);
         spell.OnCd.Returns(true);
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 1}};
         spellInput.SpellLevels.Returns(dict);
         
         // Act
@@ -62,8 +62,8 @@ public class spell_input_controller
         ISpell lastPressed = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
         lastPressed.IsDisplayed.Returns(true);
-        spell.SpellNum.Returns("Not Casted");
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spell.SpellNum.Returns(SpellType.Spell1);
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 1}};
         spellInput.SpellLevels.Returns(dict);
         spellInput.LastSpellPressed.Returns(lastPressed);
         spellInput.LastButtonPressed.Returns(KeyCode.Q);
@@ -85,8 +85,8 @@ public class spell_input_controller
         ISpell lastPressed = Substitute.For<ISpell>();
         SpellInputController controller = new SpellInputController(spellInput);
         lastPressed.IsDisplayed.Returns(true);
-        spell.SpellNum.Returns("Not Casted");
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spell.SpellNum.Returns(SpellType.Spell1);
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 1}};
         spellInput.SpellLevels.Returns(dict);
         spellInput.LastSpellPressed.Returns(lastPressed);
         spellInput.LastButtonPressed.Returns(KeyCode.Q);
@@ -106,9 +106,9 @@ public class spell_input_controller
         ISpellInput spellInput = Substitute.For<ISpellInput>();
         ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spell.IsDisplayed.Returns(false);
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 1}};
         spellInput.SpellLevels.Returns(dict);
         spellInput.LastButtonPressed.Returns(KeyCode.Q);
         
@@ -127,9 +127,9 @@ public class spell_input_controller
         ISpellInput spellInput = Substitute.For<ISpellInput>();
         ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spell.IsDisplayed = false;
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 1}};
         spellInput.SpellLevels.Returns(dict);
         spellInput.LastButtonPressed = KeyCode.Q;
         spell.When(x => x.DisplayCast()).Do(x => spell.IsDisplayed = true);
@@ -152,8 +152,8 @@ public class spell_input_controller
         SpellInputController controller = new SpellInputController(spellInput);
         spell.IsQuickCast.Returns(true);
         spell.IsDisplayed.Returns(false);
-        spell.SpellNum.Returns("Not Casted");
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        spell.SpellNum.Returns(SpellType.Spell1);
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 1}};
         spellInput.SpellLevels.Returns(dict);
         
         // Act
@@ -174,10 +174,10 @@ public class spell_input_controller
         SpellInputController controller = new SpellInputController(spellInput);
         spell.IsQuickCast.Returns(true);
         spell.IsDisplayed.Returns(false);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spellInput.LastSpellPressed = lastPressed;
         spellInput.LastButtonPressed = KeyCode.R;
-        Dictionary<string, int> dict = new Dictionary<string, int>(){{spell.SpellNum, 1}};
+        Dictionary<SpellType, int> dict = new Dictionary<SpellType, int>(){{spell.SpellNum, 1}};
         spellInput.SpellLevels.Returns(dict);
         
         // Act
@@ -259,7 +259,7 @@ public class spell_input_controller
         GameObject g1 = new GameObject();
         g1.AddComponent<BoxCollider>();
         unit.GameObject.Returns(g1);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spellInput.LastButtonPressed = KeyCode.Q;
         spellInput.LastSpellPressed.Returns(spell);
 
@@ -285,7 +285,7 @@ public class spell_input_controller
         IUnit unit = g1.GetComponent<IUnit>();
         g1.transform.position = Vector3.zero;
         //unit.GameObject.Returns(g1);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spellInput.LastSpellPressed.Returns(spell);
 
         // Act
@@ -303,7 +303,7 @@ public class spell_input_controller
         ISpellInput spellInput = Substitute.For<ISpellInput>();
         ISpell spell = Substitute.For<ISpell, IHasCast>();
         SpellInputController controller = new SpellInputController(spellInput);
-        spell.SpellNum.Returns("Not Casted");
+        spell.SpellNum.Returns(SpellType.Spell1);
         spellInput.LastSpellPressed.Returns(spell);
 
         // Act

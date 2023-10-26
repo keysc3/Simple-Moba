@@ -11,7 +11,7 @@ public class MockSpellBehaviour : MonoBehaviour, ISpell
     public bool IsQuickCast { get; set; }
     public bool IsDisplayed { get; set; }
     public bool IsSummonerSpell { get; set; }
-    public string SpellNum { get; set; }
+    public SpellType SpellNum { get; set; }
     public SpellData spellData { get; set; }
     public Transform spellCDTransform { get; set; }
     public TMP_Text spellCDText { get; set; }

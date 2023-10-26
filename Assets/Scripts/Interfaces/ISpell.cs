@@ -17,7 +17,7 @@ public interface ISpell
     bool IsQuickCast { get; set; }
     bool IsDisplayed { get; set; }
     bool IsSummonerSpell { get; set; }
-    string SpellNum { get; set; }
+    SpellType SpellNum { get; set; }
 
     SpellData spellData { get; }
     Transform spellCDTransform { get; set; }

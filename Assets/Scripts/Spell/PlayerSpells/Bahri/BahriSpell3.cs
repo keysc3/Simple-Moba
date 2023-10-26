@@ -18,8 +18,6 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell3Data) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
     }
 
     /*

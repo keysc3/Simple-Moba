@@ -25,8 +25,6 @@ public class Flash : Spell, IHasCast
     protected override void Start(){
         base.Start();
         this.spellData = (FlashData) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
         navMeshAgent = GetComponent<NavMeshAgent>();
         IsQuickCast = true;
     }

@@ -24,17 +24,15 @@ public class Spell : MonoBehaviour, ISpell
     public bool IsQuickCast { get; set; } = false;
     public bool IsDisplayed { get; set; } = false;
     public bool IsSummonerSpell { get; set; } = false;
-    private string spellNum;
-    public string SpellNum { 
+    private SpellType spellNum;
+    public SpellType SpellNum { 
         get => spellNum;
         set {
-            if(new List<string>(){"Passive", "Spell_1", "Spell_2", "Spell_3", "Spell_4","SummonerSpell_1","SummonerSpell_2"}.Contains(value)){
-                spellNum = value;
-                if(player != null && player.playerUI != null){
-                    spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value + "_Container/SpellContainer/Spell/CD");
-                    spellCDText = spellCDTransform.Find("Value").GetComponent<TMP_Text>();
-                    spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();
-                }
+            spellNum = value;
+            if(player != null && player.playerUI != null){
+                spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value.ToString() + "_Container/SpellContainer/Spell/CD");
+                spellCDText = spellCDTransform.Find("Value").GetComponent<TMP_Text>();
+                spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();
             }
         }
     }
@@ -58,6 +56,8 @@ public class Spell : MonoBehaviour, ISpell
     protected virtual void Start(){
         spellController = new SpellController(this, player);
         championStats = (ChampionStats) player.unitStats;
+        if(spellNum == SpellType.None)
+            SpellNum = spellData.defaultSpellNum;
     }
     /*
     *   DisplayCast - Displays the spell by adding its DrawSpell method to the Debug drawing singleton.

@@ -17,7 +17,7 @@ public class player_spells
         PlayerSpells playerSpells = g1.AddComponent<PlayerSpells>();
         ISpell cleanupSpell = Substitute.For<ISpell, IDeathCleanUp>();
         ISpell spell = Substitute.For<ISpell>();
-        playerSpells.spells = new Dictionary<string, ISpell>(){{"Spell_1", spell}, {"Spell_2", cleanupSpell}};
+        playerSpells.spells = new Dictionary<SpellType, ISpell>(){{SpellType.Spell1, spell}, {SpellType.Spell2, cleanupSpell}};
         
         // Act
         playerSpells.OnDeathSpellCleanUp();
@@ -37,14 +37,14 @@ public class player_spells
         ISpell spell1 = Substitute.For<ISpell>();
         ISpell spell2 = Substitute.For<ISpell>();
         ISpell spell3 = Substitute.For<ISpell>();
-        spell3.SpellNum.Returns("Spell_3");
-        playerSpells.spells = new Dictionary<string, ISpell>(){{"Spell_1", spell1}, {"Spell_2", spell2}};
+        spell3.SpellNum.Returns(SpellType.Spell3);
+        playerSpells.spells = new Dictionary<SpellType, ISpell>(){{SpellType.Spell1, spell1}, {SpellType.Spell2, spell2}};
         
         // Act
-        playerSpells.SetupSpell(spell3, "Spell_3");
+        playerSpells.SetupSpell(spell3, SpellType.Spell3);
 
         // Assert
-        Assert.True(playerSpells.spells.ContainsKey("Spell_3"));
+        Assert.True(playerSpells.spells.ContainsKey(SpellType.Spell3));
     }
 
     // A Test behaves as an ordinary method
@@ -58,15 +58,15 @@ public class player_spells
         ISpell spell1 = Substitute.For<ISpell>();
         ISpell spell2 = Substitute.For<ISpell>();
         ISpell spell3 = Substitute.For<ISpell>();
-        spell3.SpellNum.Returns("Spell_3");
-        playerSpells.spells = new Dictionary<string, ISpell>(){{"Spell_1", spell1}, {"Spell_2", spell2}};
+        spell3.SpellNum.Returns(SpellType.Spell3);
+        playerSpells.spells = new Dictionary<SpellType, ISpell>(){{SpellType.Spell1, spell1}, {SpellType.Spell2, spell2}};
         LogAssert.Expect(LogType.Error, "Destroy may not be called from edit mode! Use DestroyImmediate instead.\nDestroying an object in edit mode destroys it permanently.");
 
         // Act
-        playerSpells.SetupSpell(spell3, "Spell_2");
+        playerSpells.SetupSpell(spell3, SpellType.Spell2);
 
         // Assert
-        Assert.AreEqual(playerSpells.spells["Spell_2"], spell3);
+        Assert.AreEqual(playerSpells.spells[SpellType.Spell2], spell3);
     }
 
     // A Test behaves as an ordinary method
@@ -80,11 +80,11 @@ public class player_spells
         ISpell spell1 = Substitute.For<ISpell>();
         ISpell spell2 = Substitute.For<ISpell>();
         ISpell spell3 = Substitute.For<ISpell, IHasCallback>();
-        spell3.SpellNum.Returns("Spell_3");
-        playerSpells.spells = new Dictionary<string, ISpell>(){{"Spell_1", spell1}, {"Spell_2", spell2}};
+        spell3.SpellNum.Returns(SpellType.Spell3);
+        playerSpells.spells = new Dictionary<SpellType, ISpell>(){{SpellType.Spell1, spell1}, {SpellType.Spell2, spell2}};
 
         // Act
-        playerSpells.SetupSpell(spell3, "Spell_3");
+        playerSpells.SetupSpell(spell3, SpellType.Spell3);
 
         // Assert
         ((IHasCallback) spell3).Received().SetupCallbacks(playerSpells.spells);

@@ -18,9 +18,6 @@ public class BilliaSpell4 : Spell, IHasCast
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaSpell4Data) base.spellData;
-        if(SpellNum == null){
-            SpellNum = spellData.defaultSpellNum;
-        }
         CanMove = true;
         IsQuickCast = true;
         if(player.playerUI != null){

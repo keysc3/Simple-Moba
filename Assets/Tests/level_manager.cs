@@ -120,10 +120,10 @@ public class level_manager
         IPlayer player = CreateMockPlayerWithLevelManager(1);
         
         // Act
-        player.levelManager.SpellLevelUpRequest("Spell_3");
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell3);
 
         // Assert
-        Assert.AreEqual(1, player.levelManager.spellLevels["Spell_3"]);
+        Assert.AreEqual(1, player.levelManager.spellLevels[SpellType.Spell3]);
     }
 
     [Test]
@@ -134,24 +134,24 @@ public class level_manager
         
         // Act
         for(int i = 0; i < maxSpellLevel+1; i++){
-            player.levelManager.SpellLevelUpRequest("Spell_1");
+            player.levelManager.SpellLevelUpRequest(SpellType.Spell1);
         }
 
         // Assert
-        Assert.AreEqual(maxSpellLevel, player.levelManager.spellLevels["Spell_1"]);
+        Assert.AreEqual(maxSpellLevel, player.levelManager.spellLevels[SpellType.Spell1]);
     }
 
     [Test]
     public void does_not_level_up_spell_2_to_level_1_from_insufficient_skill_points(){
         // Arrange
         IPlayer player = CreateMockPlayerWithLevelManager(1);
-        player.levelManager.SpellLevelUpRequest("Spell_3");
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell3);
 
         // Act
-        player.levelManager.SpellLevelUpRequest("Spell_2");
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell2);
 
         // Assert
-        Assert.AreEqual(0, player.levelManager.spellLevels["Spell_2"]);
+        Assert.AreEqual(0, player.levelManager.spellLevels[SpellType.Spell2]);
     }
 
     [Test]
@@ -160,10 +160,10 @@ public class level_manager
         IPlayer player = CreateMockPlayerWithLevelManager(4);
 
         // Act
-        player.levelManager.SpellLevelUpRequest("Spell_4");
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
 
         // Assert
-        Assert.AreEqual(0, player.levelManager.spellLevels["Spell_4"]);
+        Assert.AreEqual(0, player.levelManager.spellLevels[SpellType.Spell4]);
     }
 
     [Test]
@@ -172,10 +172,10 @@ public class level_manager
         IPlayer player = CreateMockPlayerWithLevelManager(6);
 
         // Act
-        player.levelManager.SpellLevelUpRequest("Spell_4");
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
 
         // Assert
-        Assert.AreEqual(1, player.levelManager.spellLevels["Spell_4"]);
+        Assert.AreEqual(1, player.levelManager.spellLevels[SpellType.Spell4]);
     }
 
     [Test]
@@ -184,11 +184,11 @@ public class level_manager
         IPlayer player = CreateMockPlayerWithLevelManager(10);
 
         // Act
-        player.levelManager.SpellLevelUpRequest("Spell_4");
-        player.levelManager.SpellLevelUpRequest("Spell_4");
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
 
         // Assert
-        Assert.AreEqual(1, player.levelManager.spellLevels["Spell_4"]);
+        Assert.AreEqual(1, player.levelManager.spellLevels[SpellType.Spell4]);
     }
 
     [Test]
@@ -197,11 +197,11 @@ public class level_manager
         IPlayer player = CreateMockPlayerWithLevelManager(11);
 
         // Act
-        player.levelManager.SpellLevelUpRequest("Spell_4");
-        player.levelManager.SpellLevelUpRequest("Spell_4");
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
+        player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
 
         // Assert
-        Assert.AreEqual(2, player.levelManager.spellLevels["Spell_4"]);
+        Assert.AreEqual(2, player.levelManager.spellLevels[SpellType.Spell4]);
     }
 
     [Test]
@@ -211,11 +211,11 @@ public class level_manager
 
         // Act
         for(int i = 0; i < 3; i++){
-            player.levelManager.SpellLevelUpRequest("Spell_4");
+            player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
         }
 
         // Assert
-        Assert.AreEqual(2, player.levelManager.spellLevels["Spell_4"]);
+        Assert.AreEqual(2, player.levelManager.spellLevels[SpellType.Spell4]);
     }
 
     [Test]
@@ -225,11 +225,11 @@ public class level_manager
 
         // Act
         for(int i = 0; i < 3; i++){
-            player.levelManager.SpellLevelUpRequest("Spell_4");
+            player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
         }
 
         // Assert
-        Assert.AreEqual(3, player.levelManager.spellLevels["Spell_4"]);
+        Assert.AreEqual(3, player.levelManager.spellLevels[SpellType.Spell4]);
     }
 
     [Test]
@@ -240,11 +240,11 @@ public class level_manager
         
         // Act
         for(int i = 0; i < maxUltLevel+1; i++){
-            player.levelManager.SpellLevelUpRequest("Spell_4");
+            player.levelManager.SpellLevelUpRequest(SpellType.Spell4);
         }
 
         // Assert
-        Assert.AreEqual(maxUltLevel, player.levelManager.spellLevels["Spell_4"]);
+        Assert.AreEqual(maxUltLevel, player.levelManager.spellLevels[SpellType.Spell4]);
     }
 
     [Test]

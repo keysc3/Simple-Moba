@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ignite
   m_EditorClassIdentifier: 
   <sprite>k__BackingField: {fileID: 21300000, guid: d02f84e6014d06b46a502cefd75510c4, type: 3}
-  <defaultSpellNum>k__BackingField: SummonerSpell_2
+  <defaultSpellNum>k__BackingField: 7
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField: []
   <baseCd>k__BackingField:

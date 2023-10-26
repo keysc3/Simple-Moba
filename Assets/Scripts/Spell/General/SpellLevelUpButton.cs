@@ -10,8 +10,7 @@ using UnityEngine.EventSystems;
 */
 public class SpellLevelUpButton : MonoBehaviour, IPointerDownHandler
 {
-    //TODO validate spell against spell string constants.
-    public string spell;
+    public SpellType spell;
     
     private ISpellInput spellInput;
     public ISpellInput SpellInput {

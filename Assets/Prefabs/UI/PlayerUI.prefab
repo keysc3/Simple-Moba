@@ -4534,7 +4534,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2300298810660392394}
   m_Layer: 5
-  m_Name: SummonerSpell_2_Container
+  m_Name: SummonerSpell2_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5453,7 +5453,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2321052322970541384}
   m_Layer: 5
-  m_Name: SummonerSpell_1_Container
+  m_Name: SummonerSpell1_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7118,7 +7118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spell: 
+  spell: 0
 --- !u!1 &3898286953674919402
 GameObject:
   m_ObjectHideFlags: 0
@@ -8181,7 +8181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3928917374434109487}
   m_Layer: 5
-  m_Name: Spell_1_Container
+  m_Name: Spell1_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11182,7 +11182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6535936847802085119}
   m_Layer: 5
-  m_Name: Spell_2_Container
+  m_Name: Spell2_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12176,7 +12176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6291308082998671865}
   m_Layer: 5
-  m_Name: Spell_4_Container
+  m_Name: Spell4_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15639,7 +15639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spell: 
+  spell: 0
 --- !u!1 &7199323368018812923
 GameObject:
   m_ObjectHideFlags: 0
@@ -16654,7 +16654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spell: 
+  spell: 0
 --- !u!1 &7721091897835551480
 GameObject:
   m_ObjectHideFlags: 0
@@ -16703,7 +16703,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5601464384600310289}
   m_Layer: 5
-  m_Name: Spell_3_Container
+  m_Name: Spell3_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17132,7 +17132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37edf0baea3a38a4c8f95ba4ec1a806b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spell: 
+  spell: 0
 --- !u!1 &7966569210627678516
 GameObject:
   m_ObjectHideFlags: 0

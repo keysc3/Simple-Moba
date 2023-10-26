@@ -25,8 +25,6 @@ public class Ignite : Spell, IHasTargetedCast
     protected override void Start(){
         base.Start();
         this.spellData = (IgniteData) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
         navMeshAgent = GetComponent<NavMeshAgent>();
         spellInput = GetComponent<ISpellInput>();
         IsSummonerSpell = true;

@@ -23,8 +23,6 @@ public class Ghost : Spell, IHasCast
     protected override void Start(){
         base.Start();
         this.spellData = (GhostData) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
         navMeshAgent = GetComponent<NavMeshAgent>();
         IsQuickCast = true;
     }
