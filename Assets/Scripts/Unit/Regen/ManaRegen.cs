@@ -44,6 +44,7 @@ public class ManaRegen : MonoBehaviour
     {
         Unit = GetComponent<IUnit>();
         championStats = (ChampionStats) unit.unitStats;
+        ManaToRegen = championStats.HP5.GetValue()/10.0f;
         StartCoroutine(RegenMana());
     }
 
@@ -57,17 +58,19 @@ public class ManaRegen : MonoBehaviour
     */
     private IEnumerator RegenMana(){
         while(gameObject){
-            // 0.5s intervals over 5s = 10 increments.
-            float maxMana = championStats.maxMana.GetValue();
-            float currentMana = championStats.CurrentMana;
-            // If not at max mana and not dead then regen mana.
-            if(currentMana < maxMana && !unit.IsDead){
-                currentMana += ManaToRegen;
-                // If regen goes over max Mana set current mana to max.
-                if(currentMana > maxMana)
-                    currentMana = maxMana;
-                // Set mana and only regen every 0.5s.
-                championStats.CurrentMana = currentMana;
+            if(Unit != null){
+                // 0.5s intervals over 5s = 10 increments.
+                float maxMana = championStats.maxMana.GetValue();
+                float currentMana = championStats.CurrentMana;
+                // If not at max mana and not dead then regen mana.
+                if(currentMana < maxMana && !unit.IsDead){
+                    currentMana += ManaToRegen;
+                    // If regen goes over max Mana set current mana to max.
+                    if(currentMana > maxMana)
+                        currentMana = maxMana;
+                    // Set mana and only regen every 0.5s.
+                    championStats.CurrentMana = currentMana;
+                }
             }
             yield return new WaitForSeconds(0.5f);
         }

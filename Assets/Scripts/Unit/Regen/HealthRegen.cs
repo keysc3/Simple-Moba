@@ -42,7 +42,7 @@ public class HealthRegen : MonoBehaviour
     private void Start()
     {
         Unit = GetComponent<IUnit>();
-        //HealthToRegen = unit.unitStats.HP5.GetValue()/10.0f;
+        HealthToRegen = unit.unitStats.HP5.GetValue()/10.0f;
         StartCoroutine(RegenHealth());
     }
 
