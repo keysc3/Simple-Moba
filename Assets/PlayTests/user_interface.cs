@@ -71,7 +71,7 @@ public class user_interface
         yield return null;
 
         // Assert
-        Assert.AreEqual((40f, "40/100"), (slider.value, text.text));
+        Assert.AreEqual((0.40f, "40/100"), (slider.value, text.text));
     }
 
     // Mana Bar UI
@@ -131,7 +131,7 @@ public class user_interface
         yield return null;
 
         // Assert
-        Assert.AreEqual(15f, slider.value);
+        Assert.AreEqual(0.15f, slider.value);
     }
 
     // Health UI
@@ -197,7 +197,7 @@ public class user_interface
         yield return null;
 
         // Assert
-        Assert.AreEqual((98f, "98/100"), (slider.value, text.text));
+        Assert.AreEqual((0.98f, "98/100"), (slider.value, text.text));
     }
 
     // Health bar UI
@@ -259,7 +259,7 @@ public class user_interface
         yield return null;
 
         // Assert
-        Assert.AreEqual(1f, slider.value);
+        Assert.AreEqual(0.01f, slider.value);
     }
 
     // All Stats UI
