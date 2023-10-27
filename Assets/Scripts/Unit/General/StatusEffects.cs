@@ -165,7 +165,7 @@ public class StatusEffects
     */
     public bool CheckForEffectWithSource(ScriptableEffect checkFor, IUnit source){
         foreach(Effect effect in statusEffects){
-            if(effect.casted == source && effect.effectType.GetType() == checkFor.GetType())
+            if(effect.casted == source && effect.effectType == checkFor)
                 return true;
         }
         return false;
@@ -192,7 +192,7 @@ public class StatusEffects
     */
     public bool CheckForEffectByType(Effect checkFor){
         foreach(Effect effect in statusEffects){
-            if(effect.effectType.GetType() == checkFor.effectType.GetType())
+            if(effect.GetType() == checkFor.GetType())
                 return true;
         }
         return false;

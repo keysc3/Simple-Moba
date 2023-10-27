@@ -241,7 +241,7 @@ public class status_effects
         se.AddEffect(charm1.charmSlow);
 
         // Act
-        bool hasEffect = se.CheckForEffectWithSource(ScriptableObject.CreateInstance<ScriptableCharm>(), unit1);
+        bool hasEffect = se.CheckForEffectWithSource(charm1.effectType, unit1);
     
         // Arrange
         Assert.True(hasEffect);
