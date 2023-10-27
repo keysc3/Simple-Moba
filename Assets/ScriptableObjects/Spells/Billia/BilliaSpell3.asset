@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BilliaSpell3
   m_EditorClassIdentifier: 
   <sprite>k__BackingField: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
-  <defaultSpellNum>k__BackingField: Spell_3
+  <defaultSpellNum>k__BackingField: 4
   <castTime>k__BackingField: 0.4
   <baseDamage>k__BackingField:
   - 70
@@ -38,7 +38,7 @@ MonoBehaviour:
   <maxLobMagnitude>k__BackingField: 3.5
   <lobTime>k__BackingField: 0.5
   <seedSpeed>k__BackingField: 5
-  <seedRotation>k__BackingField: 270
+  <seedRotation>k__BackingField: 300
   <seedConeAngle>k__BackingField: 90
   <seedConeRadius>k__BackingField: 3
   <lobLandHitbox>k__BackingField: 1.2

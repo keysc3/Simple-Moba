@@ -15,7 +15,7 @@ public class player_spells
         // Arrange
         GameObject g1 = new GameObject("PlayerSpells");
         MockPlayerBehaviour player = g1.AddComponent<MockPlayerBehaviour>();
-        ISpell spell = AddSpellComponent(g1, "Passive");
+        ISpell spell = AddSpellComponent(g1, SpellType.Passive);
         player.playerUI = CreateSpellsContainer();
         PlayerSpells playerSpells = g1.AddComponent<PlayerSpells>();
 
@@ -35,7 +35,7 @@ public class player_spells
         // Arrange
         GameObject g1 = new GameObject("PlayerSpells");
         MockPlayerBehaviour player = g1.AddComponent<MockPlayerBehaviour>();
-        ISpell spell = AddSpellComponent(g1, "Spell_1");
+        ISpell spell = AddSpellComponent(g1, SpellType.Spell1);
         player.playerUI = CreateSpellsContainer();
         PlayerSpells playerSpells = g1.AddComponent<PlayerSpells>();
 
@@ -43,7 +43,7 @@ public class player_spells
         yield return null;
 
         // Assert
-        SpellLevelUpButton spellLevelUpButton = player.playerUI.transform.Find("Player/Combat/SpellsContainer/Spell_1_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
+        SpellLevelUpButton spellLevelUpButton = player.playerUI.transform.Find("Player/Combat/SpellsContainer/Spell1_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
         Assert.AreEqual(spell.spellData.defaultSpellNum, spellLevelUpButton.spell);
     }   
 
@@ -58,7 +58,7 @@ public class player_spells
         for(int i = 0; i < 5; i++){
             string name;
             if(i != 4)
-                name = $"Spell_{i + 1}";
+                name = $"Spell{i + 1}";
             else
                 name = "Passive";
             Transform parentContainer = new GameObject(name + "_Container").transform;
@@ -82,7 +82,7 @@ public class player_spells
         return parent;
     }
 
-    private ISpell AddSpellComponent(GameObject parent, string defaultNum){
+    private ISpell AddSpellComponent(GameObject parent, SpellType defaultNum){
         MockSpellBehaviour spell = parent.AddComponent<MockSpellBehaviour>();
         spell.spellData = SpellData.CreateNewInstance(defaultNum);
         return spell;

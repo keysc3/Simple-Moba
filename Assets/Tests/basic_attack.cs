@@ -168,7 +168,7 @@ public class basic_attack
         controller.AttackHit(enemy);
 
         // Assert
-        enemy.Received().TakeDamage(14f, "physical", player, false);
+        enemy.Received().TakeDamage(14f, DamageType.Physical, player, false);
     }
 
     private IPlayer CreateMockPlayerWithRange(float range){

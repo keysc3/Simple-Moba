@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sUnit: {fileID: 0}
-  dead: {fileID: 2100000, guid: b4a5eb8424c0fb6438759571de60a19a, type: 2}
+  dead: {fileID: 2100000, guid: b80f342db0324f84bb33e94c08c315ba, type: 2}
   playerBarPrefab: {fileID: 1774551540932771883, guid: b35871c264e664a4391ddfcce933b2ab, type: 3}
   playerUIPrefab: {fileID: 3928917373785366303, guid: c5d3401698d9e7940beb57b628997060, type: 3}
   statusEffectPrefab: {fileID: 355054382995843608, guid: c2056e5ccb088694998bcab8b037ef3a, type: 3}

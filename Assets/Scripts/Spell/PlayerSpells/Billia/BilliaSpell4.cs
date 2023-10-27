@@ -18,9 +18,6 @@ public class BilliaSpell4 : Spell, IHasCast
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaSpell4Data) base.spellData;
-        if(SpellNum == null){
-            SpellNum = spellData.defaultSpellNum;
-        }
         CanMove = true;
         IsQuickCast = true;
         if(player.playerUI != null){
@@ -128,7 +125,7 @@ public class BilliaSpell4 : Spell, IHasCast
         Player[] playerScripts = FindObjectsOfType<Player>();
         for (int i = 0; i < playerScripts.Length; i++){
             // If it is a champion and has the Billia dot then add it to the list.
-            if(playerScripts[i].statusEffects.CheckForEffectByName(spellData.passiveDot, spellData.passiveDot.name)){
+            if(playerScripts[i].statusEffects.CheckForEffectByName(spellData.passiveDot.name)){
                 passiveAppliedChamps.Add(playerScripts[i].gameObject);
             }
         }
@@ -148,7 +145,7 @@ public class BilliaSpell4 : Spell, IHasCast
                     // Remove sleep, deal damage and remove function from delegate.
                     unit.statusEffects.RemoveEffect(spellData.drowsy.sleep, player);
                     unit.bonusDamage -= Spell_4_SleepProc;
-                    ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.4f * championStats.magicDamage.GetValue()), "magic", player, false);
+                    ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.4f * championStats.magicDamage.GetValue()), DamageType.Magic, player, false);
                 }
                 // If effect fell off before damage was dealt, remove the bonus damage method.
                 else{

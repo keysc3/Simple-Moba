@@ -26,8 +26,6 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         base.Start();
         this.spellData = (BahriSpell2Data) base.spellData;
         IsQuickCast = true;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
         // Get UI elements.
         if(player.playerUI != null){
             spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
@@ -199,7 +197,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
             if(enemiesHit.Contains(unit)){
                 finalDamage = finalDamage * spellData.multiplier;
             }
-            ((IDamageable) unit).TakeDamage(finalDamage, "magic", player, false);
+            ((IDamageable) unit).TakeDamage(finalDamage, DamageType.Magic, player, false);
             enemiesHit.Add(unit);
         }
     }

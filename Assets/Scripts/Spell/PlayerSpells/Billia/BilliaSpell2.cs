@@ -22,9 +22,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     protected override void Start(){
         base.Start();
         this.spellData = (BilliaSpell2Data) base.spellData;
-        if(SpellNum == null){
-            SpellNum = spellData.defaultSpellNum;
-        }
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -187,7 +184,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            ((IDamageable) unit).TakeDamage(TotalDamage(unit), "magic", player, false);   
+            ((IDamageable) unit).TakeDamage(TotalDamage(unit), DamageType.Magic, player, false);   
         }
     }
 

@@ -9,5 +9,5 @@ using UnityEngine;
 */
 public interface IDamageable
 {
-    void TakeDamage(float incomingDamage, string damageType, IUnit damager, bool isDot);
+    void TakeDamage(float incomingDamage, DamageType damageType, IUnit damager, bool isDot);
 }

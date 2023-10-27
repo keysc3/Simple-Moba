@@ -18,8 +18,6 @@ public class BahriPassive : Spell
     protected override void Start(){
         base.Start();
         this.spellData = (BahriPassiveData) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
         // Initialize and add passive effect.
         passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, player, player);
         player.statusEffects.AddEffect(passive);

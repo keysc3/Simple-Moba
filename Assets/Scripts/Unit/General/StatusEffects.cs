@@ -15,6 +15,12 @@ public class StatusEffects
     private Effect mostImpairing;
     private GameObject statusEffectPrefab;
 
+    /*public delegate void OnActivationChange(string keyword);
+    public event OnActivationChange OnActivated;*/
+
+    public delegate void OnTimerTick(Effect effect);
+    public event OnTimerTick OnDurationUpdate;
+
     public StatusEffects(GameObject statusEffectPrefab){
         this.statusEffectPrefab = statusEffectPrefab;
     }
@@ -34,11 +40,10 @@ public class StatusEffects
                 if(statusEffects.Contains(effectUpdating)){
                     if(statusEffects[i].isFinished){
                         Effect effect = statusEffects[i];
-                        //statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
                         if(effect is Slow){
-                            if(CheckForEffectByType(effect)){
+                            if(CheckForEffectByType<Slow>()){
                                 SetStrongestSlow((Slow) effect);
                             }
                         }
@@ -46,12 +51,16 @@ public class StatusEffects
                         if(statusEffects.Count > 0){
                             SetMostImpairing(GetMostImpairing());
                         }
-                        else
+                        else{
                             highestActiveCCValue = 0;
+                        }
                     }
                 }
-                else
+                else{
                     highestActiveCCValue = 0;
+                }
+                if(effectUpdating == mostImpairing)
+                    OnDurationUpdate?.Invoke(effectUpdating);
             }
         }
     }
@@ -70,11 +79,12 @@ public class StatusEffects
                 SetMostImpairing(effect);
             }
             else{
+                // Set most impairing if new effect is a keyword 0 cc value effect.
+                if(highestActiveCCValue == 0 && mostImpairing.effectType.keyword == "Default" && effect.effectType.keyword != "Default")
+                    SetMostImpairing(effect);
                 for(int i = statusEffects.Count - 1; i >= 0; i--){
                     // If the same effect hit them and it is not stackable remove it for the new one.
-                    if(statusEffects[i].effectType.name == effect.effectType.name && 
-                    statusEffects[i].effectType.GetType() == effect.effectType.GetType() && 
-                    !effect.effectType.isStackable){
+                    if(statusEffects[i].effectType.name == effect.effectType.name && !effect.effectType.isStackable){
                         statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
                     }
@@ -165,21 +175,20 @@ public class StatusEffects
     */
     public bool CheckForEffectWithSource(ScriptableEffect checkFor, IUnit source){
         foreach(Effect effect in statusEffects){
-            if(effect.casted == source && effect.effectType.GetType() == checkFor.GetType())
+            if(effect.casted == source && effect.effectType == checkFor)
                 return true;
         }
         return false;
     }
 
     /*
-    *   CheckForEffectByName - Checks for the given effect in the status managers effect list with given name.
-    *   @param checkFor - ScriptableObject of the effect to check for.
+    *   CheckForEffectByName - Checks for the effect in the status managers effect list with given name.
     *   @param effectName - string of the effects name.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectByName(ScriptableEffect checkFor, string effectName){
+    public bool CheckForEffectByName(string effectName){
         foreach(Effect effect in statusEffects){
-            if(effect.effectType.GetType() == checkFor.GetType() && effect.effectType.name == effectName)
+            if(effect.effectType.name == effectName)
                 return true;
         }
         return false;
@@ -187,12 +196,11 @@ public class StatusEffects
 
     /*
     *   CheckForEffectByType - Checks for the given effect in the status managers effect list with given type.
-    *   @param checkFor - Effect of the effect type to check for.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectByType(Effect checkFor){
+    public bool CheckForEffectByType<T>() where T: Effect{
         foreach(Effect effect in statusEffects){
-            if(effect.effectType.GetType() == checkFor.effectType.GetType())
+            if(effect is T)
                 return true;
         }
         return false;
@@ -255,7 +263,7 @@ public class StatusEffects
         int highestCC = 0;
         // Check for highest CC value effect.
         for(int i = 0; i < statusEffects.Count; i++){
-            // Don't check values of 0.
+            // Only compare cc values greater than 0.
             if(statusEffects[i].effectType.ccValue != 0){
                 if(statusEffects[i].effectType.ccValue > highestCC){
                     index = i;
@@ -267,6 +275,11 @@ public class StatusEffects
                         index = i;
                     }
                 }
+            }
+            else{
+                // Set most impairing to be a 0 cc value keyword effect if 0 is highest value.
+                if(highestCC == 0 && statusEffects[i].effectType.keyword != "Default")
+                    index = i;
             }
         }
         return statusEffects[index];
@@ -280,6 +293,7 @@ public class StatusEffects
         effect.IsActivated = true;
         mostImpairing = effect;
         highestActiveCCValue = effect.effectType.ccValue;
+        //OnActivated?.Invoke(effect.effectType.keyword);
     }
 
     /*

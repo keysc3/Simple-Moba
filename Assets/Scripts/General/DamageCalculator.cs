@@ -17,20 +17,14 @@ public static class DamageCalculator
     *   @param from - GameObject of the damage source.
     *   @param to - GameObject the damage is going to.
     */
-    public static float CalculateDamage(float incomingDamage, string damageType, UnitStats from, UnitStats to){
+    public static float CalculateDamage(float incomingDamage, DamageType damageType, UnitStats from, UnitStats to){
         if(incomingDamage <= 0f)
             return 0f;
         float finalDamage = incomingDamage;
-        if(damageType == "magic")
+        if(damageType == DamageType.Magic)
             finalDamage = MitigateMagicDamage(incomingDamage, to);
-        else if(damageType == "physical")
+        else if(damageType == DamageType.Physical)
             finalDamage = MitigatePhysicalDamage(incomingDamage, to);
-        else if(damageType == "true"){
-            Debug.Log($"Dealing {finalDamage} of {incomingDamage} incoming damage.");
-            return finalDamage;
-        }
-        else
-            return 0f;
         Debug.Log($"Dealing {finalDamage} of {incomingDamage} incoming damage.");
         return finalDamage;
     }

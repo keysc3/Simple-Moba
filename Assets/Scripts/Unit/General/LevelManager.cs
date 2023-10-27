@@ -11,7 +11,7 @@ using UnityEngine.UI;
 */
 public class LevelManager
 {
-    public Dictionary<string, int> spellLevels { get; } = new Dictionary<string, int>();
+    public Dictionary<SpellType, int> spellLevels { get; } = new Dictionary<SpellType, int>{{SpellType.Spell1, 0}, {SpellType.Spell2, 0}, {SpellType.Spell3, 0}, {SpellType.Spell4, 0}};
 
     private Slider xpSlider = null;
     private TMP_Text playerUILevelText = null;
@@ -87,8 +87,8 @@ public class LevelManager
         levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
         _unit = unit;
         // Set up spell levels dictionary.
-        for(int i = 0; i < 4; i++)
-            spellLevels.Add("Spell_" + (i+1), 0);
+        /*for(int i = 0; i < 4; i++)
+            spellLevels.Add("Spell_" + (i+1), 0);*/
         if(unit is IPlayer)
             if(((IPlayer) unit).score != null)
                 ((IPlayer) unit).score.takedownCallback += GainXP; 
@@ -99,8 +99,8 @@ public class LevelManager
         levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
         _unit = unit;
         // Set up spell levels dictionary.
-        for(int i = 0; i < 4; i++)
-            spellLevels.Add("Spell_" + (i+1), 0);
+        /*for(int i = 0; i < 4; i++)
+            spellLevels.Add("Spell_" + (i+1), 0);*/
         if(unit is IPlayer)
             if(((IPlayer) unit).score != null)
                 ((IPlayer) unit).score.takedownCallback += GainXP;
@@ -218,16 +218,16 @@ public class LevelManager
                 // If first spell level up key bind pressed and it is not at max level then level it.
                 if(Input.GetKey(KeyCode.LeftControl)){
                     if(Input.GetKeyDown(KeyCode.Q))
-                        SpellLevelUpRequest("Spell_1");
+                        SpellLevelUpRequest(SpellType.Spell1);
                     // If second spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.W))
-                        SpellLevelUpRequest("Spell_2");
+                        SpellLevelUpRequest(SpellType.Spell2);
                     // If third spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.E))
-                        SpellLevelUpRequest("Spell_3");
+                        SpellLevelUpRequest(SpellType.Spell3);
                     // If fourth spell level up key bind pressed and it is not at max level then level it.
                     else if(Input.GetKeyDown(KeyCode.R))
-                        SpellLevelUpRequest("Spell_4");
+                        SpellLevelUpRequest(SpellType.Spell4);
                 }
             }
             // Skill level up available animation.
@@ -239,16 +239,16 @@ public class LevelManager
     *   SpellLevelUpRequest - Checks if the requested spell can be leveled up and calls the level up method.
     *   @param spell - string of the spell requested to be leveled up.
     */
-    public void SpellLevelUpRequest(string spell){
+    public void SpellLevelUpRequest(SpellType spell){
         // Basic ability.
-        if(spell != "Spell_4"){
+        if(spell != SpellType.Spell4){
             if(spellLevels[spell] != levelInfo.maxSpellLevel)
                 SpellLevelUp(spell);
         }
         // Ultimate ability.
         else{
             if(spellLevels[spell] != levelInfo.maxUltLevel){
-                int spell_4_level = spellLevels["Spell_4"];
+                int spell_4_level = spellLevels[SpellType.Spell4];
                 // Allow one point in fourth spell (ultimate) at level 6-10, two points at 11-15, and three points at 16-18.
                 if((spell_4_level < 1 && Level > 5) || (spell_4_level < 2 && Level > 10) || (spell_4_level < 3 && Level > 15))
                     SpellLevelUp(spell);
@@ -260,7 +260,7 @@ public class LevelManager
     *   SpellLevelUp - Levels up the given spell and updates the UI.
     *   @param spell - string of the spell to be leveled up.
     */
-    private void SpellLevelUp(string spell){
+    private void SpellLevelUp(SpellType spell){
         if(spellLevelPoints > 0){
             spellLevels[spell] = spellLevels[spell] + 1;
             SpellLevelPoints -= 1;
@@ -296,14 +296,15 @@ public class LevelManager
     */
     public void SetSkillLevelUpActive(bool isActive){
         // For each spell.
-        foreach(KeyValuePair<string, int> spell in spellLevels){
-            string find = spell.Key + "_Container";
+        foreach(KeyValuePair<SpellType, int> spell in spellLevels){
+
+            string find = spell.Key.ToString() + "_Container";
             GameObject spellLevelUpObj = spellsContainer.Find(find + "/LevelUp").gameObject;
             // If the UI should be active.
             if(isActive){
                 // If the kvp is spell 4.
-                if(spell.Key == "Spell_4"){
-                    int spell_4_level = spellLevels["Spell_4"];
+                if(spell.Key == SpellType.Spell4){
+                    int spell_4_level = spellLevels[SpellType.Spell4];
                     // If spell 4 can be leveled.
                     if((spell_4_level < 1 && Level > 5) || (spell_4_level < 2 && Level > 10) || (spell_4_level < 3 && Level > 15)){
                         spellLevelUpObj.SetActive(true);
@@ -331,7 +332,7 @@ public class LevelManager
     *   SpellLearned - Removes the spell cover the first time a spell is leveled.
     *   @param spell - string of the spell number.
     */
-    private void SpellLearned(string spell){
+    private void SpellLearned(SpellType spell){
         if(spellsContainer != null){
             Transform spellCover = spellsContainer.Find(spell + "_Container/SpellContainer/Spell/CD/Cover");
             spellCover.gameObject.SetActive(false);
@@ -344,7 +345,7 @@ public class LevelManager
     *   @param spell - string of the spell number.
     *   @param spellLevel - int of the spells new level.
     */
-    private void SpellLeveled(string spell, int spellLevel){
+    private void SpellLeveled(SpellType spell, int spellLevel){
         if(spellsContainer != null){
             Transform spellLevels = spellsContainer.Find(spell + "_Container/Levels");
             spellLevels.Find("Level" + spellLevel + "/Fill").gameObject.SetActive(false);
@@ -382,7 +383,7 @@ public class LevelManager
         // For each spell.
         for(int i = 0; i < 4; i++){
             if(spellsContainer != null){
-                spellsContainer.Find("Spell_" + (i+1) + "_Container/LevelUp/Background")
+                spellsContainer.Find("Spell" + (i+1) + "_Container/LevelUp/Background")
                 .gameObject.GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(currentTime, 1));
             }
         }

@@ -47,8 +47,6 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell4Data) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
         if(player.playerUI != null){
@@ -273,7 +271,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     public void Hit(IUnit unit){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.35f * championStats.magicDamage.GetValue()), "magic", player, false);
+            ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.35f * championStats.magicDamage.GetValue()), DamageType.Magic, player, false);
         }
     }
 }

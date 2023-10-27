@@ -16,7 +16,7 @@ public class damage_tracker
         IUnit unit1 = Substitute.For<IUnit>();
 
         // Act
-        dt.AddDamage(unit1, 32f, "magic");
+        dt.AddDamage(unit1, 32f, DamageType.Magic);
 
         // Assert
         Assert.AreEqual(1, dt.damageReceived.Count);
@@ -29,9 +29,9 @@ public class damage_tracker
         // Arrange
         DamageTracker dt = new DamageTracker();
         IUnit unit1 = Substitute.For<IUnit>();
-        dt.AddDamage(unit1, 323f, "true");
-        dt.AddDamage(unit1, 324f, "magic");
-        dt.AddDamage(unit1, 325f, "physical");
+        dt.AddDamage(unit1, 323f, DamageType.True);
+        dt.AddDamage(unit1, 324f, DamageType.Magic);
+        dt.AddDamage(unit1, 325f, DamageType.Physical);
 
         // Act
         dt.CheckForReset(500f);
@@ -52,11 +52,11 @@ public class damage_tracker
         IUnit unit2 = Substitute.For<IUnit>();
         IUnit unit3 = Substitute.For<IUnit>();
 
-        dt.AddDamage(player2, 3f, "physical");
-        dt.AddDamage(unit1, 1f, "true");
-        dt.AddDamage(unit2, 2f, "magic");
-        dt.AddDamage(unit3, 3f, "physical");
-        dt.AddDamage(player1, 15f, "physical");
+        dt.AddDamage(player2, 3f, DamageType.Physical);
+        dt.AddDamage(unit1, 1f, DamageType.True);
+        dt.AddDamage(unit2, 2f, DamageType.Magic);
+        dt.AddDamage(unit3, 3f, DamageType.Physical);
+        dt.AddDamage(player1, 15f, DamageType.Physical);
 
         // Act
         List<IPlayer> assists = dt.CheckForAssists(unit3, 10f);

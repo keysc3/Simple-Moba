@@ -6,13 +6,6 @@ using UnityEngine.TestTools;
 
 public class regen
 {
-    // A Test behaves as an ordinary method
-    [Test]
-    public void regenSimplePasses()
-    {
-        // Use the Assert class to test conditions
-    }
-
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
@@ -20,13 +13,12 @@ public class regen
     {
         GameObject regenObject =  new GameObject("Health Regen!");
         HealthRegen script = regenObject.AddComponent<HealthRegen>();
-        MockUnit unit = new MockUnit();
+        MockUnitBehaviour unit = regenObject.AddComponent<MockUnitBehaviour>();
         UnitStats unitStats = new UnitStats(ScriptableObject.CreateInstance<ScriptableUnit>());
         unitStats.HP5.BaseValue = 10.0f;
         unitStats.maxHealth.BaseValue = 100.0f;
         unitStats.CurrentHealth = unitStats.maxHealth.GetValue();
         unit.unitStats = unitStats;
-        script.Unit = unit;
         yield return null;
         Assert.AreEqual(100f, unit.unitStats.CurrentHealth);
     }
@@ -38,13 +30,12 @@ public class regen
     {
         GameObject regenObject =  new GameObject("Health Regen!");
         HealthRegen script = regenObject.AddComponent<HealthRegen>();
-        MockUnit unit = new MockUnit();
+        MockUnitBehaviour unit = regenObject.AddComponent<MockUnitBehaviour>();
         UnitStats unitStats = new UnitStats(ScriptableObject.CreateInstance<ScriptableUnit>());
         unitStats.HP5.BaseValue = 50.0f;
         unitStats.maxHealth.BaseValue = 100.0f;
         unitStats.CurrentHealth = 99f;
         unit.unitStats = unitStats;
-        script.Unit = unit;
         yield return null;
         Assert.AreEqual(100f, unit.unitStats.CurrentHealth);
     }
@@ -56,14 +47,13 @@ public class regen
     {
         GameObject regenObject =  new GameObject("Health Regen!");
         HealthRegen script = regenObject.AddComponent<HealthRegen>();
-        MockUnit unit = new MockUnit();
+        MockUnitBehaviour unit = regenObject.AddComponent<MockUnitBehaviour>();
         UnitStats unitStats = new UnitStats(ScriptableObject.CreateInstance<ScriptableUnit>());
         unitStats.HP5.BaseValue = 10.0f;
         unitStats.maxHealth.BaseValue = 100.0f;
         unitStats.CurrentHealth = 50f;
         unit.unitStats = unitStats;
         unit.IsDead = true;
-        script.Unit = unit;
         yield return null;
         Assert.AreEqual(50f, unit.unitStats.CurrentHealth);
     }
@@ -75,13 +65,12 @@ public class regen
     {
         GameObject regenObject =  new GameObject("Health Regen!");
         HealthRegen script = regenObject.AddComponent<HealthRegen>();
-        MockUnit unit = new MockUnit();
+        MockUnitBehaviour unit = regenObject.AddComponent<MockUnitBehaviour>();
         UnitStats unitStats = new UnitStats(ScriptableObject.CreateInstance<ScriptableUnit>());
         unitStats.HP5.BaseValue = 10.0f;
         unitStats.maxHealth.BaseValue = 100.0f;
         unitStats.CurrentHealth = 50f;
         unit.unitStats = unitStats;
-        script.Unit = unit;
         yield return null;
         Assert.AreEqual(51f, unit.unitStats.CurrentHealth);
     }

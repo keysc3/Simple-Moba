@@ -20,6 +20,7 @@ public class ScriptableSleep : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 2;
+        keyword = "Asleep";
         return new Sleep(this, duration[spellLevel], casted, effected);
     }
 }

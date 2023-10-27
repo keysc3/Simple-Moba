@@ -31,7 +31,7 @@ public class DamageTracker
     *   @param damageAmount - float of the amount of damage recieved.
     *   @param damageType - string of the type of damage.
     */
-    public void AddDamage(IUnit damageDealer, float damageAmount, string damageType){
+    public void AddDamage(IUnit damageDealer, float damageAmount, DamageType damageType){
         damageReceived.Add(new Damage(damageDealer, damageAmount, damageType));
     }
 

@@ -10,5 +10,5 @@ using UnityEngine;
 public interface IHasCallback
 {
     List<ISpell> callbackSet { get; }
-    void SetupCallbacks(Dictionary<string, ISpell> spells);
+    void SetupCallbacks(Dictionary<SpellType, ISpell> spells);
 }

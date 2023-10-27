@@ -21,8 +21,6 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell1Data) base.spellData;
-        if(SpellNum == null)
-            SpellNum = spellData.defaultSpellNum;
     }
 
     /*
@@ -111,10 +109,10 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
                 float damageValue = spellData.baseDamage[SpellLevel] + (0.45f * championStats.magicDamage.GetValue());
                 // Magic damage on first part then true damage on return.
                 if(!returning){
-                    ((IDamageable) unit).TakeDamage(damageValue, "magic", player, false);
+                    ((IDamageable) unit).TakeDamage(damageValue, DamageType.Magic, player, false);
                 }
                 else{
-                    ((IDamageable) unit).TakeDamage(damageValue, "true", player, false);
+                    ((IDamageable) unit).TakeDamage(damageValue, DamageType.True, player, false);
                 }
                 enemiesHit.Add(unit);
             }

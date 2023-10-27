@@ -10,7 +10,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Effects/Dot")]
 public class ScriptableDot : ScriptableEffect
 {
-    [field: SerializeField] public string damageType { get; private set; }
+    [field: SerializeField] public DamageType damageType { get; private set; }
     [field: SerializeField] public float tickRate { get; private set; }
 
     /*
