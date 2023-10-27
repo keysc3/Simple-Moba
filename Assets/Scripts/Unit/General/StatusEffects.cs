@@ -15,6 +15,12 @@ public class StatusEffects
     private Effect mostImpairing;
     private GameObject statusEffectPrefab;
 
+    /*public delegate void OnActivationChange(string keyword);
+    public event OnActivationChange OnActivated;*/
+
+    public delegate void OnTimerTick(Effect effect);
+    public event OnTimerTick OnDurationUpdate;
+
     public StatusEffects(GameObject statusEffectPrefab){
         this.statusEffectPrefab = statusEffectPrefab;
     }
@@ -34,7 +40,6 @@ public class StatusEffects
                 if(statusEffects.Contains(effectUpdating)){
                     if(statusEffects[i].isFinished){
                         Effect effect = statusEffects[i];
-                        //statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
                         if(effect is Slow){
@@ -46,12 +51,16 @@ public class StatusEffects
                         if(statusEffects.Count > 0){
                             SetMostImpairing(GetMostImpairing());
                         }
-                        else
+                        else{
                             highestActiveCCValue = 0;
+                        }
                     }
                 }
-                else
+                else{
                     highestActiveCCValue = 0;
+                }
+                if(effectUpdating == mostImpairing)
+                    OnDurationUpdate?.Invoke(effectUpdating);
             }
         }
     }
@@ -70,11 +79,12 @@ public class StatusEffects
                 SetMostImpairing(effect);
             }
             else{
+                // Set most impairing if new effect is a keyword 0 cc value effect.
+                if(highestActiveCCValue == 0 && mostImpairing.effectType.keyword == "Default" && effect.effectType.keyword != "Default")
+                    SetMostImpairing(effect);
                 for(int i = statusEffects.Count - 1; i >= 0; i--){
                     // If the same effect hit them and it is not stackable remove it for the new one.
-                    if(statusEffects[i].effectType.name == effect.effectType.name && 
-                    statusEffects[i].effectType.GetType() == effect.effectType.GetType() && 
-                    !effect.effectType.isStackable){
+                    if(statusEffects[i].effectType.name == effect.effectType.name && !effect.effectType.isStackable){
                         statusEffects[i].EndEffect();
                         statusEffects.RemoveAt(i);
                     }
@@ -253,7 +263,7 @@ public class StatusEffects
         int highestCC = 0;
         // Check for highest CC value effect.
         for(int i = 0; i < statusEffects.Count; i++){
-            // Don't check values of 0.
+            // Only compare cc values greater than 0.
             if(statusEffects[i].effectType.ccValue != 0){
                 if(statusEffects[i].effectType.ccValue > highestCC){
                     index = i;
@@ -265,6 +275,11 @@ public class StatusEffects
                         index = i;
                     }
                 }
+            }
+            else{
+                // Set most impairing to be a 0 cc value keyword effect if 0 is highest value.
+                if(highestCC == 0 && statusEffects[i].effectType.keyword != "Default")
+                    index = i;
             }
         }
         return statusEffects[index];
@@ -278,6 +293,7 @@ public class StatusEffects
         effect.IsActivated = true;
         mostImpairing = effect;
         highestActiveCCValue = effect.effectType.ccValue;
+        //OnActivated?.Invoke(effect.effectType.keyword);
     }
 
     /*
