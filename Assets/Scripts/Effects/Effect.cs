@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 /*
 * Purpose: Class for effects.
@@ -67,14 +69,39 @@ public class Effect
     *   @param delta - float of the time passed since the last tick.
     */
     public virtual void TimerTick(float delta){
-        if(isActivated)
+        if(isActivated){
             EffectTick();
+            if(effected is IPlayer){
+                if(effectType.keyword != "Default"){
+                    GameObject status = ((IPlayer) effected).playerBar.transform.GetChild(0).GetChild(2).gameObject;
+                    TMP_Text text = status.transform.GetChild(0).GetComponent<TMP_Text>();
+                    text.SetText(effectType.keyword.ToUpper());
+                    status.SetActive(true);
+                }
+            }
+        }
         // Persistent effects have duration -1.
         if(effectDuration != -1f){
             effectTimer += delta;
+            if(isActivated){
+                if(effected is IPlayer){
+                    if(effectType.keyword != "Default"){
+                        GameObject status = ((IPlayer) effected).playerBar.transform.GetChild(0).GetChild(2).gameObject;
+                        Slider slider = status.transform.GetChild(1).GetComponent<Slider>();
+                        slider.value = 1 - (effectTimer/effectDuration);
+                    }
+                }
+            }
             if(effectTimer >= effectDuration){
-                if(isActivated)
+                if(isActivated){
                     EndEffect();
+                    if(effected is IPlayer){
+                        if(effectType.keyword != "Default"){
+                            GameObject status = ((IPlayer) effected).playerBar.transform.GetChild(0).GetChild(2).gameObject;
+                            status.SetActive(false);
+                        }
+                    }
+                }
                 isFinished = true;
             }
         }

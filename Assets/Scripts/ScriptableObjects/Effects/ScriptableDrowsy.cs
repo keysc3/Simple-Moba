@@ -20,6 +20,7 @@ public class ScriptableDrowsy : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 0;
+        keyword = "Drowsy";
         return new Drowsy(this, duration[spellLevel], spellLevel, casted, effected);
     }
 }

@@ -20,6 +20,7 @@ public class ScriptableCharm : ScriptableEffect
     */
     public Effect InitializeEffect(int spellLevel, IUnit casted, IUnit effected){
         ccValue = 1;
+        keyword = "Charmed";
         return new Charm(this, duration[spellLevel], spellLevel, casted, effected);
     }
 }
