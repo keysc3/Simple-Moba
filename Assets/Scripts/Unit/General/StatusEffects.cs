@@ -38,7 +38,7 @@ public class StatusEffects
                         statusEffects.RemoveAt(i);
                         // If effect was a slow find the new strongest slow if another exists.
                         if(effect is Slow){
-                            if(CheckForEffectByType(effect)){
+                            if(CheckForEffectByType<Slow>()){
                                 SetStrongestSlow((Slow) effect);
                             }
                         }
@@ -172,14 +172,13 @@ public class StatusEffects
     }
 
     /*
-    *   CheckForEffectByName - Checks for the given effect in the status managers effect list with given name.
-    *   @param checkFor - ScriptableObject of the effect to check for.
+    *   CheckForEffectByName - Checks for the effect in the status managers effect list with given name.
     *   @param effectName - string of the effects name.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectByName(ScriptableEffect checkFor, string effectName){
+    public bool CheckForEffectByName(string effectName){
         foreach(Effect effect in statusEffects){
-            if(effect.effectType.GetType() == checkFor.GetType() && effect.effectType.name == effectName)
+            if(effect.effectType.name == effectName)
                 return true;
         }
         return false;
@@ -187,12 +186,11 @@ public class StatusEffects
 
     /*
     *   CheckForEffectByType - Checks for the given effect in the status managers effect list with given type.
-    *   @param checkFor - Effect of the effect type to check for.
     *   @return bool - bool of whether or not the effect exists on this GameObject.
     */
-    public bool CheckForEffectByType(Effect checkFor){
+    public bool CheckForEffectByType<T>() where T: Effect{
         foreach(Effect effect in statusEffects){
-            if(effect.GetType() == checkFor.GetType())
+            if(effect is T)
                 return true;
         }
         return false;

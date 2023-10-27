@@ -125,7 +125,7 @@ public class BilliaSpell4 : Spell, IHasCast
         Player[] playerScripts = FindObjectsOfType<Player>();
         for (int i = 0; i < playerScripts.Length; i++){
             // If it is a champion and has the Billia dot then add it to the list.
-            if(playerScripts[i].statusEffects.CheckForEffectByName(spellData.passiveDot, spellData.passiveDot.name)){
+            if(playerScripts[i].statusEffects.CheckForEffectByName(spellData.passiveDot.name)){
                 passiveAppliedChamps.Add(playerScripts[i].gameObject);
             }
         }

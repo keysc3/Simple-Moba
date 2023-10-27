@@ -275,7 +275,7 @@ public class status_effects
         se.AddEffect(sleep1);
 
         // Act
-        bool hasEffect = se.CheckForEffectByName(ScriptableObject.CreateInstance<ScriptableDot>(), dot1.effectType.name);
+        bool hasEffect = se.CheckForEffectByName(dot1.effectType.name);
 
         // Assert
         Assert.True(hasEffect);
