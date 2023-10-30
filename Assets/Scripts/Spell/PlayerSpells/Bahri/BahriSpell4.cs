@@ -139,7 +139,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     }
 
     /*
-    *   Spell_4_Takedown - Grants a change and increases the spells duration if the takedown was on a champion.
+    *   Spell_4_Takedown - Grants a charge and increases the spells duration if the takedown was on a champion.
     *   @param killed - GameObject the takedown was on.
     */
     private void Spell_4_Takedown(IUnit killed){
@@ -150,7 +150,8 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
                 spell_4_duration = 10.0f;
                 spell4Effect.ResetTimer();
                 spell4Effect.EffectDuration = spell_4_duration;
-                spellCDCover.SetActive(false);
+                if(canRecast)
+                    spellCDCover.SetActive(false);
             }
         }
     }
