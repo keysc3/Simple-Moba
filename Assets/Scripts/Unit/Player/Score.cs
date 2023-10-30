@@ -19,54 +19,40 @@ public class Score
     public int Kills { 
         get => kills;
         set {
-            kills = value;
-            if(killsText != null)
-                killsText.SetText(value.ToString());
+            if(value > 0)
+                kills = value;
         }
     }
     private int assists = 0;
     public int Assists { 
         get => assists;
         set {
-            assists = value;
-            if(assistsText != null)
-                assistsText.SetText(value.ToString());
+            if(value > 0)
+                assists = value;
         }
     }
     private int deaths = 0;
     public int Deaths { 
         get => deaths;
         set {
-            deaths = value;
-            if(deathsText != null)
-                deathsText.SetText(value.ToString());
+            if(value > 0)
+                deaths = value;
         }
     }
     private int cs = 0;
     public int CS { 
         get => cs;
         set {
-            cs = value;
-            if(csText != null)
-                csText.SetText(value.ToString());
+            if(value > 0)
+                cs = value;
         }
     }
 
     public delegate void Takedown(IUnit killed);
     public event Takedown takedownCallback;
 
-    /*
-    *   Score - Creates a new Score object.
-    *   @param scoreUI - Transform of the scores UI parent.
-    */
-    public Score(Transform scoreUI){
-        if(scoreUI != null){
-            killsText = scoreUI.Find("Kills/Value").GetComponent<TMP_Text>();
-            assistsText = scoreUI.Find("Assists/Value").GetComponent<TMP_Text>();
-            deathsText = scoreUI.Find("Deaths/Value").GetComponent<TMP_Text>();
-            csText = scoreUI.Find("CS/Value").GetComponent<TMP_Text>();
-        }
-    }
+    public delegate void UpdateScoreUI(Score score, string toUpdate);
+    public event UpdateScoreUI UpdateScoreCallback;
 
     /*
     *   ChampionKill - Adds a champion kill.
@@ -75,6 +61,7 @@ public class Score
     public void ChampionKill(IUnit killed){
         Kills += 1;
         takedownCallback?.Invoke(killed);
+        UpdateScoreCallback?.Invoke(this, "kill");
     }
 
     /*
@@ -84,6 +71,7 @@ public class Score
     public void CreepKill(IUnit killed){
         CS += 1;
         takedownCallback?.Invoke(killed);
+        UpdateScoreCallback?.Invoke(this, "cs");
     }
 
     /*
@@ -93,6 +81,7 @@ public class Score
     public void Assist(IUnit killed){
         Assists += 1;
         takedownCallback?.Invoke(killed);
+        UpdateScoreCallback?.Invoke(this, "assist");
     }
 
     /*
@@ -100,5 +89,6 @@ public class Score
     */
     public void Death(){
         Deaths += 1;
+        UpdateScoreCallback?.Invoke(this, "death");
     }
 }

@@ -72,10 +72,7 @@ public class Player : MonoBehaviour, IPlayer
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
-        if(playerUI != null)
-            score = new Score(playerUI.transform.Find("Score/Container"));
-        else
-            score = new Score(null);
+        score = new Score();
         levelManager = new LevelManager(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerControllerBehaviour>();
@@ -243,7 +240,8 @@ public class Player : MonoBehaviour, IPlayer
         if(playerUIPrefab != null){
             newPlayerUI = (GameObject) Instantiate(playerUIPrefab, playerUIPrefab.transform.position, playerUIPrefab.transform.rotation);
             newPlayerUI.name = transform.name + "UI";
-            newPlayerUI.transform.SetParent(GameObject.Find("/Canvas").transform);
+            newPlayerUI.transform.SetParent(transform);
+            newPlayerUI = newPlayerUI.transform.GetChild(0).gameObject;
             RectTransform newPlayerUIRectTransform = newPlayerUI.GetComponent<RectTransform>();
             newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
             newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
