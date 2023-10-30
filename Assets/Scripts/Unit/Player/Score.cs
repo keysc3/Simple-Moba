@@ -10,11 +10,6 @@ using TMPro;
 */
 public class Score
 {
-    private TMP_Text killsText = null;
-    private TMP_Text assistsText = null;
-    private TMP_Text deathsText = null;
-    private TMP_Text csText = null;
-
     private int kills = 0;
     public int Kills { 
         get => kills;
