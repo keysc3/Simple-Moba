@@ -9,10 +9,6 @@ public class PlayerStatusDisplay : MonoBehaviour
     private TMP_Text text;
     private Slider slider;
     
-    /*void Awake(){
-        SetupCallback();
-    }*/
-
     // Start is called before the first frame update
     void Start()
     {
