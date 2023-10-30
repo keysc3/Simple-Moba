@@ -24,19 +24,8 @@ public class PlayerStatusDisplay : MonoBehaviour
 
     private void SetupCallback(){
         IPlayer player = GetComponentInParent<IPlayer>();
-        //player.statusEffects.OnActivated += UpdateStatus;
         player.statusEffects.OnDurationUpdate += UpdateStatus;
     }
-
-    /*private void UpdateStatus(string keyword){
-        print("CALLED: " + keyword);
-        if(keyword != "Default"){
-            text.SetText(keyword.ToUpper());
-            gameObject.SetActive(true);
-            return;
-        }
-        gameObject.SetActive(false);
-    }*/
 
     private void UpdateStatus(Effect effect){
         if(effect == null || effect.effectType.keyword == "Default"){
@@ -49,7 +38,6 @@ public class PlayerStatusDisplay : MonoBehaviour
         if(text.text != effect.effectType.keyword.ToUpper()){
             text.SetText(effect.effectType.keyword.ToUpper());
         }
-        Debug.Log("Keyword: " + effect.effectType.keyword + " " + effect.effectTimer + " " + effect.EffectDuration);
         slider.value = 1 - (effect.effectTimer/effect.EffectDuration);
     }
 }
