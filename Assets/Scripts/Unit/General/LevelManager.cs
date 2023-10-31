@@ -15,7 +15,7 @@ public class LevelManager
 
     private Slider xpSlider = null;
     private TMP_Text playerUILevelText = null;
-    private TMP_Text playerBarLevelText = null;
+    //private TMP_Text playerBarLevelText = null;
     private Transform spellsContainer = null;
     private RectTransform statusEffectsRect = null;
     private Gradient gradient;
@@ -26,8 +26,8 @@ public class LevelManager
             level = value;
             if(playerUILevelText != null)
                 playerUILevelText.SetText(level.ToString());
-            if(playerBarLevelText != null)
-                playerBarLevelText.SetText(level.ToString());
+            /*if(playerBarLevelText != null)
+                playerBarLevelText.SetText(level.ToString());*/
         }
     }
     private int spellLevelPoints = 0;
@@ -66,6 +66,9 @@ public class LevelManager
     }
     private LevelInfo levelInfo;
     private IUnit _unit;
+
+    public delegate void UpdateLevelUI(int level);
+    public event UpdateLevelUI UpdateLevelCallback;
     
     /*
     *   LevelManager - Initializes a new level manager.
@@ -80,7 +83,7 @@ public class LevelManager
                 playerUILevelText = player.playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").GetComponent<TMP_Text>();
                 spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer/");
                 statusEffectsRect = player.playerUI.transform.Find("Player/StatusEffects").GetComponent<RectTransform>();
-                playerBarLevelText = player.playerBar.transform.Find("PlayerBar/Container/Level/Value").GetComponent<TMP_Text>();
+                //playerBarLevelText = player.playerBar.transform.Find("PlayerBar/Container/Level/Value").GetComponent<TMP_Text>();
             }
         }
         SetUpGradient();
@@ -158,6 +161,7 @@ public class LevelManager
         if(_unit is IPlayer)
             if(_unit.unitStats != null)
                 IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
+        UpdateLevelCallback?.Invoke(level);
     }
 
     /*

@@ -13,7 +13,10 @@ public class UnitStats
     private float currentHealth;
     public float CurrentHealth { 
         get => currentHealth;
-        set => currentHealth = value < maxHealth.GetValue() ? value : maxHealth.GetValue(); 
+        set {
+            currentHealth = value < maxHealth.GetValue() ? value : maxHealth.GetValue();
+            UpdateHealthCallback?.Invoke(this);
+        }
     }
     public Stat maxHealth { get; }
     public Stat magicDamage { get; }
@@ -28,6 +31,9 @@ public class UnitStats
     public Stat attackProjectileSpeed { get; }
     public Stat bonusAttackSpeed { get; }
     public Stat haste { get; }
+
+    public delegate void UpdateHealthUI(UnitStats unitStats);
+    public event UpdateHealthUI UpdateHealthCallback;
 
     public UnitStats(ScriptableUnit unit){
         magicDamage = new Stat(unit.magicDamage);
