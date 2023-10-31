@@ -161,7 +161,9 @@ public class Player : MonoBehaviour, IPlayer
     *   Death - Handles the death of a player.
     */
     private void Death(){
-        isDead = true;
+        isDead = true; 
+        if(playerBar != null)
+            playerBar.SetActive(false);
         if(statusEffects != null)
             statusEffects.ResetEffects();
         if(damageTracker != null)
