@@ -5,10 +5,10 @@ using TMPro;
 
 public class PlayerScoreUpdate : MonoBehaviour
 {
-    private TMP_Text killsText = null;
-    private TMP_Text assistsText = null;
-    private TMP_Text deathsText = null;
-    private TMP_Text csText = null;
+    private TMP_Text killsText;
+    private TMP_Text assistsText;
+    private TMP_Text deathsText;
+    private TMP_Text csText;
 
     // Start is called before the first frame update
     void Start()
