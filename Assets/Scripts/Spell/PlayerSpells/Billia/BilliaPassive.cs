@@ -55,16 +55,20 @@ public class BilliaPassive : Spell, IHasCallback
             // Heal the champion amount if unit is a champion.
             if(unit is IPlayer){
                 //Debug.Log("Billia passive found on: " + enemy.name);
-                float healAmount = (6f + ((84f / 17f) * (float)(player.levelManager.Level - 1)))/spellData.passiveDot.duration[0];
-                championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
-                Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+                if(championStats.CurrentHealth < championStats.maxHealth.GetValue()){
+                    float healAmount = (6f + ((84f / 17f) * (float)(player.levelManager.Level - 1)))/spellData.passiveDot.duration[0];
+                    championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
+                    Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+                }
             }
             else if(unit.SUnit is ScriptableMonster){
                 if(((ScriptableMonster) unit.SUnit).size == "large"){
                     //Debug.Log("Billia passive found on: " + enemy.name);
-                    float healAmount = (39f + ((15f / 17f) * (float)(player.levelManager.Level - 1)))/spellData.passiveDot.duration[0];
-                    championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
-                    Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+                    if(championStats.CurrentHealth < championStats.maxHealth.GetValue()){
+                        float healAmount = (39f + ((15f / 17f) * (float)(player.levelManager.Level - 1)))/spellData.passiveDot.duration[0];
+                        championStats.CurrentHealth = championStats.CurrentHealth + healAmount;
+                        Debug.Log("Billia passive healed " + healAmount + " health from passive tick.");
+                    }
                 }
             }
             yield return new WaitForSeconds(spellData.passiveDot.tickRate);
