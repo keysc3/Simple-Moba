@@ -28,7 +28,7 @@ public class ManaRegen : MonoBehaviour
     // Called once per frame.
     private void Update(){
         // 0.5s intervals over 5s = 10 increments.
-        regenAmount = championStats.HP5.GetValue()/10.0f;
+        regenAmount = championStats.MP5.GetValue()/10.0f;
         if(unit.IsDead || championStats.CurrentMana >= championStats.maxMana.GetValue())
             UpdateManaRegenCallback?.Invoke(0);
         else
