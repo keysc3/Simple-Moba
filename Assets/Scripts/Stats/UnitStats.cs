@@ -10,7 +10,7 @@ using UnityEngine;
 [System.Serializable]
 public class UnitStats
 {
-    private float currentHealth;
+    protected float currentHealth;
     public float CurrentHealth { 
         get => currentHealth;
         set {
@@ -56,7 +56,7 @@ public class UnitStats
     *   ResetHealth - Set the champions current health value to the max health value.
     */
     public void ResetHealth(){
-        currentHealth = maxHealth.GetValue();
+        CurrentHealth = maxHealth.GetValue();
     }
     
     /*
