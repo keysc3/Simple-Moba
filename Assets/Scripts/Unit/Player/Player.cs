@@ -248,12 +248,6 @@ public class Player : MonoBehaviour, IPlayer
             newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
             newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
             newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = SUnit.icon;
-            // Setup health and mana UI updates.
-            UpdateHealthUI updateHealthUI = newPlayerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<UpdateHealthUI>();
-            updateHealthUI.player = this;
-            UpdateManaUI updateManaUI = newPlayerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<UpdateManaUI>();
-            updateManaUI.player = this;
-            // Setup stats UI updates.
             UpdateAllStatsUI updateAllStatsUI = newPlayerUI.transform.Find("Player/Info/Stats/Container").GetComponent<UpdateAllStatsUI>();
             updateAllStatsUI.player = this;
         }

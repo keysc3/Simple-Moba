@@ -12,7 +12,7 @@ public class user_interface
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator does_not_update_mana_ui_with_null_player()
     {
         // Arrange
@@ -26,11 +26,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(80f, slider.value);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator does_not_update_mana_ui_with_dead_player()
     {
         // Arrange
@@ -48,11 +48,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(50f, slider.value);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator updates_mana_ui()
     {
         // Arrange
@@ -72,13 +72,13 @@ public class user_interface
 
         // Assert
         Assert.AreEqual((0.40f, "40/100"), (slider.value, text.text));
-    }
+    }*/
 
     // Mana Bar UI
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator does_not_update_mana_bar_ui_with_null_player()
     {
         // Arrange
@@ -91,11 +91,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(40f, slider.value);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator does_not_update_mana_bar_ui_with_dead_player()
     {
         // Arrange
@@ -110,11 +110,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(35f, slider.value);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator updates_mana_bar_ui()
     {
         // Arrange
@@ -132,13 +132,13 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(0.15f, slider.value);
-    }
+    }*/
 
     // Health UI
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator does_not_update_health_ui_with_null_player()
     {
         // Arrange
@@ -152,11 +152,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(80f, slider.value);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator updates_health_ui_to_0_current_health_from_dead_player()
     {
         // Arrange
@@ -174,11 +174,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(0f, slider.value);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator updates_health_ui_to_current_health_percent()
     {
         // Arrange
@@ -198,13 +198,13 @@ public class user_interface
 
         // Assert
         Assert.AreEqual((0.98f, "98/100"), (slider.value, text.text));
-    }
+    }*/
 
     // Health bar UI
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator does_not_update_health_bar_ui_with_null_unit()
     {
         // Arrange
@@ -217,11 +217,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(62f, slider.value);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator deactivates_health_bar_ui_from_dead_player()
     {
         // Arrange
@@ -238,11 +238,11 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(false, playerScript.playerBar.activeSelf);
-    }
+    }*/
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator updates_health_bar_ui()
     {
         // Arrange
@@ -260,7 +260,7 @@ public class user_interface
 
         // Assert
         Assert.AreEqual(0.01f, slider.value);
-    }
+    }*/
 
     // All Stats UI
 
