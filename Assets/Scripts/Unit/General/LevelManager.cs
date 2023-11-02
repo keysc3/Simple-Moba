@@ -24,8 +24,8 @@ public class LevelManager
         get => level; 
         private set {
             level = value;
-            if(playerUILevelText != null)
-                playerUILevelText.SetText(level.ToString());
+            /*if(playerUILevelText != null)
+                playerUILevelText.SetText(level.ToString());*/
             /*if(playerBarLevelText != null)
                 playerBarLevelText.SetText(level.ToString());*/
         }
