@@ -59,7 +59,7 @@ public class StatusEffects
                 else{
                     highestActiveCCValue = 0;
                 }
-                if(effectUpdating == mostImpairing)
+                if(effectUpdating == mostImpairing && statusEffects.Contains(effectUpdating))
                     OnDurationUpdate?.Invoke(effectUpdating);
             }
         }
