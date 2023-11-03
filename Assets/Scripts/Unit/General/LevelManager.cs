@@ -22,13 +22,7 @@ public class LevelManager
     private int level = 1;
     public int Level { 
         get => level; 
-        private set {
-            level = value;
-            /*if(playerUILevelText != null)
-                playerUILevelText.SetText(level.ToString());*/
-            /*if(playerBarLevelText != null)
-                playerBarLevelText.SetText(level.ToString());*/
-        }
+        private set => level = value;
     }
     private int spellLevelPoints = 0;
     public int SpellLevelPoints {
@@ -56,12 +50,10 @@ public class LevelManager
             currentXP = value;
             if(value >= levelInfo.requiredXP[Level])
                 LevelUp();
-            if(xpSlider != null){
-                if(Level != levelInfo.maxLevel)
-                    xpSlider.value = Mathf.Round((currentXP/levelInfo.requiredXP[Level]) * 100f);
-                else
-                    xpSlider.value = 100f;
-            }
+            if(level != levelInfo.maxLevel)
+                UpdateExperienceCallback?.Invoke(currentXP, levelInfo.requiredXP[Level]);
+            else
+                UpdateExperienceCallback?.Invoke(1f, 1f);
         }
     }
     private LevelInfo levelInfo;
@@ -69,6 +61,9 @@ public class LevelManager
 
     public delegate void UpdateLevelUI(int level);
     public event UpdateLevelUI UpdateLevelCallback;
+
+    public delegate void UpdateExperienceUI(float current, float required);
+    public event UpdateExperienceUI UpdateExperienceCallback;
     
     /*
     *   LevelManager - Initializes a new level manager.
