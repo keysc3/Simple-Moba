@@ -149,7 +149,8 @@ public class BilliaSpell4 : Spell, IHasCast
                 }
                 // If effect fell off before damage was dealt, remove the bonus damage method.
                 else{
-                    unit.bonusDamage -= Spell_4_SleepProc;
+                    if(!unit.statusEffects.CheckForEffectWithSource(spellData.drowsy, player))
+                        unit.bonusDamage -= Spell_4_SleepProc;
                 }
             }
         }
