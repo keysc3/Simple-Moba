@@ -35,9 +35,9 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         // Set the spell cast position to max range if casted past that value.
         if(targetPosition.magnitude > spellData.maxMagnitude)
             targetPosition = transform.position + (targetPosition.normalized * spellData.maxMagnitude);
-        // Set the spell cast position to the dashOffset if target positions magnitude is less than it.
-        else if(targetPosition.magnitude < spellData.dashOffset)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.dashOffset);
+        // Set the spell cast position to the minimum range if target positions magnitude is less than it.
+        else if(targetPosition.magnitude < spellData.minMagnitude)
+            targetPosition = transform.position + (targetPosition.normalized * spellData.minMagnitude);
         // Set target position to calculated mouse position.
         else
             targetPosition = transform.position + targetPosition;
@@ -62,9 +62,9 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             // Set the spell cast position to max range if casted past that value.
             if(targetPosition.magnitude > spellData.maxMagnitude)
                 targetPosition = transform.position + (targetPosition.normalized * spellData.maxMagnitude);
-            // Set the spell cast position to the dashOffset if target positions magnitude is less than it.
-            else if(targetPosition.magnitude < spellData.dashOffset)
-                targetPosition = transform.position + (targetPosition.normalized * spellData.dashOffset);
+            // Set the spell cast position to the minimum range if target positions magnitude is less than it.
+            else if(targetPosition.magnitude < spellData.minMagnitude)
+                targetPosition = transform.position + (targetPosition.normalized * spellData.minMagnitude);
             // Set target position to calculated mouse position.
             else
                 targetPosition = transform.position + targetPosition;
@@ -81,13 +81,13 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
                 targetPosition.y = temp.y;
             }
             // Get the direction to move Billia in using initial target.
-            Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y,initialTarget.z) - transform.position).normalized;
+            Vector3 directionToMove = (new Vector3(initialTarget.x, targetDirection.y, initialTarget.z) - transform.position).normalized;
             // Get the position offset to place Billia from the spell cast position.
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
-            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
             StartCoroutine(spellController.CastTime(spellData.castTime));
+            StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
@@ -114,7 +114,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   @param spellTargetPosition - Vector3 of the center of the spell.
     */
     private IEnumerator Spell_2_Dash(Vector3 targetPosition, Vector3 spellTargetPosition){
-        player.IsCasting = true;
         player.CurrentCastedSpell = this;
         // Disable pathing.
         navMeshAgent.ResetPath();
@@ -127,12 +126,12 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             // Move towards target position.
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
             timer += Time.deltaTime;
+            navMeshAgent.isStopped = true;
             yield return null;
         }
         // Apply last tick dash and enable pathing.
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
         navMeshAgent.isStopped = false;
-        player.IsCasting = false;
         player.CurrentCastedSpell = this;
         Spell_2_Finished(spellTargetPosition);
     }
