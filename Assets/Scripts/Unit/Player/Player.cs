@@ -51,7 +51,6 @@ public class Player : MonoBehaviour, IPlayer
     [SerializeField] private Material dead;
     [SerializeField] private GameObject playerBarPrefab;
     [SerializeField] private GameObject playerUIPrefab;
-    [SerializeField] private GameObject statusEffectPrefab;
 
     public delegate void UpdateRespawnTimerUI(float timer, float respawn);
     public event UpdateRespawnTimerUI UpdateRespawnTimerCallback;
@@ -65,7 +64,7 @@ public class Player : MonoBehaviour, IPlayer
         playerUI = CreateNewPlayerUI();
         playerBar = CreateNewPlayerBar();
         isDead = false;
-        statusEffects = new StatusEffects(statusEffectPrefab);
+        statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
