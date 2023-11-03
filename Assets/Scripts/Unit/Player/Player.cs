@@ -48,12 +48,13 @@ public class Player : MonoBehaviour, IPlayer
     private PlayerSpells playerSpells;
     private Material alive;
     private Renderer rend;
-    private GameObject playerIconCover;
-    private TMP_Text playerRespawnTimer;
     [SerializeField] private Material dead;
     [SerializeField] private GameObject playerBarPrefab;
     [SerializeField] private GameObject playerUIPrefab;
     [SerializeField] private GameObject statusEffectPrefab;
+
+    public delegate void UpdateRespawnTimerUI(float timer, float respawn);
+    public event UpdateRespawnTimerUI UpdateRespawnTimerCallback;
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
@@ -63,10 +64,6 @@ public class Player : MonoBehaviour, IPlayer
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
         playerUI = CreateNewPlayerUI();
         playerBar = CreateNewPlayerBar();
-        if(playerUI != null){
-            playerIconCover = playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/IconCover").gameObject;
-            playerRespawnTimer = playerIconCover.transform.Find("DeathTimer").GetComponent<TMP_Text>();
-        }
         isDead = false;
         statusEffects = new StatusEffects(statusEffectPrefab);
         damageTracker = new DamageTracker();
@@ -220,16 +217,12 @@ public class Player : MonoBehaviour, IPlayer
     */
     private IEnumerator RespawnTimer(float respawn){
         float timer = 0.0f;
-        if(playerIconCover != null)
-            playerIconCover.SetActive(true);
         while(timer < respawn){
             timer += Time.deltaTime;
-            if(playerRespawnTimer != null)
-                playerRespawnTimer.SetText(Mathf.Ceil(respawn - timer).ToString());
+            UpdateRespawnTimerCallback?.Invoke(timer, respawn);
             yield return null;
         }
-        if(playerIconCover != null)
-            playerIconCover.SetActive(false); 
+        UpdateRespawnTimerCallback?.Invoke(timer, respawn);
         Respawn();
     }
 
