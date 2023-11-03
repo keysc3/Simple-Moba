@@ -103,7 +103,7 @@ public class unit_stats
         List<float> durationValues = new List<float>(){1f, 2f, 3f, 4f, 5f};
         IUnit unit1 = Substitute.For<IUnit>();
         IUnit unit2 = Substitute.For<IUnit>();
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
         List<Effect> myEffects  = new List<Effect>();
 
         for(int i = 0; i < 3; i++){
