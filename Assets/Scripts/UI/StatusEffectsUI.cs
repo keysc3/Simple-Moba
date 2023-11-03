@@ -14,7 +14,7 @@ public class StatusEffectsUI : MonoBehaviour
     private Transform debuffsContainer;
     private float effectWidth;
     private IPlayer player;
-    //private Transform statusEffectsUI;
+    
 
     // Called when the script instance is being loaded.
     private void Start(){

@@ -14,9 +14,6 @@ public class StatusEffects
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
 
-    /*public delegate void OnActivationChange(string keyword);
-    public event OnActivationChange OnActivated;*/
-
     public delegate void OnTimerTick(Effect effect);
     public event OnTimerTick OnDurationUpdate;
 
@@ -30,8 +27,8 @@ public class StatusEffects
     public void UpdateEffects(float delta){
         // Increment every effects timer.
         for(int i = statusEffects.Count - 1; i >= 0; i--){
-            // If there is an effect, used here incase the user dies from an effect tick that isn't the last effect.
-            if(statusEffects.Count > 0){
+            // If there is an effect or invalid index, used here incase the user dies from an effect tick that isn't the last effect.
+            if(statusEffects.Count > 0 && statusEffects.Count >= i - 1){
                 Effect effectUpdating = statusEffects[i];
                 statusEffects[i].TimerTick(delta);
                 // Check if the effect still exists in the case that the unit died from the effect.
@@ -46,21 +43,14 @@ public class StatusEffects
                             }
                         }
                         // If there are still running effects, activate the most impairing.
-                        if(statusEffects.Count > 0){
-                            SetMostImpairing(GetMostImpairing());
-                        }
-                        else{
-                            highestActiveCCValue = 0;
-                        }
+                        NewMostImpairing();
                     }
                 }
-                else{
-                    highestActiveCCValue = 0;
-                }
-                if(effectUpdating == mostImpairing && statusEffects.Contains(effectUpdating))
-                    OnDurationUpdate?.Invoke(effectUpdating);
+                else
+                    NewMostImpairing();
             }
         }
+        OnDurationUpdate?.Invoke(mostImpairing);
     }
 
     /*
@@ -138,6 +128,16 @@ public class StatusEffects
         for(int i = statusEffects.Count - 1; i > -1; i--){
             if(!(statusEffects[i] is PersonalSpell))
                 statusEffects.RemoveAt(i);
+        }
+        NewMostImpairing();
+    }
+
+    private void NewMostImpairing(){
+        if(statusEffects.Count > 0)
+            SetMostImpairing(GetMostImpairing());
+        else{
+            highestActiveCCValue = 0;
+            mostImpairing = null;
         }
     }
 
