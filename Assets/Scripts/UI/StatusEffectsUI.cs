@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Updates the players status effects section of the UI.
+*
+* @author: Colin Keys
+*/
 public class StatusEffectsUI : MonoBehaviour
 {
     private StatusEffects statusEffects;
@@ -29,12 +34,12 @@ public class StatusEffectsUI : MonoBehaviour
 
     /*
     *   AddStatusEffectUI - Adds a status effect indicator to the UI. Left side is buffs, right side is debuffs.
+    *   @param effect - Effect being added to the UI.
     */
     // TODO: Handle truncation of effects when there are too many to fit the initial container.
     // Could set a max size per row, if number of children % max size per row  > 0 -> 
     // increase size of container, increase y offset.
     public void AddStatusEffectUI(Effect effect){
-        Debug.Log("EFFECT!!!! " + effect.effectType.name);
         // If a stackable effect already has 1 stack, don't create a new UI element.
         if(effect.effectType.isStackable){
             if(statusEffects.GetEffectsByName(effect.effectType.name).Count > 1)
@@ -68,6 +73,8 @@ public class StatusEffectsUI : MonoBehaviour
 
     /*
     *   SetStatusEffectUIPosition - Sets the position of the given status effect UI element.
+    *   @param myEffect - Transform of the effect UI object.
+    *   @param isBuff - bool of wether the effect is a buff or not.
     */
     private void SetStatusEffectUIPosition(Transform myEffect, bool isBuff){
         // Set up variables
@@ -98,6 +105,8 @@ public class StatusEffectsUI : MonoBehaviour
 
     /*
     *   AnimateStatusEffect - Coroutine to animate the UI to show time left on a non-stackable effect.
+    *   @param effect - Effect being updated.
+    *   @param myEffect - Transform of the effects UI object.
     */
     private IEnumerator AnimateStatusEffect(Effect effect, Transform myEffect){
         float elapsedDuration;
@@ -126,6 +135,8 @@ public class StatusEffectsUI : MonoBehaviour
 
     /*
     *   AnimateStackableStatusEffect - Coroutine to animate the UI to show time left on a stackable effect.
+    *   @param effect - Effect being updated.
+    *   @param myEffect - Transform of the effects UI object.
     */
     private IEnumerator AnimateStackableStatusEffect(Effect effect, Transform myEffect){
         // Set stack text active.
@@ -181,6 +192,8 @@ public class StatusEffectsUI : MonoBehaviour
     /*
     *   UpdateStatusEffectsPositions - Moves the status effect UI components that were created after the one that ended.
     *   This is to prevent gaps between UI components.
+    *   @param effect - Effect being updated.
+    *   @param myEffect - Transform of the effects UI object.
     */
     private void UpdateStatusEffectsPositions(Effect effect, Transform myEffect){
         // Get the UI components child index and its current position.

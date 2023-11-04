@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Updates the players portrait section of the UI.
+*
+* @author: Colin Keys
+*/
 public class UpdatePortraitUI : MonoBehaviour
 {
     private TMP_Text levelText;
@@ -23,6 +28,9 @@ public class UpdatePortraitUI : MonoBehaviour
             levelText = levelTransform.GetComponent<TMP_Text>(); 
     }
 
+    /*
+    *   SetupCallback - Adds the UI updating methods to the necessary events.
+    */
     private void SetupCallback(){
         Player player = GetComponentInParent<Player>();
         if(player != null){
@@ -32,14 +40,28 @@ public class UpdatePortraitUI : MonoBehaviour
         }
     }
 
+    /*
+    *   UpdateLevelUI - Updates the players level text.
+    *   @param level - int of the level to display.
+    */
     private void UpdateLevelUI(int level){
         levelText.SetText(level.ToString());
     }
 
+    /*
+    *   UpdateExperienceUI - Updates the experience bar with current values.
+    *   @param currentXP - float of the players current experience.
+    *   @param requiredXP - float of the required experience for the next level.
+    */
     private void UpdateExperienceUI(float currentXP, float requiredXP){
         xpSlider.value = Mathf.Round((currentXP/requiredXP) * 100f);
     }
 
+    /*
+    *   UpdateRespawnTimerUI - Updates the portraits respawn timer.
+    *   @param timer - float of the dead duration.
+    *   @param respawn - float of the total time to respawn.
+    */
     private void UpdateRespawnTimerUI(float timer, float respawn){
         float timeLeft = Mathf.Ceil(respawn - timer);
         respawnTimer.SetText(timeLeft.ToString());

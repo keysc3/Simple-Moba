@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Updates the status portion of a player bar UI.
+*
+* @author: Colin Keys
+*/
 public class PlayerStatusDisplay : MonoBehaviour
 {
     private TMP_Text text;
@@ -18,11 +23,18 @@ public class PlayerStatusDisplay : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    /*
+    *   SetupCallback - Adds the UI updating methods to the necessary events.
+    */
     private void SetupCallback(){
         IPlayer player = GetComponentInParent<IPlayer>();
         player.statusEffects.OnDurationUpdate += UpdateStatus;
     }
 
+    /*
+    *   UpdateStatus - Updates the status text and slider of the player bar.
+    *   @param effect - Effect being updated and displayed.
+    */
     private void UpdateStatus(Effect effect){
         if(effect == null || effect.effectType.keyword == "Default"){
             if(gameObject.activeSelf)

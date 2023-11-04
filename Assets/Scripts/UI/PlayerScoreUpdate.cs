@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/*
+* Purpose: Updates the score portion of the players UI.
+*
+* @author: Colin Keys
+*/
 public class PlayerScoreUpdate : MonoBehaviour
 {
     private TMP_Text killsText;
@@ -20,11 +25,19 @@ public class PlayerScoreUpdate : MonoBehaviour
         csText = transform.Find("CS/Value").GetComponent<TMP_Text>();
     }
 
+    /*
+    *   SetupCallback - Adds the UI updating methods to the necessary events.
+    */
     private void SetupCallback(){
         IPlayer player = GetComponentInParent<IPlayer>();
         player.score.UpdateScoreCallback += UpdateScore;
     }
 
+    /*
+    *   UpdateScore - Updates the text for the given score type.
+    *   @param score - Score object to use the data from.
+    *   @param updateVariable - string of the score type being updated.
+    */
     private void UpdateScore(Score score, string updateVariable){
         switch(updateVariable){
             case "kill":

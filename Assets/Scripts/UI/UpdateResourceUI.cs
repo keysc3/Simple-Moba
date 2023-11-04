@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Updates the players resource section of the UI.
+*
+* @author: Colin Keys
+*/
 public class UpdateResourceUI : MonoBehaviour
 {
     private Slider healthSlider;
@@ -13,7 +18,7 @@ public class UpdateResourceUI : MonoBehaviour
     private TMP_Text healthRegenText;
     private TMP_Text manaRegenText;
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update.
     void Start()
     {
         Transform healthBar = transform.Find("HealthContainer/HealthBar");
@@ -27,6 +32,9 @@ public class UpdateResourceUI : MonoBehaviour
         SetupCallback();
     }
 
+    /*
+    *   SetupCallback - Adds the UI updating methods to the necessary events.
+    */
     private void SetupCallback(){
         IUnit unit = GetComponentInParent<IUnit>();
         unit.unitStats.UpdateHealthCallback += UpdateHealthSliderUI;
@@ -42,13 +50,14 @@ public class UpdateResourceUI : MonoBehaviour
             manaRegenScript.UpdateManaRegenCallback += UpdateManaRegenText;
     }
 
+    /*
+    *   UpdateHealthSliderUI - Updates the health slider fill and text value.
+    *   @param unitStats - Unit stats to use for updating the displayed health values.
+    */
     private void UpdateHealthSliderUI(UnitStats unitStats){
         // If the unit is dead.
         if(unitStats.CurrentHealth > 0){
-            // Get the health percent the player is at and set the health bar text to currenthp/maxhp.
-            float healthPercent = Mathf.Clamp(unitStats.CurrentHealth/unitStats.maxHealth.GetValue(), 0f, 1f);
-            healthText.SetText(Mathf.Ceil(unitStats.CurrentHealth) + "/" + Mathf.Ceil(unitStats.maxHealth.GetValue()));
-            healthSlider.value = healthPercent;
+            UpdateResource(healthText, healthSlider, unitStats.CurrentHealth, unitStats.maxHealth.GetValue());
         }
         else{
             // Set players health text and fill to 0.
@@ -57,22 +66,50 @@ public class UpdateResourceUI : MonoBehaviour
         }
     }
 
+    /*
+    *   UpdateManaSliderUI - Updates the mana slider fill and text value.
+    *   @param unitStats - Unit stats to use for updating the displayed mana values.
+    */
     private void UpdateManaSliderUI(ChampionStats championStats){
-        // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
-        float manaPercent = Mathf.Clamp(championStats.CurrentMana/championStats.maxMana.GetValue(), 0f, 1f);
-        manaText.SetText(Mathf.Ceil(championStats.CurrentMana) + "/" + Mathf.Ceil(championStats.maxMana.GetValue()));
-        manaSlider.value = manaPercent;
+        UpdateResource(manaText, manaSlider, unitStats.CurrentMana, unitStats.maxMana.GetValue());
     }
 
+    /*
+    *   UpdateResource - Updates the UI objects for a resource with its current values.
+    *   @param textObject - TMP_Text object to update the text for.
+    *   @param slider - Slider object to update the fill for.
+    *   @param current - float of the current resource value.
+    *   @param max - float of the max resource value.
+    */
+    private void UpdateResource(TMP_Text textObject, Slider slider, float current, float max){
+        // Get the percent of the resource the player has left and set the text to current/max
+        float percent = Mathf.Clamp(current/max, 0f, 1f);
+        textObject.SetText(Mathf.Ceil(current) + "/" + Mathf.Ceil(max));
+        slider.value = percent;
+    }
+
+    /*
+    *   UpdateHealthRegenText - Updates the text for the players health regeneration.
+    *   @param value - float of the value to display.
+    */
     private void UpdateHealthRegenText(float value){
-        UpdateText(healthRegenText, value);
+        UpdateRegenText(healthRegenText, value);
     }
 
+    /*
+    *   UpdateManaRegenText - Updates the text for the players mana regeneration.
+    *   @param value - float of the value to use.
+    */
     private void UpdateManaRegenText(float value){
-        UpdateText(manaRegenText, value);
+        UpdateRegenText(manaRegenText, value);
     }
 
-    private void UpdateText(TMP_Text textObject, float value){
+    /*
+    *   UpdateRegenText - Updates a text object with a given value rounded to 2 decimals.
+    *   @param textObject - TMP_Text object to update.
+    *   @param value - float of the value to use.
+    */
+    private void UpdateRegenText(TMP_Text textObject, float value){
         if(value != 0f){
            textObject.SetText($"+{Mathf.Round((value/5.0f) * 100.0f) * 0.01f}");
             if(!textObject.gameObject.activeSelf)

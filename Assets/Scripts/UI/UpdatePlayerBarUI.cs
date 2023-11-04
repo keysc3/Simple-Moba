@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Updates the players player bar.
+*
+* @author: Colin Keys
+*/
 public class UpdatePlayerBarUI : MonoBehaviour
 {
     private Slider healthSlider;
@@ -24,6 +29,9 @@ public class UpdatePlayerBarUI : MonoBehaviour
             levelText = levelTransform.GetComponent<TMP_Text>();
     }
 
+    /*
+    *   SetupCallback - Adds the UI updating methods to the necessary events.
+    */
     private void SetupCallback(){
         IUnit unit = GetComponentInParent<IUnit>();
         unit.unitStats.UpdateHealthCallback += UpdateHealthSliderUI;
@@ -33,24 +41,40 @@ public class UpdatePlayerBarUI : MonoBehaviour
         }
     }
 
+    /*
+    *   UpdateHealthSliderUI - Updates the health slider fill value.
+    *   @param unitStats - Unit stats to use for updating the displayed health values.
+    */
     private void UpdateHealthSliderUI(UnitStats unitStats){
-        if(unitStats.CurrentHealth > 0){
-            // Get the health percent the unit is at and set the health bar text to currenthp/maxhp.
-            float healthPercent = Mathf.Clamp(unitStats.CurrentHealth/unitStats.maxHealth.GetValue(), 0f, 1f);
-            // Set the fill based on units health percent.
-            healthSlider.value = healthPercent;
-        }
+        UpdateResource(healthSlider, championStats.CurrentHealth, championStats.maxHealth.GetValue());
     }
 
+    /*
+    *   UpdateManaSliderUI - Updates the mana slider fill value.
+    *   @param unitStats - Unit stats to use for updating the displayed mana values.
+    */
     private void UpdateManaSliderUI(ChampionStats championStats){
-        if(championStats.CurrentMana > 0){
-            // Get the percent of mana the player has left and set the mana bar text to currentmana/maxmana
-            float manaPercent = Mathf.Clamp(championStats.CurrentMana/championStats.maxMana.GetValue(), 0f, 1f);
-            // Set the fill based on players mana percent.
-            manaSlider.value = manaPercent;
+        UpdateResource(manaSlider, championStats.CurrentMana, championStats.maxMana.GetValue());
+    }
+
+    /*
+    *   UpdateResource - Updates the player bar resource with its current values.
+    *   @param slider - Slider object to update the fill for.
+    *   @param current - float of the current resource value.
+    *   @param max - float of the max resource value.
+    */
+    private void UpdateResource(Slider slider, float current, float max){
+        if(current > 0){
+            // Get the percent of the resource the player has left.
+            float percent = Mathf.Clamp(current/max, 0f, 1f);
+            slider.value = percent;
         }
     }
 
+    /*
+    *   UpdateLevelUI - Updates the players level text.
+    *   @param level - int of the level to display.
+    */
     private void UpdateLevelUI(int level){
         levelText.SetText(level.ToString());
     }
