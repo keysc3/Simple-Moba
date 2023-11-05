@@ -30,6 +30,12 @@ public class StatusEffectsUI : MonoBehaviour
         debuffsContainer = transform.Find("DebuffsContainer");
         buffDebuffUIWidth = buffsContainer.GetComponent<RectTransform>().rect.width;
         effectWidth = statusEffectPrefab.GetComponent<RectTransform>().rect.width;
+        // Add any effects to UI that were initialized before this.
+        if(statusEffects.statusEffects.Count > 0){
+            foreach(Effect effect in statusEffects.statusEffects){
+                AddStatusEffectUI(effect);
+            }
+        }
     }
 
     /*
