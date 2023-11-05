@@ -71,7 +71,7 @@ public class UpdateResourceUI : MonoBehaviour
     *   @param unitStats - Unit stats to use for updating the displayed mana values.
     */
     private void UpdateManaSliderUI(ChampionStats championStats){
-        UpdateResource(manaText, manaSlider, unitStats.CurrentMana, unitStats.maxMana.GetValue());
+        UpdateResource(manaText, manaSlider, championStats.CurrentMana, championStats.maxMana.GetValue());
     }
 
     /*

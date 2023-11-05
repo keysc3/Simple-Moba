@@ -46,7 +46,7 @@ public class UpdatePlayerBarUI : MonoBehaviour
     *   @param unitStats - Unit stats to use for updating the displayed health values.
     */
     private void UpdateHealthSliderUI(UnitStats unitStats){
-        UpdateResource(healthSlider, championStats.CurrentHealth, championStats.maxHealth.GetValue());
+        UpdateResource(healthSlider, unitStats.CurrentHealth, unitStats.maxHealth.GetValue());
     }
 
     /*
