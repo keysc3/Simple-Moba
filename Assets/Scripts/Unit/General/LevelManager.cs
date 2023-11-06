@@ -15,7 +15,6 @@ public class LevelManager
 
     private Slider xpSlider = null;
     private TMP_Text playerUILevelText = null;
-    //private TMP_Text playerBarLevelText = null;
     private Transform spellsContainer = null;
     private RectTransform statusEffectsRect = null;
     private Gradient gradient;
@@ -28,18 +27,8 @@ public class LevelManager
     public int SpellLevelPoints {
         get => spellLevelPoints;
         private set {
-            if(spellsContainer != null){
-                if(value > 0){
-                    SetSkillLevelUpActive(true);
-                    if(spellLevelPoints == 0)
-                        statusEffectsRect.anchoredPosition += new Vector2(levelInfo.xShift, levelInfo.yShift);
-                }
-                else{
-                    SetSkillLevelUpActive(false);
-                    statusEffectsRect.anchoredPosition -= new Vector2(levelInfo.xShift, levelInfo.yShift);
-                }
-            }
             spellLevelPoints = value;
+            SkillPointsCallback?.Invoke(this);
         }
     }
     private float gainAmount = 100f;
@@ -64,6 +53,9 @@ public class LevelManager
 
     public delegate void UpdateExperienceUI(float current, float required);
     public event UpdateExperienceUI UpdateExperienceCallback;
+
+    public delegate void UpdateSkillPointsUI(LevelManager levelManager);
+    public event UpdateSkillPointsUI SkillPointsCallback;
     
     /*
     *   LevelManager - Initializes a new level manager.

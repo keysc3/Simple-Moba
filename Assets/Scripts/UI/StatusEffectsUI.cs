@@ -11,14 +11,18 @@ using TMPro;
 */
 public class StatusEffectsUI : MonoBehaviour
 {
+    [SerializeField] private GameObject statusEffectPrefab;
     private StatusEffects statusEffects;
     private float buffDebuffUIWidth;
     private float xOffset = 2f;
-    [SerializeField] private GameObject statusEffectPrefab;
     private Transform buffsContainer;
     private Transform debuffsContainer;
     private float effectWidth;
     private IPlayer player;
+    private RectTransform rectTransform;
+    private float xShift = 0f;
+    private float yShift = 40f;
+    private bool isShifted = false;
     
 
     // Called when the script instance is being loaded.
@@ -35,6 +39,25 @@ public class StatusEffectsUI : MonoBehaviour
             foreach(Effect effect in statusEffects.statusEffects){
                 AddStatusEffectUI(effect);
             }
+        }
+        player.levelManager.SkillPointsCallback += ShiftStatusEffects;
+        rectTransform = GetComponent<RectTransform>();
+    }
+
+    /*
+    *   ShiftStatusEffects - Shifts the status effects rect transform when needed.
+    *   @param levelManager - LevelManager of the relative player.
+    */
+    private void ShiftStatusEffects(LevelManager levelManager){
+        if(levelManager.SpellLevelPoints > 0){
+            if(!isShifted){
+                rectTransform.anchoredPosition += new Vector2(xShift, yShift);
+                isShifted = true;
+            }
+        }
+        else{
+            rectTransform.anchoredPosition -= new Vector2(xShift, yShift);
+            isShifted = false;
         }
     }
 
