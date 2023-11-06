@@ -209,10 +209,11 @@ public class StatusEffectsUI : MonoBehaviour
         Transform UI = myEffect.parent;
         // Update every status effect UI components position after the one being removed.
         for(int i = index + 1; i < UI.childCount; i++){
+            RectTransform child = UI.GetChild(i).GetComponent<RectTransform>();
             // Store the position to move the next child to.
-            lastPos = UI.GetChild(i).GetComponent<RectTransform>().anchoredPosition;
+            lastPos = child.anchoredPosition;
             // Set the position to the previous components old position.
-            UI.GetChild(i).GetComponent<RectTransform>().anchoredPosition = newPos;
+            child.anchoredPosition = newPos;
             // Set where to move next UI component to.
             newPos = lastPos;
         }
