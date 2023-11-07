@@ -22,7 +22,7 @@ public class StatusEffectsUI : MonoBehaviour
     private RectTransform rectTransform;
     private float xShift = 0f;
     private float yShift = 40f;
-    private bool isShifted = false;
+    private bool isShifted = true;
     
 
     // Called when the script instance is being loaded.
