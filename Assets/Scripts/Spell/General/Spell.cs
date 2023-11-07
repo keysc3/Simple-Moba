@@ -41,20 +41,20 @@ public class Spell : MonoBehaviour, ISpell
     protected ChampionStats championStats;
     protected Camera mainCamera;
     protected IPlayer player;
-    protected SpellController spellController;
+    public SpellController spellController { get; private set; }
     protected Collider myCollider;
 
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
         mainCamera = Camera.main;
-        //spellController = new SpellController(this, player);
+        spellController = new SpellController(this, player);
         myCollider = GetComponent<Collider>();
     }
 
     // Start is called before the first frame update
     protected virtual void Start(){
-        spellController = new SpellController(this, player);
+        //spellController = new SpellController(this, player);
         championStats = (ChampionStats) player.unitStats;
         if(spellNum == SpellType.None)
             SpellNum = spellData.defaultSpellNum;

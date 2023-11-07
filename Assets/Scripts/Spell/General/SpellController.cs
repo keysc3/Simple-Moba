@@ -18,9 +18,9 @@ public class SpellController
     private Camera mainCamera;
     private NavMeshAgent navMeshAgent;
     private Collider collider;
-    private GameObject castBar;
-    private Slider castBarSlider;
-    private TMP_Text castBarText;
+
+    public delegate void CastBarUpdate(float timer, ISpell spell);
+    public event CastBarUpdate CastBarUpdateCallback;
 
     /*
     *   SpellController - Sets up new SpellController.
@@ -34,11 +34,6 @@ public class SpellController
         spellInput = player.GameObject.GetComponent<ISpellInput>();
         navMeshAgent = player.GameObject.GetComponent<NavMeshAgent>();
         collider = player.GameObject.GetComponent<Collider>();
-        if(player.playerUI != null){
-            castBar = player.playerUI.transform.Find("Player/CastbarContainer").gameObject;
-            castBarSlider = castBar.transform.Find("Castbar").GetComponent<Slider>();
-            castBarText = castBar.transform.Find("Spell").GetComponent<TMP_Text>();
-        }
     }
 
     /*
@@ -59,18 +54,13 @@ public class SpellController
     *   CastTime - Stops the champion for the duration of the spells cast.
     *   @param castTime - float for the duration to stop the champion for casting.
     */
-    public IEnumerator CastTime(float castTime){
+    public IEnumerator CastTime(){
         float timer = 0.0f;
         player.IsCasting = true;
         player.CurrentCastedSpell = spell;
-        if(castTime > 0 && castBar != null){
-            castBar.SetActive(true);
-            castBarText.text = spell.spellData.name;
-        }
         // While still casting spell stop the player.
-        while(timer < castTime){
-            if(castBarSlider != null)
-                castBarSlider.value = Mathf.Clamp(timer/castTime, 0f, 1f);
+        while(timer < spell.spellData.castTime){
+            CastBarUpdateCallback?.Invoke(timer, spell);
             if(!spell.CanMove){
                 if(navMeshAgent != null){
                     if(!navMeshAgent.isStopped)
@@ -80,8 +70,7 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
-        if(castTime > 0 && castBar != null)
-            castBar.SetActive(false);
+        CastBarUpdateCallback?.Invoke(timer, spell);
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
         if(navMeshAgent != null)
