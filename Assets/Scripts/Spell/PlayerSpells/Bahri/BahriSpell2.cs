@@ -138,8 +138,8 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                     }
                 }
             }
-            spellController.UpdateActiveSpellSlider(imageSlider, spellData.duration, timer);
             timer += Time.deltaTime;
+            RaiseSpellSliderUpdateEvent(SpellNum, spellData.duration, timer);
             yield return null;
         }
         // Once spell is complete, destroy the parent and start the cooldown timer.

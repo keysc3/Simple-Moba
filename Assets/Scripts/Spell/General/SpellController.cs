@@ -112,22 +112,6 @@ public class SpellController
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
 
-    /*
-    *   UpdateActiveSpellSlider - Updates a spells UI component representing an active duration.
-    *   @param imageSlider - Image component to update.
-    *   @param duration - float of the total duration.
-    *   @param active - float of the active duration.
-    */
-    public void UpdateActiveSpellSlider(Image imageSlider, float duration, float active){
-        if(imageSlider != null){
-            // Get value between 0 and 1 representing the percent of the spell duration left.
-            float fill = 1.0f - (active/duration);
-            fill = Mathf.Clamp(fill, 0f, 1f);
-            // Set the fill on the active spells slider.
-            imageSlider.fillAmount = fill;
-        }
-    }
-
     public Vector3 GetPositionOnWalkableNavMesh(Vector3 targetPosition, bool fullClear){
         // Initalize variables 
         NavMeshHit meshHit;

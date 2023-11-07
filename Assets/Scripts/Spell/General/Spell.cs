@@ -47,6 +47,9 @@ public class Spell : MonoBehaviour, ISpell
     public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
     public event SpellCDSetActive SpellCDSetActiveCallback;
 
+    public delegate void SpellSliderUpdate(SpellType spellType, float duration, float active);
+    public event SpellSliderUpdate SpellSliderUpdateCallback;
+
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
@@ -94,5 +97,14 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void RaiseSpellCDSetActiveEvent(SpellType spellType, bool isActive){
         SpellCDSetActiveCallback?.Invoke(spellType, isActive);
+    }
+
+    /*
+    *   RaiseSpellSliderUpdateEvent - Raises the spell slider update event.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param isActive - bool whether to active UI or not.
+    */
+    public void RaiseSpellSliderUpdateEvent(SpellType spellType, float duration, float active){
+        SpellSliderUpdateCallback?.Invoke(spellType, duration, active);
     }
 }

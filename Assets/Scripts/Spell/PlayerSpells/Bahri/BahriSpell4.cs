@@ -121,7 +121,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
                 Spell_4_Move();
                 Spell_4_ChargesLeft--;
             }
-            spellController.UpdateActiveSpellSlider(imageSlider, spell_4_duration, spell_4_timer);
+            RaiseSpellSliderUpdateEvent(SpellNum, spell_4_duration, spell_4_timer);
             spell_4_timer += Time.deltaTime;
             yield return null;
         }
