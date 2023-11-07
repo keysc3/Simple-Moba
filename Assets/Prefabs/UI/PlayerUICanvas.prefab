@@ -13917,6 +13917,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5343513820722759438}
   - component: {fileID: 4035603941040933970}
+  - component: {fileID: 8173703303626540148}
   m_Layer: 5
   m_Name: SpellsContainer
   m_TagString: Untagged
@@ -13961,6 +13962,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c787454ef55c424bb68810c2e7b719f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8173703303626540148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5897464557610246755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c866e59e2c577df45803d9e5cfae3517, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5915319470541595215

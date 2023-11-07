@@ -22,6 +22,9 @@ public class SpellController
     public delegate void CastBarUpdate(float timer, ISpell spell);
     public event CastBarUpdate CastBarUpdateCallback;
 
+    public delegate void SpellCDUpdate(SpellType spellType, float cooldownLeft, float spell_cd);
+    public event SpellCDUpdate SpellCDUpdateCallback;
+
     /*
     *   SpellController - Sets up new SpellController.
     *   @param spell - ISpell to use with methods.
@@ -88,13 +91,7 @@ public class SpellController
         // While spell is still on CD
         while(spell_timer < spell_cd){
             spell_timer += Time.deltaTime;
-            if(spell.spellCDTransform != null){
-                // Update the UI cooldown text and slider.
-                float cooldownLeft = spell_cd - spell_timer;
-                spell.spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
-                float fill = Mathf.Clamp(cooldownLeft/spell_cd, 0f, 1f);
-                spell.spellCDImage.fillAmount = fill;
-            }
+            SpellCDUpdateCallback?.Invoke(spell.SpellNum, spell_cd - spell_timer, spell_cd);
             yield return null;
         }
         spell.OnCd = false;
