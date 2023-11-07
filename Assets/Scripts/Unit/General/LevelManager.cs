@@ -56,6 +56,9 @@ public class LevelManager
 
     public delegate void UpdateSkillPointsUI(LevelManager levelManager);
     public event UpdateSkillPointsUI SkillPointsCallback;
+
+    public delegate void UpdateLevelUpUI(SpellType spell, int level);
+    public event UpdateLevelUpUI SpellLevelUpCallback;
     
     /*
     *   LevelManager - Initializes a new level manager.
@@ -255,11 +258,7 @@ public class LevelManager
         if(spellLevelPoints > 0){
             spellLevels[spell] = spellLevels[spell] + 1;
             SpellLevelPoints -= 1;
-            // If the spell wasn't level 1 yet then take of the spell unlearned cover.
-            if(spellLevels[spell] == 1)
-                SpellLearned(spell);
-            else
-                SpellLeveled(spell, spellLevels[spell]);
+            SpellLevelUpCallback?.Invoke(spell, spellLevels[spell]);
         }
     }
 
@@ -279,68 +278,6 @@ public class LevelManager
             respawnTime = (Level * 2.5f) + 7.5f;
         }
         return respawnTime;
-    }
-
-    /*
-    *   SetSkillLevelUpActive - Activates or deactivates spell level up buttons.
-    *   @param isActive - bool of wether or not to active the buttons.
-    */
-    public void SetSkillLevelUpActive(bool isActive){
-        // For each spell.
-        foreach(KeyValuePair<SpellType, int> spell in spellLevels){
-
-            string find = spell.Key.ToString() + "_Container";
-            GameObject spellLevelUpObj = spellsContainer.Find(find + "/LevelUp").gameObject;
-            // If the UI should be active.
-            if(isActive){
-                // If the kvp is spell 4.
-                if(spell.Key == SpellType.Spell4){
-                    int spell_4_level = spellLevels[SpellType.Spell4];
-                    // If spell 4 can be leveled.
-                    if((spell_4_level < 1 && Level > 5) || (spell_4_level < 2 && Level > 10) || (spell_4_level < 3 && Level > 15)){
-                        spellLevelUpObj.SetActive(true);
-                    }
-                    else
-                        spellLevelUpObj.SetActive(false);
-                }
-                // If a basic spell then activate its level up available UI if it isn't max spell level.
-                else{
-                    if(spell.Value < 5){
-                        spellLevelUpObj.SetActive(true);  
-                    }
-                    else{
-                        spellLevelUpObj.SetActive(false);
-                    }
-                }
-            }
-            else{
-                spellLevelUpObj.SetActive(false);  
-            }
-        }
-    }
-
-    /*
-    *   SpellLearned - Removes the spell cover the first time a spell is leveled.
-    *   @param spell - string of the spell number.
-    */
-    private void SpellLearned(SpellType spell){
-        if(spellsContainer != null){
-            Transform spellCover = spellsContainer.Find(spell + "_Container/SpellContainer/Spell/CD/Cover");
-            spellCover.gameObject.SetActive(false);
-        }
-        SpellLeveled(spell, 1);
-    }
-
-    /*
-    *   SpellLearned - Updates the UI to show a spell was leveled.
-    *   @param spell - string of the spell number.
-    *   @param spellLevel - int of the spells new level.
-    */
-    private void SpellLeveled(SpellType spell, int spellLevel){
-        if(spellsContainer != null){
-            Transform spellLevels = spellsContainer.Find(spell + "_Container/Levels");
-            spellLevels.Find("Level" + spellLevel + "/Fill").gameObject.SetActive(false);
-        }
     }
 
     /*

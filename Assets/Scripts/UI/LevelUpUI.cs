@@ -9,6 +9,7 @@ public class LevelUpUI : MonoBehaviour
     {
         IPlayer player = GetComponentInParent<IPlayer>();
         player.levelManager.SkillPointsCallback += SetSkillLevelUpActive;
+        player.levelManager.SpellLevelUpCallback += SpellLearned;
     }
 
     /*
@@ -47,4 +48,19 @@ public class LevelUpUI : MonoBehaviour
             }
         }
     }
+
+    /*
+    *   SpellLearned - Removes the spell cover the first time a spell is leveled and fills in the new level.
+    *   @param spell - SpellType being leveled.
+    *   @param level - int of the spells level.
+    */
+    private void SpellLearned(SpellType spell, int level){
+        if(level == 1){
+            Transform spellCover = transform.Find(spell + "_Container/SpellContainer/Spell/CD/Cover");
+            spellCover.gameObject.SetActive(false);
+        }
+        Transform spellLevels = transform.Find(spell + "_Container/Levels");
+        spellLevels.Find("Level" + level + "/Fill").gameObject.SetActive(false);
+    }
+
 }
