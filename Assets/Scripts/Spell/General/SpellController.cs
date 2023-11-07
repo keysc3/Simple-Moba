@@ -147,7 +147,6 @@ public class SpellController
     }
 
     public Vector3 GetPositionOnWalkableNavMesh(Vector3 targetPosition, bool fullClear){
-        Debug.DrawLine(targetPosition - (Vector3.up*2), targetPosition + (Vector3.up*10), Color.red, 30f);
         // Initalize variables 
         NavMeshHit meshHit;
         Vector3 finalPosition = player.Position;
