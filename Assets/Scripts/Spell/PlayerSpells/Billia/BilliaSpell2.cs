@@ -86,7 +86,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
-            StartCoroutine(spellController.CastTime(spellData.castTime));
+            StartCoroutine(spellController.CastTime());
             StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
