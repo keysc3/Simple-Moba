@@ -28,11 +28,12 @@ public class CastBarUI : MonoBehaviour
     private void CastBarUpdate(float timer, ISpell spell){
         if(spell.spellData.castTime > 0 && timer >= spell.spellData.castTime)
             gameObject.SetActive(false);
-        else
+        else{
             if(!gameObject.activeSelf)
                 gameObject.SetActive(true);
             if(castBarText.text != spell.spellData.name)
                 castBarText.text = spell.spellData.name;
             castBarSlider.value = Mathf.Clamp(timer/spell.spellData.castTime, 0f, 1f);
+        }
     }
 }
