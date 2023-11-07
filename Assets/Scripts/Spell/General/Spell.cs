@@ -44,6 +44,9 @@ public class Spell : MonoBehaviour, ISpell
     public SpellController spellController { get; private set; }
     protected Collider myCollider;
 
+    public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
+    public event SpellCDSetActive SpellCDSetActiveCallback;
+
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
@@ -83,4 +86,13 @@ public class Spell : MonoBehaviour, ISpell
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected virtual void DrawSpell(){}
+
+    /*
+    *   RaiseSpellCDSetActiveEvent - Raises the spell cd active event.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param isActive - bool whether to active UI or not.
+    */
+    public void RaiseSpellCDSetActiveEvent(SpellType spellType, bool isActive){
+        SpellCDSetActiveCallback?.Invoke(spellType, isActive);
+    }
 }

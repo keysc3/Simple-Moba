@@ -89,25 +89,17 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     *   @param spell - string of the spell number.
     */
     private IEnumerator NextCastCd(float spell_cd){
-        spellController.SpellCDChildrenSetActive(spellCDTransform, true);
+        RaiseSpellCDSetActiveEvent(SpellNum, true);
         float spell_timer = 0.0f;
         // While time since last cast is less than or equal to the cd between casts.
         while(spell_timer <= spell_cd){
             spell_timer += Time.deltaTime;
-            if(spellCDTransform != null){
-                // Update the UI cooldown text and slider.
-                float cooldownLeft = spell_cd - spell_timer;
-                spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
-                float fill = Mathf.Clamp(cooldownLeft/spell_cd, 0f, 1f);
-                spellCDImage.fillAmount = fill;
-            }
+            // Update the UI cooldown text and slider.
+            spellController.RaiseSpellCDUpdateEvent(SpellNum, spell_cd - spell_timer, spell_cd);
+            if(Spell_4_ChargesLeft == 0)
+                spellCDCover.gameObject.SetActive(true);
             yield return null;
         }
-        // Allow the spell to be cast again.
-        if(Spell_4_ChargesLeft == 0 && spellCDText != null)
-            spellCDText.gameObject.SetActive(false);
-        else
-            spellController.SpellCDChildrenSetActive(spellCDTransform, false);
         canRecast = true;
     }
 

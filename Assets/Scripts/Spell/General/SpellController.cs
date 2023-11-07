@@ -85,7 +85,6 @@ public class SpellController
     *   @param spell_cd - float representing the spells cooldown.
     */
     public IEnumerator Spell_Cd_Timer(float spell_cd){
-        SpellCDChildrenSetActive(spell.spellCDTransform, true);
         spell_cd = CalculateCooldown(spell_cd);
         float spell_timer = 0.0f;
         // While spell is still on CD
@@ -95,7 +94,6 @@ public class SpellController
             yield return null;
         }
         spell.OnCd = false;
-        SpellCDChildrenSetActive(spell.spellCDTransform, false);
     }
 
     /*
@@ -112,19 +110,6 @@ public class SpellController
             haste = 0f;
         float reducedCD = baseCD*(100f/(100f+player.unitStats.haste.GetValue()));
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
-    }
-
-    /*
-    *   SpellCDChildrenSetActive - Sets the children of a transform as active or inactive based on given bool.
-    *   @param parent - Transform of parent.
-    *   @param isActive - bool of wether to set children active or inactive.
-    */
-    public void SpellCDChildrenSetActive(Transform parent, bool isActive){
-        if(parent != null){
-            for(int i = 0; i < parent.childCount; i++){
-                parent.GetChild(i).gameObject.SetActive(isActive);
-            }
-        }
     }
 
     /*
@@ -186,5 +171,9 @@ public class SpellController
         }
         navMeshAgent.ResetPath();
         ((IHasTargetedCast) spell).Cast(unit);
+    }
+    
+    public void RaiseSpellCDUpdateEvent(SpellType spellType, float cooldownLeft, float spell_cd){
+        SpellCDUpdateCallback?.Invoke(spellType, cooldownLeft, spell_cd);
     }
 }

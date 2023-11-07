@@ -29,7 +29,7 @@ public class spell_controller
     }
 
     // A Test behaves as an ordinary method
-    [Test]
+    /*[Test]
     public void sets_children_gameobjects_active()
     {
         // Arrange
@@ -50,7 +50,7 @@ public class spell_controller
         // Assert
         Assert.True(child1.activeSelf && child2.activeSelf);
 
-    }
+    }*/
 
     // A Test behaves as an ordinary method
     [Test]
