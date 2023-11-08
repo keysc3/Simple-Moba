@@ -11,10 +11,6 @@ using UnityEngine.UI;
 */
 public class Spell : MonoBehaviour, ISpell
 {
-    /*public Transform spellCDTransform { get; set; }
-    public TMP_Text spellCDText { get; set; }
-    public Image spellCDImage { get; set; }*/
-
     protected bool onCd = false;
     public bool OnCd { 
         get => onCd;
@@ -27,14 +23,7 @@ public class Spell : MonoBehaviour, ISpell
     private SpellType spellNum;
     public SpellType SpellNum { 
         get => spellNum;
-        set {
-            spellNum = value;
-            if(player != null && player.playerUI != null){
-                /*spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value.ToString() + "_Container/SpellContainer/Spell/CD");
-                spellCDText = spellCDTransform.Find("Value").GetComponent<TMP_Text>();
-                spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();*/
-            }
-        }
+        set => spellNum = value;
     }
     public int SpellLevel { get => player.levelManager.spellLevels[SpellNum]-1; }
     [field: SerializeField] public SpellData spellData { get; set; }

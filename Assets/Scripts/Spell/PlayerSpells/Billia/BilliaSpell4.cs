@@ -12,7 +12,6 @@ public class BilliaSpell4 : Spell, IHasCast
 {
     new private BilliaSpell4Data spellData;
     private bool canUseSpell = false;
-    private GameObject spellCDCover;
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -20,9 +19,6 @@ public class BilliaSpell4 : Spell, IHasCast
         this.spellData = (BilliaSpell4Data) base.spellData;
         CanMove = true;
         IsQuickCast = true;
-        if(player.playerUI != null){
-            spellCDCover = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/CD/Cover").gameObject;
-        }
     }
 
     // Called after all Update functions have been called
@@ -104,13 +100,11 @@ public class BilliaSpell4 : Spell, IHasCast
             List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
             if(passiveAppliedChamps.Count > 0){
                 canUseSpell = true;
-                if(spellCDCover != null)
-                    spellCDCover.SetActive(false);
+                RaiseSetComponentActiveEvent(SpellNum, "CDCover", false);
             }
             else{
                 canUseSpell = false;
-                if(spellCDCover != null)
-                    spellCDCover.SetActive(true);
+                RaiseSetComponentActiveEvent(SpellNum, "CDCover", true);
             }
         }
     }
