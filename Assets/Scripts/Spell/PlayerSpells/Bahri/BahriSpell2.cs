@@ -83,7 +83,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     private IEnumerator Spell_2_Cast(GameObject spell_2_parent){
         float timer = 0.0f;
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        RaiseSetComponentActiveEvent(SpellNum, "DurationSlider", true);
+        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, true);
         // While spells still active.
         while(spell_2_parent && timer < spellData.duration && spell_2_parent.transform.childCount > 0){
             // Wait for 0.25s wind up on cast.
@@ -138,7 +138,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         if(spell_2_parent)
             Destroy(spell_2_parent);
         enemiesHit.Clear();
-        RaiseSetComponentActiveEvent(SpellNum, "DurationSlider", false);
+        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, false);
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 

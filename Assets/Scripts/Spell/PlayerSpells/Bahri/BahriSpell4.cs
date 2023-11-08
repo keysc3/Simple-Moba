@@ -34,7 +34,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         get => spell4Casting;
         set {
             spell4Casting = value;
-            RaiseSetComponentActiveEvent(SpellNum, "DurationSlider", value);
+            RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, value);
         }
     }
     private bool canRecast = false;
@@ -88,7 +88,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
             // Update the UI cooldown text and slider.
             spellController.RaiseSpellCDUpdateEvent(SpellNum, spell_cd - spell_timer, spell_cd);
             if(Spell_4_ChargesLeft == 0)
-                RaiseSetComponentActiveEvent(SpellNum, "CDCover", true);
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
             yield return null;
         }
         canRecast = true;
@@ -134,7 +134,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
                 spell4Effect.ResetTimer();
                 spell4Effect.EffectDuration = spell_4_duration;
                 if(canRecast)
-                    RaiseSetComponentActiveEvent(SpellNum, "CDCover", false);
+                    RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, false);
             }
         }
     }

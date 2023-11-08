@@ -100,11 +100,11 @@ public class BilliaSpell4 : Spell, IHasCast
             List<GameObject> passiveAppliedChamps = GetChampionsWithPassive();
             if(passiveAppliedChamps.Count > 0){
                 canUseSpell = true;
-                RaiseSetComponentActiveEvent(SpellNum, "CDCover", false);
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, false);
             }
             else{
                 canUseSpell = false;
-                RaiseSetComponentActiveEvent(SpellNum, "CDCover", true);
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
             }
         }
     }

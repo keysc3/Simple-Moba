@@ -39,7 +39,7 @@ public class Spell : MonoBehaviour, ISpell
     public delegate void SpellSliderUpdate(SpellType spellType, float duration, float active);
     public event SpellSliderUpdate SpellSliderUpdateCallback;
 
-    public delegate void SetComponentActive(SpellType spellType, string component, bool isActive);
+    public delegate void SetComponentActive(SpellType spellType, SpellComponent component, bool isActive);
     public event SetComponentActive SetComponentActiveCallback;
 
     // Called when the script instance is being loaded.
@@ -103,10 +103,10 @@ public class Spell : MonoBehaviour, ISpell
     /*
     *   RaiseSetComponentActiveEvent - Raises the set active event.
     *   @param spellType - SpellType for which UI element to adjust.
-    *   @param component - String of the component to set active.
+    *   @param component - SpellComponent of the component to set active.
     *   @param isActive - bool whether to active UI or not.
     */
-    public void RaiseSetComponentActiveEvent(SpellType spellType, string component, bool isActive){
+    public void RaiseSetComponentActiveEvent(SpellType spellType, SpellComponent component, bool isActive){
         SetComponentActiveCallback?.Invoke(spellType, component, isActive);
     }
 }
