@@ -18,16 +18,8 @@ public interface ISpell
     bool IsDisplayed { get; set; }
     bool IsSummonerSpell { get; set; }
     SpellType SpellNum { get; set; }
-
     SpellData spellData { get; }
-    Transform spellCDTransform { get; set; }
-    TMP_Text spellCDText { get; set; }
-    Image spellCDImage { get; set; }
     void DisplayCast();
     void HideCast();
-    //Camera MainCamera { get; set; }
-    //protected ChampionStats championStats;
-    //protected NewChampionSpells championSpells;
-    //protected Camera mainCamera;
-    //protected IPlayer player;
+
 }

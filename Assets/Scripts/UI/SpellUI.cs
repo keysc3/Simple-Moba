@@ -7,7 +7,8 @@ using System;
 
 public class SpellUI : MonoBehaviour
 {
-    private Dictionary<SpellType, Tuple<Transform, Image, Image, TMP_Text, Image>> spellComponents = new Dictionary<SpellType, Tuple<Transform, Image, Image, TMP_Text, Image>>();
+    //TODO: Better way to do this.
+    private Dictionary<SpellType, Tuple<Transform, Image, Image, TMP_Text, Image, GameObject>> spellComponents = new Dictionary<SpellType, Tuple<Transform, Image, Image, TMP_Text, Image, GameObject>>();
 
     // Start is called before the first frame update
     void Start()
@@ -20,11 +21,13 @@ public class SpellUI : MonoBehaviour
                 Image spellCover = spellCDTransform.Find("Cover").GetComponent<Image>();
                 Image spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();
                 TMP_Text spellCDText = spellCDTransform.Find("Value").GetComponent<TMP_Text>();
-                //GameObject spellDurationSlider = transform.Find(spell + "_Container/SpellContainer/Outline/Slider").gameObject;
+                GameObject durationSlider = null;
                 Image durationImage = null;
-                if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2}).Contains(spellType))
+                if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2}).Contains(spellType)){
                     durationImage = transform.Find(spell + "_Container/SpellContainer/Outline/Slider/Fill").GetComponent<Image>();
-                spellComponents.Add(spellType, new Tuple<Transform, Image, Image, TMP_Text, Image>(spellCDTransform, spellCover, spellCDImage, spellCDText, durationImage));
+                    durationSlider = transform.Find(spell + "_Container/SpellContainer/Outline/Slider").gameObject;
+                }
+                spellComponents.Add(spellType, new Tuple<Transform, Image, Image, TMP_Text, Image, GameObject>(spellCDTransform, spellCover, spellCDImage, spellCDText, durationImage, durationSlider));
             }
         }
         
@@ -34,6 +37,7 @@ public class SpellUI : MonoBehaviour
             spell.spellController.SpellCDUpdateCallback += SpellCDTimerUpdate;
             spell.SpellCDSetActiveCallback += SpellCDChildrenSetActive;
             spell.SpellSliderUpdateCallback += UpdateActiveSpellSlider;
+            spell.SetComponentActiveCallback += SetComponentActive;
         }
     }
 
@@ -44,7 +48,7 @@ public class SpellUI : MonoBehaviour
     *   @param active - float of the active duration.
     */
     public void UpdateActiveSpellSlider(SpellType spellType, float duration, float active){
-        Tuple<Transform, Image, Image, TMP_Text, Image> spellComps = spellComponents[spellType];
+        Tuple<Transform, Image, Image, TMP_Text, Image, GameObject> spellComps = spellComponents[spellType];
         // Get value between 0 and 1 representing the percent of the spell duration left.
         float fill = 1.0f - (active/duration);
         fill = Mathf.Clamp(fill, 0f, 1f);
@@ -59,7 +63,7 @@ public class SpellUI : MonoBehaviour
     *   @param spell_cd - float representing the spells cooldown.
     */
     private void SpellCDTimerUpdate(SpellType spellType, float cooldownLeft, float spell_cd){
-        Tuple<Transform, Image, Image, TMP_Text, Image> spellComps = spellComponents[spellType];
+        Tuple<Transform, Image, Image, TMP_Text, Image, GameObject> spellComps = spellComponents[spellType];
         if(!spellComps.Item4.gameObject.activeSelf && cooldownLeft > 0)
             SpellCDChildrenSetActive(spellType, true);
         else if(spellComps.Item4.gameObject.activeSelf && cooldownLeft <= 0)
@@ -75,9 +79,24 @@ public class SpellUI : MonoBehaviour
     *   @param isActive - bool of wether to set children active or inactive.
     */
     public void SpellCDChildrenSetActive(SpellType spellType, bool isActive){
-        Tuple<Transform, Image, Image, TMP_Text, Image> spellComps = spellComponents[spellType];
+        Tuple<Transform, Image, Image, TMP_Text, Image, GameObject> spellComps = spellComponents[spellType];
         foreach(Transform child in spellComps.Item1){
                 child.gameObject.SetActive(isActive);
+        }
+    }
+
+    public void SetComponentActive(SpellType spellType, string component, bool isActive){
+        Tuple<Transform, Image, Image, TMP_Text, Image, GameObject> spellComps = spellComponents[spellType];
+        switch(component){
+            case "CDTransform":
+                spellComps.Item1.gameObject.SetActive(isActive);
+                break;
+            case "CDCover":
+                spellComps.Item2.gameObject.SetActive(isActive);
+                break;
+            case "DurationSlider":
+                spellComps.Item6.SetActive(isActive);
+                break;
         }
     }
 }

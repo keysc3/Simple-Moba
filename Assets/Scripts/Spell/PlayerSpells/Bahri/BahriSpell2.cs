@@ -18,19 +18,12 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     
     new private BahriSpell2Data spellData;
     private List<IUnit> enemiesHit = new List<IUnit>();
-    private GameObject spellDurationSlider;
-    private Image imageSlider;
 
     // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell2Data) base.spellData;
         IsQuickCast = true;
-        // Get UI elements.
-        if(player.playerUI != null){
-            spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
-            imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
-        }
     }
 
     /*
@@ -90,8 +83,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     private IEnumerator Spell_2_Cast(GameObject spell_2_parent){
         float timer = 0.0f;
         LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        if(spellDurationSlider != null)
-            spellDurationSlider.SetActive(true);
+        RaiseSetComponentActiveEvent(SpellNum, "DurationSlider", true);
         // While spells still active.
         while(spell_2_parent && timer < spellData.duration && spell_2_parent.transform.childCount > 0){
             // Wait for 0.25s wind up on cast.
@@ -146,8 +138,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         if(spell_2_parent)
             Destroy(spell_2_parent);
         enemiesHit.Clear();
-        if(spellDurationSlider != null)
-            spellDurationSlider.SetActive(false);
+        RaiseSetComponentActiveEvent(SpellNum, "DurationSlider", false);
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 

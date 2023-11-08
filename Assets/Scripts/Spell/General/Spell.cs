@@ -11,9 +11,9 @@ using UnityEngine.UI;
 */
 public class Spell : MonoBehaviour, ISpell
 {
-    public Transform spellCDTransform { get; set; }
+    /*public Transform spellCDTransform { get; set; }
     public TMP_Text spellCDText { get; set; }
-    public Image spellCDImage { get; set; }
+    public Image spellCDImage { get; set; }*/
 
     protected bool onCd = false;
     public bool OnCd { 
@@ -30,9 +30,9 @@ public class Spell : MonoBehaviour, ISpell
         set {
             spellNum = value;
             if(player != null && player.playerUI != null){
-                spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value.ToString() + "_Container/SpellContainer/Spell/CD");
+                /*spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value.ToString() + "_Container/SpellContainer/Spell/CD");
                 spellCDText = spellCDTransform.Find("Value").GetComponent<TMP_Text>();
-                spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();
+                spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();*/
             }
         }
     }
@@ -49,6 +49,9 @@ public class Spell : MonoBehaviour, ISpell
 
     public delegate void SpellSliderUpdate(SpellType spellType, float duration, float active);
     public event SpellSliderUpdate SpellSliderUpdateCallback;
+
+    public delegate void SetComponentActive(SpellType spellType, string component, bool isActive);
+    public event SetComponentActive SetComponentActiveCallback;
 
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
@@ -106,5 +109,15 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void RaiseSpellSliderUpdateEvent(SpellType spellType, float duration, float active){
         SpellSliderUpdateCallback?.Invoke(spellType, duration, active);
+    }
+
+    /*
+    *   RaiseSetComponentActiveEvent - Raises the set active event.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param component - String of the component to set active.
+    *   @param isActive - bool whether to active UI or not.
+    */
+    public void RaiseSetComponentActiveEvent(SpellType spellType, string component, bool isActive){
+        SetComponentActiveCallback?.Invoke(spellType, component, isActive);
     }
 }

@@ -34,14 +34,10 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         get => spell4Casting;
         set {
             spell4Casting = value;
-            if(spellDurationSlider != null)
-                spellDurationSlider.SetActive(value);
+            RaiseSetComponentActiveEvent(SpellNum, "DurationSlider", value);
         }
     }
     private bool canRecast = false;
-    private GameObject spellDurationSlider;
-    private Image imageSlider;
-    private GameObject spellCDCover;
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -49,11 +45,6 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         this.spellData = (BahriSpell4Data) base.spellData;
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
-        if(player.playerUI != null){
-            spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
-            imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
-            spellCDCover = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/CD/Cover").gameObject;
-        }
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -97,7 +88,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
             // Update the UI cooldown text and slider.
             spellController.RaiseSpellCDUpdateEvent(SpellNum, spell_cd - spell_timer, spell_cd);
             if(Spell_4_ChargesLeft == 0)
-                spellCDCover.gameObject.SetActive(true);
+                RaiseSetComponentActiveEvent(SpellNum, "CDCover", true);
             yield return null;
         }
         canRecast = true;
@@ -143,7 +134,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
                 spell4Effect.ResetTimer();
                 spell4Effect.EffectDuration = spell_4_duration;
                 if(canRecast)
-                    spellCDCover.SetActive(false);
+                    RaiseSetComponentActiveEvent(SpellNum, "CDCover", false);
             }
         }
     }
