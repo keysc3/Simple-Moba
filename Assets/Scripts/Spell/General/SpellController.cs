@@ -88,11 +88,13 @@ public class SpellController
         spell_cd = CalculateCooldown(spell_cd);
         float spell_timer = 0.0f;
         // While spell is still on CD
-        while(spell_timer < spell_cd){
+        while(spell_timer < spell_cd && spell.OnCd){
             spell_timer += Time.deltaTime;
+            Debug.Log(spell + " ONCD");
             SpellCDUpdateCallback?.Invoke(spell.SpellNum, spell_cd - spell_timer, spell_cd);
             yield return null;
         }
+        SpellCDUpdateCallback?.Invoke(spell.SpellNum, 0f, spell_cd);
         spell.OnCd = false;
     }
 

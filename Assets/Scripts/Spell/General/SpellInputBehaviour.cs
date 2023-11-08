@@ -36,6 +36,11 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
     // Update is called once per frame
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.M)){
+            foreach(KeyValuePair<SpellType, ISpell> spell in playerSpells.spells){
+               spell.Value.OnCd = false;
+            }
+        }
         // If any input is detected.
         if(Input.anyKeyDown){
             // If the input detected is different than the last button press and not left click.
