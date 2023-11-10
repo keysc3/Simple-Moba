@@ -35,7 +35,7 @@ public class Minion : MonoBehaviour, IMinion
     private void Awake(){
         isDead = false;
         unitStats = new MinionStats((ScriptableMinion) sUnit);
-        statusEffects = new StatusEffects(null);
+        statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         levelManager = new LevelManager(this);

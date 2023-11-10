@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* Purpose: Updates the status portion of a player bar UI.
+*
+* @author: Colin Keys
+*/
 public class PlayerStatusDisplay : MonoBehaviour
 {
     private TMP_Text text;
     private Slider slider;
     
-    /*void Awake(){
-        SetupCallback();
-    }*/
-
     // Start is called before the first frame update
     void Start()
     {
@@ -22,22 +23,18 @@ public class PlayerStatusDisplay : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    /*
+    *   SetupCallback - Adds the UI updating methods to the necessary events.
+    */
     private void SetupCallback(){
         IPlayer player = GetComponentInParent<IPlayer>();
-        //player.statusEffects.OnActivated += UpdateStatus;
         player.statusEffects.OnDurationUpdate += UpdateStatus;
     }
 
-    /*private void UpdateStatus(string keyword){
-        print("CALLED: " + keyword);
-        if(keyword != "Default"){
-            text.SetText(keyword.ToUpper());
-            gameObject.SetActive(true);
-            return;
-        }
-        gameObject.SetActive(false);
-    }*/
-
+    /*
+    *   UpdateStatus - Updates the status text and slider of the player bar.
+    *   @param effect - Effect being updated and displayed.
+    */
     private void UpdateStatus(Effect effect){
         if(effect == null || effect.effectType.keyword == "Default"){
             if(gameObject.activeSelf)
@@ -49,7 +46,6 @@ public class PlayerStatusDisplay : MonoBehaviour
         if(text.text != effect.effectType.keyword.ToUpper()){
             text.SetText(effect.effectType.keyword.ToUpper());
         }
-        Debug.Log("Keyword: " + effect.effectType.keyword + " " + effect.effectTimer + " " + effect.EffectDuration);
         slider.value = 1 - (effect.effectTimer/effect.EffectDuration);
     }
 }

@@ -19,7 +19,7 @@ public class score
     public void adds_1_champion_kill_with_null_takedown_callback(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
 
         // Act
         score.ChampionKill(unit);
@@ -35,7 +35,7 @@ public class score
     public void adds_champion_kill_with_takedown_callback_that_changes_bool(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
         bool wasCalled = false;
         score.takedownCallback += (unit) => wasCalled = true;
         
@@ -53,7 +53,7 @@ public class score
     public void adds_2_champion_kills_with_takedown_callback(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
         int calls = 0;
 
         score.takedownCallback += (unit) => calls++;
@@ -73,7 +73,7 @@ public class score
     public void adds_1_assist_with_null_takedown_callback(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
 
         // Act
         score.Assist(unit);
@@ -89,7 +89,7 @@ public class score
     public void adds_assist_with_takedown_callback_that_changes_bool(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
         bool wasCalled = false;
 
         score.takedownCallback += (unit) => wasCalled = true;
@@ -109,7 +109,7 @@ public class score
         // Arrange
         IUnit unit1 = Substitute.For<IUnit>();
         IUnit unit2 = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
         
         // Act
         score.Assist(unit1);
@@ -126,7 +126,7 @@ public class score
     public void adds_1_creep_kill_with_null_takedown_callback(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
 
         // Act
         score.CreepKill(unit);
@@ -142,7 +142,7 @@ public class score
     public void adds_creep_kill_with_takedown_callback_that_changes_bool(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
         bool wasCalled = false;
 
         score.takedownCallback += (unit) => wasCalled = true;
@@ -161,7 +161,7 @@ public class score
     public void adds_2_creep_kills_with_takedown_callback(){
         // Arrange
         IUnit unit = Substitute.For<IUnit>();
-        Score score = new Score(null);
+        Score score = new Score();
         int calls = 0;
 
         score.takedownCallback += (unit) => calls++;
@@ -180,7 +180,7 @@ public class score
     [Test]
     public void adds_1_death(){
         // Arrange
-        Score score = new Score(null);
+        Score score = new Score();
 
         // Act
         score.Death();

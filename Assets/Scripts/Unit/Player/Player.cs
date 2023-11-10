@@ -48,12 +48,12 @@ public class Player : MonoBehaviour, IPlayer
     private PlayerSpells playerSpells;
     private Material alive;
     private Renderer rend;
-    private GameObject playerIconCover;
-    private TMP_Text playerRespawnTimer;
     [SerializeField] private Material dead;
     [SerializeField] private GameObject playerBarPrefab;
     [SerializeField] private GameObject playerUIPrefab;
-    [SerializeField] private GameObject statusEffectPrefab;
+
+    public delegate void UpdateRespawnTimerUI(float timer, float respawn);
+    public event UpdateRespawnTimerUI UpdateRespawnTimerCallback;
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
@@ -63,19 +63,12 @@ public class Player : MonoBehaviour, IPlayer
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
         playerUI = CreateNewPlayerUI();
         playerBar = CreateNewPlayerBar();
-        if(playerUI != null){
-            playerIconCover = playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/IconCover").gameObject;
-            playerRespawnTimer = playerIconCover.transform.Find("DeathTimer").GetComponent<TMP_Text>();
-        }
         isDead = false;
-        statusEffects = new StatusEffects(statusEffectPrefab);
+        statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
         myCollider = GetComponent<Collider>();
-        if(playerUI != null)
-            score = new Score(playerUI.transform.Find("Score/Container"));
-        else
-            score = new Score(null);
+        score = new Score();
         levelManager = new LevelManager(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerController = GetComponent<PlayerControllerBehaviour>();
@@ -164,7 +157,9 @@ public class Player : MonoBehaviour, IPlayer
     *   Death - Handles the death of a player.
     */
     private void Death(){
-        isDead = true;
+        isDead = true; 
+        if(playerBar != null)
+            playerBar.SetActive(false);
         if(statusEffects != null)
             statusEffects.ResetEffects();
         if(damageTracker != null)
@@ -221,16 +216,12 @@ public class Player : MonoBehaviour, IPlayer
     */
     private IEnumerator RespawnTimer(float respawn){
         float timer = 0.0f;
-        if(playerIconCover != null)
-            playerIconCover.SetActive(true);
         while(timer < respawn){
             timer += Time.deltaTime;
-            if(playerRespawnTimer != null)
-                playerRespawnTimer.SetText(Mathf.Ceil(respawn - timer).ToString());
+            UpdateRespawnTimerCallback?.Invoke(timer, respawn);
             yield return null;
         }
-        if(playerIconCover != null)
-            playerIconCover.SetActive(false); 
+        UpdateRespawnTimerCallback?.Invoke(timer, respawn);
         Respawn();
     }
 
@@ -243,17 +234,12 @@ public class Player : MonoBehaviour, IPlayer
         if(playerUIPrefab != null){
             newPlayerUI = (GameObject) Instantiate(playerUIPrefab, playerUIPrefab.transform.position, playerUIPrefab.transform.rotation);
             newPlayerUI.name = transform.name + "UI";
-            newPlayerUI.transform.SetParent(GameObject.Find("/Canvas").transform);
+            newPlayerUI.transform.SetParent(transform);
+            newPlayerUI = newPlayerUI.transform.GetChild(0).gameObject;
             RectTransform newPlayerUIRectTransform = newPlayerUI.GetComponent<RectTransform>();
             newPlayerUIRectTransform.offsetMin = new Vector2(0, 0);
             newPlayerUIRectTransform.offsetMax = new Vector2(0, 0);
             newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = SUnit.icon;
-            // Setup health and mana UI updates.
-            UpdateHealthUI updateHealthUI = newPlayerUI.transform.Find("Player/Combat/ResourceContainer/HealthContainer/HealthBar").GetComponent<UpdateHealthUI>();
-            updateHealthUI.player = this;
-            UpdateManaUI updateManaUI = newPlayerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar").GetComponent<UpdateManaUI>();
-            updateManaUI.player = this;
-            // Setup stats UI updates.
             UpdateAllStatsUI updateAllStatsUI = newPlayerUI.transform.Find("Player/Info/Stats/Container").GetComponent<UpdateAllStatsUI>();
             updateAllStatsUI.player = this;
         }

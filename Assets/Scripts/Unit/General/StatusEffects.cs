@@ -13,18 +13,13 @@ public class StatusEffects
     
     private int highestActiveCCValue = 0;
     private Effect mostImpairing;
-    private GameObject statusEffectPrefab;
-
-    /*public delegate void OnActivationChange(string keyword);
-    public event OnActivationChange OnActivated;*/
 
     public delegate void OnTimerTick(Effect effect);
     public event OnTimerTick OnDurationUpdate;
 
-    public StatusEffects(GameObject statusEffectPrefab){
-        this.statusEffectPrefab = statusEffectPrefab;
-    }
-
+    public delegate void OnEffectAdded(Effect effect);
+    public event OnEffectAdded EffectAdded;
+    
     /*
     *   UpdateEffects - Ticks the effects.
     *   @param delta - float of the interval since the last frame.
@@ -32,8 +27,8 @@ public class StatusEffects
     public void UpdateEffects(float delta){
         // Increment every effects timer.
         for(int i = statusEffects.Count - 1; i >= 0; i--){
-            // If there is an effect, used here incase the user dies from an effect tick that isn't the last effect.
-            if(statusEffects.Count > 0){
+            // If there is an effect or invalid index, used here incase the user dies from an effect tick that isn't the last effect.
+            if(statusEffects.Count > 0 && statusEffects.Count >= i - 1){
                 Effect effectUpdating = statusEffects[i];
                 statusEffects[i].TimerTick(delta);
                 // Check if the effect still exists in the case that the unit died from the effect.
@@ -48,21 +43,14 @@ public class StatusEffects
                             }
                         }
                         // If there are still running effects, activate the most impairing.
-                        if(statusEffects.Count > 0){
-                            SetMostImpairing(GetMostImpairing());
-                        }
-                        else{
-                            highestActiveCCValue = 0;
-                        }
+                        NewMostImpairing();
                     }
                 }
-                else{
-                    highestActiveCCValue = 0;
-                }
-                if(effectUpdating == mostImpairing)
-                    OnDurationUpdate?.Invoke(effectUpdating);
+                else
+                    NewMostImpairing();
             }
         }
+        OnDurationUpdate?.Invoke(mostImpairing);
     }
 
     /*
@@ -111,32 +99,8 @@ public class StatusEffects
             }
         }
         // Add UI element.
-        NewStatusEffectUIElement(effect.effected, effect);
-    }
-
-    /*
-    *   NewStatusEffectUIElement - Adds a new UI element if the unit is a player and not an existing stackable effect.
-    *   @param unit - IUnit the effect is on.
-    *   @param effect - Effect to be displayed on the UI.
-    */
-    private void NewStatusEffectUIElement(IUnit unit, Effect effect){
-        if(unit != null){
-            if(unit is IPlayer){
-                if(((IPlayer) unit).playerUI != null){
-                    // If a stackable effect already has 1 stack, don't create a new UI element.
-                    if(effect.effectType.isStackable)
-                        if(GetEffectsByType(effect.effectType.GetType()).Count > 1)
-                            return;
-                    //Instantiate status effect prefab.
-                    if(statusEffectPrefab != null){
-                        GameObject myEffect = (GameObject) GameObject.Instantiate(statusEffectPrefab, Vector3.zero, Quaternion.identity);
-                        StatusEffectUI statusEffectUI = myEffect.GetComponent<StatusEffectUI>();
-                        statusEffectUI.player = (IPlayer) unit;
-                        statusEffectUI.effect = effect;
-                    }
-                }
-            }
-        }
+        if(effect.effected != null && effect.effected is IPlayer)
+            EffectAdded?.Invoke(effect);
     }
 
     /*
@@ -164,6 +128,16 @@ public class StatusEffects
         for(int i = statusEffects.Count - 1; i > -1; i--){
             if(!(statusEffects[i] is PersonalSpell))
                 statusEffects.RemoveAt(i);
+        }
+        NewMostImpairing();
+    }
+
+    private void NewMostImpairing(){
+        if(statusEffects.Count > 0)
+            SetMostImpairing(GetMostImpairing());
+        else{
+            highestActiveCCValue = 0;
+            mostImpairing = null;
         }
     }
 

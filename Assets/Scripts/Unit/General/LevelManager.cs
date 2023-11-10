@@ -13,39 +13,17 @@ public class LevelManager
 {
     public Dictionary<SpellType, int> spellLevels { get; } = new Dictionary<SpellType, int>{{SpellType.Spell1, 0}, {SpellType.Spell2, 0}, {SpellType.Spell3, 0}, {SpellType.Spell4, 0}};
 
-    private Slider xpSlider = null;
-    private TMP_Text playerUILevelText = null;
-    private TMP_Text playerBarLevelText = null;
-    private Transform spellsContainer = null;
-    private RectTransform statusEffectsRect = null;
-    private Gradient gradient;
     private int level = 1;
     public int Level { 
         get => level; 
-        private set {
-            level = value;
-            if(playerUILevelText != null)
-                playerUILevelText.SetText(level.ToString());
-            if(playerBarLevelText != null)
-                playerBarLevelText.SetText(level.ToString());
-        }
+        private set => level = value;
     }
     private int spellLevelPoints = 0;
     public int SpellLevelPoints {
         get => spellLevelPoints;
         private set {
-            if(spellsContainer != null){
-                if(value > 0){
-                    SetSkillLevelUpActive(true);
-                    if(spellLevelPoints == 0)
-                        statusEffectsRect.anchoredPosition += new Vector2(levelInfo.xShift, levelInfo.yShift);
-                }
-                else{
-                    SetSkillLevelUpActive(false);
-                    statusEffectsRect.anchoredPosition -= new Vector2(levelInfo.xShift, levelInfo.yShift);
-                }
-            }
             spellLevelPoints = value;
+            SkillPointsCallback?.Invoke(this);
         }
     }
     private float gainAmount = 100f;
@@ -56,16 +34,29 @@ public class LevelManager
             currentXP = value;
             if(value >= levelInfo.requiredXP[Level])
                 LevelUp();
-            if(xpSlider != null){
-                if(Level != levelInfo.maxLevel)
-                    xpSlider.value = Mathf.Round((currentXP/levelInfo.requiredXP[Level]) * 100f);
-                else
-                    xpSlider.value = 100f;
-            }
+            if(level != levelInfo.maxLevel)
+                UpdateExperienceCallback?.Invoke(currentXP, levelInfo.requiredXP[Level]);
+            else
+                UpdateExperienceCallback?.Invoke(1f, 1f);
         }
     }
     private LevelInfo levelInfo;
     private IUnit _unit;
+
+    public delegate void UpdateLevelUI(int level);
+    public event UpdateLevelUI UpdateLevelCallback;
+
+    public delegate void UpdateExperienceUI(float current, float required);
+    public event UpdateExperienceUI UpdateExperienceCallback;
+
+    public delegate void UpdateSkillPointsUI(LevelManager levelManager);
+    public event UpdateSkillPointsUI SkillPointsCallback;
+
+    public delegate void UpdateLevelUpUI(SpellType spell, int level);
+    public event UpdateLevelUpUI SpellLevelUpCallback;
+
+    public delegate void SkillPointAvailable(float currentTime);
+    public event SkillPointAvailable SkillPointAvailableCallback;
     
     /*
     *   LevelManager - Initializes a new level manager.
@@ -73,22 +64,8 @@ public class LevelManager
     *   @param levelInfo - LevelInfo to use for leveling information/constants.
     */
     public LevelManager(IUnit unit){
-        if(unit is IPlayer){
-            IPlayer player = (IPlayer) unit;
-            if(player.playerUI != null && player.playerBar != null){
-                xpSlider = player.playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/Experience").GetComponent<Slider>();
-                playerUILevelText = player.playerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Level/Value").GetComponent<TMP_Text>();
-                spellsContainer = player.playerUI.transform.Find("Player/Combat/SpellsContainer/");
-                statusEffectsRect = player.playerUI.transform.Find("Player/StatusEffects").GetComponent<RectTransform>();
-                playerBarLevelText = player.playerBar.transform.Find("PlayerBar/Container/Level/Value").GetComponent<TMP_Text>();
-            }
-        }
-        SetUpGradient();
         levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
         _unit = unit;
-        // Set up spell levels dictionary.
-        /*for(int i = 0; i < 4; i++)
-            spellLevels.Add("Spell_" + (i+1), 0);*/
         if(unit is IPlayer)
             if(((IPlayer) unit).score != null)
                 ((IPlayer) unit).score.takedownCallback += GainXP; 
@@ -98,9 +75,6 @@ public class LevelManager
     public LevelManager(IUnit unit, int startingLevel){
         levelInfo = ScriptableObject.CreateInstance<LevelInfo>();
         _unit = unit;
-        // Set up spell levels dictionary.
-        /*for(int i = 0; i < 4; i++)
-            spellLevels.Add("Spell_" + (i+1), 0);*/
         if(unit is IPlayer)
             if(((IPlayer) unit).score != null)
                 ((IPlayer) unit).score.takedownCallback += GainXP;
@@ -158,6 +132,7 @@ public class LevelManager
         if(_unit is IPlayer)
             if(_unit.unitStats != null)
                 IncreaseChampionStats((ChampionStats) _unit.unitStats, (ScriptableChampion) _unit.SUnit);
+        UpdateLevelCallback?.Invoke(level);
     }
 
     /*
@@ -231,7 +206,7 @@ public class LevelManager
                 }
             }
             // Skill level up available animation.
-            SkillLevelUpGradient(currentTime);
+            SkillPointAvailableCallback?.Invoke(currentTime);
         }
     }
 
@@ -264,11 +239,7 @@ public class LevelManager
         if(spellLevelPoints > 0){
             spellLevels[spell] = spellLevels[spell] + 1;
             SpellLevelPoints -= 1;
-            // If the spell wasn't level 1 yet then take of the spell unlearned cover.
-            if(spellLevels[spell] == 1)
-                SpellLearned(spell);
-            else
-                SpellLeveled(spell, spellLevels[spell]);
+            SpellLevelUpCallback?.Invoke(spell, spellLevels[spell]);
         }
     }
 
@@ -288,104 +259,5 @@ public class LevelManager
             respawnTime = (Level * 2.5f) + 7.5f;
         }
         return respawnTime;
-    }
-
-    /*
-    *   SetSkillLevelUpActive - Activates or deactivates spell level up buttons.
-    *   @param isActive - bool of wether or not to active the buttons.
-    */
-    public void SetSkillLevelUpActive(bool isActive){
-        // For each spell.
-        foreach(KeyValuePair<SpellType, int> spell in spellLevels){
-
-            string find = spell.Key.ToString() + "_Container";
-            GameObject spellLevelUpObj = spellsContainer.Find(find + "/LevelUp").gameObject;
-            // If the UI should be active.
-            if(isActive){
-                // If the kvp is spell 4.
-                if(spell.Key == SpellType.Spell4){
-                    int spell_4_level = spellLevels[SpellType.Spell4];
-                    // If spell 4 can be leveled.
-                    if((spell_4_level < 1 && Level > 5) || (spell_4_level < 2 && Level > 10) || (spell_4_level < 3 && Level > 15)){
-                        spellLevelUpObj.SetActive(true);
-                    }
-                    else
-                        spellLevelUpObj.SetActive(false);
-                }
-                // If a basic spell then activate its level up available UI if it isn't max spell level.
-                else{
-                    if(spell.Value < 5){
-                        spellLevelUpObj.SetActive(true);  
-                    }
-                    else{
-                        spellLevelUpObj.SetActive(false);
-                    }
-                }
-            }
-            else{
-                spellLevelUpObj.SetActive(false);  
-            }
-        }
-    }
-
-    /*
-    *   SpellLearned - Removes the spell cover the first time a spell is leveled.
-    *   @param spell - string of the spell number.
-    */
-    private void SpellLearned(SpellType spell){
-        if(spellsContainer != null){
-            Transform spellCover = spellsContainer.Find(spell + "_Container/SpellContainer/Spell/CD/Cover");
-            spellCover.gameObject.SetActive(false);
-        }
-        SpellLeveled(spell, 1);
-    }
-
-    /*
-    *   SpellLearned - Updates the UI to show a spell was leveled.
-    *   @param spell - string of the spell number.
-    *   @param spellLevel - int of the spells new level.
-    */
-    private void SpellLeveled(SpellType spell, int spellLevel){
-        if(spellsContainer != null){
-            Transform spellLevels = spellsContainer.Find(spell + "_Container/Levels");
-            spellLevels.Find("Level" + spellLevel + "/Fill").gameObject.SetActive(false);
-        }
-    }
-
-    /*
-    *   SetUpGradient - Creates a new Gradient object to use for animating the spell level up buttons.
-    */
-    private void SetUpGradient(){
-        GradientColorKey[] colorKey;
-        GradientAlphaKey[] alphaKey;
-        Color defaultBorderColor = new Color(167f/255f, 126f/255f, 69f/255f);
-        gradient = new Gradient();
-        // Two color gradient.
-        colorKey = new GradientColorKey[2];
-        // Set colors and set their time to opposite ends.
-        colorKey[0].color = new Color(167f/255f, 126f/255f, 69f/255f);
-        colorKey[0].time = 0.0f;
-        colorKey[1].color = new Color(230f/255f, 219f/255f, 204f/255f);
-        colorKey[1].time = 1.0f;
-        // One alpha gradient.
-        alphaKey = new GradientAlphaKey[1];
-        alphaKey[0].alpha = 1.0f;
-        alphaKey[0].time = 0.0f;
-        // Set the gradient.
-        gradient.SetKeys(colorKey, alphaKey);
-    }
-
-    /*
-    *   SkillLevelUpGradient - Animates the spell level up buttons.
-    *   @param currentTime - float of the current game time.
-    */
-    public void SkillLevelUpGradient(float currentTime){
-        // For each spell.
-        for(int i = 0; i < 4; i++){
-            if(spellsContainer != null){
-                spellsContainer.Find("Spell" + (i+1) + "_Container/LevelUp/Background")
-                .gameObject.GetComponent<Image>().color = gradient.Evaluate(Mathf.PingPong(currentTime, 1));
-            }
-        }
     }
 }

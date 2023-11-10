@@ -11,46 +11,28 @@ using TMPro;
 public class ManaRegen : MonoBehaviour
 {
     private IUnit unit;
-    public IUnit Unit{
-        get => unit;
-        set {
-            unit = value;
-            if(value is IPlayer){
-                if(((IPlayer) value).playerUI != null)
-                    manaRegenText = ((IPlayer) value).playerUI.transform.Find("Player/Combat/ResourceContainer/ManaContainer/ManaBar/Regen").GetComponent<TMP_Text>();
-            }
-        }
-    }
-    private float manaToRegen;
-    public float ManaToRegen {
-        get => manaToRegen;
-        private set {
-            manaToRegen = value;
-            if(manaRegenText != null){
-                if(!unit.IsDead && championStats.CurrentMana < championStats.maxMana.GetValue())
-                    // Display HP5 per 1s on UI.
-                    manaRegenText.SetText("+" + (Mathf.Round((championStats.MP5.GetValue()/5.0f) * 100.0f) * 0.01f));
-                else
-                    manaRegenText.SetText("");
-            }
-        }
-    }
-    
-    private TMP_Text manaRegenText;
     private ChampionStats championStats;
+    private float regenAmount = 0;
+
+    public delegate void UpdateManaRegenUI(float value);
+    public event UpdateManaRegenUI UpdateManaRegenCallback;
 
     // Start is called before the first frame update.
     private void Start()
     {
-        Unit = GetComponent<IUnit>();
+        unit = GetComponent<IUnit>();
         championStats = (ChampionStats) unit.unitStats;
-        ManaToRegen = championStats.HP5.GetValue()/10.0f;
         StartCoroutine(RegenMana());
     }
 
     // Called once per frame.
     private void Update(){
-        ManaToRegen = championStats.HP5.GetValue()/10.0f;
+        // 0.5s intervals over 5s = 10 increments.
+        regenAmount = championStats.MP5.GetValue()/10.0f;
+        if(unit.IsDead || championStats.CurrentMana >= championStats.maxMana.GetValue())
+            UpdateManaRegenCallback?.Invoke(0);
+        else
+            UpdateManaRegenCallback?.Invoke(championStats.MP5.GetValue());
     }
 
     /*
@@ -58,20 +40,21 @@ public class ManaRegen : MonoBehaviour
     */
     private IEnumerator RegenMana(){
         while(gameObject){
-            if(Unit != null){
+            if(unit != null && !unit.IsDead){
                 // 0.5s intervals over 5s = 10 increments.
                 float maxMana = championStats.maxMana.GetValue();
                 float currentMana = championStats.CurrentMana;
-                // If not at max mana and not dead then regen mana.
-                if(currentMana < maxMana && !unit.IsDead){
-                    currentMana += ManaToRegen;
+                // If not at max mana then regen mana.
+                if(currentMana < maxMana){
+                    currentMana += regenAmount;
                     // If regen goes over max Mana set current mana to max.
                     if(currentMana > maxMana)
                         currentMana = maxMana;
-                    // Set mana and only regen every 0.5s.
+                    // Set mana
                     championStats.CurrentMana = currentMana;
                 }
             }
+            // Only regen every 0.5s.
             yield return new WaitForSeconds(0.5f);
         }
     }

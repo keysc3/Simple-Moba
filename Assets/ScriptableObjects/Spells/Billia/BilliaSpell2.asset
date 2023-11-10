@@ -37,7 +37,8 @@ MonoBehaviour:
   <innerRadius>k__BackingField: 0.6
   <outerRadius>k__BackingField: 2.5
   <maxMagnitude>k__BackingField: 4
-  <dashOffset>k__BackingField: 1.8
+  <minMagnitude>k__BackingField: 0.8
+  <dashOffset>k__BackingField: 1.6
   <dashTime>k__BackingField: 0.759
   <minionDamage>k__BackingField:
   - 40

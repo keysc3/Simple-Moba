@@ -73,7 +73,7 @@ public class player
         // Arrange
         IPlayer player = CreatePlayerWithUnitStats(150f);
         IPlayer damager = CreateDamager();
-        damager.score = new Score(null);
+        damager.score = new Score();
         player.unitStats.CurrentHealth = 20f;
 
         // Act
@@ -88,9 +88,9 @@ public class player
         // Arrange
         IPlayer player = CreatePlayerWithUnitStats(150f);
         IPlayer damager1 = CreateDamager();
-        damager1.score = new Score(null);
+        damager1.score = new Score();
         IPlayer damager2 = CreateDamager();
-        damager2.score = new Score(null);
+        damager2.score = new Score();
         player.damageTracker = new DamageTracker();
 
         // Act

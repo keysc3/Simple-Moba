@@ -20,6 +20,7 @@ public class regen
         unitStats.CurrentHealth = unitStats.maxHealth.GetValue();
         unit.unitStats = unitStats;
         yield return null;
+        yield return new WaitForSeconds(0.5f);
         Assert.AreEqual(100f, unit.unitStats.CurrentHealth);
     }
 
@@ -37,6 +38,7 @@ public class regen
         unitStats.CurrentHealth = 99f;
         unit.unitStats = unitStats;
         yield return null;
+        yield return new WaitForSeconds(0.5f);
         Assert.AreEqual(100f, unit.unitStats.CurrentHealth);
     }
 
@@ -55,6 +57,7 @@ public class regen
         unit.unitStats = unitStats;
         unit.IsDead = true;
         yield return null;
+        yield return new WaitForSeconds(0.5f);
         Assert.AreEqual(50f, unit.unitStats.CurrentHealth);
     }
 
@@ -72,6 +75,7 @@ public class regen
         unitStats.CurrentHealth = 50f;
         unit.unitStats = unitStats;
         yield return null;
+        yield return new WaitForSeconds(0.5f);
         Assert.AreEqual(51f, unit.unitStats.CurrentHealth);
     }
 }

@@ -25,7 +25,7 @@ public class status_effects
         Slow s1 = CreateSlowEffect("Slow1", 0);
         Slow s2 = CreateSlowEffect("Slow2", 4);
         Slow s3 = CreateSlowEffect("Slow3", 2);
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
         
         // Act
         se.AddEffect(s1);
@@ -60,7 +60,7 @@ public class status_effects
         charm.slow.slowPercent.AddRange(slowValues);
         Charm charm1 = (Charm) charm.InitializeEffect(4, unit1, unit2);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         // Act
         se.AddEffect(charm1);
@@ -112,7 +112,7 @@ public class status_effects
         dot.duration.AddRange(durationValues);
         Dot dot1 = (Dot) dot.InitializeEffect(10f, 1, unit1, unit2);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         // Act
         se.AddEffect(drowsy1);
@@ -163,7 +163,7 @@ public class status_effects
         personalSpell2.duration.AddRange(new List<float>(){-1f});
         PersonalSpell ps2 = (PersonalSpell) personalSpell2.InitializeEffect(0, unit1, unit2);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         //Act
         se.AddEffect(slow1);
@@ -208,7 +208,7 @@ public class status_effects
         personalSpell1.duration.AddRange(new List<float>(){-1f});
         myEffects.Add((PersonalSpell) personalSpell1.InitializeEffect(0, unit1, unit2));
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         myEffects.ForEach(e => se.AddEffect(e));
 
@@ -235,7 +235,7 @@ public class status_effects
         charm.slow.slowPercent.AddRange(slowValues);
         Charm charm1 = (Charm) charm.InitializeEffect(4, unit1, unit2);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         se.AddEffect(charm1);
         se.AddEffect(charm1.charmSlow);
@@ -268,7 +268,7 @@ public class status_effects
         sleep.duration.AddRange(durationValues);
         Sleep sleep1 = (Sleep) sleep.InitializeEffect(2, unit1, unit2);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         se.AddEffect(speedBonus1);
         se.AddEffect(dot1);
@@ -310,7 +310,7 @@ public class status_effects
 
         myEffects.Add(CreateSlowEffect("Slow2", 1));
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         myEffects.ForEach(e => se.AddEffect(e));
 
@@ -354,7 +354,7 @@ public class status_effects
         myEffects.Add(charm1);
         myEffects.Add(charm1.charmSlow);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         myEffects.ForEach(e => se.AddEffect(e));
 
@@ -391,7 +391,7 @@ public class status_effects
         myEffects[3].TimerTick(1.2f);
         myEffects[4].TimerTick(3.8f);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         myEffects.ForEach(e => se.AddEffect(e));
 
@@ -441,7 +441,7 @@ public class status_effects
 
         s3.TimerTick(2f);
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         se.AddEffect(dot1);
         se.AddEffect(charm1);
@@ -476,7 +476,7 @@ public class status_effects
         myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
         myEffects.Add((SpeedBonus) speedBonus.InitializeEffect(3, 1f, unit1, unit2));
 
-        StatusEffects se = new StatusEffects(null);
+        StatusEffects se = new StatusEffects();
 
         myEffects.ForEach(e => se.AddEffect(e));
 

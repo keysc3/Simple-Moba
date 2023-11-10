@@ -18,9 +18,12 @@ public class SpellController
     private Camera mainCamera;
     private NavMeshAgent navMeshAgent;
     private Collider collider;
-    private GameObject castBar;
-    private Slider castBarSlider;
-    private TMP_Text castBarText;
+
+    public delegate void CastBarUpdate(float timer, ISpell spell);
+    public event CastBarUpdate CastBarUpdateCallback;
+
+    public delegate void SpellCDUpdate(SpellType spellType, float cooldownLeft, float spell_cd);
+    public event SpellCDUpdate SpellCDUpdateCallback;
 
     /*
     *   SpellController - Sets up new SpellController.
@@ -34,11 +37,6 @@ public class SpellController
         spellInput = player.GameObject.GetComponent<ISpellInput>();
         navMeshAgent = player.GameObject.GetComponent<NavMeshAgent>();
         collider = player.GameObject.GetComponent<Collider>();
-        if(player.playerUI != null){
-            castBar = player.playerUI.transform.Find("Player/CastbarContainer").gameObject;
-            castBarSlider = castBar.transform.Find("Castbar").GetComponent<Slider>();
-            castBarText = castBar.transform.Find("Spell").GetComponent<TMP_Text>();
-        }
     }
 
     /*
@@ -59,18 +57,13 @@ public class SpellController
     *   CastTime - Stops the champion for the duration of the spells cast.
     *   @param castTime - float for the duration to stop the champion for casting.
     */
-    public IEnumerator CastTime(float castTime){
+    public IEnumerator CastTime(){
         float timer = 0.0f;
         player.IsCasting = true;
         player.CurrentCastedSpell = spell;
-        if(castTime > 0 && castBar != null){
-            castBar.SetActive(true);
-            castBarText.text = spell.spellData.name;
-        }
         // While still casting spell stop the player.
-        while(timer < castTime){
-            if(castBarSlider != null)
-                castBarSlider.value = Mathf.Clamp(timer/castTime, 0f, 1f);
+        while(timer < spell.spellData.castTime){
+            CastBarUpdateCallback?.Invoke(timer, spell);
             if(!spell.CanMove){
                 if(navMeshAgent != null){
                     if(!navMeshAgent.isStopped)
@@ -80,8 +73,7 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
-        if(castTime > 0 && castBar != null)
-            castBar.SetActive(false);
+        CastBarUpdateCallback?.Invoke(timer, spell);
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
         if(navMeshAgent != null)
@@ -93,23 +85,16 @@ public class SpellController
     *   @param spell_cd - float representing the spells cooldown.
     */
     public IEnumerator Spell_Cd_Timer(float spell_cd){
-        SpellCDChildrenSetActive(spell.spellCDTransform, true);
         spell_cd = CalculateCooldown(spell_cd);
         float spell_timer = 0.0f;
         // While spell is still on CD
-        while(spell_timer < spell_cd){
+        while(spell_timer < spell_cd && spell.OnCd){
             spell_timer += Time.deltaTime;
-            if(spell.spellCDTransform != null){
-                // Update the UI cooldown text and slider.
-                float cooldownLeft = spell_cd - spell_timer;
-                spell.spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
-                float fill = Mathf.Clamp(cooldownLeft/spell_cd, 0f, 1f);
-                spell.spellCDImage.fillAmount = fill;
-            }
+            SpellCDUpdateCallback?.Invoke(spell.SpellNum, spell_cd - spell_timer, spell_cd);
             yield return null;
         }
+        SpellCDUpdateCallback?.Invoke(spell.SpellNum, 0f, spell_cd);
         spell.OnCd = false;
-        SpellCDChildrenSetActive(spell.spellCDTransform, false);
     }
 
     /*
@@ -128,37 +113,7 @@ public class SpellController
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
 
-    /*
-    *   SpellCDChildrenSetActive - Sets the children of a transform as active or inactive based on given bool.
-    *   @param parent - Transform of parent.
-    *   @param isActive - bool of wether to set children active or inactive.
-    */
-    public void SpellCDChildrenSetActive(Transform parent, bool isActive){
-        if(parent != null){
-            for(int i = 0; i < parent.childCount; i++){
-                parent.GetChild(i).gameObject.SetActive(isActive);
-            }
-        }
-    }
-
-    /*
-    *   UpdateActiveSpellSlider - Updates a spells UI component representing an active duration.
-    *   @param imageSlider - Image component to update.
-    *   @param duration - float of the total duration.
-    *   @param active - float of the active duration.
-    */
-    public void UpdateActiveSpellSlider(Image imageSlider, float duration, float active){
-        if(imageSlider != null){
-            // Get value between 0 and 1 representing the percent of the spell duration left.
-            float fill = 1.0f - (active/duration);
-            fill = Mathf.Clamp(fill, 0f, 1f);
-            // Set the fill on the active spells slider.
-            imageSlider.fillAmount = fill;
-        }
-    }
-
     public Vector3 GetPositionOnWalkableNavMesh(Vector3 targetPosition, bool fullClear){
-        Debug.DrawLine(targetPosition - (Vector3.up*2), targetPosition + (Vector3.up*10), Color.red, 30f);
         // Initalize variables 
         NavMeshHit meshHit;
         Vector3 finalPosition = player.Position;
@@ -201,5 +156,9 @@ public class SpellController
         }
         navMeshAgent.ResetPath();
         ((IHasTargetedCast) spell).Cast(unit);
+    }
+    
+    public void RaiseSpellCDUpdateEvent(SpellType spellType, float cooldownLeft, float spell_cd){
+        SpellCDUpdateCallback?.Invoke(spellType, cooldownLeft, spell_cd);
     }
 }

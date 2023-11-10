@@ -58,7 +58,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         // If the spell is off cd, Billia is not casting, and has enough mana.
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
-            StartCoroutine(spellController.CastTime(spellData.castTime));
+            StartCoroutine(spellController.CastTime());
             StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);

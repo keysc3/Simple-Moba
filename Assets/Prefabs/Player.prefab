@@ -158,7 +158,7 @@ MonoBehaviour:
   sUnit: {fileID: 0}
   dead: {fileID: 2100000, guid: b80f342db0324f84bb33e94c08c315ba, type: 2}
   playerBarPrefab: {fileID: 1774551540932771883, guid: b35871c264e664a4391ddfcce933b2ab, type: 3}
-  playerUIPrefab: {fileID: 3928917373785366303, guid: c5d3401698d9e7940beb57b628997060, type: 3}
+  playerUIPrefab: {fileID: 2636498259493704288, guid: 0f8610d3c93310e47823385e67bb3ce3, type: 3}
   statusEffectPrefab: {fileID: 355054382995843608, guid: c2056e5ccb088694998bcab8b037ef3a, type: 3}
 --- !u!114 &6590089661217169653
 MonoBehaviour:

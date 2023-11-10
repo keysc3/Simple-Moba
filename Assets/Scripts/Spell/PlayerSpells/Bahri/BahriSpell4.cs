@@ -34,14 +34,10 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         get => spell4Casting;
         set {
             spell4Casting = value;
-            if(spellDurationSlider != null)
-                spellDurationSlider.SetActive(value);
+            RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, value);
         }
     }
     private bool canRecast = false;
-    private GameObject spellDurationSlider;
-    private Image imageSlider;
-    private GameObject spellCDCover;
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -49,11 +45,6 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         this.spellData = (BahriSpell4Data) base.spellData;
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
-        if(player.playerUI != null){
-            spellDurationSlider = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Outline/Slider").gameObject;
-            imageSlider = spellDurationSlider.transform.Find("Fill").GetComponent<Image>();
-            spellCDCover = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/CD/Cover").gameObject;
-        }
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -89,25 +80,17 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     *   @param spell - string of the spell number.
     */
     private IEnumerator NextCastCd(float spell_cd){
-        spellController.SpellCDChildrenSetActive(spellCDTransform, true);
+        RaiseSpellCDSetActiveEvent(SpellNum, true);
         float spell_timer = 0.0f;
         // While time since last cast is less than or equal to the cd between casts.
         while(spell_timer <= spell_cd){
             spell_timer += Time.deltaTime;
-            if(spellCDTransform != null){
-                // Update the UI cooldown text and slider.
-                float cooldownLeft = spell_cd - spell_timer;
-                spellCDText.SetText(Mathf.Ceil(cooldownLeft).ToString());
-                float fill = Mathf.Clamp(cooldownLeft/spell_cd, 0f, 1f);
-                spellCDImage.fillAmount = fill;
-            }
+            // Update the UI cooldown text and slider.
+            spellController.RaiseSpellCDUpdateEvent(SpellNum, spell_cd - spell_timer, spell_cd);
+            if(Spell_4_ChargesLeft == 0)
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
             yield return null;
         }
-        // Allow the spell to be cast again.
-        if(Spell_4_ChargesLeft == 0 && spellCDText != null)
-            spellCDText.gameObject.SetActive(false);
-        else
-            spellController.SpellCDChildrenSetActive(spellCDTransform, false);
         canRecast = true;
     }
 
@@ -129,7 +112,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
                 Spell_4_Move();
                 Spell_4_ChargesLeft--;
             }
-            spellController.UpdateActiveSpellSlider(imageSlider, spell_4_duration, spell_4_timer);
+            RaiseSpellSliderUpdateEvent(SpellNum, spell_4_duration, spell_4_timer);
             spell_4_timer += Time.deltaTime;
             yield return null;
         }
@@ -139,7 +122,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     }
 
     /*
-    *   Spell_4_Takedown - Grants a change and increases the spells duration if the takedown was on a champion.
+    *   Spell_4_Takedown - Grants a charge and increases the spells duration if the takedown was on a champion.
     *   @param killed - GameObject the takedown was on.
     */
     private void Spell_4_Takedown(IUnit killed){
@@ -150,7 +133,8 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
                 spell_4_duration = 10.0f;
                 spell4Effect.ResetTimer();
                 spell4Effect.EffectDuration = spell_4_duration;
-                spellCDCover.SetActive(false);
+                if(canRecast)
+                    RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, false);
             }
         }
     }

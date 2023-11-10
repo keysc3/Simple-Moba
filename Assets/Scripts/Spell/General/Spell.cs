@@ -11,10 +11,6 @@ using UnityEngine.UI;
 */
 public class Spell : MonoBehaviour, ISpell
 {
-    public Transform spellCDTransform { get; set; }
-    public TMP_Text spellCDText { get; set; }
-    public Image spellCDImage { get; set; }
-
     protected bool onCd = false;
     public bool OnCd { 
         get => onCd;
@@ -27,34 +23,36 @@ public class Spell : MonoBehaviour, ISpell
     private SpellType spellNum;
     public SpellType SpellNum { 
         get => spellNum;
-        set {
-            spellNum = value;
-            if(player != null && player.playerUI != null){
-                spellCDTransform = player.playerUI.transform.Find("Player/Combat/SpellsContainer/" + value.ToString() + "_Container/SpellContainer/Spell/CD");
-                spellCDText = spellCDTransform.Find("Value").GetComponent<TMP_Text>();
-                spellCDImage = spellCDTransform.Find("Slider").GetComponent<Image>();
-            }
-        }
+        set => spellNum = value;
     }
     public int SpellLevel { get => player.levelManager.spellLevels[SpellNum]-1; }
     [field: SerializeField] public SpellData spellData { get; set; }
     protected ChampionStats championStats;
     protected Camera mainCamera;
     protected IPlayer player;
-    protected SpellController spellController;
+    public SpellController spellController { get; private set; }
     protected Collider myCollider;
+
+    public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
+    public event SpellCDSetActive SpellCDSetActiveCallback;
+
+    public delegate void SpellSliderUpdate(SpellType spellType, float duration, float active);
+    public event SpellSliderUpdate SpellSliderUpdateCallback;
+
+    public delegate void SetComponentActive(SpellType spellType, SpellComponent component, bool isActive);
+    public event SetComponentActive SetComponentActiveCallback;
 
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
         mainCamera = Camera.main;
-        //spellController = new SpellController(this, player);
+        spellController = new SpellController(this, player);
         myCollider = GetComponent<Collider>();
     }
 
     // Start is called before the first frame update
     protected virtual void Start(){
-        spellController = new SpellController(this, player);
+        //spellController = new SpellController(this, player);
         championStats = (ChampionStats) player.unitStats;
         if(spellNum == SpellType.None)
             SpellNum = spellData.defaultSpellNum;
@@ -83,4 +81,32 @@ public class Spell : MonoBehaviour, ISpell
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected virtual void DrawSpell(){}
+
+    /*
+    *   RaiseSpellCDSetActiveEvent - Raises the spell cd active event.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param isActive - bool whether to active UI or not.
+    */
+    public void RaiseSpellCDSetActiveEvent(SpellType spellType, bool isActive){
+        SpellCDSetActiveCallback?.Invoke(spellType, isActive);
+    }
+
+    /*
+    *   RaiseSpellSliderUpdateEvent - Raises the spell slider update event.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param isActive - bool whether to active UI or not.
+    */
+    public void RaiseSpellSliderUpdateEvent(SpellType spellType, float duration, float active){
+        SpellSliderUpdateCallback?.Invoke(spellType, duration, active);
+    }
+
+    /*
+    *   RaiseSetComponentActiveEvent - Raises the set active event.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param component - SpellComponent of the component to set active.
+    *   @param isActive - bool whether to active UI or not.
+    */
+    public void RaiseSetComponentActiveEvent(SpellType spellType, SpellComponent component, bool isActive){
+        SetComponentActiveCallback?.Invoke(spellType, component, isActive);
+    }
 }

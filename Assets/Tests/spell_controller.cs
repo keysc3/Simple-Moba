@@ -29,7 +29,7 @@ public class spell_controller
     }
 
     // A Test behaves as an ordinary method
-    [Test]
+    /*[Test]
     public void sets_children_gameobjects_active()
     {
         // Arrange
@@ -50,10 +50,10 @@ public class spell_controller
         // Assert
         Assert.True(child1.activeSelf && child2.activeSelf);
 
-    }
+    }*/
 
     // A Test behaves as an ordinary method
-    [Test]
+    /*[Test]
     public void sets_image_fill_amount()
     {
         // Arrange
@@ -69,7 +69,7 @@ public class spell_controller
         // Assert
         Assert.AreEqual(0.8f, slider.fillAmount);
 
-    }
+    }*/
 
     public IPlayer CreateMockPlayer(){
         IPlayer player = Substitute.For<IPlayer>();

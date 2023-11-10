@@ -44,7 +44,7 @@ public class minion
         IMinion minion = CreateMinionWithUnitStats(50f);
         IPlayer damager = CreateDamager();
         minion.unitStats.CurrentHealth = 5f;
-        damager.score = new Score(null);
+        damager.score = new Score();
         LogAssert.Expect(LogType.Error, "Destroy may not be called from edit mode! Use DestroyImmediate instead.\nDestroying an object in edit mode destroys it permanently.");
 
         // Act
