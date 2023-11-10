@@ -21,8 +21,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         get => currentTarget; 
         set {
             currentTarget = value;
-            if(myCollider != null)
-                currentTarget.y = myCollider.bounds.center.y;
+            currentTarget.y = transform.position.y;
             transform.LookAt(currentTarget);
         }
     }
@@ -31,7 +30,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
             if(IsMoving)
                 return navMeshAgent.steeringTarget;
             else
-                return transform.position;
+                return (transform.position + transform.forward);
         }
     }
     public bool IsMoving { 
@@ -66,6 +65,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     // Update is called once per frame.
     private void Update()
     {
+        Debug.Log("FORWARD " + transform.forward);
         if(navMeshAgent.enabled){
             // Set the players destination.
             if(Input.GetMouseButtonDown(1)){
