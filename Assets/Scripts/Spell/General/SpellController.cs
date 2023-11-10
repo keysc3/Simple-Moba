@@ -113,6 +113,11 @@ public class SpellController
         return Mathf.Round(reducedCD * 1000.0f) * 0.001f;
     }
 
+    /*
+    *   GetPositionOnWalkableNavMesh - Gets a position on the walkable NavMesh given a position.
+    *   @param targetPosition - Vector3 of the position being checked.
+    *   @param fullClear - bool for whether or not the targetPosition should clear the entire un-walkable for a return value on the opposite side.
+    */
     public Vector3 GetPositionOnWalkableNavMesh(Vector3 targetPosition, bool fullClear){
         // Initalize variables 
         NavMeshHit meshHit;
