@@ -64,7 +64,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
-        BahriSpell1Trigger spell1Trigger = orb.GetComponent<BahriSpell1Trigger>();
+        BahriSpell1Trigger spell1Trigger = orb.GetComponentInChildren<BahriSpell1Trigger>();
         spell1Trigger.bahriSpell1 = this;
         spell1Trigger.unit = player; 
         // Set initial return values.
