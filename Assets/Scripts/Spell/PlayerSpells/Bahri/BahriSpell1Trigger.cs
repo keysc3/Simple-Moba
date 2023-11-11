@@ -44,6 +44,9 @@ public class BahriSpell1Trigger : MonoBehaviour
         }
     }
 
+    /*
+    *   CheckContained - Checks if the orb is contained within Bahri.
+    */
     private void CheckContained(){
         Vector3 min = orbCollider.bounds.min;
         Vector3 max = orbCollider.bounds.max;

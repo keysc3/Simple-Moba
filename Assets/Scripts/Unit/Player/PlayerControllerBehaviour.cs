@@ -65,7 +65,6 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
     // Update is called once per frame.
     private void Update()
     {
-        Debug.Log("FORWARD " + transform.forward);
         if(navMeshAgent.enabled){
             // Set the players destination.
             if(Input.GetMouseButtonDown(1)){

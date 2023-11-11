@@ -42,7 +42,6 @@ public class PlayerController
             playerMover.CurrentTarget = player.MouseOnCast;
         else{
             playerMover.CurrentTarget = playerMover.NextDestination;
-            Debug.Log("HERE " + playerMover.CurrentTarget);
         }
     }
 
