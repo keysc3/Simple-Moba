@@ -226,7 +226,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
             foreach(GameObject target in targets){
                 // Create missile and set necessary variables
                 GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
-                TargetedProjectile targetedProjectile = missile.GetComponent<TargetedProjectile>();
+                TargetedProjectile targetedProjectile = missile.GetComponentInChildren<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
                 targetedProjectile.TargetUnit = target.GetComponent<IUnit>();
                 // Use the same animation as spell two to send the missiles to their target.
