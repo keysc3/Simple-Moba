@@ -37,7 +37,7 @@ public class TargetedProjectile : MonoBehaviour
         // Call collision handler for whichever spell the GameObject was for if the target was hit.
         if(otherUnit == targetUnit){
             hit?.Invoke(otherUnit);
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 }
