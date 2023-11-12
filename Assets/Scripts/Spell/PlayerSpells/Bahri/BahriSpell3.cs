@@ -61,7 +61,7 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));  
         // Create spell 3 GameObject and set its necessary variables.
         GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
-        BahriSpell3Trigger spell3Trigger = missile.GetComponent<BahriSpell3Trigger>();
+        BahriSpell3Trigger spell3Trigger = missile.GetComponentInChildren<BahriSpell3Trigger>();
         spell3Trigger.hitMethod = this;
         spell3Trigger.caster = player;
         // While the spell object still exists.

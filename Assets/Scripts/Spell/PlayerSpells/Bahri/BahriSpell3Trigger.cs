@@ -21,7 +21,7 @@ public class BahriSpell3Trigger : MonoBehaviour
         if(other.gameObject.tag == "Enemy" &&  other.gameObject.GetComponent<IUnit>() != null &&  other.gameObject.GetComponent<IUnit>() != caster && !hit){
             hitMethod.Hit(other.gameObject.GetComponent<IUnit>());
             hit = true;
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 }
