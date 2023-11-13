@@ -187,48 +187,52 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     */
     private void Spell_4_Missiles(){
         // Set up necessary variables.
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<GameObject> targets = new List<GameObject>();
-        Collider [] hitColliders = Physics.OverlapSphere(transform.position, spellData.radius, enemyMask);
+        //LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        List<Transform> targets = new List<Transform>();
+        Collider [] hitColliders = Physics.OverlapSphere(player.hitbox.transform.position, spellData.radius);
         // If a target is in range.
         if(hitColliders.Length > 0){
             foreach(Collider collider in hitColliders){
+                IUnit enemyUnit = collider.gameObject.GetComponentInParent<IUnit>();
+                if(enemyUnit == null)
+                    continue;
                 // If the target is alive.
-                if(!collider.gameObject.GetComponent<IUnit>().IsDead && collider.gameObject != gameObject && collider.gameObject.GetComponent<IDamageable>() != null){
+                if(!enemyUnit.IsDead && collider.transform.parent != transform && collider.gameObject.GetComponentInParent<IDamageable>() != null){
+                    Transform enemyHitbox = enemyUnit.hitbox.transform.parent;
                     // If three targets have already been found.
                     if(targets.Count > 2){
                         // Set the farthest enemy as first in the targets found list.
                         int furthestEnemyIndex = 0;
-                        float furthestEnemyDist = (transform.position - targets[0].transform.position).magnitude;
+                        float furthestEnemyDist = (transform.position - targets[0].position).magnitude;
                         // Check the other two targets against the first and set the farthest target in the targets found list.
                         for(int i = 1; i < 3; i++){
-                            float distToEnemy = (transform.position - targets[i].transform.position).magnitude;
+                            float distToEnemy = (transform.position - targets[i].position).magnitude;
                             if(distToEnemy > furthestEnemyDist){
                                 furthestEnemyIndex = i;
                                 furthestEnemyDist = distToEnemy;
                             }
                         }
                         // If the farthest target in the targets found list is farther than the new target then replace it.
-                        float newEnemyDist = (transform.position - collider.gameObject.transform.position).magnitude;
+                        float newEnemyDist = (transform.position - enemyHitbox.position).magnitude;
                         if(furthestEnemyDist > newEnemyDist){
                             targets.RemoveAt(furthestEnemyIndex);
-                            targets.Add(collider.gameObject);
+                            targets.Add(enemyHitbox);
                         }
                     }
                     else{
-                        targets.Add(collider.gameObject);
+                        targets.Add(enemyHitbox);
                     }
                 }
             }
         }
         // If a target has been found start the target found animation.
         if(targets.Count > 0){
-            foreach(GameObject target in targets){
+            foreach(Transform target in targets){
                 // Create missile and set necessary variables
                 GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
                 TargetedProjectile targetedProjectile = missile.GetComponentInChildren<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
-                targetedProjectile.TargetUnit = target.GetComponent<IUnit>();
+                targetedProjectile.TargetUnit = target.GetComponentInParent<IUnit>();
                 // Use the same animation as spell two to send the missiles to their target.
                 StartCoroutine(Spell_4_Target(missile, target));
             }
@@ -237,13 +241,13 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
 
     /*
     *   Spell_4_Target - Move the object towards the enemy it has targeted.
-    *   @param missile - GameObject to move towards the target.
+    *   @param missile - Transform to move towards the target.
     *   @param target - Target GameObject to move the spell towards.
     */
-    private IEnumerator Spell_4_Target(GameObject missile, GameObject target){
+    private IEnumerator Spell_4_Target(GameObject missile, Transform target){
         // While the GameObject still exists move it towards the target.
         while(missile && target){
-            missile.transform.position = Vector3.MoveTowards(missile.transform.position, target.transform.position, spellData.missileSpeed * Time.deltaTime);
+            missile.transform.position = Vector3.MoveTowards(missile.transform.position, target.position, spellData.missileSpeed * Time.deltaTime);
             yield return null;
         }
     }
