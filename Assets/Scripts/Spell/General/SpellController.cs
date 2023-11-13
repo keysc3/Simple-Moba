@@ -17,7 +17,7 @@ public class SpellController
     private ISpellInput spellInput;
     private Camera mainCamera;
     private NavMeshAgent navMeshAgent;
-    private Collider collider;
+    //private Collider collider;
 
     public delegate void CastBarUpdate(float timer, ISpell spell);
     public event CastBarUpdate CastBarUpdateCallback;
@@ -36,7 +36,7 @@ public class SpellController
         mainCamera = Camera.main;
         spellInput = player.GameObject.GetComponent<ISpellInput>();
         navMeshAgent = player.GameObject.GetComponent<NavMeshAgent>();
-        collider = player.GameObject.GetComponent<Collider>();
+        //collider = player.GameObject.transform.Find("PlayerCollider").GetComponent<Collider>();
     }
 
     /*
@@ -49,7 +49,7 @@ public class SpellController
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
         player.MouseOnCast = targetDirection;
-        targetDirection.y = collider.bounds.center.y;
+        targetDirection.y = player.GameObject.transform.position.y;
         return targetDirection;
     }
 

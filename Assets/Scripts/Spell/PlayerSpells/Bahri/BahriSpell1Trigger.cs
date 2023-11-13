@@ -18,7 +18,7 @@ public class BahriSpell1Trigger : MonoBehaviour
     // Start is called before the first frame update.
     private void Start(){
         orbCollider = GetComponent<SphereCollider>();
-        bahriBounds = unit.GameObject.GetComponent<Collider>().bounds;
+        bahriBounds = unit.hitbox.bounds;
     }
 
     // Update is called once per frame
@@ -34,12 +34,13 @@ public class BahriSpell1Trigger : MonoBehaviour
 
     // Called once per physics update for every Collider that is touching the trigger.
     private void OnTriggerStay(Collider other){
+        IUnit hitUnit = other.gameObject.GetComponentInParent<IUnit>();
         // Call collision handler if enemy is hit.
-        if(other.gameObject.tag == "Enemy" && other.gameObject.GetComponent<IUnit>() != unit){
-            bahriSpell1.Hit(other.gameObject.GetComponent<IUnit>());
+        if(other.transform.parent.tag == "Enemy" && hitUnit != unit){
+            bahriSpell1.Hit(hitUnit);
         }
         //  Destroy GameObject if it has returned to Bahri.
-        if(other.gameObject.GetComponent<IUnit>() == unit && bahriSpell1.returning){
+        if(hitUnit == unit && bahriSpell1.returning){
             CheckContained();
         }
     }

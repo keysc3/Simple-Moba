@@ -14,11 +14,11 @@ public class MockUnit : IUnit
     public StatusEffects statusEffects { get; set; }
     public DamageTracker damageTracker { get; set; }
     public Inventory inventory { get; set; }
-    public Collider myCollider { get; set; }
     public bool IsDead { get; set; }
     public BonusDamage bonusDamage { get; set; }
     public GameObject GameObject { get; set; } = new GameObject();
     public Vector3 Position { get; set; }
+    public Collider hitbox { get; set; }
 
     public void TakeDamage(float damageAmount, DamageType damageType, IUnit damager, bool isDot){
         

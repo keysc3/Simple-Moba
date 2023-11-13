@@ -27,6 +27,7 @@ public class Minion : MonoBehaviour, IMinion
     public ScriptableUnit SUnit { get => sUnit; }
     public GameObject GameObject { get => gameObject; }
     public Vector3 Position { get => transform.position; set => transform.position = value; }
+    public Collider hitbox { get; private set; }
 
     //[SerializeField] private GameObject statusEffectPrefab;
     private NavMeshAgent navMeshAgent;
@@ -40,6 +41,7 @@ public class Minion : MonoBehaviour, IMinion
         inventory = new Inventory();
         levelManager = new LevelManager(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
+        hitbox = transform.Find("Hitbox").GetComponent<Collider>();
     }
 
     // Update is called once per frame

@@ -41,7 +41,7 @@ public class Player : MonoBehaviour, IPlayer
     public GameObject GameObject { get => gameObject; }
     public Vector3 Position { get => transform.position; set => transform.position = value; }
 
-    private Collider myCollider;
+    public Collider hitbox { get; private set; }
     private NavMeshAgent navMeshAgent;
     private PlayerControllerBehaviour playerController;
     private SpellInputBehaviour playerSpellInput;
@@ -67,7 +67,7 @@ public class Player : MonoBehaviour, IPlayer
         statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
         inventory = new Inventory();
-        myCollider = GetComponent<Collider>();
+        hitbox = transform.Find("Hitbox").GetComponent<Collider>();
         score = new Score();
         levelManager = new LevelManager(this);
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -174,8 +174,8 @@ public class Player : MonoBehaviour, IPlayer
             navMeshAgent.enabled = false;
         }
         // Disable collider and remove status effects.
-        if(myCollider != null)
-            myCollider.enabled = false;
+        if(hitbox != null)
+            hitbox.enabled = false;
         // Handle champion death clean up.
         if(playerSpells != null)
             playerSpells.OnDeathSpellCleanUp();
@@ -198,7 +198,7 @@ public class Player : MonoBehaviour, IPlayer
         // TODO: Implement respawn cleanup
         //championAbilities.OnRespawnCleanUp();
         // Enable collider.
-        myCollider.enabled = true;
+        hitbox.enabled = true;
         // Set currenthp and currentmana to max values.
         ((ChampionStats) unitStats).ResetHealth();
         ((ChampionStats) unitStats).ResetMana();
