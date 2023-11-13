@@ -92,7 +92,8 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                 foreach(Transform child in spell_2_parent.transform){
                     Transform target = null;
                     float closestDist = 0f;
-                    Collider [] hitColliders = Physics.OverlapSphere(child.GetChild(0).position, spellData.radius);
+                    Transform hitbox = child.GetChild(0);
+                    Collider [] hitColliders = Physics.OverlapSphere(hitbox.position, spellData.radius);
                     // If an enemy is in the childs proximity find the closest one.
                     if(hitColliders.Length > 0){
                         // Check each enemy hit for closest to the GameObject.
@@ -100,7 +101,6 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                             IUnit enemyUnit = enemy.gameObject.GetComponentInParent<IUnit>();
                             if(enemyUnit == null)
                                 continue;
-                            Transform hitbox = child.GetChild(0);
                             Transform enemyTransform = enemy.transform.parent;
                             // Only want to target alive units.
                             if(!enemyUnit.IsDead && enemyUnit != player){
