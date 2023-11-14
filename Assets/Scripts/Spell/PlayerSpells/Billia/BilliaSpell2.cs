@@ -167,15 +167,12 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
                 closestPoint.y = collider.transform.position.y;
                 distToHitboxCenter = (closestPoint - hitboxCenter).magnitude;
                 // Check if the unit was hit by the specified spells inner damage.
-                if(distToHitboxCenter < spellData.innerRadius){
+                if(distToHitboxCenter < spellData.innerRadius)
                     radius = "inner";
-                    Hit(enemyUnit);
-                }
                 // Unit hit by outer portion.
-                else{
+                else
                     radius = "outer";
-                    Hit(enemyUnit);
-                }
+                Hit(enemyUnit);
             }
         }
     }

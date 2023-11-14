@@ -97,15 +97,12 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
             float distToHitboxCenter = (colliderHitCenter - player.hitbox.transform.position).magnitude;
             if(distToHitboxCenter < spellData.outerRadius){
                 // Check if the unit was hit by the specified spells inner damage.
-                if(distToHitboxCenter < spellData.innerRadius){
+                if(distToHitboxCenter < spellData.innerRadius)
                     radius = "inner";
-                    Hit(enemyUnit);
-                }
                 // Unit hit by outer portion.
-                else{
+                else
                     radius = "outer";
-                    Hit(enemyUnit);
-                }
+                Hit(enemyUnit);
             }
         }
     }
