@@ -152,25 +152,29 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   @param hitboxCenter - Vector3 of the position of the center of the radius' hit box.
     */
     private void HitboxCheck(Vector3 hitboxCenter){
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(hitboxCenter, spellData.outerRadius, enemyMask));
+        hitboxCenter = new Vector3(hitboxCenter.x, player.hitbox.transform.position.y, hitboxCenter.z);
+        //LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(hitboxCenter, spellData.outerRadius));
         foreach(Collider collider in outerHit){
+            IUnit enemyUnit = collider.gameObject.GetComponentInParent<IUnit>();
+            if(enemyUnit == null || enemyUnit == player)
+                continue;
             // Check if the center of the hit collider is within the spell hitbox.
-            Vector3 colliderHitCenter = collider.bounds.center;
+            Vector3 colliderHitCenter = collider.transform.position;
             float distToHitboxCenter = (colliderHitCenter - hitboxCenter).magnitude;
             if(distToHitboxCenter < spellData.outerRadius){
                 Vector3 closestPoint = collider.ClosestPoint(hitboxCenter);
-                closestPoint.y = collider.bounds.center.y;
+                closestPoint.y = collider.transform.position.y;
                 distToHitboxCenter = (closestPoint - hitboxCenter).magnitude;
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < spellData.innerRadius){
                     radius = "inner";
-                    Hit(collider.gameObject.GetComponent<IUnit>());
+                    Hit(enemyUnit);
                 }
                 // Unit hit by outer portion.
                 else{
                     radius = "outer";
-                    Hit(collider.gameObject.GetComponent<IUnit>());
+                    Hit(enemyUnit);
                 }
             }
         }
