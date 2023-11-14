@@ -86,22 +86,25 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     *   HitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
     */
     private void HitboxCheck(){
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(transform.position, spellData.outerRadius, enemyMask));
+        //LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(player.hitbox.transform.position, spellData.outerRadius));
         foreach(Collider collider in outerHit){
+            IUnit enemyUnit = collider.gameObject.GetComponentInParent<IUnit>();
+            if(enemyUnit == null || enemyUnit == player)
+                continue;
             // Check if the center of the hit collider is within the spell hitbox.
-            Vector3 colliderHitCenter = collider.bounds.center;
-            float distToHitboxCenter = (colliderHitCenter - transform.position).magnitude;
+            Vector3 colliderHitCenter = collider.transform.position;
+            float distToHitboxCenter = (colliderHitCenter - player.hitbox.transform.position).magnitude;
             if(distToHitboxCenter < spellData.outerRadius){
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < spellData.innerRadius){
                     radius = "inner";
-                    Hit(collider.gameObject.GetComponent<IUnit>());
+                    Hit(enemyUnit);
                 }
                 // Unit hit by outer portion.
                 else{
                     radius = "outer";
-                    Hit(collider.gameObject.GetComponent<IUnit>());
+                    Hit(enemyUnit);
                 }
             }
         }
