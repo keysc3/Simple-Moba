@@ -89,9 +89,9 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         GameObject seed = (GameObject) Instantiate(spellData.visualPrefab, transform.position, Quaternion.identity);
         // Look at roll direction.
         seed.transform.LookAt(seed.transform.position + targetDirection);
-        BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponent<BilliaSpell3Trigger>();
+        BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponentInChildren<BilliaSpell3Trigger>();
         billiaSpell3Trigger.billiaSpell3 = this;
-        billiaSpell3Trigger.casted = gameObject;
+        billiaSpell3Trigger.casted = transform;
         // Set p0.
         Vector3 p0 = transform.position;
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
@@ -134,14 +134,14 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
+        SphereCollider seedCollider = seed.GetComponentInChildren<SphereCollider>();
         // Check for lob landing hits.
-        List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seed.transform.position, 
-        seed.GetComponent<SphereCollider>().radius * spellData.lobLandHitbox, ~groundMask));
+        List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seedCollider.transform.position, 
+        seedCollider.radius * spellData.lobLandHitbox, ~groundMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
-            if(lobHit[0].gameObject != gameObject){
-                Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
-                Spell_3_ConeHitbox(seed, lobHit[0].gameObject, targetDirection);
+            if(lobHit[0].transform.parent != transform){
+                Spell_3_ConeHitbox(seed.transform, lobHit[0].transform, targetDirection);
                 Destroy(seed);
             }
         }
@@ -157,25 +157,25 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
 
     /*
     *   Spell_3_ConeHitBox - Checks the seeds post collision cone hitbox for any units to apply the damage to.
-    *   @param seed - GameObject of the seed.
-    *   @param initialHit - GameObject of the first hit object.
+    *   @param seed - Transform of the seed.
+    *   @param initialHit - Transform of the first hit object.
     *   @param forwardDirection - Vector3 of the roll direction.
     */
-    public void Spell_3_ConeHitbox(GameObject seed, GameObject initialHit, Vector3 forwardDirection){
-        if(initialHit.tag == "Enemy"){
-            Hit(initialHit.GetComponent<IUnit>());
+    public void Spell_3_ConeHitbox(Transform seed, Transform initialHit, Vector3 forwardDirection){
+        if(initialHit.parent.tag == "Enemy"){
+            Hit(initialHit.GetComponentInParent<IUnit>());
         }
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
-        Collider [] seedConeHits = Physics.OverlapSphere(seed.transform.position, spellData.seedConeRadius, ~groundMask);
+        Collider [] seedConeHits = Physics.OverlapSphere(seed.position, spellData.seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            if(collider.tag == "Enemy" && collider.gameObject != initialHit){
+            if(collider.transform.parent.tag == "Enemy" && collider.transform != initialHit){
                 // Get the direction to the hit collider.
                 Vector3 colliderPos = collider.transform.position;
-                Vector3 directionToHit = (new Vector3(colliderPos.x, seed.transform.position.y, colliderPos.z) - seed.transform.position).normalized;
+                Vector3 directionToHit = (colliderPos - seed.transform.position).normalized;
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
                 if(Vector3.Angle(forwardDirection, directionToHit) < spellData.seedConeAngle/2){
-                    Hit(collider.gameObject.GetComponent<IUnit>());
+                    Hit(collider.gameObject.GetComponentInParent<IUnit>());
                 }
             }
         }
