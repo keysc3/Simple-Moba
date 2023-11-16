@@ -52,8 +52,8 @@ public class Flash : Spell, IHasCast
                 targetPosition = transform.position + (targetPosition.normalized * spellData.maxMagnitude);
             else
                 targetPosition += transform.position;
-            Move(spellController.GetPositionOnWalkableNavMesh(targetPosition, false));
             OnCd = true;
+            Move(spellController.GetPositionOnWalkableNavMesh(targetPosition, false));
         }
     }
 
