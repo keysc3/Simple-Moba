@@ -169,7 +169,7 @@ public class Player : MonoBehaviour, IPlayer
             playerController.enabled = false; 
         if(playerSpellInput != null)
             playerSpellInput.enabled = false;
-        if(navMeshAgent != null){
+        if(navMeshAgent != null && navMeshAgent.enabled){
             navMeshAgent.ResetPath();
             navMeshAgent.enabled = false;
         }

@@ -34,7 +34,9 @@ public class BasicAttackController
                 return false;
             //Vector3 myTarget = target.transform.position;
             //myTarget.y = 0.0f;
-            float distToEnemy = (player.Position - playerMover.TargetedEnemy.Position).magnitude;
+            Vector3 playerPos = player.Position;
+            playerPos.y = playerMover.TargetedEnemy.Position.y;
+            float distToEnemy = (playerPos - playerMover.TargetedEnemy.Position).magnitude;
             // If the enemy is in auto range then start autoing.
             if(distToEnemy < player.unitStats.autoRange.GetValue()){
                 if(currentTime >=  basicAttack.NextAuto && !basicAttack.WindingUp){
