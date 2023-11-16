@@ -65,7 +65,7 @@ public class SpellController
         while(timer < spell.spellData.castTime){
             CastBarUpdateCallback?.Invoke(timer, spell);
             if(!spell.CanMove){
-                if(navMeshAgent != null){
+                if(navMeshAgent != null && navMeshAgent.enabled){
                     if(!navMeshAgent.isStopped)
                         navMeshAgent.isStopped = true;
                 }
@@ -76,7 +76,7 @@ public class SpellController
         CastBarUpdateCallback?.Invoke(timer, spell);
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
-        if(navMeshAgent != null)
+        if(navMeshAgent != null && navMeshAgent.enabled)
             navMeshAgent.isStopped = false;
     }
 

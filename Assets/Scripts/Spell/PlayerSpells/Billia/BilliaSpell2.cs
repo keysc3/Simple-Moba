@@ -157,7 +157,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(hitboxCenter, spellData.outerRadius));
         foreach(Collider collider in outerHit){
             IUnit enemyUnit = collider.gameObject.GetComponentInParent<IUnit>();
-            if(enemyUnit == null || enemyUnit == player)
+            if(enemyUnit == null || enemyUnit == player || collider.transform.name != "Hitbox")
                 continue;
             // Check if the center of the hit collider is within the spell hitbox.
             Vector3 colliderHitCenter = collider.transform.position;

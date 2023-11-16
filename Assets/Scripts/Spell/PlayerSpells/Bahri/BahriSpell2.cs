@@ -98,9 +98,11 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                     if(hitColliders.Length > 0){
                         // Check each enemy hit for closest to the GameObject.
                         foreach(Collider enemy in hitColliders){
+                            Debug.Log("Collider: " + enemy.transform.name);
                             IUnit enemyUnit = enemy.gameObject.GetComponentInParent<IUnit>();
-                            if(enemyUnit == null)
+                            if(enemyUnit == null || enemy.transform.name != "Hitbox")
                                 continue;
+                            Debug.Log(enemy.transform.name + " processed.");
                             Transform enemyTransform = enemy.transform.parent;
                             // Only want to target alive units.
                             if(!enemyUnit.IsDead && enemyUnit != player){

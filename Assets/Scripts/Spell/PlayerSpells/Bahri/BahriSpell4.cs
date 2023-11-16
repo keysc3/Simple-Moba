@@ -194,7 +194,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         if(hitColliders.Length > 0){
             foreach(Collider collider in hitColliders){
                 IUnit enemyUnit = collider.gameObject.GetComponentInParent<IUnit>();
-                if(enemyUnit == null)
+                if(enemyUnit == null  || collider.transform.name != "Hitbox")
                     continue;
                 // If the target is alive.
                 if(!enemyUnit.IsDead && collider.transform.parent != transform && collider.gameObject.GetComponentInParent<IDamageable>() != null){

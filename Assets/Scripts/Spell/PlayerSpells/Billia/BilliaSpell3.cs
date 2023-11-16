@@ -163,19 +163,21 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     */
     public void Spell_3_ConeHitbox(Transform seed, Transform initialHit, Vector3 forwardDirection){
         if(initialHit.parent.tag == "Enemy"){
+            Debug.Log("SEED COLLIDER HIT");
             Hit(initialHit.GetComponentInParent<IUnit>());
         }
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         Collider [] seedConeHits = Physics.OverlapSphere(seed.position, spellData.seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            if(collider.transform.parent.tag == "Enemy" && collider.transform != initialHit){
+            if(collider.transform.parent.tag == "Enemy" && collider.transform != initialHit && collider.transform.name == "Hitbox"){
                 // Get the direction to the hit collider.
                 Vector3 colliderPos = collider.transform.position;
                 Vector3 directionToHit = (colliderPos - seed.transform.position).normalized;
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
                 if(Vector3.Angle(forwardDirection, directionToHit) < spellData.seedConeAngle/2){
                     Hit(collider.gameObject.GetComponentInParent<IUnit>());
+                    Debug.Log("SEED CONE HIT");
                 }
             }
         }
