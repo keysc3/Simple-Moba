@@ -73,7 +73,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
                 RaycastHit[] hits = GetRaycastHits(ray);
                 // If any hits get first hit.
                 if(hits.Length > 0){
-                    if(!(hits.Length == 1 && hits[0].collider.gameObject == gameObject)){
+                    if(!(hits.Length == 1 && hits[0].collider.gameObject == gameObject) && hits[0].transform.name != "Hitbox"){
                         RaycastHit firstHit = GetFirstHit(hits);
                         playerController.RightClick(firstHit.transform.GetComponent<IUnit>(), firstHit.point);
                     }

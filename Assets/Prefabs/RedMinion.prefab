@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 4067613685028727941}
   - component: {fileID: 4067613685028727943}
   - component: {fileID: 4067613685028727944}
+  - component: {fileID: -7071451212668767925}
   m_Layer: 3
   m_Name: RedMinion
   m_TagString: Enemy
@@ -197,6 +198,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sUnit: {fileID: 11400000, guid: dd3a6e08ad50efa4ab39c173cd44914f, type: 2}
+--- !u!65 &-7071451212668767925
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4067613685028727936}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4067613684609170741
 PrefabInstance:
   m_ObjectHideFlags: 0

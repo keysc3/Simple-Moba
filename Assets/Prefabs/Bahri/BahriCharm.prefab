@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4249611051691486610}
   - component: {fileID: 4249611051691486611}
   m_Layer: 0
-  m_Name: Collider
+  m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
