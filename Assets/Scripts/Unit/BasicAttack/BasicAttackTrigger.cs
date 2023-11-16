@@ -24,7 +24,7 @@ public class BasicAttackTrigger : MonoBehaviour
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
         // If the attack has hit its target call the attack function.
-        if(other == Target.hitbox && other.transform.name == "Hitbox"){
+        if(other == Target.hitbox){
             basicAttackController.AttackHit(other.GetComponentInParent<IUnit>());
             Destroy(transform.parent.gameObject);
         }
