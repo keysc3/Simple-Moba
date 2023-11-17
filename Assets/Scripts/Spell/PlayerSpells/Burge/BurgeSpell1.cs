@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEditor;
 
+/*
+* Purpose: Implements Burge's first spell. Burge vaults into the air spinning their weapon and deals damage on cast and every x seconds
+* after as she goes through the air. Burge can go over terrain and always vaults a set distance.
+*
+* @author: Colin Keys
+*/
 public class BurgeSpell1 : Spell, IHasHit, IHasCast
 {
     new private BurgeSpell1Data spellData;
@@ -99,7 +105,11 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
-    private List<float> GetHitPositions(Vector3 targetPosition){
+    /*
+    *   GetHitPositions - Gets the time to check for any spell hits.
+    *   @return List<float> - List of floats representing the time after spell cast the spell will deal damage. 
+    */
+    private List<float> GetHitPositions(){
         float timeBetweenHits = spellData.jumpTime/spellData.numberOfHits;
         List<float> hitPositions = new List<float>();
         float hitTimer = 0f;
@@ -111,7 +121,7 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     }
 
     /*
-    *   Hit - 
+    *   Hit - Deals first spells damage to the enemy hit.
     *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit unit){
