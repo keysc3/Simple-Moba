@@ -64,7 +64,7 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     }
 
     /*
-    *   Spell_4 - Handles calculating where to move Bahri when spell 4 is casted so that the GameObject always ends up on the navmesh.
+    *   Move - Handles calculating where to move Burge when spell 1 is casted.
     */
     private IEnumerator Move(Vector3 targetPosition){
         while(player.IsCasting)
