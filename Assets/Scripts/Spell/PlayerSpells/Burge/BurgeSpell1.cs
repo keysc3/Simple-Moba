@@ -43,24 +43,16 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
             OnCd = true;
         }
     }
-    //TODO: SPLIT UP
+
     /*
-    *   Spell_4 - Handles calculating where to move Bahri when spell 4 is casted so that the GameObject always ends up on the navmesh.
+    *   SetupBezierPoints - Sets up the bezier points for Burge's vault path.
+    *   @return List<Vector> - List of Vector3 representing the bezier points.
     */
-    private IEnumerator Move(Vector3 targetPosition){
-        while(player.IsCasting)
-            yield return null;
-         // Set necessary values and disable navmesh.
-        player.IsCasting = true;
-        player.CurrentCastedSpell = this;
-        float newSpeed = championStats.speed.GetValue() + spellData.jumpTime;
-        navMeshAgent.ResetPath();
-        navMeshAgent.enabled = false;
-        targetPosition = spellController.GetPositionOnWalkableNavMesh(targetPosition, true);
+    private List<Vector3> SetupBezierPoints(Vector3 targetPosition){
         Vector3 targetDirection = targetPosition - transform.position;
         // Set p0.
         Vector3 p0 = transform.position;
-        // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
+        // Set p1. X and Z of p1 are halfway between Burge and target position. Y of p1 is an offset value.
         Vector3 p1 = transform.position;
         p1.y = p1.y + p1_y_offset;
         Vector3 dir = targetDirection.normalized;
@@ -68,41 +60,61 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
         p1.x = p1.x + (dir.x * (mag/2f));
         p1.z = p1.z + (dir.z * (mag/2f));
         Vector3 p2 = targetPosition;
-        List<float> hitTimes = GetHitPositions(targetDirection);
+        return new List<Vector3>(){p0, p1, p2};
+    }
+
+    /*
+    *   Spell_4 - Handles calculating where to move Bahri when spell 4 is casted so that the GameObject always ends up on the navmesh.
+    */
+    private IEnumerator Move(Vector3 targetPosition){
+        while(player.IsCasting)
+            yield return null;
+        // Set necessary values and disable navmesh.
+        player.IsCasting = true;
+        player.CurrentCastedSpell = this;
+        navMeshAgent.ResetPath();
+        navMeshAgent.enabled = false;
+        targetPosition = spellController.GetPositionOnWalkableNavMesh(targetPosition, true);
+        List<Vector3> bezierPoints = SetupBezierPoints(targetPosition);
+        List<float> hitTimes = GetHitPositions();
         int nextHitIndex = 0;
-        Vector3 targetHitboxPosition = targetPosition;
-        targetHitboxPosition.y = player.hitbox.transform.position.y;
         // While lob time has not finished.
         float timer = 0.0f;
         while(timer < spellData.jumpTime){
             // Get t value, a value between 0 and 1.
             float t = Mathf.Clamp01(timer/spellData.jumpTime);
             // Get the next position on the Quadratic Bezier curve.
-            Vector3 point = spellController.QuadraticBezierCurvePoint(t, p0, p1, p2);
-            // Set the seeds new position.
+            Vector3 point = spellController.QuadraticBezierCurvePoint(t, bezierPoints[0], bezierPoints[1], bezierPoints[2]);
+            // Set the players new position.
             transform.position = point;
             if(nextHitIndex <= hitTimes.Count - 1 && timer >= hitTimes[nextHitIndex]){
-                Debug.Log("Hit position #" + nextHitIndex + " Hit time: " + hitTimes[nextHitIndex]);
-                List<Collider> outerHit = new List<Collider>(Physics.OverlapBox(player.hitbox.transform.position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation));
-                foreach(Collider collider in outerHit){
-                    if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
-                        IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
-                        if(hitUnit != null){
-                            Hit(hitUnit);
-                        }
-                    }
-                }
+                CheckForSpellHits();
                 nextHitIndex += 1;
             }
             timer += Time.deltaTime;
             yield return null;
         }
         // Set the final point.
-        Vector3 lastPoint = spellController.QuadraticBezierCurvePoint(1, p0, p1, p2);
+        Vector3 lastPoint = spellController.QuadraticBezierCurvePoint(1, bezierPoints[0], bezierPoints[1], bezierPoints[2]);
         transform.position = lastPoint;
         navMeshAgent.enabled = true;
         player.IsCasting = false;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+    }
+
+    /*
+    *   CheckForSpellHits - Checks if there are any hits at the current players position using the spells hitbox.
+    */
+    private void CheckForSpellHits(){
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapBox(player.hitbox.transform.position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation));
+        foreach(Collider collider in outerHit){
+            if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
+                IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
+                if(hitUnit != null){
+                    Hit(hitUnit);
+                }
+            }
+        }
     }
 
     /*
