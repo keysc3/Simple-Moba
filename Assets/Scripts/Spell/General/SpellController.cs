@@ -166,4 +166,25 @@ public class SpellController
     public void RaiseSpellCDUpdateEvent(SpellType spellType, float cooldownLeft, float spell_cd){
         SpellCDUpdateCallback?.Invoke(spellType, cooldownLeft, spell_cd);
     }
+
+    /*
+    *   QuadraticBezierCurvePoint - Calculates a point on a quadratic Bezier curve based on the t value.
+    *   It is a linear interpolation of two points obtained from linear Bezier curves from p0 to p1 and p1 to p2.
+    *   @param t - float of a time value between 0 and 1 for the progress on the curve.
+    *   @param p0 - Vector3 of the first control point (starting point).
+    *   @param p1 - Vector3 of the second control point (connecting point).
+    *   @param p2 - Vector 3 of the third control point (end point).
+    */
+    public Vector3 QuadraticBezierCurvePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2){
+        // p = ((1-t)^2 * P0) + (2(1-t)t * P1) + (t^2 * P2)
+        float coefficient = 1 - t;
+        float alpha = Mathf.Pow(coefficient, 2f);
+        float beta = 2 * coefficient * t;
+        float phi = Mathf.Pow(t, 2f);
+
+        float x = (alpha * p0.x) + (beta * p1.x) + (phi * p2.x);
+        float y = (alpha * p0.y) + (beta * p1.y) + (phi * p2.y);
+        float z = (alpha * p0.z) + (beta * p1.z) + (phi * p2.z);
+        return new Vector3(x, y, z);
+    }
 }
