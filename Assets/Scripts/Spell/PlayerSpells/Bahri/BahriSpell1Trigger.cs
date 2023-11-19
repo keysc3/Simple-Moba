@@ -10,15 +10,12 @@ using UnityEngine;
 public class BahriSpell1Trigger : MonoBehaviour
 {
     public BahriSpell1 bahriSpell1;
-
-    private Bounds bahriBounds;
     public IUnit unit;
     private SphereCollider orbCollider;
 
     // Start is called before the first frame update.
     private void Start(){
         orbCollider = GetComponent<SphereCollider>();
-        bahriBounds = unit.hitbox.bounds;
     }
 
     // Update is called once per frame
@@ -51,6 +48,7 @@ public class BahriSpell1Trigger : MonoBehaviour
     private void CheckContained(){
         Vector3 min = orbCollider.bounds.min;
         Vector3 max = orbCollider.bounds.max;
+        Bounds bahriBounds = unit.hitbox.bounds;
         if(bahriBounds.Contains(new Vector3(min.x, bahriBounds.center.y, min.z)) && bahriBounds.Contains(new Vector3(max.x, bahriBounds.center.y, max.z))){
             Destroy(transform.parent.gameObject);
         } 
