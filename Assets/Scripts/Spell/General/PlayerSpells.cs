@@ -60,6 +60,12 @@ public class PlayerSpells : MonoBehaviour
             Spell spell = (Spell) gameObject.AddComponent(newSpell);
             spell.spellData = spellData;
             SetupSpell((ISpell) spell, num);
+            CastBarUI castBarUIScript = GetComponentInChildren<CastBarUI>();
+            if(castBarUIScript != null)
+                castBarUIScript.SpellCallbacks(spell);
+                SpellUI spellUIScript = GetComponentInChildren<SpellUI>();
+            if(spellUIScript != null)
+                spellUIScript.SpellCallbacks(spell);
         }
     }
     /*

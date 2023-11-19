@@ -50,11 +50,15 @@ public class SpellUI : MonoBehaviour
        // Setup callbacks.
         Spell[] objSpells = GetComponentsInParent<Spell>();
         foreach(Spell spell in objSpells){
-            spell.spellController.SpellCDUpdateCallback += SpellCDTimerUpdate;
-            spell.SpellCDSetActiveCallback += SpellCDChildrenSetActive;
-            spell.SpellSliderUpdateCallback += UpdateActiveSpellSlider;
-            spell.SetComponentActiveCallback += SetComponentActive;
+            SpellCallbacks(spell);
         } 
+    }
+
+    public void SpellCallbacks(Spell spell){
+        spell.spellController.SpellCDUpdateCallback += SpellCDTimerUpdate;
+        spell.SpellCDSetActiveCallback += SpellCDChildrenSetActive;
+        spell.SpellSliderUpdateCallback += UpdateActiveSpellSlider;
+        spell.SetComponentActiveCallback += SetComponentActive;
     }
 
     /*
