@@ -11,7 +11,9 @@ public class BahriSpell1Trigger : MonoBehaviour
 {
     public BahriSpell1 bahriSpell1;
     public IUnit unit;
+    private Bounds bahriBounds;
     private SphereCollider orbCollider;
+    private bool deathBoundsSet = false;
 
     // Start is called before the first frame update.
     private void Start(){
@@ -21,7 +23,17 @@ public class BahriSpell1Trigger : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(unit.IsDead){
+        // Store current bounds. If unit died set bounds once.
+        if(!unit.IsDead){
+            bahriBounds = unit.hitbox.bounds;
+        }
+        else{
+            if(!deathBoundsSet){
+                unit.hitbox.enabled = true;
+                bahriBounds = unit.hitbox.bounds;
+                unit.hitbox.enabled = false;
+                deathBoundsSet = true;
+            }
             // If bahri is dead destroy the orb when it has returned to Bahri.
             if(bahriSpell1.returning){
                 CheckContained();
@@ -48,7 +60,6 @@ public class BahriSpell1Trigger : MonoBehaviour
     private void CheckContained(){
         Vector3 min = orbCollider.bounds.min;
         Vector3 max = orbCollider.bounds.max;
-        Bounds bahriBounds = unit.hitbox.bounds;
         if(bahriBounds.Contains(new Vector3(min.x, bahriBounds.center.y, min.z)) && bahriBounds.Contains(new Vector3(max.x, bahriBounds.center.y, max.z))){
             Destroy(transform.parent.gameObject);
         } 
