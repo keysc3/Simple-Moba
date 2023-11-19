@@ -27,7 +27,7 @@ public class TargetedProjectile : MonoBehaviour
     {
         // Destroy GameObject if target dies.
         if((targetUnit == null || targetUnit.IsDead) && targetSet == true){
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 
