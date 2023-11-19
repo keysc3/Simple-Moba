@@ -38,6 +38,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
         // Use mana.
         championStats.UseMana(spellData.baseMana[SpellLevel]);
         OnCd = true;
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
     /*
@@ -66,7 +67,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
         // Last hit
         spellTransform.localScale = Vector3.Lerp(startingSize, endSize, 1);
         CheckForSpellHits(spellTransform);
-        //TODO: knock up.
+        //TODO: knock up and double damage last hit
         Destroy(spellTransform.gameObject);
     }
 
