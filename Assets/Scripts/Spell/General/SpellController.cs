@@ -144,11 +144,22 @@ public class SpellController
         return finalPosition;
     }
 
+    /*
+    *   CheckInRange - Checks if the player is in range of a given unit.
+    *   @param unit - IUnit to check if in range of.
+    *   @param maxMagnitude - float of the max range to check for.
+    *   @return - bool of wether or not the unit is in range.
+    */
     public bool CheckInRange(IUnit unit, float maxMagnitude){
         float distToTarget = (player.Position - unit.Position).magnitude;
         return distToTarget <= maxMagnitude;
     }
 
+    /*
+    *   MoveTowardsSpellTarget - Moves the player in range of a given unit.
+    *   @param unit - IUnit to move in range of.
+    *   @param maxMagnitude - float of the max range to check to.
+    */
     public IEnumerator MoveTowardsSpellTarget(IUnit unit, float maxMagnitude){
         while(!CheckInRange(unit, maxMagnitude)){
             if(spellInput.LastSpellPressed != spell && spellInput.LastSpellPressed == null){
@@ -163,6 +174,12 @@ public class SpellController
         ((IHasTargetedCast) spell).Cast(unit);
     }
     
+    /*
+    *   RaiseSpellCDUpdateEvent - Raises a spell cd update event.
+    *   @param spellType - SpellType of the spell raising the event.
+    *   @param cooldownLeft - float of the spells cooldown left.
+    *   @param spell_cd - float of the spells total cooldown.
+    */
     public void RaiseSpellCDUpdateEvent(SpellType spellType, float cooldownLeft, float spell_cd){
         SpellCDUpdateCallback?.Invoke(spellType, cooldownLeft, spell_cd);
     }
