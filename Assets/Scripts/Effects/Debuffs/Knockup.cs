@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+* Purpose: Implements a knockup effect where the player becomes airborne for a duration and loses controls.
+*
+* @author: Colin Keys
+*/
 public class Knockup : Effect
 {
     private NavMeshAgent effectedNavMeshAgent;
     private float initialHeight;
     private float maxHeight;
+
     /*
     *   Knockup - Initialize a new knockup effect.
     *   @param knockupEffect - ScriptableKnockup of the knockup effect to apply.
@@ -26,7 +32,7 @@ public class Knockup : Effect
     */
     public override void StartEffect(){
         if(effected != null){
-            // If the knockuped unit ia a champion disable their controls.
+            // If the knocked up unit ia a champion disable their controls.
             if(effected is IPlayer){
                 effected.GameObject.GetComponent<PlayerControllerBehaviour>().enabled = false;
                 effected.GameObject.GetComponent<SpellInputBehaviour>().enabled = false;
@@ -57,7 +63,7 @@ public class Knockup : Effect
     }
 
     /*
-    *   EffectTick - Tick for the charms effect.
+    *   EffectTick - Tick for the knockups effect.
     */
     public override void EffectTick(){
         Vector3 position = effected.Position;
