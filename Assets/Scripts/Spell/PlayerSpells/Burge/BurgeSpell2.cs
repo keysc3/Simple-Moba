@@ -57,7 +57,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
         while(timer < spellData.duration){
             if(timer > nextTick){
                 // Check for hit
-                CheckForSpellHits(spellTransform);
+                CheckForSpellHits(spellTransform, false);
                 nextTick += timeBetweenTicks;
             }
             spellTransform.localScale = Vector3.Lerp(startingSize, endSize, timer/spellData.duration);
@@ -66,15 +66,14 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
         }
         // Last hit
         spellTransform.localScale = Vector3.Lerp(startingSize, endSize, 1);
-        CheckForSpellHits(spellTransform);
-        //TODO: knock up and double damage last hit
+        CheckForSpellHits(spellTransform, true);
         Destroy(spellTransform.gameObject);
     }
 
     /*
     *   CheckForSpellHits - Checks if there are any hits at the current players position using the spells hitbox.
     */
-    private void CheckForSpellHits(Transform spellTransform){
+    private void CheckForSpellHits(Transform spellTransform, bool lastHit){
         Vector3 overlapCheck = spellTransform.position;
         overlapCheck.y = player.hitbox.transform.position.y;
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(overlapCheck, spellTransform.localScale.x/2f));
@@ -83,6 +82,11 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
                 IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
                 if(hitUnit != null){
                     Hit(hitUnit);
+                    if(lastHit){
+                        Hit(hitUnit);
+                        if(!hitUnit.IsDead)
+                            hitUnit.statusEffects.AddEffect(spellData.knockup.InitializeEffect(SpellLevel, player, hitUnit));
+                    }
                 }
             }
         }
