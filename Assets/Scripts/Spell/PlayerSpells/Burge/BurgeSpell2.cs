@@ -4,7 +4,7 @@ using UnityEngine;
 
 /*
 * Purpose: Implements Burge's second spell. Burge throws a spinning dagger at the target location that grows in size over the spells duration.
-* The spell deals damage to any Unit touching the dagger every x seconds then explodes, units hit by the explosion take double damage and are knocked up.
+* The spell deals damage to any Unit touching the dagger every x seconds then explodes, units hit by the explosion take damage and are knocked up.
 *
 * @author: Colin Keys
 */
@@ -48,32 +48,28 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     public IEnumerator Spell_2_Cast(Vector3 targetPosition){
         while(player.IsCasting)
             yield return null;
+        Dictionary<IUnit, float> lastHits = new Dictionary<IUnit, float>();
         Transform spellTransform = ((GameObject) Instantiate(spellData.prefab, targetPosition, Quaternion.identity)).transform;
         Vector3 endSize = spellTransform.localScale * spellData.sizeMultiplier;
         Vector3 startingSize = spellTransform.localScale;
-        float nextTick = 0.0f;
         float timer = 0.0f;
-        float timeBetweenTicks = spellData.duration/(spellData.numberOfHits - 1);
         while(timer < spellData.duration){
-            if(timer > nextTick){
-                // Check for hit
-                CheckForSpellHits(spellTransform, false);
-                nextTick += timeBetweenTicks;
-            }
+            // Check for hit
+            lastHits = CheckForSpellHits(spellTransform, false, lastHits);
             spellTransform.localScale = Vector3.Lerp(startingSize, endSize, timer/spellData.duration);
             timer += Time.deltaTime;
             yield return null;
         }
         // Last hit
         spellTransform.localScale = Vector3.Lerp(startingSize, endSize, 1);
-        CheckForSpellHits(spellTransform, true);
+        CheckForSpellHits(spellTransform, true, lastHits);
         Destroy(spellTransform.gameObject);
     }
 
     /*
-    *   CheckForSpellHits - Checks if there are any hits at the current players position using the spells hitbox.
+    *   CheckForSpellHits - Checks if there are any hits using the spells hitbox.
     */
-    private void CheckForSpellHits(Transform spellTransform, bool lastHit){
+    private Dictionary<IUnit, float> CheckForSpellHits(Transform spellTransform, bool spellFinished, Dictionary<IUnit, float> lastHits){
         Vector3 overlapCheck = spellTransform.position;
         overlapCheck.y = player.hitbox.transform.position.y;
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(overlapCheck, spellTransform.localScale.x/2f));
@@ -81,15 +77,31 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
                 IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
                 if(hitUnit != null){
-                    Hit(hitUnit);
-                    if(lastHit){
-                        Hit(hitUnit);
-                        if(!hitUnit.IsDead)
+                    float lastHitTime;
+                    if(!spellFinished){
+                        // If unit has been hit once already and its not last hit, check if time for another hit, otherwise hit and add to dictionary.
+                        if(lastHits.TryGetValue(hitUnit, out lastHitTime)){
+                            if(Time.time >= (lastHitTime + spellData.timeBetweenTicks)){
+                                Hit(hitUnit);
+                                lastHits[hitUnit] = Time.time;
+                            }
+                        }
+                        else{
+                            lastHits.Add(hitUnit, Time.time);
+                            Hit(hitUnit);
+                        }
+                    }
+                    else{
+                        if(!hitUnit.IsDead){
+                            Hit(hitUnit);
+                            Hit(hitUnit);
                             hitUnit.statusEffects.AddEffect(spellData.knockup.InitializeEffect(SpellLevel, player, hitUnit));
+                        }
                     }
                 }
             }
         }
+        return lastHits;
     }
 
     /*

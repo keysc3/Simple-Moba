@@ -14,6 +14,6 @@ public class BurgeSpell2Data : SpellData
     [field: SerializeField] public float sizeMultiplier { get; private set; }
     [field: SerializeField] public GameObject prefab { get; private set; }
     [field: SerializeField] public float magnitude { get; private set; }
-    [field: SerializeField] public int numberOfHits { get; private set; }
+    [field: SerializeField] public float timeBetweenTicks { get; private set; }
     [field: SerializeField] public ScriptableKnockup knockup { get; private set; }
 }

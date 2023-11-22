@@ -37,5 +37,5 @@ MonoBehaviour:
   <sizeMultiplier>k__BackingField: 2
   <prefab>k__BackingField: {fileID: 4965935970901747691, guid: ec75181032343924a89a22503b0a9b14, type: 3}
   <magnitude>k__BackingField: 4
-  <numberOfHits>k__BackingField: 7
+  <timeBetweenTicks>k__BackingField: 0.5
   <knockup>k__BackingField: {fileID: 11400000, guid: feefd50284ae2be4fa89fa23e1a14ca9, type: 2}
