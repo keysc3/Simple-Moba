@@ -99,36 +99,4 @@ public class PlayerSpells : MonoBehaviour
             }
         }
     }
-
-    /*
-    *   SetupSpellButtons - Setup for the a spells button click and level up button click.
-    *   @param newSpell - Spell to set the buttons for.
-    */
-    /*private void SetupSpellButtons(ISpell newSpell){
-        if(spellsContainer != null){
-            SpellType num;
-            //Spell button
-            if(newSpell.SpellNum == SpellType.None)
-                num = newSpell.spellData.defaultSpellNum;
-            else
-                num = newSpell.SpellNum;
-            SpellButton spellButton = spellsContainer.Find(num.ToString() + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
-            spellButton.spell = newSpell;
-            //TODO: Change this to not be hardcoded using a proper keybind/input system?
-            List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.D, KeyCode.F};
-            if(num != SpellType.Passive)
-                spellButton.keyCode = inputs[((int) num) - 1];
-            else
-                spellButton.keyCode = inputs[0];
-            spellButton.SpellInput = gameObject.GetComponent<ISpellInput>();
-            // Spell level up button.
-            spellsContainer.Find(num + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
-            if(num != SpellType.Passive && !newSpell.IsSummonerSpell){
-                SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(num + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
-                spellLevelUpButton.spell = num;
-                spellLevelUpButton.LevelManager = player.levelManager;
-                spellLevelUpButton.SpellInput = gameObject.GetComponent<ISpellInput>();
-            }
-        }
-    }*/
 }
