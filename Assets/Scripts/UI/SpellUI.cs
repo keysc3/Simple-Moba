@@ -8,13 +8,17 @@ using System;
 public class SpellUI : MonoBehaviour
 {
     private Dictionary<SpellType, Hashtable> spellComps = new Dictionary<SpellType, Hashtable>();
-
+    private bool prevEnabled = false;
+    
     // Called when the object becomes enabled and active.
     void OnEnable(){
-        PlayerSpells playerSpells = GetComponentInParent<PlayerSpells>();
-        if(playerSpells != null)
-            playerSpells.SpellAddedCallback += SetupSpellButtons;
-        GetSpellUIObjects();   
+        if(!prevEnabled){
+            PlayerSpells playerSpells = GetComponentInParent<PlayerSpells>();
+            if(playerSpells != null)
+                playerSpells.SpellAddedCallback += SetupSpellButtons;
+            GetSpellUIObjects();
+            prevEnabled = true;
+        }
     }
 
     // Start is called before the first frame update

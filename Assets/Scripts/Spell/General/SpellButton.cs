@@ -29,26 +29,32 @@ public class SpellButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     *   OnPointerEnter - Called when the cursor enters the rect area of this button.
     */
     public void OnPointerEnter(PointerEventData eventData){
-        if(DrawGizmos.instance.drawMethod == null)
-            spell.DisplayCast();
+        if(spell != null){
+            if(DrawGizmos.instance.drawMethod == null)
+                spell.DisplayCast();
+        }
     }
 
     /*
     *   OnPointerExit - Called when the cursor exits the rect area of this button.
     */
     public void OnPointerExit(PointerEventData eventData){
-        if(spellInput.LastSpellPressed != spell && spell.IsDisplayed)
-            spell.HideCast();
+        if(spellInput != null && spell != null){
+            if(spellInput.LastSpellPressed != spell && spell.IsDisplayed)
+                spell.HideCast();
+        }
     }
 
     /*
     *   OnPointerDown - Called when the mouse is clicked over the button.
     */
     public void OnPointerDown(PointerEventData eventData){
-        if(spell.SpellNum != SpellType.Passive){
-            spellInput.ButtonClick = true;
-            if(spellInputController != null)
-                spellInputController.SpellButtonPressed(keyCode, spell);
+        if(spell != null){
+            if(spell.SpellNum != SpellType.Passive){
+                spellInput.ButtonClick = true;
+                if(spellInputController != null)
+                    spellInputController.SpellButtonPressed(keyCode, spell);
+            }
         }
     }
 }
