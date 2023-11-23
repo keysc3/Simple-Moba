@@ -8,11 +8,18 @@ using System;
 public class SpellUI : MonoBehaviour
 {
     private Dictionary<SpellType, Hashtable> spellComps = new Dictionary<SpellType, Hashtable>();
-    
+
+    // Called when the object becomes enabled and active.
+    void OnEnable(){
+        PlayerSpells playerSpells = GetComponentInParent<PlayerSpells>();
+        if(playerSpells != null)
+            playerSpells.SpellAddedCallback += SetupSpellButtons;
+        GetSpellUIObjects();   
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        GetSpellUIObjects();   
         SetupCallbacks();
     }
 
@@ -27,9 +34,11 @@ public class SpellUI : MonoBehaviour
                 Transform spellCDTransform = transform.Find(spell + "_Container/SpellContainer/Spell/CD");
                 Transform durationSlider = null;
                 Image durationImage = null;
+                SpellLevelUpButton spellLevelUpButton = null;
                 if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2}).Contains(spellType)){
                     durationSlider = transform.Find(spell + "_Container/SpellContainer/Outline/Slider");
                     durationImage = durationSlider.transform.Find("Fill").GetComponent<Image>();
+                    spellLevelUpButton = transform.Find(spell + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
                 }
                 Hashtable hashy = new Hashtable();
                 hashy.Add(SpellComponent.CDTransform, spellCDTransform);
@@ -38,6 +47,9 @@ public class SpellUI : MonoBehaviour
                 hashy.Add(SpellComponent.CDText, spellCDTransform.transform.Find("Value").GetComponent<TMP_Text>());
                 hashy.Add(SpellComponent.DurationSlider, durationSlider);
                 hashy.Add(SpellComponent.DurationImage, durationImage);
+                hashy.Add(SpellComponent.SpellButton, spellCDTransform.parent.Find("Button").GetComponent<SpellButton>());
+                hashy.Add(SpellComponent.SpellImage, spellCDTransform.parent.Find("Icon").GetComponent<Image>());
+                hashy.Add(SpellComponent.SpellLevelUpButton, spellLevelUpButton);
                 spellComps.Add(spellType, hashy);
             }
         }
@@ -113,5 +125,37 @@ public class SpellUI : MonoBehaviour
     */
     public void SetComponentActive(SpellType spellType, SpellComponent component, bool isActive){
         ((Transform) spellComps[spellType][component]).gameObject.SetActive(isActive);
+    }
+
+    /*
+    *   SetupSpellButtons - Setup for the a spells button click and level up button click.
+    *   @param newSpell - ISpell to set the buttons for.
+    *   @param levelManager - LevelManager of the player the spell is for.
+    */
+    private void SetupSpellButtons(ISpell newSpell, LevelManager levelManager){
+        SpellType num;
+        //Spell button
+        if(newSpell.SpellNum == SpellType.None)
+            num = newSpell.spellData.defaultSpellNum;
+        else
+            num = newSpell.SpellNum;
+        SpellButton spellButton = (SpellButton) spellComps[num][SpellComponent.SpellButton];
+        spellButton.spell = newSpell;
+        //TODO: Change this to not be hardcoded using a proper keybind/input system?
+        List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.D, KeyCode.F};
+        if(num != SpellType.Passive)
+            spellButton.keyCode = inputs[((int) num) - 1];
+        else
+            spellButton.keyCode = inputs[0];
+        ISpellInput spellInput = GetComponentInParent<ISpellInput>();
+        spellButton.SpellInput = spellInput;
+        // Spell level up button.
+        ((Image) spellComps[num][SpellComponent.SpellImage]).sprite = newSpell.spellData.sprite;
+        SpellLevelUpButton spellLevelUpButton = (SpellLevelUpButton) spellComps[num][SpellComponent.SpellLevelUpButton];
+        if(spellLevelUpButton != null){
+            spellLevelUpButton.spell = num;
+            spellLevelUpButton.LevelManager = levelManager;
+            spellLevelUpButton.SpellInput = spellInput;
+        }
     }
 }

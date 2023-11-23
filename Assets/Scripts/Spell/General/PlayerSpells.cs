@@ -14,6 +14,9 @@ public class PlayerSpells : MonoBehaviour
     private Transform spellsContainer;
     private IPlayer player;
 
+    public delegate void SpellAdded(ISpell newSpell, LevelManager levelManager);
+    public event SpellAdded SpellAddedCallback;
+
     // Called when the script instance is being loaded.
     private void Awake(){
         player = GetComponent<IPlayer>();
@@ -29,7 +32,7 @@ public class PlayerSpells : MonoBehaviour
         foreach(ISpell spellInterface in objSpells){
             spells.Add(spellInterface.spellData.defaultSpellNum, spellInterface);
             // Setup UI buttons.
-            SetupSpellButtons(spellInterface);
+            SpellAddedCallback?.Invoke(spellInterface, player.levelManager);
         }
         // Setup each spells callbacks, if any.
         foreach(ISpell spellInterface in objSpells){
@@ -63,7 +66,7 @@ public class PlayerSpells : MonoBehaviour
             CastBarUI castBarUIScript = GetComponentInChildren<CastBarUI>();
             if(castBarUIScript != null)
                 castBarUIScript.SpellCallbacks(spell);
-                SpellUI spellUIScript = GetComponentInChildren<SpellUI>();
+            SpellUI spellUIScript = GetComponentInChildren<SpellUI>();
             if(spellUIScript != null)
                 spellUIScript.SpellCallbacks(spell);
         }
@@ -89,7 +92,7 @@ public class PlayerSpells : MonoBehaviour
             // Set spells num.
             newSpell.SpellNum = num;
             // Setup UI buttons.
-            SetupSpellButtons(newSpell);
+            SpellAddedCallback?.Invoke(newSpell, player.levelManager);
             // Setup any callbacks.
             if(newSpell is IHasCallback){
                 ((IHasCallback) newSpell).SetupCallbacks(spells);
@@ -101,7 +104,7 @@ public class PlayerSpells : MonoBehaviour
     *   SetupSpellButtons - Setup for the a spells button click and level up button click.
     *   @param newSpell - Spell to set the buttons for.
     */
-    private void SetupSpellButtons(ISpell newSpell){
+    /*private void SetupSpellButtons(ISpell newSpell){
         if(spellsContainer != null){
             SpellType num;
             //Spell button
@@ -127,5 +130,5 @@ public class PlayerSpells : MonoBehaviour
                 spellLevelUpButton.SpellInput = gameObject.GetComponent<ISpellInput>();
             }
         }
-    }
+    }*/
 }

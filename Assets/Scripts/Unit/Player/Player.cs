@@ -195,8 +195,6 @@ public class Player : MonoBehaviour, IPlayer
             playerController.enabled = true;
             playerSpellInput.enabled = true;
         }
-        // TODO: Implement respawn cleanup
-        //championAbilities.OnRespawnCleanUp();
         // Enable collider.
         hitbox.enabled = true;
         // Set currenthp and currentmana to max values.
@@ -242,6 +240,7 @@ public class Player : MonoBehaviour, IPlayer
             newPlayerUI.transform.Find("Player/Info/PlayerContainer/InnerContainer/IconContainer/Icon").GetComponent<Image>().sprite = SUnit.icon;
             UpdateAllStatsUI updateAllStatsUI = newPlayerUI.transform.Find("Player/Info/Stats/Container").GetComponent<UpdateAllStatsUI>();
             updateAllStatsUI.player = this;
+            newPlayerUI.SetActive(true);
         }
         return newPlayerUI;
     }
