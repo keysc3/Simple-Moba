@@ -77,8 +77,8 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
                 IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
                 if(hitUnit != null){
-                    float lastHitTime;
                     if(!spellFinished){
+                        float lastHitTime;
                         // If unit has been hit once already and its not last hit, check if time for another hit, otherwise hit and add to dictionary.
                         if(lastHits.TryGetValue(hitUnit, out lastHitTime)){
                             if(Time.time >= (lastHitTime + spellData.timeBetweenTicks)){
