@@ -58,6 +58,8 @@ public class StatusEffects
     *   @param effect - Effect to add to the status effects list.
     */
     public void AddEffect(Effect effect){
+        if(effect.effected.IsDead)
+            return;
         // If there is an existing effect, only the new one if it is more impairing than the current most.
         if(statusEffects.Count > 0){
             if(effect.effectType.ccValue > highestActiveCCValue){

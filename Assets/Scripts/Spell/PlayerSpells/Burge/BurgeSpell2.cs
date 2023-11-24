@@ -92,11 +92,9 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
                         }
                     }
                     else{
-                        if(!hitUnit.IsDead){
-                            Hit(hitUnit);
-                            Hit(hitUnit);
-                            hitUnit.statusEffects.AddEffect(spellData.knockup.InitializeEffect(SpellLevel, player, hitUnit));
-                        }
+                        Hit(hitUnit);
+                        Hit(hitUnit);
+                        hitUnit.statusEffects.AddEffect(spellData.knockup.InitializeEffect(SpellLevel, player, hitUnit));
                     }
                 }
             }

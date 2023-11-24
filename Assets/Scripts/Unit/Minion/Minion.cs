@@ -66,19 +66,21 @@ public class Minion : MonoBehaviour, IMinion
     *   @param isDot - bool if the damage was from a dot.
     */
     public void TakeDamage(float incomingDamage, DamageType damageType, IUnit damager, bool isDot){
-        float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
-        unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
-        //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
-        // If dead then award a creep kill and start the death method.
-        if(unitStats.CurrentHealth <= 0f){
-            if(damager is IPlayer)
-                if(((IPlayer) damager).score != null)
-                    ((IPlayer) damager).score.CreepKill(this);
-            Death();
-        }
-        // Apply any damage that procs after recieving damage.
-        else{
-            bonusDamage?.Invoke(this, isDot);
+        if(!isDead){
+            float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
+            unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
+            //Debug.Log(transform.name + " took " + damageToTake + " " + damageType + " damage from " + from.transform.name);
+            // If dead then award a creep kill and start the death method.
+            if(unitStats.CurrentHealth <= 0f){
+                if(damager is IPlayer)
+                    if(((IPlayer) damager).score != null)
+                        ((IPlayer) damager).score.CreepKill(this);
+                Death();
+            }
+            // Apply any damage that procs after recieving damage.
+            else{
+                bonusDamage?.Invoke(this, isDot);
+            }
         }
     }
 
