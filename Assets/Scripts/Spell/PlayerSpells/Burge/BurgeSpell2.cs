@@ -23,22 +23,24 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        // Start cast time then cast the spell.
-        StartCoroutine(spellController.CastTime());
-        // Get the players mouse position on spell cast for spells target direction.
-        Vector3 targetDirection = spellController.GetTargetDirection();
-        // Set the target position to be in the direction of the mouse on cast.
-        Vector3 targetPosition = (targetDirection - transform.position);
-        // Set target position to max distance if casted at a greater distance.
-        if(targetPosition.magnitude > spellData.magnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.magnitude);
-        else
-            targetPosition = transform.position + (targetDirection - transform.position);
-        StartCoroutine(Spell_2_Cast(targetPosition));
-        // Use mana.
-        championStats.UseMana(spellData.baseMana[SpellLevel]);
-        OnCd = true;
-        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+            // Start cast time then cast the spell.
+            StartCoroutine(spellController.CastTime());
+            // Get the players mouse position on spell cast for spells target direction.
+            Vector3 targetDirection = spellController.GetTargetDirection();
+            // Set the target position to be in the direction of the mouse on cast.
+            Vector3 targetPosition = (targetDirection - transform.position);
+            // Set target position to max distance if casted at a greater distance.
+            if(targetPosition.magnitude > spellData.magnitude)
+                targetPosition = transform.position + (targetPosition.normalized * spellData.magnitude);
+            else
+                targetPosition = transform.position + (targetDirection - transform.position);
+            StartCoroutine(Spell_2_Cast(targetPosition));
+            // Use mana.
+            championStats.UseMana(spellData.baseMana[SpellLevel]);
+            OnCd = true;
+            StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+        }
     }
 
     /*
