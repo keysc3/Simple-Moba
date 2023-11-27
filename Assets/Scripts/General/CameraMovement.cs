@@ -36,6 +36,7 @@ public class CameraMovement : MonoBehaviour
             // If the camera is locked follow the champion.
             if(isLocked){
                 Vector3 newPosition = targetObject.transform.position + cameraOffset;
+                newPosition.y = cameraOffset.y;
                 transform.position = newPosition;
             }
             // Let the player move the camera by moving their mouse to the edges of the screen.
