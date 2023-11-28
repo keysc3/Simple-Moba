@@ -60,8 +60,19 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private void SpellCast(float heldDuration){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(player.hitbox.transform.position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation));
+        Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.hitboxLength/2));
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation));
         CheckForSpellHits(hits);
+        //TODO: REMOVE
+        #region "Hitbox debug lines"
+        Vector3 startingPosition = transform.position;
+        Vector3 targetPos = (targetDirection - transform.position).normalized;
+        targetPos = transform.position + (targetPos * spellData.hitboxLength);
+        targetPos.y = player.hitbox.transform.position.y;
+        Debug.DrawLine(startingPosition, targetPos, Color.blue, 5f);
+        Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.hitboxWidth/2), Color.blue, 5f);
+        Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.hitboxWidth/2), Color.blue, 5f);
+        #endregion
         if(heldDuration >= spellData.maxChargeDuration)
             StartCoroutine(SecondCast());
         else{
@@ -75,17 +86,28 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             timer += Time.deltaTime;
             yield return null;
         }
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(player.hitbox.transform.position, new Vector3(spellData.chargedHitboxWidth/2, 0.5f, spellData.chargedHitboxLength/2), transform.rotation));
-        CheckForSpellHits(hits);
-        StartCoroutine(SecondSpellDash());
-    }
-
-    private IEnumerator SecondSpellDash(){
-        // Disable pathing.
-        //navMeshAgent.ResetPath();
-        // Get dash position
+        // Get second cast position
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
+        Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.chargedHitboxWidth/2, 0.5f, spellData.chargedHitboxLength/2), transform.rotation));
+        CheckForSpellHits(hits);
+        //TODO: REMOVE
+        #region "Hitbox2 debug lines"
+        Vector3 startingPosition = transform.position;
+        Vector3 targetPos = (targetDirection - transform.position).normalized;
+        targetPos = transform.position + (targetPos * spellData.chargedHitboxLength);
+        targetPos.y = player.hitbox.transform.position.y;
+        IPlayerMover playerMover = GetComponentInParent<IPlayerMover>();
+        playerMover.CurrentTarget = targetDirection;
+        Debug.DrawLine(startingPosition, targetPos, Color.red, 5f);
+        Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.chargedHitboxWidth/2), Color.red, 5f);
+        Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.chargedHitboxWidth/2), Color.red, 5f);
+        #endregion
+        StartCoroutine(SecondSpellDash(targetDirection));
+    }
+
+    private IEnumerator SecondSpellDash(Vector3 targetDirection){
         Vector3 targetPosition = (targetDirection - transform.position).normalized;
         targetPosition = transform.position + (targetPosition * spellData.dashMagnitude);
         targetPosition = GetFinalPosition(targetPosition);
@@ -134,6 +156,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
 
     private void PutOnCd(bool casted){
         player.IsCasting = false;
+        navMeshAgent.ResetPath();
         navMeshAgent.isStopped = false;
         float cd = spellData.baseCd[SpellLevel];
         if(!casted)
@@ -142,6 +165,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         StartCoroutine(spellController.Spell_Cd_Timer(cd));
     }   
     public void Hit(IUnit hit){
-
+        Debug.Log("HIT: " + hit.GameObject.transform.name);
     }
 }

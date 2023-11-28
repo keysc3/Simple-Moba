@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c5fcbf8c483874a80b531abca2ce6b, type: 3}
   m_Name: BurgeSpell3
   m_EditorClassIdentifier: 
-  <sprite>k__BackingField: {fileID: 0}
-  <defaultSpellNum>k__BackingField: 0
+  <sprite>k__BackingField: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
+  <defaultSpellNum>k__BackingField: 4
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField:
   - 5
@@ -40,6 +40,6 @@ MonoBehaviour:
   <maxChargeDuration>k__BackingField: 2
   <holdDuration>k__BackingField: 3
   <cdRefundPercent>k__BackingField: 0.5
-  <timeBetweenDash>k__BackingField: 0.25
+  <timeBetweenDash>k__BackingField: 0.5
   <dashMagnitude>k__BackingField: 2
   <dashTime>k__BackingField: 0.25
