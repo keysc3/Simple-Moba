@@ -57,6 +57,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
+            player.MouseOnCast = targetDirection;
             // Set the target position to be in the direction of the mouse on cast.
             Vector3 targetPosition = (targetDirection - transform.position);
             // Set the spell cast position to max range if casted past that value.

@@ -40,6 +40,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
+            player.MouseOnCast = targetDirection;
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
             Vector3 targetPosition = (targetDirection - transform.position).normalized;
             targetPosition = transform.position + (targetPosition * spellData.magnitude);

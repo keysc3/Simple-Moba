@@ -28,6 +28,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             StartCoroutine(spellController.CastTime());
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
+            player.MouseOnCast = targetDirection;
             // Set the target position to be in the direction of the mouse on cast.
             Vector3 targetPosition = (targetDirection - transform.position);
             // Set target position to max distance if casted at a greater distance.

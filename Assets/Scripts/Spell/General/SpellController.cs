@@ -48,7 +48,7 @@ public class SpellController
         LayerMask groundMask = LayerMask.GetMask("Ground");
         Physics.Raycast(ray, out hitInfo, Mathf.Infinity, groundMask);
         Vector3 targetDirection = hitInfo.point;
-        player.MouseOnCast = targetDirection;
+        //player.MouseOnCast = targetDirection;
         targetDirection.y = player.GameObject.transform.position.y;
         return targetDirection;
     }
