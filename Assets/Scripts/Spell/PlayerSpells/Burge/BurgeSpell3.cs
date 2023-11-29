@@ -63,6 +63,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         player.MouseOnCast = targetDirection;
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.hitboxLength/2));
         Transform visualHitbox = ((GameObject) Instantiate(spellData.visualHitbox, position, transform.rotation)).transform;
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+        visualHitbox.position = new Vector3(visualHitbox.position.x, visualHitbox.position.y - capsule.bounds.size.y/2f, visualHitbox.position.z);
         visualHitbox.localScale = new Vector3(spellData.hitboxWidth, visualHitbox.localScale.y, spellData.hitboxLength);
         float timer = 0.0f;
         while(timer < spellData.castTime){
