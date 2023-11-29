@@ -72,7 +72,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             yield return null;
         }
         List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation));
-        CheckForSpellHits(hits);
+        List<IUnit> pastHits = new List<IUnit>();
+        pastHits = CheckForSpellHits(hits, pastHits);
         //TODO: REMOVE
         #region "Hitbox debug lines"
         Vector3 startingPosition = transform.position;
@@ -101,18 +102,20 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         // Get second cast position
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
-        Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.chargedHitboxWidth/2, 0.5f, spellData.chargedHitboxLength/2), transform.rotation));
-        CheckForSpellHits(hits);
+        //Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
+        //List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.chargedHitboxWidth/2, 0.5f, spellData.chargedHitboxLength/2), transform.rotation));
+        //List<IUnit> pastHits = new List<IUnit>();
+        //pastHits = CheckForSpellHits(hits, pastHits);
         //TODO: REMOVE
         #region "Hitbox2 debug lines"
         Vector3 startingPosition = transform.position;
         startingPosition.y = player.hitbox.transform.position.y;
         Vector3 targetPos = (targetDirection - transform.position).normalized;
-        targetPos = transform.position + (targetPos * spellData.chargedHitboxLength);
+        targetPos = transform.position + (targetPos * spellData.dashMagnitude);
         targetPos.y = player.hitbox.transform.position.y;
         IPlayerMover playerMover = GetComponentInParent<IPlayerMover>();
         playerMover.CurrentTarget = targetDirection;
+        Vector3 endPosition = targetDirection;
         Debug.DrawLine(startingPosition, targetPos, Color.red, 5f);
         Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.chargedHitboxWidth/2), Color.red, 5f);
         Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.chargedHitboxWidth/2), Color.red, 5f);
@@ -124,26 +127,29 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         Vector3 targetPosition = (targetDirection - transform.position).normalized;
         targetPosition = transform.position + (targetPosition * spellData.dashMagnitude);
         targetPosition = GetFinalPosition(targetPosition);
-        // Get dash speed since dash duration is a fixed time.
-        float dashSpeed = (targetPosition - transform.position).magnitude/spellData.dashTime; 
         float timer = 0.0f;
+        List<IUnit> pastHits = new List<IUnit>();
+        Vector3 startingPosition = transform.position;
         // While still dashing.
         while(timer < spellData.dashTime && !player.IsDead){
             // Move towards target position.
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+            Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
+            List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.chargedHitboxWidth/2, 0.5f, spellData.chargedHitboxLength/2), transform.rotation));
+            pastHits = CheckForSpellHits(hits, pastHits);
+            transform.position = Vector3.Lerp(startingPosition, targetPosition, timer/spellData.dashTime);
             timer += Time.deltaTime;
             //navMeshAgent.isStopped = true;
             yield return null;
         }
         // Apply last tick dash and enable pathing.
         if(!player.IsDead)
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, dashSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(startingPosition, targetPosition, 1);
         //navMeshAgent.isStopped = false;
         PutOnCd(true);
     }
 
     private Vector3 GetFinalPosition(Vector3 targetPosition){
-        // Initalize variables 
+        // Initialize variables 
         NavMeshHit meshHit;
         int walkableMask = 1 << NavMesh.GetAreaFromName("Walkable");
         // Check if there is terrain between the target location and Burge.
@@ -156,15 +162,17 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         return targetPosition;
     }
 
-    private void CheckForSpellHits(List<Collider> hits){
+    private List<IUnit> CheckForSpellHits(List<Collider> hits, List<IUnit> pastHits){
         foreach(Collider collider in hits){
             if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
                 IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
-                if(hitUnit != null){
+                if(hitUnit != null && !pastHits.Contains(hitUnit)){
                     Hit(hitUnit);
+                    pastHits.Add(hitUnit);
                 }
             }
         }
+        return pastHits;
     }
 
     private void PutOnCd(bool casted){

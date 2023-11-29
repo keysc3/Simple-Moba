@@ -35,12 +35,12 @@ MonoBehaviour:
   - 10
   <hitboxLength>k__BackingField: 2
   <hitboxWidth>k__BackingField: 1
-  <chargedHitboxLength>k__BackingField: 3
+  <chargedHitboxLength>k__BackingField: 1
   <chargedHitboxWidth>k__BackingField: 2
   <maxChargeDuration>k__BackingField: 2
   <holdDuration>k__BackingField: 3
   <cdRefundPercent>k__BackingField: 0.5
-  <timeBetweenDash>k__BackingField: 0.5
+  <timeBetweenDash>k__BackingField: 0.25
   <dashMagnitude>k__BackingField: 2
   <dashTime>k__BackingField: 0.25
   <visualHitbox>k__BackingField: {fileID: 2269633781424815707, guid: 6116a2e4a08d8f24fb0c96fc909dd8a0, type: 3}
