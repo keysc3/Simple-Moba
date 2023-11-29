@@ -53,19 +53,28 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             PutOnCd(false);
         }
         else{
-            SpellCast(timer);
+            StartCoroutine(SpellCast(timer));
         }
     }
 
-    private void SpellCast(float heldDuration){
+
+    private IEnumerator SpellCast(float heldDuration){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.hitboxLength/2));
+        Transform visualHitbox = ((GameObject) Instantiate(spellData.visualHitbox, position, transform.rotation)).transform;
+        visualHitbox.localScale = new Vector3(spellData.hitboxWidth, visualHitbox.localScale.y, spellData.hitboxLength);
+        float timer = 0.0f;
+        while(timer < spellData.castTime){
+            timer += Time.deltaTime;
+            yield return null;
+        }
         List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation));
         CheckForSpellHits(hits);
         //TODO: REMOVE
         #region "Hitbox debug lines"
         Vector3 startingPosition = transform.position;
+        startingPosition.y = player.hitbox.transform.position.y;
         Vector3 targetPos = (targetDirection - transform.position).normalized;
         targetPos = transform.position + (targetPos * spellData.hitboxLength);
         targetPos.y = player.hitbox.transform.position.y;
@@ -78,6 +87,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         else{
             PutOnCd(true);
         }
+        Destroy(visualHitbox.gameObject);
     }
 
     private IEnumerator SecondCast(){
@@ -95,6 +105,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         //TODO: REMOVE
         #region "Hitbox2 debug lines"
         Vector3 startingPosition = transform.position;
+        startingPosition.y = player.hitbox.transform.position.y;
         Vector3 targetPos = (targetDirection - transform.position).normalized;
         targetPos = transform.position + (targetPos * spellData.chargedHitboxLength);
         targetPos.y = player.hitbox.transform.position.y;
