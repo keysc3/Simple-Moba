@@ -41,6 +41,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         player.IsCasting = true;
         player.CurrentCastedSpell = this;
         navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
         KeyCode spellInput = KeyCode.E;
         float timer = 0.0f;
         while(Input.GetKey(spellInput) && timer < spellData.holdDuration){
@@ -116,13 +117,13 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         }
         // Get second cast position.
         Vector3 targetDirection = spellController.GetTargetDirection();
-        player.MouseOnCast = targetDirection;
+        player.MouseOnCast = targetDirection + ((targetDirection - transform.position).normalized * (spellData.dashMagnitude + spellData.chargedHitboxLength));
         //TODO: REMOVE
         #region "Hitbox2 debug lines"
         Vector3 startingPosition = transform.position;
         startingPosition.y = player.hitbox.transform.position.y;
         Vector3 targetPos = (targetDirection - transform.position).normalized;
-        targetPos = transform.position + (targetPos * spellData.dashMagnitude);
+        targetPos = transform.position + (targetPos * (spellData.dashMagnitude + spellData.chargedHitboxLength));
         targetPos.y = player.hitbox.transform.position.y;
         IPlayerMover playerMover = GetComponentInParent<IPlayerMover>();
         playerMover.CurrentTarget = targetDirection;
@@ -146,6 +147,10 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         float timer = 0.0f;
         List<IUnit> pastHits = new List<IUnit>();
         Vector3 startingPosition = transform.position;
+        Transform visual = ((GameObject) Instantiate(spellData.secondCastVisual, transform.position, transform.rotation)).transform;
+        visual.SetParent(transform);
+        visual.localScale = new Vector3(spellData.chargedHitboxWidth, 0.01f, spellData.chargedHitboxLength);
+        visual.position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));;
         // While still dashing.
         while(timer < spellData.dashTime && !player.IsDead){
             // Move towards target position. Hitbox starts at center of player.
@@ -163,6 +168,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             transform.position = Vector3.Lerp(startingPosition, targetPosition, 1);
         //navMeshAgent.isStopped = false;
         PutOnCd(true);
+        Destroy(visual.gameObject);
     }
 
     /*
@@ -209,7 +215,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private void PutOnCd(bool casted){
         // Set fields back to non-casting state.
         player.IsCasting = false;
-        navMeshAgent.ResetPath();
         navMeshAgent.isStopped = false;
         // Put spell on full cd if it was casted.
         float cd = spellData.baseCd[SpellLevel];
