@@ -14,6 +14,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     new private BurgeSpell3Data spellData;
     public SpellHitCallback spellHitCallback { get; set; }
     private NavMeshAgent navMeshAgent;
+    private float chargeAmount;
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -43,12 +44,12 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         navMeshAgent.isStopped = true;
         navMeshAgent.ResetPath();
         KeyCode spellInput = KeyCode.E;
-        float timer = 0.0f;
-        while(Input.GetKey(spellInput) && timer < spellData.holdDuration){
+        chargeAmount = 0.0f;
+        while(Input.GetKey(spellInput) && chargeAmount < spellData.holdDuration){
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
-            timer += Time.deltaTime;
-            Debug.Log("holding: " + timer);
+            chargeAmount += Time.deltaTime;
+            Debug.Log("holding: " + chargeAmount);
             yield return null;
         }
         // If the key was not released do not cast the spell.
@@ -56,7 +57,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             PutOnCd(false);
         }
         else{
-            StartCoroutine(SpellCast(timer));
+            StartCoroutine(SpellCast(chargeAmount));
         }
     }
 
@@ -70,11 +71,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         player.MouseOnCast = targetDirection;
         // Center of the spells hitbox.
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.hitboxLength/2));
-        Transform visualHitbox = ((GameObject) Instantiate(spellData.visualHitbox, position, transform.rotation)).transform;
-        // Setup the spells visual.
-        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
-        visualHitbox.position = new Vector3(visualHitbox.position.x, visualHitbox.position.y - capsule.bounds.size.y/2f, visualHitbox.position.z);
-        visualHitbox.localScale = new Vector3(spellData.hitboxWidth, visualHitbox.localScale.y, spellData.hitboxLength);
+        GameObject visualHitbox = CreateFirstCastVisual(position);
         float timer = 0.0f;
         // Wait out the cast time.
         while(timer < spellData.castTime){
@@ -102,7 +99,16 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         else{
             PutOnCd(true);
         }
-        Destroy(visualHitbox.gameObject);
+        Destroy(visualHitbox);
+    }
+
+    private GameObject CreateFirstCastVisual(Vector3 position){
+        Transform visualHitbox = ((GameObject) Instantiate(spellData.visualHitbox, position, transform.rotation)).transform;
+        // Setup the spells visual.
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+        visualHitbox.position = new Vector3(visualHitbox.position.x, visualHitbox.position.y - capsule.bounds.size.y/2f, visualHitbox.position.z);
+        visualHitbox.localScale = new Vector3(spellData.hitboxWidth, visualHitbox.localScale.y, spellData.hitboxLength);
+        return visualHitbox.gameObject;
     }
 
     /*
@@ -142,15 +148,12 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private IEnumerator SecondSpellDash(Vector3 targetDirection){
         // Get the final position after dash is applied.
         Vector3 targetPosition = (targetDirection - transform.position).normalized;
+        GameObject visual = CreateSecondCastVisual(targetPosition);
         targetPosition = transform.position + (targetPosition * spellData.dashMagnitude);
         targetPosition = GetFinalPosition(targetPosition);
         float timer = 0.0f;
         List<IUnit> pastHits = new List<IUnit>();
         Vector3 startingPosition = transform.position;
-        Transform visual = ((GameObject) Instantiate(spellData.secondCastVisual, transform.position, transform.rotation)).transform;
-        visual.SetParent(transform);
-        visual.localScale = new Vector3(spellData.chargedHitboxWidth, 0.01f, spellData.chargedHitboxLength);
-        visual.position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));;
         // While still dashing.
         while(timer < spellData.dashTime && !player.IsDead){
             // Move towards target position. Hitbox starts at center of player.
@@ -168,7 +171,15 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             transform.position = Vector3.Lerp(startingPosition, targetPosition, 1);
         //navMeshAgent.isStopped = false;
         PutOnCd(true);
-        Destroy(visual.gameObject);
+        Destroy(visual);
+    }
+
+    private GameObject CreateSecondCastVisual(Vector3 direction){
+        Transform visual = ((GameObject) Instantiate(spellData.secondCastVisual, transform.position, transform.rotation)).transform;
+        visual.SetParent(transform);
+        visual.localScale = new Vector3(spellData.chargedHitboxWidth, 0.01f, spellData.chargedHitboxLength);
+        visual.position = transform.position + (direction * (spellData.chargedHitboxLength/2));
+        return visual.gameObject;
     }
 
     /*
