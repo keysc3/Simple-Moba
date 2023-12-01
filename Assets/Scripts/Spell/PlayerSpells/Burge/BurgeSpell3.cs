@@ -15,6 +15,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     public SpellHitCallback spellHitCallback { get; set; }
     private NavMeshAgent navMeshAgent;
     private float chargeAmount;
+    private List<IUnit> pastHits = new List<IUnit>();
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -78,10 +79,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             timer += Time.deltaTime;
             yield return null;
         }
-        // Check for any hits. Hitbox starts from the middle of the player.
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation));
-        List<IUnit> pastHits = new List<IUnit>();
-        pastHits = CheckForSpellHits(hits, pastHits);
+        // Check for any hits.
+        CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength);
         //TODO: REMOVE
         #region "Hitbox debug lines"
         Vector3 startingPosition = transform.position;
@@ -152,26 +151,26 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         targetPosition = transform.position + (targetPosition * spellData.dashMagnitude);
         targetPosition = GetFinalPosition(targetPosition);
         float timer = 0.0f;
-        List<IUnit> pastHits = new List<IUnit>();
         Vector3 startingPosition = transform.position;
         // While still dashing.
         while(timer < spellData.dashTime && !player.IsDead){
-            // Move towards target position. Hitbox starts at center of player.
-            Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
-            List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.chargedHitboxWidth/2, 0.5f, spellData.chargedHitboxLength/2), transform.rotation));
-            pastHits = CheckForSpellHits(hits, pastHits);
-            transform.position = Vector3.Lerp(startingPosition, targetPosition, timer/spellData.dashTime);
+            SecondSpellTick(startingPosition, targetPosition, targetDirection, timer/spellData.dashTime);
             timer += Time.deltaTime;
-            //navMeshAgent.isStopped = true;
             yield return null;
         }
-        //TODO: Last hit check, move repeated lines.
         // Apply last tick dash and enable pathing.
         if(!player.IsDead)
-            transform.position = Vector3.Lerp(startingPosition, targetPosition, 1);
+            SecondSpellTick(startingPosition, targetPosition, targetDirection, 1);
         //navMeshAgent.isStopped = false;
         PutOnCd(true);
         Destroy(visual);
+    }
+
+    private void SecondSpellTick(Vector3 startingPosition, Vector3 targetPosition, Vector3 targetDirection, float ratio){
+        transform.position = Vector3.Lerp(startingPosition, targetPosition, ratio);
+        // Move towards target position. Hitbox starts at center of player.
+        Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
+        CheckForSpellHits(position, spellData.chargedHitboxWidth, spellData.chargedHitboxLength);
     }
 
     private GameObject CreateSecondCastVisual(Vector3 direction){
@@ -206,7 +205,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @param pastHits - List of IUnits that have already been hit by the spell.
     *   @return List<IUnit> - List of IUnits that have been hit.
     */
-    private List<IUnit> CheckForSpellHits(List<Collider> hits, List<IUnit> pastHits){
+    private void CheckForSpellHits(Vector3 position, float xSize, float zSize){
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(xSize/2, 0.5f, zSize/2), transform.rotation));
         foreach(Collider collider in hits){
             if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
                 IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
@@ -216,7 +216,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
                 }
             }
         }
-        return pastHits;
     }
 
     /*
@@ -231,6 +230,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         float cd = spellData.baseCd[SpellLevel];
         if(!casted)
             cd = cd * (1f - spellData.cdRefundPercent);
+        pastHits.Clear();
         OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(cd));
     }
