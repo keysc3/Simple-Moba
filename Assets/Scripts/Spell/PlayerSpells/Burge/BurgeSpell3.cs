@@ -101,6 +101,11 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         Destroy(visualHitbox);
     }
 
+    /*
+    *   CreateFirstCastVisual - Creates the visual effect for the first cast jab.
+    *   @param position - Vector3 of the x and z center of the visual.
+    *   @return GameObject - The created visual.
+    */
     private GameObject CreateFirstCastVisual(Vector3 position){
         Transform visualHitbox = ((GameObject) Instantiate(spellData.visualHitbox, position, transform.rotation)).transform;
         // Setup the spells visual.
@@ -166,6 +171,13 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         Destroy(visual);
     }
 
+    /*
+    *   SecondSpellTick - Handles checking the second spells hitbox and moving the player.
+    *   @param startingPosition - Vector3 of the players starting position.
+    *   @param targetPosition - Vector3 of the players target position.
+    *   @param targetDirection - Vector3 of the players direction of movement.
+    *   @param ratio - float representing the fraction of the spells movement completed.
+    */
     private void SecondSpellTick(Vector3 startingPosition, Vector3 targetPosition, Vector3 targetDirection, float ratio){
         transform.position = Vector3.Lerp(startingPosition, targetPosition, ratio);
         // Move towards target position. Hitbox starts at center of player.
@@ -173,6 +185,11 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         CheckForSpellHits(position, spellData.chargedHitboxWidth, spellData.chargedHitboxLength);
     }
 
+    /*
+    *   CreateSecondCastVisual - Creates the second casts visual.
+    *   @param direction - Vector3 of the direction the cast is in.
+    *   @return GameObject - The created visual effect.
+    */
     private GameObject CreateSecondCastVisual(Vector3 direction){
         Transform visual = ((GameObject) Instantiate(spellData.secondCastVisual, transform.position, transform.rotation)).transform;
         visual.SetParent(transform);
