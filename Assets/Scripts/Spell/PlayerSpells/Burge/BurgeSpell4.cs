@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+* Purpose: Implements Burge's fourth spell. Burge enters a trance and receives increased ability haste for the duration. The ability can be recast before the
+* duration expires to deal damage in a line. Hitting basic abilities before increases the duration of the spell when cast, with a minimum amount to cast.
+* The abilities damage varies based on how many spell hits happened during the spell cast, the more spells hit the more damage the recast will do.
+*
+* @author: Colin Keys
+*/
 public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
 {
     public List<ISpell> callbackSet { get; } = new List<ISpell>();
@@ -19,9 +26,13 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         IsQuickCast = true;
     }
 
+    /*
+    *   Cast - Casts the spell.
+    */
     public void Cast(){
         float minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && currentFill >= minFillToCast){
+            casted = true;
             StartCoroutine(spellController.CastTime());
             StartCoroutine(SpellDuration(CalculateDuration()));
             // Use mana.
@@ -30,16 +41,23 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         }      
     }
 
+    /*
+    *   CalculateDuration - Calculates how long the spell will last based on how much energy is stored.
+    *   @return float - Duration the spell will last.
+    */
     private float CalculateDuration(){
         float duration = currentFill/100f;
         return Mathf.Clamp(duration * spellData.maxDuration, spellData.minDuration, spellData.maxDuration);
     }
 
+    /*
+    *   SpellDuration - Handles the spells lifecycle.
+    *   @param duration - float of the spells duration.
+    */
     private IEnumerator SpellDuration(float duration){
         while(player.IsCasting)
             yield return null;
         float timer = 0f;
-        casted = true;
         while(timer < duration && casted){
             if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting){
                 SecondCast();
@@ -48,8 +66,12 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
             timer += Time.deltaTime;
             yield return null;
         }
+        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
+    /*
+    *   SecondCast - Handles the recast of the ability which ends it and deals damage.
+    */
     private void SecondCast(){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
@@ -74,6 +96,11 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         }
     }
 
+    /*
+    *   BasicSpellHit - Incrememnts necessary fields when the player lands a basic spell.
+    *   @param hitUnit - IUnit of the enemy hit.
+    *   @param spellHit - ISpell the hit is from.
+    */
     public void BasicSpellHit(IUnit hitUnit, ISpell spellHit){
         if(!casted){
             if(currentFill < 100f)
@@ -84,6 +111,10 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         }
     }
 
+    /*
+    *   Hit - Deals fourth spells damage to the enemy hit.
+    *   @param unit - IUnit of the enemy hit.
+    */
     public void Hit(IUnit hit){
         Debug.Log("Imagine getting hit :skull:");
     }
