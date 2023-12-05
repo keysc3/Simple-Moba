@@ -33,7 +33,7 @@ MonoBehaviour:
   - 70
   - 70
   - 70
-  <visualPrefab>k__BackingField: {fileID: 484404483246906668, guid: 76f33d688ebfd79458b523d051e26fa0, type: 3}
+  <visualPrefab>k__BackingField: {fileID: 1615369582613741815, guid: 8b873509ac3ddf8419af558a96117be6, type: 3}
   <slowEffect>k__BackingField: {fileID: 11400000, guid: 1033d164f757ea5489657bdefbbf368e, type: 2}
   <maxLobMagnitude>k__BackingField: 3.5
   <lobTime>k__BackingField: 0.5

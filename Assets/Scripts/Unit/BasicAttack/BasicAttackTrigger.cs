@@ -17,16 +17,16 @@ public class BasicAttackTrigger : MonoBehaviour
     {
         // Destroy the attack object if the target dies or is destroyed.
         if(Target.IsDead){
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
         // If the attack has hit its target call the attack function.
-        if(other.gameObject == Target.GameObject){
-            basicAttackController.AttackHit(other.GetComponent<IUnit>());
-            Destroy(gameObject);
+        if(other == Target.hitbox){
+            basicAttackController.AttackHit(other.GetComponentInParent<IUnit>());
+            Destroy(transform.parent.gameObject);
         }
     }
 }

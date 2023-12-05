@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
     public int selectedChampion { get; private set; }
     public static GameController instance { get; private set; }
     public GameObject currentChampion { get; private set; }
+    public float collisionPlane { get; private set; } = 0.5f;
     [SerializeField] private List<GameObject> champions;
 
     // Called when the script instance is being loaded.

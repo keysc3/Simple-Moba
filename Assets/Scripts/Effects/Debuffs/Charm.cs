@@ -26,7 +26,7 @@ public class Charm : Effect
     public Charm(ScriptableCharm charmEffect, float duration, int spellLevel, IUnit casted, IUnit effected) : base(charmEffect, duration, casted, effected){
         this.spellLevel = spellLevel;
         effectedNavMeshAgent = effected.GameObject.GetComponent<NavMeshAgent>();
-        effectedCollider = effected.GameObject.GetComponent<Collider>();
+        //effectedCollider = effected.GameObject.GetComponent<Collider>();
         if(((ScriptableCharm) effectType).slow != null)
             charmSlow = (Slow) ((ScriptableCharm) effectType).slow.InitializeEffect(spellLevel, casted, effected);
     }
@@ -78,7 +78,7 @@ public class Charm : Effect
             nextTarget = effectedNavMeshAgent.steeringTarget;
             // If a new target location exists set the target and look at the target location.
             if(currentTarget != nextTarget){
-                nextTarget.y = effectedCollider.bounds.center.y;
+                nextTarget.y = effected.GameObject.transform.position.y;
                 effected.GameObject.transform.LookAt(nextTarget);
                 currentTarget = nextTarget;
             }

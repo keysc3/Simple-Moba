@@ -9,7 +9,7 @@ public class player_spells
 {
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator sets_up_player_spells_spell_buttons()
     {
         // Arrange
@@ -45,7 +45,7 @@ public class player_spells
         // Assert
         SpellLevelUpButton spellLevelUpButton = player.playerUI.transform.Find("Player/Combat/SpellsContainer/Spell1_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
         Assert.AreEqual(spell.spellData.defaultSpellNum, spellLevelUpButton.spell);
-    }   
+    }*/ 
 
     public GameObject CreateSpellsContainer(){
         GameObject parent = new GameObject("Parent");

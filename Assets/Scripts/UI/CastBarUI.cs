@@ -16,7 +16,7 @@ public class CastBarUI : MonoBehaviour
         castBarText = transform.Find("Spell").GetComponent<TMP_Text>();
         Spell[] objSpells = GetComponentsInParent<Spell>();
         foreach(Spell spell in objSpells){
-            spell.spellController.CastBarUpdateCallback += CastBarUpdate;
+            SpellCallbacks(spell);
         }
         gameObject.SetActive(false);
     }
@@ -35,5 +35,9 @@ public class CastBarUI : MonoBehaviour
                 castBarText.text = spell.spellData.name;
             castBarSlider.value = Mathf.Clamp(timer/spell.spellData.castTime, 0f, 1f);
         }
+    }
+
+    public void SpellCallbacks(Spell spell){
+        spell.spellController.CastBarUpdateCallback += CastBarUpdate;
     }
 }

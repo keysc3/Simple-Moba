@@ -14,6 +14,9 @@ public class PlayerSpells : MonoBehaviour
     private Transform spellsContainer;
     private IPlayer player;
 
+    public delegate void SpellAdded(ISpell newSpell, LevelManager levelManager);
+    public event SpellAdded SpellAddedCallback;
+
     // Called when the script instance is being loaded.
     private void Awake(){
         player = GetComponent<IPlayer>();
@@ -29,7 +32,7 @@ public class PlayerSpells : MonoBehaviour
         foreach(ISpell spellInterface in objSpells){
             spells.Add(spellInterface.spellData.defaultSpellNum, spellInterface);
             // Setup UI buttons.
-            SetupSpellButtons(spellInterface);
+            SpellAddedCallback?.Invoke(spellInterface, player.levelManager);
         }
         // Setup each spells callbacks, if any.
         foreach(ISpell spellInterface in objSpells){
@@ -60,6 +63,12 @@ public class PlayerSpells : MonoBehaviour
             Spell spell = (Spell) gameObject.AddComponent(newSpell);
             spell.spellData = spellData;
             SetupSpell((ISpell) spell, num);
+            CastBarUI castBarUIScript = GetComponentInChildren<CastBarUI>();
+            if(castBarUIScript != null)
+                castBarUIScript.SpellCallbacks(spell);
+            SpellUI spellUIScript = GetComponentInChildren<SpellUI>();
+            if(spellUIScript != null)
+                spellUIScript.SpellCallbacks(spell);
         }
     }
     /*
@@ -83,42 +92,10 @@ public class PlayerSpells : MonoBehaviour
             // Set spells num.
             newSpell.SpellNum = num;
             // Setup UI buttons.
-            SetupSpellButtons(newSpell);
+            SpellAddedCallback?.Invoke(newSpell, player.levelManager);
             // Setup any callbacks.
             if(newSpell is IHasCallback){
                 ((IHasCallback) newSpell).SetupCallbacks(spells);
-            }
-        }
-    }
-
-    /*
-    *   SetupSpellButtons - Setup for the a spells button click and level up button click.
-    *   @param newSpell - Spell to set the buttons for.
-    */
-    private void SetupSpellButtons(ISpell newSpell){
-        if(spellsContainer != null){
-            SpellType num;
-            //Spell button
-            if(newSpell.SpellNum == SpellType.None)
-                num = newSpell.spellData.defaultSpellNum;
-            else
-                num = newSpell.SpellNum;
-            SpellButton spellButton = spellsContainer.Find(num.ToString() + "_Container/SpellContainer/Spell/Button").GetComponent<SpellButton>();
-            spellButton.spell = newSpell;
-            //TODO: Change this to not be hardcoded using a proper keybind/input system?
-            List<KeyCode> inputs = new List<KeyCode>(){KeyCode.None, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.D, KeyCode.F};
-            if(num != SpellType.Passive)
-                spellButton.keyCode = inputs[((int) num) - 1];
-            else
-                spellButton.keyCode = inputs[0];
-            spellButton.SpellInput = gameObject.GetComponent<ISpellInput>();
-            // Spell level up button.
-            spellsContainer.Find(num + "_Container/SpellContainer/Spell/Icon").GetComponent<Image>().sprite = newSpell.spellData.sprite;
-            if(num != SpellType.Passive && !newSpell.IsSummonerSpell){
-                SpellLevelUpButton spellLevelUpButton = spellsContainer.Find(num + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
-                spellLevelUpButton.spell = num;
-                spellLevelUpButton.LevelManager = player.levelManager;
-                spellLevelUpButton.SpellInput = gameObject.GetComponent<ISpellInput>();
             }
         }
     }

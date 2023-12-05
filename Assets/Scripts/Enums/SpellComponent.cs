@@ -9,5 +9,8 @@ public enum SpellComponent
     CDImage,
     CDText,
     DurationSlider,
-    DurationImage
+    DurationImage,
+    SpellButton,
+    SpellLevelUpButton,
+    SpellImage
 }

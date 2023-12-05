@@ -37,6 +37,7 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
+            player.MouseOnCast = targetDirection;
             // Set the target position to be in the direction of the mouse on cast and at max spell distance from the player.
             Vector3 targetPosition = (targetDirection - transform.position).normalized;
             targetPosition = transform.position + (targetPosition * spellData.magnitude);
@@ -61,7 +62,7 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));  
         // Create spell 3 GameObject and set its necessary variables.
         GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
-        BahriSpell3Trigger spell3Trigger = missile.GetComponent<BahriSpell3Trigger>();
+        BahriSpell3Trigger spell3Trigger = missile.GetComponentInChildren<BahriSpell3Trigger>();
         spell3Trigger.hitMethod = this;
         spell3Trigger.caster = player;
         // While the spell object still exists.

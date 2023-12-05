@@ -40,8 +40,9 @@ public class PlayerController
         // The player should never be casting something if current spell is null but just to be safe check for null.
         if(player.IsCasting && player.CurrentCastedSpell != null && !player.CurrentCastedSpell.CanMove)
             playerMover.CurrentTarget = player.MouseOnCast;
-        else
+        else{
             playerMover.CurrentTarget = playerMover.NextDestination;
+        }
     }
 
     /*

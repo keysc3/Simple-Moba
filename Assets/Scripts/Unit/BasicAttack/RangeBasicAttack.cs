@@ -27,7 +27,7 @@ public class RangeBasicAttack : BasicAttackBehaviour
     private IEnumerator AttackProjectile(IUnit target){
         // Create attack GameObject and set necessary variables.
         GameObject projectile = (GameObject) Instantiate(attackProjectile, transform.position, Quaternion.identity);
-        BasicAttackTrigger basicAttackTrigger = projectile.gameObject.GetComponent<BasicAttackTrigger>();
+        BasicAttackTrigger basicAttackTrigger = projectile.GetComponentInChildren<BasicAttackTrigger>();
         basicAttackTrigger.Target = target;
         basicAttackTrigger.basicAttackController = basicAttackController;
         // While the attack still exists animate it.

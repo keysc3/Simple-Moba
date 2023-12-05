@@ -13,7 +13,9 @@ public class targeted_projectile
     {
         // Arrange
         GameObject projectile = new GameObject("Projectile");
-        TargetedProjectile script = projectile.AddComponent<TargetedProjectile>();
+        GameObject hitbox = new GameObject("Hitbox");
+        hitbox.transform.SetParent(projectile.transform);
+        TargetedProjectile script = hitbox.AddComponent<TargetedProjectile>();
         MockPlayer player = new MockPlayer();
         script.TargetUnit = player;
         script.TargetUnit = null;
@@ -32,7 +34,9 @@ public class targeted_projectile
     {
         // Arrange
         GameObject projectile = new GameObject("Projectile");
-        TargetedProjectile targetedProjectile = projectile.AddComponent<TargetedProjectile>();
+        GameObject hitbox = new GameObject("Hitbox");
+        hitbox.transform.SetParent(projectile.transform);
+        TargetedProjectile targetedProjectile = hitbox.AddComponent<TargetedProjectile>();
         MockPlayer player = new MockPlayer();
         player.IsDead = true;
         targetedProjectile.TargetUnit = player;
@@ -52,17 +56,23 @@ public class targeted_projectile
         // Arrange
         GameObject projectile = new GameObject("Projectile");
         projectile.transform.position = Vector3.zero;
-        BoxCollider collider = projectile.AddComponent<BoxCollider>();
-        Rigidbody rb = projectile.AddComponent<Rigidbody>();
+        GameObject hitbox = new GameObject("Hitbox");
+        BoxCollider collider = hitbox.AddComponent<BoxCollider>();
+        Rigidbody rb = hitbox.AddComponent<Rigidbody>();
+        hitbox.transform.SetParent(projectile.transform);
+        hitbox.transform.position = Vector3.zero;
         rb.isKinematic = true;
         collider.isTrigger = true;
-        TargetedProjectile targetedProjectile = projectile.AddComponent<TargetedProjectile>();
+        TargetedProjectile targetedProjectile = hitbox.AddComponent<TargetedProjectile>();
         GameObject player = new GameObject("Target");
+        GameObject playerHitbox = new GameObject("Hitbox");
         player.transform.position = Vector3.zero;
-        player.AddComponent<BoxCollider>();
+        playerHitbox.transform.SetParent(player.transform);
+        playerHitbox.transform.position = Vector3.zero;
+        playerHitbox.AddComponent<BoxCollider>();
         MockPlayerBehaviour playerBehaviour = player.AddComponent<MockPlayerBehaviour>();
         targetedProjectile.TargetUnit = playerBehaviour;
-        player.AddComponent<Rigidbody>();
+        playerHitbox.AddComponent<Rigidbody>();
 
         // Act
         yield return new WaitForSeconds(0.1f);

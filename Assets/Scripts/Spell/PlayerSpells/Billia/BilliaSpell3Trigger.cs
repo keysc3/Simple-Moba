@@ -11,7 +11,7 @@ public class BilliaSpell3Trigger : MonoBehaviour
 {
     public Vector3 forwardDirection;
     public BilliaSpell3 billiaSpell3;
-    public GameObject casted;
+    public Transform casted;
     
     private bool hit = false;
     private int groundLayer;
@@ -27,13 +27,12 @@ public class BilliaSpell3Trigger : MonoBehaviour
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
         // If a unit is hit.
-        if(other.gameObject.layer != groundLayer && other.gameObject.layer != projectileLayer && !hit && other.gameObject != casted && this.enabled == true){
+        if(other.gameObject.layer != groundLayer && other.gameObject.layer != projectileLayer && !hit && other.transform.parent != casted && this.enabled == true){
             // Avoid same frame multi hits.
             hit = true;
-            Debug.Log("Hit on roll: " + other.gameObject.name);
             // Check for hits in a cone in the roll direction.
-            billiaSpell3.Spell_3_ConeHitbox(gameObject, other.gameObject, forwardDirection);
-            Destroy(gameObject);
+            billiaSpell3.Spell_3_ConeHitbox(transform, other.transform, forwardDirection);
+            Destroy(transform.parent.gameObject);
         }
     }
 }

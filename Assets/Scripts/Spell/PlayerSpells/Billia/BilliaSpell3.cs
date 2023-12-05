@@ -54,6 +54,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             StartCoroutine(spellController.CastTime());
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
+            player.MouseOnCast = targetDirection;
             // Set the target position to be in the direction of the mouse on cast.
             Vector3 targetPosition = (targetDirection - transform.position);
             // Set target to lob seed to to max lob distance if casted at a greater distance.
@@ -89,9 +90,9 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         GameObject seed = (GameObject) Instantiate(spellData.visualPrefab, transform.position, Quaternion.identity);
         // Look at roll direction.
         seed.transform.LookAt(seed.transform.position + targetDirection);
-        BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponent<BilliaSpell3Trigger>();
+        BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponentInChildren<BilliaSpell3Trigger>();
         billiaSpell3Trigger.billiaSpell3 = this;
-        billiaSpell3Trigger.casted = gameObject;
+        billiaSpell3Trigger.casted = transform;
         // Set p0.
         Vector3 p0 = transform.position;
         // Set p1. X and Z of p1 are halfway between Billia and target position. Y of p1 is an offset value.
@@ -110,14 +111,14 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             // Get t value, a value between 0 and 1.
             float t = Mathf.Clamp01(timer/spellData.lobTime);
             // Get the next position on the Quadratic Bezier curve.
-            Vector3 point = QuadraticBezierCurvePoint(t, p0, p1, p2);
+            Vector3 point = spellController.QuadraticBezierCurvePoint(t, p0, p1, p2);
             // Set the seeds new position.
             seed.transform.position = point;
             timer += Time.deltaTime;
             yield return null;
         }
         // Set the seeds final point.
-        Vector3 lastPoint = QuadraticBezierCurvePoint(1, p0, p1, p2);
+        Vector3 lastPoint = spellController.QuadraticBezierCurvePoint(1, p0, p1, p2);
         seed.transform.position = lastPoint;
         billiaSpell3Trigger.enabled = true;
         // Start the seeds rolling.
@@ -134,14 +135,14 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
+        SphereCollider seedCollider = seed.GetComponentInChildren<SphereCollider>();
         // Check for lob landing hits.
-        List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seed.transform.position, 
-        seed.GetComponent<SphereCollider>().radius * spellData.lobLandHitbox, ~groundMask));
+        List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seedCollider.transform.position, 
+        seedCollider.radius * spellData.lobLandHitbox, ~groundMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
-            if(lobHit[0].gameObject != gameObject){
-                Debug.Log("Hit on lob land: " + lobHit[0].gameObject.name);
-                Spell_3_ConeHitbox(seed, lobHit[0].gameObject, targetDirection);
+            if(lobHit[0].transform.parent != transform){
+                Spell_3_ConeHitbox(seed.transform, lobHit[0].transform, targetDirection);
                 Destroy(seed);
             }
         }
@@ -157,25 +158,27 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
 
     /*
     *   Spell_3_ConeHitBox - Checks the seeds post collision cone hitbox for any units to apply the damage to.
-    *   @param seed - GameObject of the seed.
-    *   @param initialHit - GameObject of the first hit object.
+    *   @param seed - Transform of the seed.
+    *   @param initialHit - Transform of the first hit object.
     *   @param forwardDirection - Vector3 of the roll direction.
     */
-    public void Spell_3_ConeHitbox(GameObject seed, GameObject initialHit, Vector3 forwardDirection){
-        if(initialHit.tag == "Enemy"){
-            Hit(initialHit.GetComponent<IUnit>());
+    public void Spell_3_ConeHitbox(Transform seed, Transform initialHit, Vector3 forwardDirection){
+        if(initialHit.parent.tag == "Enemy"){
+            Debug.Log("SEED COLLIDER HIT");
+            Hit(initialHit.GetComponentInParent<IUnit>());
         }
         // Check for hits in a sphere with radius of the cone to be checked.
         LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
-        Collider [] seedConeHits = Physics.OverlapSphere(seed.transform.position, spellData.seedConeRadius, ~groundMask);
+        Collider [] seedConeHits = Physics.OverlapSphere(seed.position, spellData.seedConeRadius, ~groundMask);
         foreach (Collider collider in seedConeHits){
-            if(collider.tag == "Enemy" && collider.gameObject != initialHit){
+            if(collider.transform.parent.tag == "Enemy" && collider.transform != initialHit && collider.transform.name == "Hitbox"){
                 // Get the direction to the hit collider.
                 Vector3 colliderPos = collider.transform.position;
-                Vector3 directionToHit = (new Vector3(colliderPos.x, seed.transform.position.y, colliderPos.z) - seed.transform.position).normalized;
+                Vector3 directionToHit = (colliderPos - seed.transform.position).normalized;
                 // If the angle between the roll direction and hit collider direction is within the cone then apply damage.
                 if(Vector3.Angle(forwardDirection, directionToHit) < spellData.seedConeAngle/2){
-                    Hit(collider.gameObject.GetComponent<IUnit>());
+                    Hit(collider.gameObject.GetComponentInParent<IUnit>());
+                    Debug.Log("SEED CONE HIT");
                 }
             }
         }
@@ -191,26 +194,5 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             unit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(SpellLevel, player, unit));
             ((IDamageable) unit).TakeDamage(spellData.baseDamage[SpellLevel] + (0.6f * championStats.magicDamage.GetValue()), DamageType.Magic, player, false);   
         }
-    }
-
-    /*
-    *   QuadraticBezierCurvePoint - Calculates a point on a quadratic Bezier curve based on the t value.
-    *   It is a linear interpolation of two points obtained from linear Bezier curves from p0 to p1 and p1 to p2.
-    *   @param t - float of a time value between 0 and 1 for the progress on the curve.
-    *   @param p0 - Vector3 of the first control point (starting point).
-    *   @param p1 - Vector3 of the second control point (connecting point).
-    *   @param p2 - Vector 3 of the third control point (end point).
-    */
-    private Vector3 QuadraticBezierCurvePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2){
-        // p = ((1-t)^2 * P0) + (2(1-t)t * P1) + (t^2 * P2)
-        float coefficient = 1 - t;
-        float alpha = Mathf.Pow(coefficient, 2f);
-        float beta = 2 * coefficient * t;
-        float phi = Mathf.Pow(t, 2f);
-
-        float x = (alpha * p0.x) + (beta * p1.x) + (phi * p2.x);
-        float y = (alpha * p0.y) + (beta * p1.y) + (phi * p2.y);
-        float z = (alpha * p0.z) + (beta * p1.z) + (phi * p2.z);
-        return new Vector3(x, y, z);
     }
 }

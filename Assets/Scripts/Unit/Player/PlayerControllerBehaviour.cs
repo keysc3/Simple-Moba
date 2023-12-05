@@ -21,8 +21,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         get => currentTarget; 
         set {
             currentTarget = value;
-            if(myCollider != null)
-                currentTarget.y = myCollider.bounds.center.y;
+            currentTarget.y = transform.position.y;
             transform.LookAt(currentTarget);
         }
     }
@@ -31,7 +30,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
             if(IsMoving)
                 return navMeshAgent.steeringTarget;
             else
-                return transform.position;
+                return (transform.position + transform.forward);
         }
     }
     public bool IsMoving { 
@@ -74,7 +73,7 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
                 RaycastHit[] hits = GetRaycastHits(ray);
                 // If any hits get first hit.
                 if(hits.Length > 0){
-                    if(!(hits.Length == 1 && hits[0].collider.gameObject == gameObject)){
+                    if(!(hits.Length == 1 && (hits[0].collider.gameObject == gameObject || hits[0].collider.transform.name == "Hitbox"))){
                         RaycastHit firstHit = GetFirstHit(hits);
                         playerController.RightClick(firstHit.transform.GetComponent<IUnit>(), firstHit.point);
                     }
@@ -98,8 +97,8 @@ public class PlayerControllerBehaviour : MonoBehaviour, IPlayerMover
         RaycastHit firstHit = hits[0];
         for(int i = 1; i < hits.Length; i++){
             RaycastHit hit = hits[i];
-            if(hit.collider.gameObject != gameObject){
-                if(hit.distance < firstHit.distance){
+            if(hit.collider.gameObject != gameObject && hit.collider.transform.name != "Hitbox"){
+                if(hit.distance < firstHit.distance || firstHit.collider.gameObject == gameObject){
                     firstHit = hit;
                 }
             }

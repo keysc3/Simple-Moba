@@ -19,4 +19,5 @@ public interface IUnit: IDamageable
     BonusDamage bonusDamage { get; set; }
     GameObject GameObject { get; }
     Vector3 Position { get; set; }
+    Collider hitbox { get; }
 }

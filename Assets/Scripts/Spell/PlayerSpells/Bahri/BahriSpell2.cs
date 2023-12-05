@@ -46,7 +46,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
                 GameObject missile = (GameObject) Instantiate(spellData.missile, spell_2_parent.transform.position, Quaternion.identity);
-                TargetedProjectile targetedProjectile = missile.GetComponent<TargetedProjectile>();
+                TargetedProjectile targetedProjectile = missile.GetComponentInChildren<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
                 missile.transform.SetParent(spell_2_parent.transform);
                 missile.transform.localPosition = new Vector3(1,0,1).normalized * spellData.magnitude;
@@ -82,7 +82,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     */
     private IEnumerator Spell_2_Cast(GameObject spell_2_parent){
         float timer = 0.0f;
-        LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        //LayerMask enemyMask = LayerMask.GetMask("Enemy");
         RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, true);
         // While spells still active.
         while(spell_2_parent && timer < spellData.duration && spell_2_parent.transform.childCount > 0){
@@ -90,31 +90,37 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
             if(timer > 0.25f){
                 // Check each childs proximity for an enemy.
                 foreach(Transform child in spell_2_parent.transform){
-                    GameObject target = null;
+                    Transform target = null;
                     float closestDist = 0f;
-                    Collider [] hitColliders = Physics.OverlapSphere(child.position, spellData.radius, enemyMask);
+                    Transform hitbox = child.GetChild(0);
+                    Collider [] hitColliders = Physics.OverlapSphere(hitbox.position, spellData.radius);
                     // If an enemy is in the childs proximity find the closest one.
                     if(hitColliders.Length > 0){
                         // Check each enemy hit for closest to the GameObject.
                         foreach(Collider enemy in hitColliders){
-                            IUnit enemyUnit = enemy.gameObject.GetComponent<IUnit>();
+                            Debug.Log("Collider: " + enemy.transform.name);
+                            IUnit enemyUnit = enemy.gameObject.GetComponentInParent<IUnit>();
+                            if(enemyUnit == null || enemy.transform.name != "Hitbox")
+                                continue;
+                            Debug.Log(enemy.transform.name + " processed.");
+                            Transform enemyTransform = enemy.transform.parent;
                             // Only want to target alive units.
                             if(!enemyUnit.IsDead && enemyUnit != player){
                                 // If a player is currently under spell 3 effects, prioritize that player.
                                 if(enemyUnit.statusEffects.CheckForEffectWithSource(spellData.charm, player)){
-                                    target = enemy.gameObject;
+                                    target = enemyTransform;
                                     break;
                                 }
                                 // Set closest enemy if there isn't one yet.
                                 if(target == null){
-                                    target = enemy.gameObject;
-                                    closestDist = (child.position - enemy.gameObject.transform.position).magnitude;
+                                    target = enemyTransform;
+                                    closestDist = (hitbox.position - enemyTransform.position).magnitude;
                                 }
                                 else{
-                                    float distToEnemy = (child.position - enemy.gameObject.transform.position).magnitude;
+                                    float distToEnemy = (hitbox.position - enemyTransform.position).magnitude;
                                     // Set closest enemy if closer one found.
                                     if (distToEnemy < closestDist){
-                                        target = enemy.gameObject;
+                                        target = enemyTransform;
                                         closestDist = distToEnemy;
                                     }
                                 }
@@ -124,8 +130,8 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                     // If a target has been found start the target found animation.
                     if(target != null){
                         StartCoroutine(Spell_2_Target(child.gameObject, target));
-                        TargetedProjectile targetedProjectile = child.gameObject.GetComponent<TargetedProjectile>();
-                        targetedProjectile.TargetUnit = target.GetComponent<IUnit>();
+                        TargetedProjectile targetedProjectile = child.gameObject.GetComponentInChildren<TargetedProjectile>();
+                        targetedProjectile.TargetUnit = target.GetComponentInParent<IUnit>();
                         child.parent = null;
                     }
                 }
@@ -144,13 +150,13 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
 
     /*
     *   Spell_2_Target - Move the object towards the enemy it has targeted.
-    *   @param spell_2_child - GameObject to move towards the target.
+    *   @param spell_2_child - Transform to move towards the target.
     *   @param target - Target GameObject to move the spell towards.
     */
-    private IEnumerator Spell_2_Target(GameObject spell_2_child, GameObject target){
+    private IEnumerator Spell_2_Target(GameObject spell_2_child, Transform target){
         // While the GameObject still exists move it towards the target.
         while(spell_2_child && target){
-            spell_2_child.transform.position = Vector3.MoveTowards(spell_2_child.transform.position, target.transform.position, spellData.speed * Time.deltaTime);
+            spell_2_child.transform.position = Vector3.MoveTowards(spell_2_child.transform.position, target.position, spellData.speed * Time.deltaTime);
             yield return null;
         }
     }

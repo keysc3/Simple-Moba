@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c5fcbf8c483874a80b531abca2ce6b, type: 3}
+  m_Name: BurgeSpell3
+  m_EditorClassIdentifier: 
+  <sprite>k__BackingField: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
+  <defaultSpellNum>k__BackingField: 4
+  <castTime>k__BackingField: 0.25
+  <baseDamage>k__BackingField:
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  <baseCd>k__BackingField:
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  <baseMana>k__BackingField:
+  - 10
+  - 10
+  - 10
+  - 10
+  - 10
+  <hitboxLength>k__BackingField: 2
+  <hitboxWidth>k__BackingField: 1
+  <chargedHitboxLength>k__BackingField: 1
+  <chargedHitboxWidth>k__BackingField: 2
+  <maxChargeDuration>k__BackingField: 2
+  <holdDuration>k__BackingField: 3
+  <cdRefundPercent>k__BackingField: 0.5
+  <timeBetweenDash>k__BackingField: 0.25
+  <dashMagnitude>k__BackingField: 5
+  <dashTime>k__BackingField: 0.25
+  <visualHitbox>k__BackingField: {fileID: 2269633781424815707, guid: 6116a2e4a08d8f24fb0c96fc909dd8a0, type: 3}
+  <secondCastVisual>k__BackingField: {fileID: 731987182873078092, guid: c259360ff7aad8c4aadeb6dd2ad2d103, type: 3}
