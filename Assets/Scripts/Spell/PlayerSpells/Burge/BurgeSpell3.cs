@@ -223,7 +223,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @return List<IUnit> - List of IUnits that have been hit.
     */
     private void CheckForSpellHits(Vector3 position, float xSize, float zSize){
-        position.y = player.hitbox.transform.position.y
+        position.y = player.hitbox.transform.position.y;
         List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(xSize/2, 0.5f, zSize/2), transform.rotation));
         foreach(Collider collider in hits){
             if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
