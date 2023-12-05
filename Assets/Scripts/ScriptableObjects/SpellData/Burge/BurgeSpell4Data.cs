@@ -7,8 +7,11 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-[CreateAssetMenu(fileName = "BurgeSpell3", menuName = "Spell/Burge/Spell4")]
+[CreateAssetMenu(fileName = "BurgeSpell4", menuName = "Spell/Burge/Spell4")]
 public class BurgeSpell4Data : SpellData
 {
     [field: SerializeField] public float spellFill { get; private set; }
+    [field: SerializeField] public float width { get; private set; }
+    [field: SerializeField] public float length { get; private set; }
+    [field: SerializeField] public float maxDuration { get; private set; }
 }

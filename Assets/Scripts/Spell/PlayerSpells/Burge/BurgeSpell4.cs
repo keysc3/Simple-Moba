@@ -20,12 +20,58 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     }
 
     public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+        float minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
+        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && currentFill >= minFillToCast){
             StartCoroutine(spellController.CastTime());
+            StartCoroutine(SpellDuration(CalculateDuration()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
         }      
+    }
+
+    private float CalculateDuration(){
+        float duration = currentFill/100f;
+        return Mathf.Clamp(duration * spellData.maxDuration, spellData.minDuration, spellData.maxDuration);
+    }
+
+    private IEnumerator SpellDuration(float duration){
+        while(player.IsCasting)
+            yield return null;
+        float timer = 0f;
+        casted = true;
+        while(timer < duration && casted){
+            if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting){
+                SecondCast();
+                casted = false;
+            }
+            timer += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private void SecondCast(){
+        Vector3 targetDirection = spellController.GetTargetDirection();
+        player.MouseOnCast = targetDirection;
+        Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.length/2));
+        position.y = player.hitbox.transform.position.y;
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width, 0.5f, spellData.length), transform.rotation));
+        CheckForSpellHits(hits);
+    }
+
+    /*
+    *   CheckForSpellHits - Checks for any spell hits from a list of hit colliders.
+    *   @param hits - List of colliders to check.
+    */
+    private void CheckForSpellHits(List<Collider> hits){
+        foreach(Collider collider in hits){
+            if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
+                IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
+                if(hitUnit != null){
+                    Hit(hitUnit);
+                }
+            }
+        }
     }
 
     public void BasicSpellHit(IUnit hitUnit, ISpell spellHit){
@@ -39,7 +85,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     }
 
     public void Hit(IUnit hit){
-
+        Debug.Log("Imagine getting hit :skull:");
     }
 
     /*
