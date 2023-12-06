@@ -18,6 +18,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private float currentFill = 0f;
     private bool casted = false;
     private int castedHits = 0;
+    private PersonalSpell spellEffect;
 
     // Start is called before the first frame update
     protected override void Start(){
@@ -57,15 +58,23 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private IEnumerator SpellDuration(float duration){
         while(player.IsCasting)
             yield return null;
+        spellData.spellEffect.duration[0] = duration;
+        spellEffect = (PersonalSpell) spellData.spellEffect.InitializeEffect(0, player, player);
+        player.statusEffects.AddEffect(spellEffect);
         float timer = 0f;
+        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, true);
         while(timer < duration && casted){
             if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting){
                 SecondCast();
                 casted = false;
             }
             timer += Time.deltaTime;
+            RaiseSpellSliderUpdateEvent(SpellNum, duration, timer);
             yield return null;
         }
+        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, false);
+        player.statusEffects.RemoveEffect(spellEffect.effectType, player);
+        spellEffect = null;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
@@ -108,6 +117,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         }
         else{
             castedHits += 1;
+            if(spellEffect != null)
+                spellEffect.Stacks = castedHits;
         }
     }
 
