@@ -19,7 +19,7 @@ public class BahriPassive : Spell
         base.Start();
         this.spellData = (BahriPassiveData) base.spellData;
         // Initialize and add passive effect.
-        passive = (PersonalSpell) this.spellData.passivePreset.InitializeEffect(0, player, player);
+        passive = (PersonalSpell) spellData.passivePreset.InitializeEffect(0, player, player);
         player.statusEffects.AddEffect(passive);
         player.score.takedownCallback += Passive;
     }
