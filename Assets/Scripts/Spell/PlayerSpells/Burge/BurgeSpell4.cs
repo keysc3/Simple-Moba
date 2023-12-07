@@ -19,26 +19,29 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private bool casted = false;
     private int castedHits = 0;
     private PersonalSpell spellEffect;
+    private bool canCast = false;
+    private float minFillToCast;
 
     // Start is called before the first frame update
     protected override void Start(){
         base.Start();
         this.spellData = (BurgeSpell4Data) base.spellData;
         IsQuickCast = true;
+        minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
+        player.levelManager.SpellLevelUpCallback += CheckForFirstLevel;
     }
 
     /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        float minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && currentFill >= minFillToCast){
+        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
             casted = true;
+            canCast = false;
             StartCoroutine(spellController.CastTime());
             StartCoroutine(SpellDuration(CalculateDuration()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
-            OnCd = true;
         }      
     }
 
@@ -66,7 +69,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         while(timer < duration && casted){
             if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting){
                 SecondCast();
-                casted = false;
+                break;
             }
             timer += Time.deltaTime;
             RaiseSpellSliderUpdateEvent(SpellNum, duration, timer);
@@ -75,6 +78,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, false);
         player.statusEffects.RemoveEffect(spellEffect.effectType, player);
         spellEffect = null;
+        casted = false;
+        OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
@@ -111,14 +116,31 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     *   @param spellHit - ISpell the hit is from.
     */
     public void BasicSpellHit(IUnit hitUnit, ISpell spellHit){
-        if(!casted){
-            if(currentFill < 100f)
-                currentFill = Mathf.Clamp(spellData.spellFill + currentFill, 0f, 100f);
+        if(SpellLevel >= 0 && !OnCd){
+            if(!casted){
+                if(currentFill < 100f){
+                    currentFill = Mathf.Clamp(spellData.spellFill + currentFill, 0f, 100f);
+                    if(currentFill >= minFillToCast){
+                        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, false);
+                        canCast = true;
+                    }
+                    else{
+                        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
+                    }
+                }
+            }
+            else{
+                castedHits += 1;
+                if(spellEffect != null)
+                    spellEffect.Stacks = castedHits;
+            }
         }
-        else{
-            castedHits += 1;
-            if(spellEffect != null)
-                spellEffect.Stacks = castedHits;
+    }
+
+    public void CheckForFirstLevel(SpellType spell, int spellLevel){
+        if(spellLevel == 1 && spell == SpellNum){
+            player.levelManager.SpellLevelUpCallback -= CheckForFirstLevel;
+            RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
         }
     }
 
