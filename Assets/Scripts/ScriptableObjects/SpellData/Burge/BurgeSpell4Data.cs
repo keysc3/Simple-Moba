@@ -16,4 +16,5 @@ public class BurgeSpell4Data : SpellData
     [field: SerializeField] public float maxDuration { get; private set; }
     [field: SerializeField] public float minDuration { get; private set; }
     [field: SerializeField] public ScriptablePersonalSpell spellEffect { get; private set; }
+    [field: SerializeField] public Sprite castedSprite { get; private set; }
 }

@@ -42,6 +42,9 @@ public class Spell : MonoBehaviour, ISpell
     public delegate void SetComponentActive(SpellType spellType, SpellComponent component, bool isActive);
     public event SetComponentActive SetComponentActiveCallback;
 
+    public delegate void SetSprite(SpellType spellType, SpellComponent component, Sprite sprite);
+    public event SetSprite SetSpriteCallback;
+
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
@@ -108,5 +111,15 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void RaiseSetComponentActiveEvent(SpellType spellType, SpellComponent component, bool isActive){
         SetComponentActiveCallback?.Invoke(spellType, component, isActive);
+    }
+
+    /*
+    *   RaiseSetSpriteEvent - Raises the set sprite event.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param component - SpellComponent of the component to set active.
+    *   @param sprite - Sprite to set the image to.
+    */
+    public void RaiseSetSpriteEvent(SpellType spellType, SpellComponent component, Sprite sprite){
+        SetSpriteCallback?.Invoke(spellType, component, sprite);
     }
 }

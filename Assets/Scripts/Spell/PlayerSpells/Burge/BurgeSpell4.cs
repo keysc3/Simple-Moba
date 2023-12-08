@@ -28,7 +28,11 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         this.spellData = (BurgeSpell4Data) base.spellData;
         IsQuickCast = true;
         minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
-        player.levelManager.SpellLevelUpCallback += CheckForFirstLevel;
+    }
+
+    // Called after all Update functions have been called
+    private void LateUpdate(){
+        CanUseSpell();
     }
 
     /*
@@ -37,6 +41,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
             casted = true;
+            UpdateSpellSprite();
             canCast = false;
             StartCoroutine(spellController.CastTime());
             StartCoroutine(SpellDuration(CalculateDuration()));
@@ -79,6 +84,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         player.statusEffects.RemoveEffect(spellEffect.effectType, player);
         spellEffect = null;
         casted = false;
+        currentFill = 0f;
+        UpdateSpellSprite();
         OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
@@ -111,23 +118,30 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     }
 
     /*
-    *   BasicSpellHit - Incrememnts necessary fields when the player lands a basic spell.
+    *   CanUseSpell - Checks if the spell has enough stacks to be used.
+    */
+    private void CanUseSpell(){
+        if(SpellLevel >= 0 && !OnCd && !casted){
+            if(currentFill >= minFillToCast){
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, false);
+                canCast = true;
+            }
+            else{
+                canCast = false;
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
+            }
+        }
+    }
+    /*
+    *   BasicSpellHit - Increments necessary fields when the player lands a basic spell.
     *   @param hitUnit - IUnit of the enemy hit.
     *   @param spellHit - ISpell the hit is from.
     */
     public void BasicSpellHit(IUnit hitUnit, ISpell spellHit){
         if(SpellLevel >= 0 && !OnCd){
             if(!casted){
-                if(currentFill < 100f){
+                if(currentFill < 100f)
                     currentFill = Mathf.Clamp(spellData.spellFill + currentFill, 0f, 100f);
-                    if(currentFill >= minFillToCast){
-                        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, false);
-                        canCast = true;
-                    }
-                    else{
-                        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
-                    }
-                }
             }
             else{
                 castedHits += 1;
@@ -136,12 +150,12 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
             }
         }
     }
-
-    public void CheckForFirstLevel(SpellType spell, int spellLevel){
-        if(spellLevel == 1 && spell == SpellNum){
-            player.levelManager.SpellLevelUpCallback -= CheckForFirstLevel;
-            RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
-        }
+    
+    private void UpdateSpellSprite(){
+        if(casted)
+            RaiseSetSpriteEvent(SpellNum, SpellComponent.SpellImage, spellData.castedSprite);
+        else
+            RaiseSetSpriteEvent(SpellNum, SpellComponent.SpellImage, spellData.sprite);
     }
 
     /*
