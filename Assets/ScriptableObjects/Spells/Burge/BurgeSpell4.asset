@@ -39,3 +39,4 @@ MonoBehaviour:
   <maxDuration>k__BackingField: 20
   <minDuration>k__BackingField: 1
   <spellEffect>k__BackingField: {fileID: 11400000, guid: 1671e33ddf09de94b8be5ae06b2fea12, type: 2}
+  <castedSprite>k__BackingField: {fileID: 21300000, guid: a2e384f972f22b640a7d6693f7e33df9, type: 3}
