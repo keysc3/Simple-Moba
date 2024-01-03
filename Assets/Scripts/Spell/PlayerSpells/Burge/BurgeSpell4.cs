@@ -98,7 +98,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         player.MouseOnCast = targetDirection;
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.length/2));
         position.y = player.hitbox.transform.position.y;
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width, 0.5f, spellData.length), transform.rotation));
+        LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width, 0.5f, spellData.length), transform.rotation, hitboxMask));
         CheckForSpellHits(hits);
     }
 
@@ -108,11 +109,9 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     */
     private void CheckForSpellHits(List<Collider> hits){
         foreach(Collider collider in hits){
-            if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
-                IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
-                if(hitUnit != null){
-                    Hit(hitUnit);
-                }
+            IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
+            if(hitUnit != player && hitUnit != null){
+                Hit(hitUnit);
             }
         }
     }

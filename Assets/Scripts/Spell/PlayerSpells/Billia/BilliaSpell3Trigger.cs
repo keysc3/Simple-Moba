@@ -14,20 +14,18 @@ public class BilliaSpell3Trigger : MonoBehaviour
     public Transform casted;
     
     private bool hit = false;
-    private int groundLayer;
-    private int projectileLayer;
+    private int hitboxLayer;
 
     // Called when the script instance is being loaded.
     private void Awake(){
         this.enabled = false;
-        groundLayer = LayerMask.NameToLayer("Ground");
-        projectileLayer = LayerMask.NameToLayer("Projectile");
+        hitboxLayer = LayerMask.NameToLayer("Hitbox");
     }
 
     // Called when the GameObject collides with an another GameObject.
     private void OnTriggerEnter(Collider other){
         // If a unit is hit.
-        if(other.gameObject.layer != groundLayer && other.gameObject.layer != projectileLayer && !hit && other.transform.parent != casted && this.enabled == true){
+        if(other.gameObject.layer == hitboxLayer && other.gameObject.tag != "Projectile" && !hit && other.transform.parent != casted && this.enabled == true){
             // Avoid same frame multi hits.
             hit = true;
             // Check for hits in a cone in the roll direction.

@@ -93,14 +93,15 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
                     Transform target = null;
                     float closestDist = 0f;
                     Transform hitbox = child.GetChild(0);
-                    Collider [] hitColliders = Physics.OverlapSphere(hitbox.position, spellData.radius);
+                    LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
+                    Collider [] hitColliders = Physics.OverlapSphere(hitbox.position, spellData.radius, hitboxMask);
                     // If an enemy is in the childs proximity find the closest one.
                     if(hitColliders.Length > 0){
                         // Check each enemy hit for closest to the GameObject.
                         foreach(Collider enemy in hitColliders){
                             Debug.Log("Collider: " + enemy.transform.name);
                             IUnit enemyUnit = enemy.gameObject.GetComponentInParent<IUnit>();
-                            if(enemyUnit == null || enemy.transform.name != "Hitbox")
+                            if(enemyUnit == null)
                                 continue;
                             Debug.Log(enemy.transform.name + " processed.");
                             Transform enemyTransform = enemy.transform.parent;

@@ -35,7 +35,8 @@ public class TargetedProjectile : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         IUnit otherUnit = other.gameObject.GetComponentInParent<IUnit>();
         // Call collision handler for whichever spell the GameObject was for if the target was hit.
-        if(otherUnit == targetUnit){
+        if(targetUnit != null && otherUnit == targetUnit){
+            Debug.Log(targetUnit);
             hit?.Invoke(otherUnit);
             Destroy(transform.parent.gameObject);
         }
