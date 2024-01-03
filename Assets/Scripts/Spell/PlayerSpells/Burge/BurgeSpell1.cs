@@ -107,7 +107,6 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     *   CheckForSpellHits - Checks if there are any hits at the current players position using the spells hitbox.
     */
     private void CheckForSpellHits(){
-        LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapBox(player.hitbox.transform.position, new Vector3(spellData.hitboxWidth/2, 0.5f, spellData.hitboxLength/2), transform.rotation, hitboxMask));
         foreach(Collider collider in outerHit){
             IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();

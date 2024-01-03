@@ -32,6 +32,7 @@ public class Spell : MonoBehaviour, ISpell
     protected IPlayer player;
     public SpellController spellController { get; private set; }
     protected Collider myCollider;
+    protected LayerMask hitboxMask;
 
     public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
     public event SpellCDSetActive SpellCDSetActiveCallback;
@@ -51,6 +52,7 @@ public class Spell : MonoBehaviour, ISpell
         mainCamera = Camera.main;
         spellController = new SpellController(this, player);
         myCollider = GetComponent<Collider>();
+        hitboxMask = LayerMask.GetMask("Hitbox");
     }
 
     // Start is called before the first frame update

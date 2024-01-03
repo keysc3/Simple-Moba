@@ -75,7 +75,6 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     private Dictionary<IUnit, float> CheckForSpellHits(Transform spellTransform, bool spellFinished, Dictionary<IUnit, float> lastHits){
         Vector3 overlapCheck = spellTransform.position;
         overlapCheck.y = player.hitbox.transform.position.y;
-        LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(overlapCheck, spellTransform.localScale.x/2f, hitboxMask));
         foreach(Collider collider in outerHit){
             IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();

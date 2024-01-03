@@ -134,7 +134,6 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     */
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
-        LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
         SphereCollider seedCollider = seed.GetComponentInChildren<SphereCollider>();
         // Check for lob landing hits.
         List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seedCollider.transform.position, 
@@ -170,7 +169,6 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             Hit(initialHit.GetComponentInParent<IUnit>());
         }
         // Check for hits in a sphere with radius of the cone to be checked.
-        LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
         Collider [] seedConeHits = Physics.OverlapSphere(seed.position, spellData.seedConeRadius, hitboxMask);
         foreach (Collider collider in seedConeHits){
             if(collider.transform.parent.tag == "Enemy" && collider.transform != initialHit){

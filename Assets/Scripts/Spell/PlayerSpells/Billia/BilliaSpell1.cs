@@ -86,7 +86,6 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     *   HitboxCheck - Checks an outer radius for any collider hits then checks if those hits are part of the inner radius damage.
     */
     private void HitboxCheck(){
-        LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(player.hitbox.transform.position, spellData.outerRadius, hitboxMask));
         foreach(Collider collider in outerHit){
             IUnit enemyUnit = collider.gameObject.GetComponentInParent<IUnit>();

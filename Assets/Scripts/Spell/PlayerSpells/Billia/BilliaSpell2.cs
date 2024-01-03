@@ -154,7 +154,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     */
     private void HitboxCheck(Vector3 hitboxCenter){
         hitboxCenter = new Vector3(hitboxCenter.x, player.hitbox.transform.position.y, hitboxCenter.z);
-        LayerMask hitboxMask = LayerMask.GetMask("Hitbox");
         List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(hitboxCenter, spellData.outerRadius, hitboxMask));
         foreach(Collider collider in outerHit){
             IUnit enemyUnit = collider.gameObject.GetComponentInParent<IUnit>();
