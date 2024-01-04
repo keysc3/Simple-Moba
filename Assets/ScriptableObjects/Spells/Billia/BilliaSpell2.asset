@@ -33,6 +33,7 @@ MonoBehaviour:
   - 50
   - 50
   - 50
+  <spellID>k__BackingField: Billia2
   <visualPrefab>k__BackingField: {fileID: 2809299097425876486, guid: d0a19b033a1664247bf7d4d5591b1784, type: 3}
   <innerRadius>k__BackingField: 0.6
   <outerRadius>k__BackingField: 2.5

@@ -18,4 +18,5 @@ MonoBehaviour:
   <baseDamage>k__BackingField: []
   <baseCd>k__BackingField: []
   <baseMana>k__BackingField: []
+  <spellID>k__BackingField: Billia0
   <passiveDot>k__BackingField: {fileID: 11400000, guid: 7c48892f3f1b12a499890c1d8bbf1305, type: 2}

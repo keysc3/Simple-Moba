@@ -33,6 +33,7 @@ MonoBehaviour:
   - 10
   - 10
   - 10
+  <spellID>k__BackingField: Burge2
   <duration>k__BackingField: 3
   <sizeMultiplier>k__BackingField: 2
   <prefab>k__BackingField: {fileID: 4965935970901747691, guid: ec75181032343924a89a22503b0a9b14, type: 3}

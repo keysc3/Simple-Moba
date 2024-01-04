@@ -17,4 +17,8 @@ public class BurgeSpell4Data : SpellData
     [field: SerializeField] public float minDuration { get; private set; }
     [field: SerializeField] public ScriptablePersonalSpell spellEffect { get; private set; }
     [field: SerializeField] public Sprite castedSprite { get; private set; }
+    [field: SerializeField] public Dictionary<string, float> fillPerSpellHit { get; private set; } = new Dictionary<string, float>(){
+        {"Burge1", 5f},
+        {"Burge2", 5f},
+        {"Burge3", 20f}};
 }

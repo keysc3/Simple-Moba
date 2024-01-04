@@ -33,6 +33,7 @@ MonoBehaviour:
   - 75
   - 85
   - 95
+  <spellID>k__BackingField: Bahri1
   <orb>k__BackingField: {fileID: 4134317213431649570, guid: ec61ec87397d7b641b22e45736326951, type: 3}
   <magnitude>k__BackingField: 7
   <speed>k__BackingField: 10

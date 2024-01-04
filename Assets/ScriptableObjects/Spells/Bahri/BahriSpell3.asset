@@ -33,6 +33,7 @@ MonoBehaviour:
   - 60
   - 60
   - 60
+  <spellID>k__BackingField: Bahri3
   <missile>k__BackingField: {fileID: 7601594001302005403, guid: ee2b9a54a7a9fa742b6e7ea45100c528, type: 3}
   <charmEffect>k__BackingField: {fileID: 11400000, guid: 5d62630e6c9b2a5469b4c64b5390ab9e, type: 2}
   <magnitude>k__BackingField: 8.5
