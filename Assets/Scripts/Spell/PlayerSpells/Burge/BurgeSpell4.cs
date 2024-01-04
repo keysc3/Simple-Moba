@@ -138,8 +138,10 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     public void BasicSpellHit(IUnit hitUnit, ISpell spellHit){
         if(SpellLevel >= 0 && !OnCd){
             if(!casted){
-                if(currentFill < 100f)
-                    currentFill = Mathf.Clamp(spellData.spellFill + currentFill, 0f, 100f);
+                if(currentFill < 100f){
+                    float toFill = spellData.fillPerSpellHit[spellHit.spellData.spellID];
+                    currentFill = Mathf.Clamp(toFill + currentFill, 0f, 100f);
+                }
             }
             else{
                 castedHits += 1;
