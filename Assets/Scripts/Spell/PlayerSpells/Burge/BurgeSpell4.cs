@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
 * Purpose: Implements Burge's fourth spell. Burge enters a trance and receives increased ability haste for the duration. The ability can be recast before the
@@ -21,6 +22,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private PersonalSpell spellEffect;
     private bool canCast = false;
     private float minFillToCast;
+    private Image fillImage;
 
     // Start is called before the first frame update
     protected override void Start(){
@@ -28,6 +30,13 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         this.spellData = (BurgeSpell4Data) base.spellData;
         IsQuickCast = true;
         minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
+        Transform uiComp = transform.Find(transform.name + "UI" + "/PlayerUI/Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/Fill/Amount");
+        Debug.Log(uiComp);
+        if(uiComp != null){
+            fillImage = uiComp.GetComponent<Image>();
+            fillImage.fillAmount = 0f;
+        }
+
     }
 
     // Called after all Update functions have been called
@@ -47,6 +56,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
             StartCoroutine(SpellDuration(CalculateDuration()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
+            if(fillImage != null)
+                fillImage.fillAmount = 0f;
         }      
     }
 
@@ -141,7 +152,10 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
                 if(currentFill < 100f){
                     float toFill = spellData.fillPerSpellHit[spellHit.spellData.spellID];
                     currentFill = Mathf.Clamp(toFill + currentFill, 0f, 100f);
+                    if(fillImage != null)
+                        fillImage.fillAmount = 1f - Mathf.Clamp(currentFill/100f, 0f, 1f);
                 }
+                Debug.Log(currentFill + " FILL");
             }
             else{
                 castedHits += 1;
