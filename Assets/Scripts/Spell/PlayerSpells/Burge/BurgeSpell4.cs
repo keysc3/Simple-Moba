@@ -31,7 +31,6 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         IsQuickCast = true;
         minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
         Transform uiComp = transform.Find(transform.name + "UI" + "/PlayerUI/Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/Fill/Amount");
-        Debug.Log(uiComp);
         if(uiComp != null){
             fillImage = uiComp.GetComponent<Image>();
             fillImage.fillAmount = 0f;
@@ -155,7 +154,6 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
                     if(fillImage != null)
                         fillImage.fillAmount = 1f - Mathf.Clamp(currentFill/100f, 0f, 1f);
                 }
-                Debug.Log(currentFill + " FILL");
             }
             else{
                 castedHits += 1;
