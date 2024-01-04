@@ -80,7 +80,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             yield return null;
         }
         // Check for any hits.
-        CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength);
+        CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength, true);
         //TODO: REMOVE
         #region "Hitbox debug lines"
         Vector3 startingPosition = transform.position;
@@ -182,7 +182,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         transform.position = Vector3.Lerp(startingPosition, targetPosition, ratio);
         // Move towards target position. Hitbox starts at center of player.
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
-        CheckForSpellHits(position, spellData.chargedHitboxWidth, spellData.chargedHitboxLength);
+        CheckForSpellHits(position, spellData.chargedHitboxWidth, spellData.chargedHitboxLength, false);
     }
 
     /*
@@ -220,9 +220,9 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   CheckForSpellHits - Checks for any spell hits from a list of hit colliders.
     *   @param hits - List of colliders to check.
     *   @param pastHits - List of IUnits that have already been hit by the spell.
-    *   @return List<IUnit> - List of IUnits that have been hit.
+    *   @param isFirstCast - bool for is the check if for the first spell cast
     */
-    private void CheckForSpellHits(Vector3 position, float xSize, float zSize){
+    private void CheckForSpellHits(Vector3 position, float xSize, float zSize, bool isFirstCast){
         position.y = player.hitbox.transform.position.y;
         List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(xSize/2, 0.5f, zSize/2), transform.rotation, hitboxMask));
         foreach(Collider collider in hits){
@@ -230,7 +230,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             if(hitUnit != player && hitUnit != null){
                 if(!pastHits.Contains(hitUnit)){
                     Hit(hitUnit);
-                    pastHits.Add(hitUnit);
+                    if(!isFirstCast)
+                        pastHits.Add(hitUnit);
                 }
             }
         }
@@ -259,6 +260,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     */
     public void Hit(IUnit hit){
         //TODO: Handle hit damage.
+        spellHitCallback?.Invoke(hit, this);
         Debug.Log("HIT: " + hit.GameObject.transform.name);
     }
 }
