@@ -265,7 +265,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         spellHitCallback?.Invoke(hit, this);
         if(hit is IDamageable){
             float dmg = TotalDamage();
-            Debug.Log(dmg);
             ((IDamageable) hit).TakeDamage(dmg, DamageType.Magic, player, false);   
         }
     }
@@ -279,7 +278,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         if(isFirstCast){
             damage += 0.4f * player.unitStats.physicalDamage.GetValue();
             //Charge damage. 10% per 1/10 of max charge duration.
-            damage += damage * (0.1f * (Mathf.Floor(chargeAmount/(spellData.maxChargeDuration/10f))));
+            damage += damage * (0.1f * (Mathf.Floor(Mathf.Clamp(chargeAmount, 0f, spellData.maxChargeDuration)/(spellData.maxChargeDuration/10f))));
         }
         else
             damage += 1f * player.unitStats.physicalDamage.GetValue();
