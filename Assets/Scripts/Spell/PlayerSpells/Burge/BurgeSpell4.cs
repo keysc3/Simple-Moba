@@ -49,14 +49,11 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
             casted = true;
-            UpdateSpellSprite();
             canCast = false;
             StartCoroutine(spellController.CastTime());
             StartCoroutine(SpellDuration(CalculateDuration()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
-            if(fillImage != null)
-                fillImage.fillAmount = 0f;
         }      
     }
 
@@ -76,6 +73,9 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private IEnumerator SpellDuration(float duration){
         while(player.IsCasting)
             yield return null;
+        UpdateSpellSprite();
+        if(fillImage != null)
+                fillImage.fillAmount = 0f;
         spellData.spellEffect.duration[0] = duration;
         spellEffect = (PersonalSpell) spellData.spellEffect.InitializeEffect(0, player, player);
         player.statusEffects.AddEffect(spellEffect);
@@ -163,7 +163,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
                     float toFill = spellData.fillPerSpellHit[spellHit.spellData.spellID];
                     currentFill = Mathf.Clamp(toFill + currentFill, 0f, 100f);
                     if(fillImage != null)
-                        fillImage.fillAmount = 1f - Mathf.Clamp(currentFill/100f, 0f, 1f);
+                        fillImage.fillAmount = Mathf.Clamp(currentFill/100f, 0f, 1f);
                 }
             }
             else{
