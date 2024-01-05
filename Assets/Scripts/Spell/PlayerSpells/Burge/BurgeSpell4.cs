@@ -163,7 +163,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
                     float toFill = spellData.fillPerSpellHit[spellHit.spellData.spellID];
                     currentFill = Mathf.Clamp(toFill + currentFill, 0f, 100f);
                     if(fillImage != null)
-                        fillImage.fillAmount = Mathf.Clamp(currentFill/100f, 0f, 1f);
+                        fillImage.fillAmount = Mathf.Clamp01(currentFill/100f);
                 }
             }
             else{
