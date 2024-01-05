@@ -53,6 +53,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             yield return null;
         Dictionary<IUnit, float> lastHits = new Dictionary<IUnit, float>();
         Transform spellTransform = ((GameObject) Instantiate(spellData.prefab, targetPosition, Quaternion.identity)).transform;
+        spellTransform.position = new Vector3(targetPosition.x, 0.5f, targetPosition.z);
         Vector3 endSize = spellTransform.localScale * spellData.sizeMultiplier;
         Vector3 startingSize = spellTransform.localScale;
         float timer = 0.0f;
