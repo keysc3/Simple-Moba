@@ -19,7 +19,7 @@ public class SpellController
     private NavMeshAgent navMeshAgent;
     //private Collider collider;
 
-    public delegate void CastBarUpdate(float timer, ISpell spell);
+    public delegate void CastBarUpdate(float timer, string name, float castTime, bool hideOnMax);
     public event CastBarUpdate CastBarUpdateCallback;
 
     public delegate void SpellCDUpdate(SpellType spellType, float cooldownLeft, float spell_cd);
@@ -63,7 +63,7 @@ public class SpellController
         player.CurrentCastedSpell = spell;
         // While still casting spell stop the player.
         while(timer < spell.spellData.castTime){
-            CastBarUpdateCallback?.Invoke(timer, spell);
+            CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, spell.spellData.castTime, true);
             if(!spell.CanMove){
                 if(navMeshAgent != null && navMeshAgent.enabled){
                     if(!navMeshAgent.isStopped)
@@ -73,11 +73,21 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
-        CastBarUpdateCallback?.Invoke(timer, spell);
+        CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, spell.spellData.castTime, true);
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
         if(navMeshAgent != null && navMeshAgent.enabled)
             navMeshAgent.isStopped = false;
+    }
+
+    /*
+    *   ChargeUpUI - Raises a cast bar update event for charge abilities.
+    *   @param timer - float of the elapsed time.
+    *   @param maxDuration - float of the total charge duration.
+    *   @param hideOnMax - bool to hide the cast bar or not when max charge reached.
+    */
+    public void ChargeUpUI(float timer, float maxDuration, bool hideOnMax){
+        CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, maxDuration, hideOnMax);
     }
 
     /*

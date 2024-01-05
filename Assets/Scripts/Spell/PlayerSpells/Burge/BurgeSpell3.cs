@@ -52,10 +52,11 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         while(Input.GetKey(spellInput) && chargeAmount < spellData.holdDuration){
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
+            spellController.ChargeUpUI(chargeAmount, spellData.maxChargeDuration, false);
             chargeAmount += Time.deltaTime;
-            Debug.Log("holding: " + chargeAmount);
             yield return null;
         }
+        spellController.ChargeUpUI(chargeAmount, spellData.maxChargeDuration, true);
         // If the key was not released do not cast the spell.
         if(Input.GetKey(spellInput)){
             PutOnCd(false);
