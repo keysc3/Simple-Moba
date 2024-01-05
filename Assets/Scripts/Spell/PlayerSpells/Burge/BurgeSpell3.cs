@@ -14,8 +14,9 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     new private BurgeSpell3Data spellData;
     public SpellHitCallback spellHitCallback { get; set; }
     private NavMeshAgent navMeshAgent;
-    private float chargeAmount;
+    private float chargeAmount = 0.0f;
     private List<IUnit> pastHits = new List<IUnit>();
+    private bool isFirstCast = false;
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -30,6 +31,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     */
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+            isFirstCast = true;
+            chargeAmount = 0.0f;
             StartCoroutine(ChargeUp());
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
@@ -58,16 +61,15 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             PutOnCd(false);
         }
         else{
-            StartCoroutine(SpellCast(chargeAmount));
+            StartCoroutine(SpellCast());
         }
     }
 
 
     /*
-    *   SpellCast - Handles casting the spell
-    *   @param heladDuration - float of how long the spell was charging for.
+    *   SpellCast - Handles casting the spell.
     */
-    private IEnumerator SpellCast(float heldDuration){
+    private IEnumerator SpellCast(){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
         // Center of the spells hitbox.
@@ -80,7 +82,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             yield return null;
         }
         // Check for any hits.
-        CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength, true);
+        CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength);
         //TODO: REMOVE
         #region "Hitbox debug lines"
         Vector3 startingPosition = transform.position;
@@ -93,7 +95,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.hitboxWidth/2), Color.blue, 5f);
         #endregion
         // Cast second part of spell if it was charged enough.
-        if(heldDuration >= spellData.maxChargeDuration)
+        if(chargeAmount >= spellData.maxChargeDuration)
             StartCoroutine(SecondCast());
         else{
             PutOnCd(true);
@@ -150,6 +152,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @param targetDirection - Vector3 of the target direction of the spell cast.
     */
     private IEnumerator SecondSpellDash(Vector3 targetDirection){
+        isFirstCast = false;
         // Get the final position after dash is applied.
         Vector3 targetPosition = (targetDirection - transform.position).normalized;
         GameObject visual = CreateSecondCastVisual(targetPosition);
@@ -182,7 +185,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         transform.position = Vector3.Lerp(startingPosition, targetPosition, ratio);
         // Move towards target position. Hitbox starts at center of player.
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
-        CheckForSpellHits(position, spellData.chargedHitboxWidth, spellData.chargedHitboxLength, false);
+        CheckForSpellHits(position, spellData.chargedHitboxWidth, spellData.chargedHitboxLength);
     }
 
     /*
@@ -220,9 +223,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   CheckForSpellHits - Checks for any spell hits from a list of hit colliders.
     *   @param hits - List of colliders to check.
     *   @param pastHits - List of IUnits that have already been hit by the spell.
-    *   @param isFirstCast - bool for is the check if for the first spell cast
     */
-    private void CheckForSpellHits(Vector3 position, float xSize, float zSize, bool isFirstCast){
+    private void CheckForSpellHits(Vector3 position, float xSize, float zSize){
         position.y = player.hitbox.transform.position.y;
         List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(xSize/2, 0.5f, zSize/2), transform.rotation, hitboxMask));
         foreach(Collider collider in hits){
@@ -259,8 +261,27 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @param unit - IUnit of the enemy hit.
     */
     public void Hit(IUnit hit){
-        //TODO: Handle hit damage.
         spellHitCallback?.Invoke(hit, this);
-        Debug.Log("HIT: " + hit.GameObject.transform.name);
+        if(hit is IDamageable){
+            float dmg = TotalDamage();
+            Debug.Log(dmg);
+            ((IDamageable) hit).TakeDamage(dmg, DamageType.Magic, player, false);   
+        }
+    }
+
+    /*
+    *   TotalDamage - Calculate the pre-mitigation damage to deal.
+    *   @return float - pre-mitigation damage damage to deal.
+    */
+    private float TotalDamage(){
+        float damage = spellData.baseDamage[SpellLevel];
+        if(isFirstCast){
+            damage += 0.4f * player.unitStats.physicalDamage.GetValue();
+            //Charge damage. 10% per 1/10 of max charge duration.
+            damage += damage * (0.1f * (Mathf.Floor(chargeAmount/(spellData.maxChargeDuration/10f))));
+        }
+        else
+            damage += 1f * player.unitStats.physicalDamage.GetValue();
+        return damage;
     }
 }
