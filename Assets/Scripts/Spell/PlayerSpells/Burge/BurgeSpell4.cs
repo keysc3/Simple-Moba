@@ -83,7 +83,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, true);
         while(timer < duration && casted){
             if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting){
-                SecondCast();
+                StartCoroutine(spellController.CastTime());
+                SecondCastTarget();
                 break;
             }
             timer += Time.deltaTime;
@@ -101,13 +102,23 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     }
 
     /*
-    *   SecondCast - Handles the recast of the ability which ends it and deals damage.
+    *   SecondCastTarget - Handles getting the target of the recast.
     */
-    private void SecondCast(){
+    private void SecondCastTarget(){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.length/2));
         position.y = player.hitbox.transform.position.y;
+        StartCoroutine(SecondCastHitbox(position));
+    }
+
+    /*
+    *   SecondCastHitBox - Handles hit checking for the spells damage cast.
+    *   @param position - Vector3 of the center of the hitbox.
+    */
+    private IEnumerator SecondCastHitbox(Vector3 position){
+        while(player.IsCasting)
+            yield return null;
         List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width, 0.5f, spellData.length), transform.rotation, hitboxMask));
         CheckForSpellHits(hits);
     }
