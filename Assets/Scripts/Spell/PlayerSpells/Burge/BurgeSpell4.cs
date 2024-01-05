@@ -156,9 +156,11 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
                 }
             }
             else{
-                castedHits += 1;
-                if(spellEffect != null)
-                    spellEffect.Stacks = castedHits;
+                if(castedHits < spellData.maxCastedHits){
+                    castedHits += 1;
+                    if(spellEffect != null)
+                        spellEffect.Stacks = castedHits;
+                }
             }
         }
     }
@@ -176,6 +178,23 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     */
     public void Hit(IUnit hit){
         Debug.Log("Imagine getting hit :skull:");
+        if(hit is IDamageable){
+            ((IDamageable) hit).TakeDamage(TotalDamage(hit), DamageType.Magic, player, false);   
+        }
+    }
+
+    /*
+    *   TotalDamage - Calculate the pre-mitigation damage to deal.
+    *   @return float - pre-mitigation damage damage to deal.
+    */
+    private float TotalDamage(IUnit unit){
+        // Damage increased by number of casted hits.
+        float damage = (spellData.baseDamage[SpellLevel] + (0.3f * player.unitStats.physicalDamage.GetValue()));
+        damage += damage * (castedHits/spellData.maxCastedHits);
+        if(unit is not IPlayer){
+            damage *= 0.5f;
+        }
+        return damage;
     }
 
     /*

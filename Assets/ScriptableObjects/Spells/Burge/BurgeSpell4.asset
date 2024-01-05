@@ -34,9 +34,9 @@ MonoBehaviour:
   - 5
   - 5
   <spellID>k__BackingField: Burge4
-  <spellFill>k__BackingField: 17
   <width>k__BackingField: 2
   <length>k__BackingField: 3
+  <maxCastedHits>k__BackingField: 10
   <maxDuration>k__BackingField: 20
   <minDuration>k__BackingField: 1
   <spellEffect>k__BackingField: {fileID: 11400000, guid: 1671e33ddf09de94b8be5ae06b2fea12, type: 2}
