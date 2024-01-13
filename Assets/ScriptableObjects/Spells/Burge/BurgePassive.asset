@@ -19,4 +19,5 @@ MonoBehaviour:
   <baseCd>k__BackingField: []
   <baseMana>k__BackingField: []
   <spellID>k__BackingField: BurgePassive
-  <magnitude>k__BackingField: 0
+  <passiveEffect>k__BackingField: {fileID: 11400000, guid: 295a409e0df3d0646a9c660949430fc0, type: 2}
+  <timeAfterProc>k__BackingField: 10
