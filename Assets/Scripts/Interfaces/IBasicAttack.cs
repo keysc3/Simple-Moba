@@ -8,7 +8,7 @@ using UnityEngine;
 * @author: Colin Keys
 */
 
-public delegate void BasicAttackHitCallback(IUnit hit, IUnit from);
+public delegate void BasicAttackHitCallback(IUnit hit);
 
 public interface IBasicAttack
 {
