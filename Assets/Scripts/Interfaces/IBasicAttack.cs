@@ -7,8 +7,12 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
+
+public delegate void BasicAttackHitCallback(IUnit hit, IUnit from);
+
 public interface IBasicAttack
 {
+    BasicAttackHitCallback basicAttackHitCallback { get; set; }
     bool WindingUp { get; set; }
     float NextAuto { get; set; }
     float AttackSpeed { get; }
