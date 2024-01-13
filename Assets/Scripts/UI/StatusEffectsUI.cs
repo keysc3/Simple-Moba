@@ -147,7 +147,9 @@ public class StatusEffectsUI : MonoBehaviour
         // While the effect still exists on the GameObject.
         while(statusEffects.statusEffects.Contains(effect)){
             if(value != null){
-                value.SetText(((PersonalSpell) effect).Stacks.ToString());
+                int stacks = ((PersonalSpell) effect).Stacks;
+                string stackText = (stacks == -1) ? "" : stacks.ToString();
+                value.SetText(stackText);
                 if(effect.EffectDuration == -1f)
                     yield return null;
             }
