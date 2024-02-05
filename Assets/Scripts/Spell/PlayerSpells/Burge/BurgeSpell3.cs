@@ -56,7 +56,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             chargeAmount += Time.deltaTime;
             yield return null;
         }
-        spellController.ChargeUpUI(chargeAmount, spellData.maxChargeDuration, true);
+        spellController.ChargeUpUI(spellData.maxChargeDuration, spellData.maxChargeDuration, true);
         // If the key was not released do not cast the spell.
         if(Input.GetKey(spellInput)){
             PutOnCd(false);
