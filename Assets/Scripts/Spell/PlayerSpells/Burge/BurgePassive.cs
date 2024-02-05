@@ -4,7 +4,7 @@ using UnityEngine;
 
 /*
 * Purpose: Implements Burge's passive. Burge applies a mark on any enemy player hit by their abilities. If Burge basic attacks a player with a mark
-* they expunge the mark <what it do though?>.
+* they expunge the mark which deals damage to the target.
 *
 * @author: Colin Keys
 */
@@ -48,11 +48,13 @@ public class BurgePassive : Spell, IHasCallback
     *   @param hit - IUnit hit by basic attack.
     */
     public void ProcPassive(IUnit hit){
-        if(hit is IPlayer){
+        if(hit is IPlayer && hit is IDamageable){
             if(hit.statusEffects.CheckForEffectByName(spellData.passiveEffect.name)){
                 nextApply[(IPlayer) hit] = Time.time + spellData.timeAfterProc;
                 Debug.Log("PASSIVE PROC");
-                // TODO: Proc passive.
+                // Auto deals an additional 30% physical damage plus 2% per level > 1.
+                float damageValue = (0.30f + (0.02f * (float)(player.levelManager.Level - 1))) * championStats.physicalDamage.GetValue();
+                ((IDamageable) hit).TakeDamage(damageValue, DamageType.Physical, player, false);
             }
         }
     }
