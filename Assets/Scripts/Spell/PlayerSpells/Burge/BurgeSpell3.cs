@@ -161,15 +161,16 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         targetPosition = GetFinalPosition(targetPosition);
         float timer = 0.0f;
         Vector3 startingPosition = transform.position;
+        float dashSpeed = spellData.dashMagnitude/spellData.dashTime;
         // While still dashing.
         while(timer < spellData.dashTime && !player.IsDead){
-            SecondSpellTick(startingPosition, targetPosition, targetDirection, timer/spellData.dashTime);
+            SecondSpellTick(startingPosition, targetPosition, targetDirection, dashSpeed);
             timer += Time.deltaTime;
             yield return null;
         }
         // Apply last tick dash and enable pathing.
         if(!player.IsDead)
-            SecondSpellTick(startingPosition, targetPosition, targetDirection, 1);
+            SecondSpellTick(startingPosition, targetPosition, targetDirection, dashSpeed);
         //navMeshAgent.isStopped = false;
         PutOnCd(true);
         Destroy(visual);
@@ -180,11 +181,12 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @param startingPosition - Vector3 of the players starting position.
     *   @param targetPosition - Vector3 of the players target position.
     *   @param targetDirection - Vector3 of the players direction of movement.
-    *   @param ratio - float representing the fraction of the spells movement completed.
+    *   @param speed - The speed of the dash
     */
-    private void SecondSpellTick(Vector3 startingPosition, Vector3 targetPosition, Vector3 targetDirection, float ratio){
-        transform.position = Vector3.Lerp(startingPosition, targetPosition, ratio);
-        // Move towards target position. Hitbox starts at center of player.
+    private void SecondSpellTick(Vector3 startingPosition, Vector3 targetPosition, Vector3 targetDirection, float speed){
+        // Move towards target position
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * speed);
+        // Hitbox starts at center of player.
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.chargedHitboxLength/2));
         CheckForSpellHits(position, spellData.chargedHitboxWidth, spellData.chargedHitboxLength);
     }
