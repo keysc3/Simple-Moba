@@ -45,8 +45,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private IEnumerator ChargeUp(){
         player.IsCasting = true;
         player.CurrentCastedSpell = this;
-        navMeshAgent.isStopped = true;
         navMeshAgent.ResetPath();
+        navMeshAgent.isStopped = true;
         KeyCode spellInput = KeyCode.E;
         chargeAmount = 0.0f;
         while(Input.GetKey(spellInput) && chargeAmount < spellData.holdDuration){
@@ -249,6 +249,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private void PutOnCd(bool casted){
         // Set fields back to non-casting state.
         player.IsCasting = false;
+        navMeshAgent.ResetPath();
         navMeshAgent.isStopped = false;
         // Put spell on full cd if it was casted.
         float cd = spellData.baseCd[SpellLevel];
