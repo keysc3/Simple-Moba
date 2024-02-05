@@ -134,16 +134,17 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     */
     private IEnumerator Spell_3_Move(Vector3 targetDirection, GameObject seed, BilliaSpell3Trigger billiaSpell3Trigger){
         billiaSpell3Trigger.forwardDirection = targetDirection;
-        LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
         SphereCollider seedCollider = seed.GetComponentInChildren<SphereCollider>();
         // Check for lob landing hits.
         List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seedCollider.transform.position, 
-        seedCollider.radius * spellData.lobLandHitbox, ~groundMask));
+        seedCollider.radius * spellData.lobLandHitbox, hitboxMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
-            if(lobHit[0].transform.parent != transform){
-                Spell_3_ConeHitbox(seed.transform, lobHit[0].transform, targetDirection);
-                Destroy(seed);
+            foreach(Collider hit in lobHit){
+                if(hit.transform.parent != seed.transform && hit.transform.parent != transform){
+                    Spell_3_ConeHitbox(seed.transform, hit.transform, targetDirection);
+                    Destroy(seed);
+                }
             }
         }
         // While seed hasn't been destroyed, no collision.
@@ -168,10 +169,9 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             Hit(initialHit.GetComponentInParent<IUnit>());
         }
         // Check for hits in a sphere with radius of the cone to be checked.
-        LayerMask groundMask = LayerMask.GetMask("Ground", "Projectile");
-        Collider [] seedConeHits = Physics.OverlapSphere(seed.position, spellData.seedConeRadius, ~groundMask);
+        Collider [] seedConeHits = Physics.OverlapSphere(seed.position, spellData.seedConeRadius, hitboxMask);
         foreach (Collider collider in seedConeHits){
-            if(collider.transform.parent.tag == "Enemy" && collider.transform != initialHit && collider.transform.name == "Hitbox"){
+            if(collider.transform.parent.tag == "Enemy" && collider.transform != initialHit){
                 // Get the direction to the hit collider.
                 Vector3 colliderPos = collider.transform.position;
                 Vector3 directionToHit = (colliderPos - seed.transform.position).normalized;

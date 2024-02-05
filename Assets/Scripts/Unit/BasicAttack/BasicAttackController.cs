@@ -76,6 +76,7 @@ public class BasicAttackController
     *   @param target - IUnit of the target to attack.
     */
     public void AttackHit(IUnit target){
+        basicAttack.basicAttackHitCallback?.Invoke(target);
         float physicalDamage = basicAttack.PhysicalDamage;
         target.TakeDamage(physicalDamage, DamageType.Physical, player, false);
     }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5883134750688949829}
   m_Layer: 0
   m_Name: BahriOrb
-  m_TagString: DestroyOnRespawn
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,9 +96,9 @@ GameObject:
   - component: {fileID: 9117239031240664618}
   - component: {fileID: 2460871509128602984}
   - component: {fileID: 8738471944718744954}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hitbox
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

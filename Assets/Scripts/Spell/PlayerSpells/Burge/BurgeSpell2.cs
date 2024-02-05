@@ -53,6 +53,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             yield return null;
         Dictionary<IUnit, float> lastHits = new Dictionary<IUnit, float>();
         Transform spellTransform = ((GameObject) Instantiate(spellData.prefab, targetPosition, Quaternion.identity)).transform;
+        spellTransform.position = new Vector3(targetPosition.x, 0.5f, targetPosition.z);
         Vector3 endSize = spellTransform.localScale * spellData.sizeMultiplier;
         Vector3 startingSize = spellTransform.localScale;
         float timer = 0.0f;
@@ -75,30 +76,28 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     private Dictionary<IUnit, float> CheckForSpellHits(Transform spellTransform, bool spellFinished, Dictionary<IUnit, float> lastHits){
         Vector3 overlapCheck = spellTransform.position;
         overlapCheck.y = player.hitbox.transform.position.y;
-        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(overlapCheck, spellTransform.localScale.x/2f));
+        List<Collider> outerHit = new List<Collider>(Physics.OverlapSphere(overlapCheck, spellTransform.localScale.x/2f, hitboxMask));
         foreach(Collider collider in outerHit){
-            if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
-                IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
-                if(hitUnit != null){
-                    if(!spellFinished){
-                        float lastHitTime;
-                        // If unit has been hit once already and its not last hit, check if time for another hit, otherwise hit and add to dictionary.
-                        if(lastHits.TryGetValue(hitUnit, out lastHitTime)){
-                            if(Time.time >= (lastHitTime + spellData.timeBetweenTicks)){
-                                Hit(hitUnit);
-                                lastHits[hitUnit] = Time.time;
-                            }
-                        }
-                        else{
-                            lastHits.Add(hitUnit, Time.time);
+            IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
+            if(hitUnit != player && hitUnit != null){
+                if(!spellFinished){
+                    float lastHitTime;
+                    // If unit has been hit once already and its not last hit, check if time for another hit, otherwise hit and add to dictionary.
+                    if(lastHits.TryGetValue(hitUnit, out lastHitTime)){
+                        if(Time.time >= (lastHitTime + spellData.timeBetweenTicks)){
                             Hit(hitUnit);
+                            lastHits[hitUnit] = Time.time;
                         }
                     }
                     else{
+                        lastHits.Add(hitUnit, Time.time);
                         Hit(hitUnit);
-                        Hit(hitUnit);
-                        hitUnit.statusEffects.AddEffect(spellData.knockup.InitializeEffect(SpellLevel, player, hitUnit));
                     }
+                }
+                else{
+                    Hit(hitUnit);
+                    Hit(hitUnit);
+                    hitUnit.statusEffects.AddEffect(spellData.knockup.InitializeEffect(SpellLevel, player, hitUnit));
                 }
             }
         }

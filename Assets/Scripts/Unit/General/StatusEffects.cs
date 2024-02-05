@@ -285,7 +285,7 @@ public class StatusEffects
                 statusEffects[i].EndEffect();
                 statusEffects.RemoveAt(i);
                 if(removed == mostImpairing)
-                    SetMostImpairing(GetMostImpairing());
+                    NewMostImpairing();
                 return;
             }
         }

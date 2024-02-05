@@ -16,6 +16,8 @@ public class BasicAttackBehaviour : MonoBehaviour, IBasicAttack
     public float AttackSpeed { get => unitStats.attackSpeed.GetValue(); }
     public float PhysicalDamage { get => unitStats.physicalDamage.GetValue(); }
 
+    public BasicAttackHitCallback basicAttackHitCallback { get; set; }
+
     protected BasicAttackController basicAttackController;
     protected UnitStats unitStats;
     [SerializeField] protected GameObject attackProjectile;

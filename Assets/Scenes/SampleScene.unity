@@ -2286,6 +2286,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: cf70b327e47f7d44b8a7353b353895f9, type: 2}
+    - target: {fileID: 6719907778403370811, guid: 0764377be9fe6994984fdf29d92f64b7, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 8310896156975719262, guid: 0764377be9fe6994984fdf29d92f64b7, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2647,8 +2651,8 @@ GameObject:
   - component: {fileID: 1438147746}
   - component: {fileID: 1438147745}
   - component: {fileID: 1438147744}
-  m_Layer: 7
-  m_Name: Collider
+  m_Layer: 9
+  m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3524,6 +3528,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7071451212668767925, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2365348720512060567, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -3539,6 +3547,10 @@ PrefabInstance:
     - target: {fileID: 2365348721444662711, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
       propertyPath: m_MaxValue
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2673462179313430975, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4067613685028727936, guid: 8eea5d51784ebdf4987f3be58fd3eae2, type: 3}
       propertyPath: m_Name
@@ -3995,9 +4007,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bahri
       objectReference: {fileID: 0}
+    - target: {fileID: 4176618735587184694, guid: 81bc33484846d7749b056e314192e53a, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4230911344176095919, guid: 81bc33484846d7749b056e314192e53a, type: 3}
       propertyPath: m_IsTrigger
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5538618006549796756, guid: 81bc33484846d7749b056e314192e53a, type: 3}
       propertyPath: sUnit
@@ -4128,8 +4144,8 @@ GameObject:
   - component: {fileID: 1917155698}
   - component: {fileID: 1917155697}
   - component: {fileID: 1917155696}
-  m_Layer: 7
-  m_Name: Collider
+  m_Layer: 9
+  m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4329,6 +4345,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1331981380}
     m_Modifications:
+    - target: {fileID: 381104454186276088, guid: f81ec30f7e946ac4fab7408866094095, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2725297665633345505, guid: f81ec30f7e946ac4fab7408866094095, type: 3}
       propertyPath: m_Name
       value: Burge
@@ -4381,6 +4401,10 @@ PrefabInstance:
       propertyPath: sUnit
       value: 
       objectReference: {fileID: 11400000, guid: 4ba0205ac1e26ec46a68815391f9c4f9, type: 2}
+    - target: {fileID: 8098245484843783002, guid: f81ec30f7e946ac4fab7408866094095, type: 3}
+      propertyPath: playerUIPrefab
+      value: 
+      objectReference: {fileID: 8040892094604157911, guid: 7c9cc4b5f44a7bd469e9875a28db2ff4, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f81ec30f7e946ac4fab7408866094095, type: 3}
 --- !u!1 &1951473417
@@ -4395,8 +4419,8 @@ GameObject:
   - component: {fileID: 1951473420}
   - component: {fileID: 1951473419}
   - component: {fileID: 1951473421}
-  m_Layer: 7
-  m_Name: Collider
+  m_Layer: 9
+  m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4542,6 +4566,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <spellData>k__BackingField: {fileID: 11400000, guid: 68f1de89ffc210d44807eb955d1fb883, type: 2}
+--- !u!114 &2000949320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000949286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b57d2bd43dd37a4fa96494d26ca8a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <spellData>k__BackingField: {fileID: 11400000, guid: 36069b5858f1dd94a9d99e61ab56ece0, type: 2}
+--- !u!114 &2000949330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000949286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd3b2350c2879748926c24ec78ece3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <spellData>k__BackingField: {fileID: 11400000, guid: b54bf704d4292e84ab0cfdc8c85891f0, type: 2}
 --- !u!1 &2012432339
 GameObject:
   m_ObjectHideFlags: 0

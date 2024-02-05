@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
 * Purpose: Implements Burge's fourth spell. Burge enters a trance and receives increased ability haste for the duration. The ability can be recast before the
@@ -18,26 +19,41 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private float currentFill = 0f;
     private bool casted = false;
     private int castedHits = 0;
+    private PersonalSpell spellEffect;
+    private bool canCast = false;
+    private float minFillToCast;
+    private Image fillImage;
 
     // Start is called before the first frame update
     protected override void Start(){
         base.Start();
         this.spellData = (BurgeSpell4Data) base.spellData;
         IsQuickCast = true;
+        minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
+        Transform uiComp = transform.Find(transform.name + "UI" + "/PlayerUI/Player/Combat/SpellsContainer/" + SpellNum + "_Container/SpellContainer/Spell/Fill/Amount");
+        if(uiComp != null){
+            fillImage = uiComp.GetComponent<Image>();
+            fillImage.fillAmount = 0f;
+        }
+
+    }
+
+    // Called after all Update functions have been called
+    private void LateUpdate(){
+        CanUseSpell();
     }
 
     /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        float minFillToCast = (spellData.minDuration/spellData.maxDuration) * 100f;
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && currentFill >= minFillToCast){
+        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
             casted = true;
+            canCast = false;
             StartCoroutine(spellController.CastTime());
             StartCoroutine(SpellDuration(CalculateDuration()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
-            OnCd = true;
         }      
     }
 
@@ -57,27 +73,53 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private IEnumerator SpellDuration(float duration){
         while(player.IsCasting)
             yield return null;
+        UpdateSpellSprite();
+        if(fillImage != null)
+                fillImage.fillAmount = 0f;
+        spellData.spellEffect.duration[0] = duration;
+        spellEffect = (PersonalSpell) spellData.spellEffect.InitializeEffect(0, player, player);
+        player.statusEffects.AddEffect(spellEffect);
         float timer = 0f;
+        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, true);
         while(timer < duration && casted){
             if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting){
-                SecondCast();
-                casted = false;
+                StartCoroutine(spellController.CastTime());
+                SecondCastTarget();
+                break;
             }
             timer += Time.deltaTime;
+            RaiseSpellSliderUpdateEvent(SpellNum, duration, timer);
             yield return null;
         }
+        RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, false);
+        player.statusEffects.RemoveEffect(spellEffect.effectType, player);
+        spellEffect = null;
+        casted = false;
+        currentFill = 0f;
+        UpdateSpellSprite();
+        OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
     /*
-    *   SecondCast - Handles the recast of the ability which ends it and deals damage.
+    *   SecondCastTarget - Handles getting the target of the recast.
     */
-    private void SecondCast(){
+    private void SecondCastTarget(){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.length/2));
         position.y = player.hitbox.transform.position.y;
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width, 0.5f, spellData.length), transform.rotation));
+        StartCoroutine(SecondCastHitbox(position));
+    }
+
+    /*
+    *   SecondCastHitBox - Handles hit checking for the spells damage cast.
+    *   @param position - Vector3 of the center of the hitbox.
+    */
+    private IEnumerator SecondCastHitbox(Vector3 position){
+        while(player.IsCasting)
+            yield return null;
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width, 0.5f, spellData.length), transform.rotation, hitboxMask));
         CheckForSpellHits(hits);
     }
 
@@ -87,28 +129,58 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     */
     private void CheckForSpellHits(List<Collider> hits){
         foreach(Collider collider in hits){
-            if(collider.transform.name == "Hitbox" && collider.transform.parent != transform){
-                IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
-                if(hitUnit != null){
-                    Hit(hitUnit);
-                }
+            IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
+            if(hitUnit != player && hitUnit != null){
+                Hit(hitUnit);
             }
         }
     }
 
     /*
-    *   BasicSpellHit - Incrememnts necessary fields when the player lands a basic spell.
+    *   CanUseSpell - Checks if the spell has enough stacks to be used.
+    */
+    private void CanUseSpell(){
+        if(SpellLevel >= 0 && !OnCd && !casted){
+            if(currentFill >= minFillToCast){
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, false);
+                canCast = true;
+            }
+            else{
+                canCast = false;
+                RaiseSetComponentActiveEvent(SpellNum, SpellComponent.CDCover, true);
+            }
+        }
+    }
+    /*
+    *   BasicSpellHit - Increments necessary fields when the player lands a basic spell.
     *   @param hitUnit - IUnit of the enemy hit.
     *   @param spellHit - ISpell the hit is from.
     */
     public void BasicSpellHit(IUnit hitUnit, ISpell spellHit){
-        if(!casted){
-            if(currentFill < 100f)
-                currentFill = Mathf.Clamp(spellData.spellFill + currentFill, 0f, 100f);
+        if(SpellLevel >= 0 && !OnCd){
+            if(!casted){
+                if(currentFill < 100f){
+                    float toFill = spellData.fillPerSpellHit[spellHit.spellData.spellID];
+                    currentFill = Mathf.Clamp(toFill + currentFill, 0f, 100f);
+                    if(fillImage != null)
+                        fillImage.fillAmount = Mathf.Clamp01(currentFill/100f);
+                }
+            }
+            else{
+                if(castedHits < spellData.maxCastedHits){
+                    castedHits += 1;
+                    if(spellEffect != null)
+                        spellEffect.Stacks = castedHits;
+                }
+            }
         }
-        else{
-            castedHits += 1;
-        }
+    }
+    
+    private void UpdateSpellSprite(){
+        if(casted)
+            RaiseSetSpriteEvent(SpellNum, SpellComponent.SpellImage, spellData.castedSprite);
+        else
+            RaiseSetSpriteEvent(SpellNum, SpellComponent.SpellImage, spellData.sprite);
     }
 
     /*
@@ -117,6 +189,23 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     */
     public void Hit(IUnit hit){
         Debug.Log("Imagine getting hit :skull:");
+        if(hit is IDamageable){
+            ((IDamageable) hit).TakeDamage(TotalDamage(hit), DamageType.Magic, player, false);   
+        }
+    }
+
+    /*
+    *   TotalDamage - Calculate the pre-mitigation damage to deal.
+    *   @return float - pre-mitigation damage damage to deal.
+    */
+    private float TotalDamage(IUnit unit){
+        // Damage increased by number of casted hits.
+        float damage = (spellData.baseDamage[SpellLevel] + (0.3f * player.unitStats.physicalDamage.GetValue()));
+        damage += damage * (castedHits/spellData.maxCastedHits);
+        if(unit is not IPlayer){
+            damage *= 0.5f;
+        }
+        return damage;
     }
 
     /*

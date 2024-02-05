@@ -14,7 +14,13 @@ public class BahriSpell1Trigger : MonoBehaviour
     private Bounds bahriBounds;
     private SphereCollider orbCollider;
     private bool deathBoundsSet = false;
+    private LayerMask hitboxLayer;
 
+    // Called when the script instance is being loaded.
+    private void Awake(){
+        hitboxLayer = LayerMask.NameToLayer("Hitbox");
+    }
+    
     // Start is called before the first frame update.
     private void Start(){
         orbCollider = GetComponent<SphereCollider>();
@@ -45,7 +51,7 @@ public class BahriSpell1Trigger : MonoBehaviour
     private void OnTriggerStay(Collider other){
         IUnit hitUnit = other.gameObject.GetComponentInParent<IUnit>();
         // Call collision handler if enemy is hit.
-        if(other.transform.parent.tag == "Enemy" && hitUnit != unit){
+        if(other.gameObject.layer == hitboxLayer && other.transform.parent.tag == "Enemy" && hitUnit != unit){
             bahriSpell1.Hit(hitUnit);
         }
         //  Destroy GameObject if it has returned to Bahri.

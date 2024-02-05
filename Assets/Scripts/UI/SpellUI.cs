@@ -75,6 +75,7 @@ public class SpellUI : MonoBehaviour
         spell.SpellCDSetActiveCallback += SpellCDChildrenSetActive;
         spell.SpellSliderUpdateCallback += UpdateActiveSpellSlider;
         spell.SetComponentActiveCallback += SetComponentActive;
+        spell.SetSpriteCallback += SetSprite;
     }
 
     /*
@@ -161,5 +162,15 @@ public class SpellUI : MonoBehaviour
             spellLevelUpButton.LevelManager = levelManager;
             spellLevelUpButton.SpellInput = spellInput;
         }
+    }
+
+    /*
+    *   SetSprite - Sets the spells sprite.
+    *   @param spellType - SpellType for which UI element to adjust.
+    *   @param component - SpellComponent of the component to set active.
+    *   @param sprite - Sprite to set the image to.
+    */
+    public void SetSprite(SpellType spellType, SpellComponent component, Sprite sprite){
+        ((Image) spellComps[spellType][component]).sprite = sprite;
     }
 }

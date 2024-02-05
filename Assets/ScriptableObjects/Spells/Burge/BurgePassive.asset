@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cc5d38d360ff8146bb39e68cc95d56d, type: 3}
-  m_Name: BilliaPassive
+  m_Script: {fileID: 11500000, guid: cc08b9fac3585ec489376148fe43406a, type: 3}
+  m_Name: BurgePassive
   m_EditorClassIdentifier: 
-  <sprite>k__BackingField: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
+  <sprite>k__BackingField: {fileID: 21300000, guid: dcd0655e17ffe824ca6693a54297152f, type: 3}
   <defaultSpellNum>k__BackingField: 1
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField: []
   <baseCd>k__BackingField: []
   <baseMana>k__BackingField: []
-  <spellID>k__BackingField: Billia0
-  <passiveDot>k__BackingField: {fileID: 11400000, guid: 7c48892f3f1b12a499890c1d8bbf1305, type: 2}
+  <spellID>k__BackingField: BurgePassive
+  <passiveEffect>k__BackingField: {fileID: 11400000, guid: 295a409e0df3d0646a9c660949430fc0, type: 2}
+  <timeAfterProc>k__BackingField: 10

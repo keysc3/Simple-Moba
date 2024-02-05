@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d8bfa0629be384c94ade0fcf3a25f4, type: 3}
+  m_Name: BurgeSpell4
+  m_EditorClassIdentifier: 
+  <sprite>k__BackingField: {fileID: 21300000, guid: 426de15506f9fb44ca326454f5f937d1, type: 3}
+  <defaultSpellNum>k__BackingField: 5
+  <castTime>k__BackingField: 0.25
+  <baseDamage>k__BackingField:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  <baseCd>k__BackingField:
+  - 10
+  - 10
+  - 10
+  - 10
+  - 10
+  <baseMana>k__BackingField:
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  <spellID>k__BackingField: Burge4
+  <width>k__BackingField: 2
+  <length>k__BackingField: 3
+  <maxCastedHits>k__BackingField: 10
+  <maxDuration>k__BackingField: 20
+  <minDuration>k__BackingField: 1
+  <spellEffect>k__BackingField: {fileID: 11400000, guid: 1671e33ddf09de94b8be5ae06b2fea12, type: 2}
+  <castedSprite>k__BackingField: {fileID: 21300000, guid: a2e384f972f22b640a7d6693f7e33df9, type: 3}
