@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 /*
 * Purpose: Implements Burge's second spell. Burge throws a spinning dagger at the target location that grows in size over the spells duration.
@@ -23,21 +24,21 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-       /* Handles.color = Color.cyan;
+        Handles.color = Color.cyan;
         Handles.DrawWireDisc(transform.position, Vector3.up, spellData.magnitude, 1f);
        // Get the players mouse position on spell cast for spells target direction.
         Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
         Vector3 targetPosition = (targetDirection - transform.position);
-        // Set target to lob seed to to max lob distance if casted at a greater distance.
-        if(targetPosition.magnitude > spellData.maxLobMagnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
+        // Set target to lob seed to max lob distance if casted at a greater distance.
+        if(targetPosition.magnitude > spellData.magnitude)
+            targetPosition = transform.position + (targetPosition.normalized * spellData.magnitude);
         else
             targetPosition = transform.position + (targetDirection - transform.position);
         Handles.color = Color.cyan;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.visualPrefab.transform.localScale.x, 1f);
+        Handles.DrawWireDisc(targetPosition, Vector3.up, (spellData.startingSize/2f) * spellData.sizeMultiplier, 1f);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(targetPosition, targetPosition + ((targetPosition - transform.position).normalized * 2f));*/
+        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.startingSize/2f, 1f);
     }
 
     /*
