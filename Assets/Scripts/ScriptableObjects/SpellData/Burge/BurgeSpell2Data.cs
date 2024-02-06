@@ -16,4 +16,5 @@ public class BurgeSpell2Data : SpellData
     [field: SerializeField] public float magnitude { get; private set; }
     [field: SerializeField] public float timeBetweenTicks { get; private set; }
     [field: SerializeField] public ScriptableKnockup knockup { get; private set; }
+    [field: SerializeField] public float startingSize { get; private set; }
 }

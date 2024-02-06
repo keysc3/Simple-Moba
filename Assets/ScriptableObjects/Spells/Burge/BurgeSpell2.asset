@@ -40,3 +40,4 @@ MonoBehaviour:
   <magnitude>k__BackingField: 4
   <timeBetweenTicks>k__BackingField: 0.5
   <knockup>k__BackingField: {fileID: 11400000, guid: feefd50284ae2be4fa89fa23e1a14ca9, type: 2}
+  <startingSize>k__BackingField: 1.5
