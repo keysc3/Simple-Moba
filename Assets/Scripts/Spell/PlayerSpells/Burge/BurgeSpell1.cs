@@ -26,6 +26,14 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     }
 
     /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
+    protected override void DrawSpell(){
+        Handles.color = Color.cyan;
+        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.magnitude, 1f);
+    }
+
+    /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
