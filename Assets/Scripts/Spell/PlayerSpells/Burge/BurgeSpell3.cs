@@ -84,6 +84,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         }
         // Check for any hits.
         CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength);
+        StartCoroutine(Fade(visualHitbox));
         //TODO: REMOVE
         #region "Hitbox debug lines"
         Vector3 startingPosition = transform.position;
@@ -100,6 +101,24 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             StartCoroutine(SecondCast());
         else{
             PutOnCd(true);
+        }
+    }
+
+    /*
+        Fade - Coroutine to fade out the hitbox.
+        @param visualHitbox - GameObject representing the hitbox.
+    */
+    private IEnumerator Fade(GameObject visualHitbox){
+        Renderer visualHitboxRend = visualHitbox.GetComponent<Renderer>();
+        Color color = visualHitboxRend.material.color;
+        float initialAlpha = color.a;
+        float timer = 0.0f;
+        while(timer < spellData.firstCastFadeTime){
+                color.a = Mathf.Lerp(1f, initialAlpha, timer/spellData.firstCastFadeTime);
+                visualHitboxRend.material.color = color;
+                color = visualHitboxRend.material.color;
+            timer += Time.deltaTime;
+            yield return null;
         }
         Destroy(visualHitbox);
     }
