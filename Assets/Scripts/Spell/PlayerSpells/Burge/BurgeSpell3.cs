@@ -17,6 +17,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private float chargeAmount = 0.0f;
     private List<IUnit> pastHits = new List<IUnit>();
     private bool isFirstCast = false;
+    IPlayerMover playerMover;
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -24,6 +25,16 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         this.spellData = (BurgeSpell3Data) base.spellData;
         navMeshAgent = GetComponent<NavMeshAgent>();
         IsQuickCast = true;
+        playerMover = GetComponentInParent<IPlayerMover>();
+    }
+
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
+    protected override void DrawSpell(){
+        Vector3 targetDirection = spellController.GetTargetDirection();
+        DrawCast(targetDirection, false);
+        DrawCast(targetDirection, true);
     }
 
     /*
@@ -51,6 +62,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         chargeAmount = 0.0f;
         while(Input.GetKey(spellInput) && chargeAmount < spellData.holdDuration){
             Vector3 targetDirection = spellController.GetTargetDirection();
+            DrawCast(targetDirection, true);
             player.MouseOnCast = targetDirection;
             spellController.ChargeUpUI(chargeAmount, spellData.maxChargeDuration, false);
             chargeAmount += Time.deltaTime;
@@ -66,6 +78,20 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         }
     }
 
+    private void DrawCast(Vector3 targetDirection, bool isFirst){
+        Color color = Color.cyan;
+        float multi = spellData.hitboxLength;
+        if(!isFirst){
+            color = Color.red;
+            multi = spellData.dashMagnitude + spellData.chargedHitboxLength;
+        }
+        Vector3 startingPosition = transform.position;
+        Vector3 targetPos = (targetDirection - transform.position).normalized;
+        targetPos = transform.position + (targetPos * multi);
+        Debug.DrawLine(startingPosition, targetPos, color);
+        //Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.hitboxWidth/2), Color.blue);
+        //Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.hitboxWidth/2), Color.blue);
+    }
 
     /*
     *   SpellCast - Handles casting the spell.
@@ -79,23 +105,14 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         float timer = 0.0f;
         // Wait out the cast time.
         while(timer < spellData.castTime){
+            if(chargeAmount >= spellData.maxChargeDuration)
+                DrawCast(spellController.GetTargetDirection(), false);
             timer += Time.deltaTime;
             yield return null;
         }
         // Check for any hits.
         CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength);
         StartCoroutine(Fade(visualHitbox));
-        //TODO: REMOVE
-        #region "Hitbox debug lines"
-        Vector3 startingPosition = transform.position;
-        startingPosition.y = player.hitbox.transform.position.y;
-        Vector3 targetPos = (targetDirection - transform.position).normalized;
-        targetPos = transform.position + (targetPos * spellData.hitboxLength);
-        targetPos.y = player.hitbox.transform.position.y;
-        Debug.DrawLine(startingPosition, targetPos, Color.blue, 5f);
-        Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.hitboxWidth/2), Color.blue, 5f);
-        Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.hitboxWidth/2), Color.blue, 5f);
-        #endregion
         // Cast second part of spell if it was charged enough.
         if(chargeAmount >= spellData.maxChargeDuration)
             StartCoroutine(SecondCast());
@@ -144,26 +161,13 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         float timer = 0.0f;
         // Wait out cast time.
         while(timer < spellData.timeBetweenDash){
+            DrawCast(spellController.GetTargetDirection(), false);
             timer += Time.deltaTime;
             yield return null;
         }
         // Get second cast position.
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection + ((targetDirection - transform.position).normalized * (spellData.dashMagnitude + spellData.chargedHitboxLength));
-        //TODO: REMOVE
-        #region "Hitbox2 debug lines"
-        Vector3 startingPosition = transform.position;
-        startingPosition.y = player.hitbox.transform.position.y;
-        Vector3 targetPos = (targetDirection - transform.position).normalized;
-        targetPos = transform.position + (targetPos * (spellData.dashMagnitude + spellData.chargedHitboxLength));
-        targetPos.y = player.hitbox.transform.position.y;
-        IPlayerMover playerMover = GetComponentInParent<IPlayerMover>();
-        playerMover.CurrentTarget = targetDirection;
-        Vector3 endPosition = targetDirection;
-        Debug.DrawLine(startingPosition, targetPos, Color.red, 5f);
-        Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.chargedHitboxWidth/2), Color.red, 5f);
-        Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.chargedHitboxWidth/2), Color.red, 5f);
-        #endregion
         StartCoroutine(SecondSpellDash(targetDirection));
     }
 
@@ -173,6 +177,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     */
     private IEnumerator SecondSpellDash(Vector3 targetDirection){
         isFirstCast = false;
+        playerMover.CurrentTarget = targetDirection;
         // Get the final position after dash is applied.
         Vector3 targetPosition = (targetDirection - transform.position).normalized;
         GameObject visual = CreateSecondCastVisual(targetPosition);
