@@ -23,7 +23,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private bool canCast = false;
     private float minFillToCast;
     private Image fillImage;
-
+    IPlayerMover playerMover;
     // Start is called before the first frame update
     protected override void Start(){
         base.Start();
@@ -35,7 +35,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
             fillImage = uiComp.GetComponent<Image>();
             fillImage.fillAmount = 0f;
         }
-
+        playerMover = GetComponentInParent<IPlayerMover>();
     }
 
     // Called after all Update functions have been called
@@ -50,6 +50,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
             casted = true;
             canCast = false;
+            player.MouseOnCast = transform.position + transform.forward;
             StartCoroutine(spellController.CastTime());
             StartCoroutine(SpellDuration(CalculateDuration()));
             // Use mana.
@@ -107,8 +108,9 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private void SecondCastTarget(){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
+        playerMover.CurrentTarget = targetDirection;
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.length/2));
-        position.y = player.hitbox.transform.position.y;
+        //position.y = player.hitbox.transform.position.y;
         StartCoroutine(SecondCastHitbox(position));
     }
 
@@ -117,17 +119,53 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     *   @param position - Vector3 of the center of the hitbox.
     */
     private IEnumerator SecondCastHitbox(Vector3 position){
-        while(player.IsCasting)
+        GameObject visualHitbox = CreateCastVisual(position);
+        while(player.IsCasting){
             yield return null;
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width, 0.5f, spellData.length), transform.rotation, hitboxMask));
-        CheckForSpellHits(hits);
+        }
+        CheckForSpellHits(position);
+        StartCoroutine(Fade(visualHitbox));
+    }
+
+    /*
+    *   CreateCastVisual - Creates the visual effect for the cast jab.
+    *   @param position - Vector3 of the x and z center of the visual.
+    *   @return GameObject - The created visual.
+    */
+    private GameObject CreateCastVisual(Vector3 position){
+        Transform visualHitbox = ((GameObject) Instantiate(spellData.visualHitbox, position, transform.rotation)).transform;
+        // Setup the spells visual.
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+        visualHitbox.position = new Vector3(visualHitbox.position.x, visualHitbox.position.y - capsule.bounds.size.y/2f, visualHitbox.position.z);
+        visualHitbox.localScale = new Vector3(spellData.width, visualHitbox.localScale.y, spellData.length);
+        return visualHitbox.gameObject;
+    }
+
+    /*
+        Fade - Coroutine to fade out the hitbox.
+        @param visualHitbox - GameObject representing the hitbox.
+    */
+    private IEnumerator Fade(GameObject visualHitbox){
+        Renderer visualHitboxRend = visualHitbox.GetComponent<Renderer>();
+        Color color = visualHitboxRend.material.color;
+        float initialAlpha = color.a;
+        float timer = 0.0f;
+        while(timer < spellData.fadeTime){
+                color.a = Mathf.Lerp(1f, initialAlpha, timer/spellData.fadeTime);
+                visualHitboxRend.material.color = color;
+                color = visualHitboxRend.material.color;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        Destroy(visualHitbox);
     }
 
     /*
     *   CheckForSpellHits - Checks for any spell hits from a list of hit colliders.
-    *   @param hits - List of colliders to check.
     */
-    private void CheckForSpellHits(List<Collider> hits){
+    private void CheckForSpellHits(Vector3 position){
+        position.y = player.hitbox.transform.position.y;
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(spellData.width/2f, 0.5f, spellData.length/2f), transform.rotation, hitboxMask));
         foreach(Collider collider in hits){
             IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
             if(hitUnit != player && hitUnit != null){
