@@ -53,6 +53,8 @@ public class SpellController
         return targetDirection;
     }
 
+    //TODO: float parameter so it can be used for multicast abilities.
+    //TODO: fade material color coroutine.
     /*
     *   CastTime - Stops the champion for the duration of the spells cast.
     *   @param castTime - float for the duration to stop the champion for casting.

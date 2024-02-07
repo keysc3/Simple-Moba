@@ -253,7 +253,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     */
     private void CheckForSpellHits(Vector3 position, float xSize, float zSize){
         position.y = player.hitbox.transform.position.y;
-        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(xSize/2, 0.5f, zSize/2), transform.rotation, hitboxMask));
+        List<Collider> hits = new List<Collider>(Physics.OverlapBox(position, new Vector3(xSize/2f, 0.5f, zSize/2f), transform.rotation, hitboxMask));
         foreach(Collider collider in hits){
             IUnit hitUnit = collider.gameObject.GetComponentInParent<IUnit>();
             if(hitUnit != player && hitUnit != null){
