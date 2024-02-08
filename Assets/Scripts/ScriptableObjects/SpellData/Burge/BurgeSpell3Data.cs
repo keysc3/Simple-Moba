@@ -23,4 +23,5 @@ public class BurgeSpell3Data : SpellData
     [field: SerializeField] public GameObject visualHitbox { get; private set; }
     [field: SerializeField] public GameObject secondCastVisual { get; private set; }
     [field: SerializeField] public float firstCastFadeTime { get; private set; }
+    [field: SerializeField] public string secondName { get; private set; }
 }

@@ -74,6 +74,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             PutOnCd(false);
         }
         else{
+            StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             StartCoroutine(SpellCast());
         }
     }
@@ -98,25 +99,25 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     */
     private IEnumerator SpellCast(){
         Vector3 targetDirection = spellController.GetTargetDirection();
+        // Wait out the cast time.
+        while(player.IsCasting){
+            if(chargeAmount >= spellData.maxChargeDuration)
+                DrawCast(spellController.GetTargetDirection(), false);
+            yield return null;
+        }
         player.MouseOnCast = targetDirection;
         playerMover.CurrentTarget = targetDirection;
         // Center of the spells hitbox.
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.hitboxLength/2));
         GameObject visualHitbox = CreateFirstCastVisual(position);
-        float timer = 0.0f;
-        // Wait out the cast time.
-        while(timer < spellData.castTime){
-            if(chargeAmount >= spellData.maxChargeDuration)
-                DrawCast(spellController.GetTargetDirection(), false);
-            timer += Time.deltaTime;
-            yield return null;
-        }
         // Check for any hits.
         CheckForSpellHits(position, spellData.hitboxWidth, spellData.hitboxLength);
         StartCoroutine(spellController.Fade(visualHitbox, spellData.firstCastFadeTime));
         // Cast second part of spell if it was charged enough.
-        if(chargeAmount >= spellData.maxChargeDuration)
+        if(chargeAmount >= spellData.maxChargeDuration){
+            StartCoroutine(spellController.CastTime(spellData.timeBetweenDash, spellData.secondName));
             StartCoroutine(SecondCast());
+        }
         else{
             PutOnCd(true);
         }
@@ -140,15 +141,13 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   SecondCast - Handle casting the second part of the spell.
     */
     private IEnumerator SecondCast(){
-        float timer = 0.0f;
-        // Wait out cast time.
-        while(timer < spellData.timeBetweenDash){
-            DrawCast(spellController.GetTargetDirection(), false);
-            timer += Time.deltaTime;
-            yield return null;
-        }
         // Get second cast position.
         Vector3 targetDirection = spellController.GetTargetDirection();
+        // Wait out cast time.
+        while(player.IsCasting){
+            DrawCast(spellController.GetTargetDirection(), false);
+            yield return null;
+        }
         player.MouseOnCast = targetDirection + ((targetDirection - transform.position).normalized * (spellData.dashMagnitude + spellData.chargedHitboxLength));
         StartCoroutine(SecondSpellDash(targetDirection));
     }
