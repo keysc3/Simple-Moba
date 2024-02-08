@@ -42,7 +42,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private void LateUpdate(){
         CanUseSpell();
     }
-
+    //TODO: Second cast to use confirm cast.
     /*
     *   Cast - Casts the spell.
     */
@@ -124,7 +124,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
             yield return null;
         }
         CheckForSpellHits(position);
-        StartCoroutine(Fade(visualHitbox));
+        StartCoroutine(spellController.Fade(visualHitbox, spellData.fadeTime));
     }
 
     /*
@@ -139,25 +139,6 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         visualHitbox.position = new Vector3(visualHitbox.position.x, visualHitbox.position.y - capsule.bounds.size.y/2f, visualHitbox.position.z);
         visualHitbox.localScale = new Vector3(spellData.width, visualHitbox.localScale.y, spellData.length);
         return visualHitbox.gameObject;
-    }
-
-    /*
-        Fade - Coroutine to fade out the hitbox.
-        @param visualHitbox - GameObject representing the hitbox.
-    */
-    private IEnumerator Fade(GameObject visualHitbox){
-        Renderer visualHitboxRend = visualHitbox.GetComponent<Renderer>();
-        Color color = visualHitboxRend.material.color;
-        float initialAlpha = color.a;
-        float timer = 0.0f;
-        while(timer < spellData.fadeTime){
-                color.a = Mathf.Lerp(1f, initialAlpha, timer/spellData.fadeTime);
-                visualHitboxRend.material.color = color;
-                color = visualHitboxRend.material.color;
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        Destroy(visualHitbox);
     }
 
     /*
