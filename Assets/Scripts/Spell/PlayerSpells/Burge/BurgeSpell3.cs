@@ -99,6 +99,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private IEnumerator SpellCast(){
         Vector3 targetDirection = spellController.GetTargetDirection();
         player.MouseOnCast = targetDirection;
+        playerMover.CurrentTarget = targetDirection;
         // Center of the spells hitbox.
         Vector3 position = transform.position + ((targetDirection - transform.position).normalized * (spellData.hitboxLength/2));
         GameObject visualHitbox = CreateFirstCastVisual(position);

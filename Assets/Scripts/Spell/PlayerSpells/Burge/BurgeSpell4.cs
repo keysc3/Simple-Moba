@@ -53,7 +53,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private void LateUpdate(){
         CanUseSpell();
     }
-    //TODO: Second cast to use confirm cast.
+
     /*
     *   Cast - Casts the spell.
     */
