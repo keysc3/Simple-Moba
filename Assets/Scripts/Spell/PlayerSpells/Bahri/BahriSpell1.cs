@@ -45,7 +45,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
             Vector3 targetPosition = (targetDirection - transform.position).normalized;
             targetPosition = transform.position + (targetPosition * spellData.magnitude);
             // Start coroutines to handle the spells cast time and animation.
-            StartCoroutine(spellController.CastTime());
+            StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             StartCoroutine(Spell_1_Move(targetPosition));
             // Use mana and set spell on cooldown to true.
             championStats.UseMana(spellData.baseMana[SpellLevel]);

@@ -51,7 +51,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
-            StartCoroutine(spellController.CastTime());
+            StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;

@@ -53,18 +53,17 @@ public class SpellController
         return targetDirection;
     }
 
-    //TODO: float parameter so it can be used for multicast abilities.
     /*
     *   CastTime - Stops the champion for the duration of the spells cast.
     *   @param castTime - float for the duration to stop the champion for casting.
     */
-    public IEnumerator CastTime(){
+    public IEnumerator CastTime(float castTime, string spellName){
         float timer = 0.0f;
         player.IsCasting = true;
         player.CurrentCastedSpell = spell;
         // While still casting spell stop the player.
-        while(timer < spell.spellData.castTime){
-            CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, spell.spellData.castTime, true);
+        while(timer < castTime){
+            CastBarUpdateCallback?.Invoke(timer, spellName, castTime, true);
             if(!spell.CanMove){
                 if(navMeshAgent != null && navMeshAgent.enabled){
                     if(!navMeshAgent.isStopped)
@@ -74,7 +73,7 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
-        CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, spell.spellData.castTime, true);
+        CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, castTime, true);
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
         if(navMeshAgent != null && navMeshAgent.enabled)

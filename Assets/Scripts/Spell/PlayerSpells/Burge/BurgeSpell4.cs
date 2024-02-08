@@ -64,7 +64,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
                     casted = true;
                     canCast = false;
                     player.MouseOnCast = transform.position + transform.forward;
-                    StartCoroutine(spellController.CastTime());
+                    StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
                     StartCoroutine(SpellDuration(CalculateDuration()));
                     // Use mana.
                     championStats.UseMana(spellData.baseMana[SpellLevel]);
@@ -81,7 +81,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         Recast - Handles the recast actions of the spell.
     */
     private void Recast(){
-        StartCoroutine(spellController.CastTime());
+        StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
         SecondCastTarget();
         SpellFinished();
     }
