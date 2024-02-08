@@ -99,8 +99,8 @@ public class SpellInputController
 
     public void UnreadySpell(){
         if(spellInput.LastSpellPressed != null){
-            if(!spellInput.LastSpellPressed.IsQuickCast)
-                spellInput.LastSpellPressed.HideCast();
+            //if(!spellInput.LastSpellPressed.IsQuickCast)
+            spellInput.LastSpellPressed.HideCast();
             if(!(spellInput.LastSpellPressed is IHasTargetedCast))
                 spellInput.LastSpellPressed = null;
             spellInput.LastButtonPressed = KeyCode.None;

@@ -24,6 +24,17 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     private float minFillToCast;
     private Image fillImage;
     IPlayerMover playerMover;
+
+    /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
+    protected override void DrawSpell(){
+        Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
+        targetPosition = transform.position + (targetPosition * spellData.length);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(transform.position, targetPosition);
+    }
+
     // Start is called before the first frame update
     protected override void Start(){
         base.Start();
@@ -47,15 +58,40 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
-            casted = true;
-            canCast = false;
-            player.MouseOnCast = transform.position + transform.forward;
-            StartCoroutine(spellController.CastTime());
-            StartCoroutine(SpellDuration(CalculateDuration()));
-            // Use mana.
-            championStats.UseMana(spellData.baseMana[SpellLevel]);
-        }      
+        if(!player.IsCasting){
+            if(!casted){
+                if(championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
+                    casted = true;
+                    canCast = false;
+                    player.MouseOnCast = transform.position + transform.forward;
+                    StartCoroutine(spellController.CastTime());
+                    StartCoroutine(SpellDuration(CalculateDuration()));
+                    // Use mana.
+                    championStats.UseMana(spellData.baseMana[SpellLevel]);
+                    IsQuickCast = false;
+                }
+            }
+            else{
+                Recast();
+            }
+        }   
+    }
+
+    /*
+        Recast - Handles the recast actions of the spell.
+    */
+    private void Recast(){
+        StartCoroutine(spellController.CastTime());
+        SecondCastTarget();
+        SpellFinished();
+    }
+    
+    /*
+        SpellFinished - Handles settings fields on finishing.
+    */
+    private void SpellFinished(){
+        casted = false;
+        IsQuickCast = true;
     }
 
     /*
@@ -83,11 +119,6 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         float timer = 0f;
         RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, true);
         while(timer < duration && casted){
-            if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting){
-                StartCoroutine(spellController.CastTime());
-                SecondCastTarget();
-                break;
-            }
             timer += Time.deltaTime;
             RaiseSpellSliderUpdateEvent(SpellNum, duration, timer);
             yield return null;
@@ -95,8 +126,9 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         RaiseSetComponentActiveEvent(SpellNum, SpellComponent.DurationSlider, false);
         player.statusEffects.RemoveEffect(spellEffect.effectType, player);
         spellEffect = null;
-        casted = false;
         currentFill = 0f;
+        if(casted)
+            SpellFinished();
         UpdateSpellSprite();
         OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
