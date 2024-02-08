@@ -81,7 +81,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         Recast - Handles the recast actions of the spell.
     */
     private void Recast(){
-        StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
+        StartCoroutine(spellController.CastTime(spellData.recastCastTime, spellData.secondName));
         SecondCastTarget();
         SpellFinished();
     }
