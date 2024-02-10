@@ -71,15 +71,16 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     */
     private IEnumerator Spell_1_Cast(GameObject visualHitbox){
         // Animate the beginning of the spell.
-        StartCoroutine(Spell_1_Animation(visualHitbox, spellData.initialAlpha, spellData.finalAlpha));
+        //StartCoroutine(Spell_1_Animation(visualHitbox, spellData.initialAlpha, spellData.finalAlpha));
         while(player.IsCasting){
             yield return null;
         }
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Hitbox starts from center of Billia.
         HitboxCheck();
+        StartCoroutine(spellController.Fade(visualHitbox.transform.GetChild(1).gameObject, spellData.castTime));
         // Animate the ending of the spell.
-        StartCoroutine(Spell_1_Animation(visualHitbox, spellData.finalAlpha, spellData.initialAlpha));
+        //StartCoroutine(Spell_1_Animation(visualHitbox, spellData.finalAlpha, spellData.initialAlpha));
     }
 
     /*

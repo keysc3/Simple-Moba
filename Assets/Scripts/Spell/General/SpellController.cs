@@ -231,6 +231,9 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
-        GameObject.Destroy(toFade);
+        if(toFade.transform.parent.tag == "SpellHitboxRoot")
+            GameObject.Destroy(toFade.transform.parent.gameObject);
+        else
+            GameObject.Destroy(toFade);
     }
 }
