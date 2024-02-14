@@ -16,17 +16,37 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
 
     new private BahriSpell1Data spellData;
     private List<IUnit> enemiesHit = new List<IUnit>();
+    private GameObject hitbox;
+    private Transform canvas;
 
     // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell1Data) base.spellData;
+        AttachSpellUI();
+    }
+
+    private void AttachSpellUI(){
+        hitbox = (GameObject) Instantiate(spellData.drawSpellImages[0], Vector3.zero, Quaternion.identity);
+        canvas = transform.Find("DrawSpell");
+        hitbox.transform.SetParent(canvas, false);
+        hitbox.SetActive(false);
     }
 
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
+        hitbox.SetActive(true);
+        RectTransform rect = hitbox.GetComponent<RectTransform>();
+        RectTransform rect2 = canvas.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(1f, spellData.magnitude);
+        Vector3 offset = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
+        print(rect2.anchoredPosition3D);
+        offset.y = transform.position.y + rect2.anchoredPosition3D.y;
+        Vector3 newOffset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
+        rect.anchoredPosition3D = newOffset;
+        canvas.LookAt(offset);
         Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
         targetPosition = transform.position + (targetPosition * spellData.magnitude);
         Gizmos.color = Color.cyan;

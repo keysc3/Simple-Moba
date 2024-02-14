@@ -66,11 +66,18 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     *   Cast - Casts the spell.
     */
     public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
-            StartCoroutine(Spell_4_Start());
-            // Use mana and set spell on cooldown.
-            championStats.UseMana(spellData.baseMana[SpellLevel]);
-            OnCd = true;
+        if(!player.IsCasting){
+            if(!Spell4Casting){
+                if(championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+                    StartCoroutine(Spell_4_LifeCycle());
+                    // Use mana and set spell on cooldown.
+                    championStats.UseMana(spellData.baseMana[SpellLevel]);
+                }
+            }
+            else{
+                if(Spell4Casting)
+                    Recast();
+            }
         }
     }
 
@@ -93,11 +100,21 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         }
         canRecast = true;
     }
-
+    
     /*
-    *   Spell_4_Start - Handles the fourth spells first cast and re-casting.
+        Recast - Handles the actions of the spells recast.
     */
-    private IEnumerator Spell_4_Start(){
+    private void Recast(){
+        // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
+        if(Spell_4_ChargesLeft > 0){
+            Spell_4_Move();
+            Spell_4_ChargesLeft--;
+        }
+    }
+    /*
+    *   Spell_4_LifeCycle - Handles the fourth spells initialization and life cycle.
+    */
+    private IEnumerator Spell_4_LifeCycle(){
         spell4Effect = (PersonalSpell) spellData.spell4.InitializeEffect(SpellLevel, player, player);
         player.statusEffects.AddEffect(spell4Effect);
         spell_4_timer = 0.0f;
@@ -107,17 +124,13 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         Spell_4_ChargesLeft = spellData.charges - 1;
         // While the spells duration has not expired.
         while(spell_4_timer < spell_4_duration){
-            // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
-            if(Input.GetKeyDown(KeyCode.R) && !player.IsCasting && Spell_4_ChargesLeft > 0 && canRecast && !player.IsDead){
-                Spell_4_Move();
-                Spell_4_ChargesLeft--;
-            }
             RaiseSpellSliderUpdateEvent(SpellNum, spell_4_duration, spell_4_timer);
             spell_4_timer += Time.deltaTime;
             yield return null;
         }
         // Reset charges and start spell cooldown timer.
         Spell4Casting = false;
+        OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 

@@ -8,6 +8,7 @@ TagManager:
   - DestroyOnDeath
   - DestroyOnRespawn
   - Projectile
+  - SpellHitboxRoot
   layers:
   - Default
   - TransparentFX

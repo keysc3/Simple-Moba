@@ -17,6 +17,7 @@ public class SpellData : ScriptableObject
     [field: SerializeField] public List<float> baseCd { get; private set; }
     [field: SerializeField] public List<float> baseMana { get; private set; }
     [field: SerializeField] public string spellID { get; private set; }
+    [field: SerializeField] public List<GameObject> drawSpellImages {get; private set; }
 
     public static SpellData CreateNewInstance(SpellType spellNum){
         SpellData data = CreateInstance<SpellData>();
