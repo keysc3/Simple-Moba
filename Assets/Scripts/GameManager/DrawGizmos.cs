@@ -15,6 +15,9 @@ public class DrawGizmos : MonoBehaviour
     public delegate void DrawMethod();
     public DrawMethod drawMethod;
 
+    public delegate void DrawMethod2();
+    public DrawMethod2 drawMethod2;
+
     // Called when the script instance is being loaded.
     private void Awake(){
         instance = this;
@@ -25,5 +28,12 @@ public class DrawGizmos : MonoBehaviour
     */
     private void OnDrawGizmos(){
         drawMethod?.Invoke();
+    }
+
+    /*
+    *   OnDrawGizmos - Draws gizmos for debugging.
+    */
+    private void LateUpdate(){
+        drawMethod2?.Invoke();
     }
 }

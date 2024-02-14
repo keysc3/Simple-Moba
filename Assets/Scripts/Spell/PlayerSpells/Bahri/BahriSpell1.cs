@@ -32,13 +32,14 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         hitbox.transform.SetParent(canvas, false);
         hitbox.transform.eulerAngles = new Vector3(90f, 0f, 0f);
         hitbox.SetActive(false);
+        spellUIDisplay.Add(hitbox);
     }
 
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        hitbox.SetActive(true);
+        //hitbox.SetActive(true);
         RectTransform rect = hitbox.GetComponent<RectTransform>();
         RectTransform rect2 = canvas.GetComponent<RectTransform>();
         rect.sizeDelta = new Vector2(1f, spellData.magnitude + 0.5f);
@@ -48,10 +49,10 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         Vector3 newOffset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
         rect.anchoredPosition3D = newOffset;
         canvas.LookAt(offset);
-        Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
-        targetPosition = transform.position + (targetPosition * spellData.magnitude);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, targetPosition);
+        //Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
+        //targetPosition = transform.position + (targetPosition * spellData.magnitude);
+        //Gizmos.color = Color.cyan;
+        //Gizmos.DrawLine(transform.position, targetPosition);
     }
 
     /*

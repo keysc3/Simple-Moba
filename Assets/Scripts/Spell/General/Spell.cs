@@ -33,6 +33,7 @@ public class Spell : MonoBehaviour, ISpell
     public SpellController spellController { get; private set; }
     protected Collider myCollider;
     protected LayerMask hitboxMask;
+    protected List<GameObject> spellUIDisplay = new List<GameObject>();
 
     public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
     public event SpellCDSetActive SpellCDSetActiveCallback;
@@ -67,7 +68,13 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void DisplayCast(){
         if(!IsDisplayed){
-            DrawGizmos.instance.drawMethod += DrawSpell;
+            if(spellData.spellID == "Bahri1")
+                DrawGizmos.instance.drawMethod2 += DrawSpell;
+            else
+                DrawGizmos.instance.drawMethod += DrawSpell;
+            foreach(GameObject myObj in spellUIDisplay){
+                myObj.SetActive(true);
+            }
             IsDisplayed = true;
         }
     }
@@ -77,7 +84,13 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void HideCast(){
         if(IsDisplayed){
-            DrawGizmos.instance.drawMethod -= DrawSpell;
+            if(spellData.spellID == "Bahri1")
+                DrawGizmos.instance.drawMethod2 -= DrawSpell;
+            else
+                DrawGizmos.instance.drawMethod -= DrawSpell;
+            foreach(GameObject myObj in spellUIDisplay){
+                myObj.SetActive(false);
+            }
             IsDisplayed = false;
         }
     }
