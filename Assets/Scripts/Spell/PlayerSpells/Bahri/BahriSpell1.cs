@@ -30,6 +30,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         hitbox = (GameObject) Instantiate(spellData.drawSpellImages[0], Vector3.zero, Quaternion.identity);
         canvas = transform.Find("DrawSpell");
         hitbox.transform.SetParent(canvas, false);
+        hitbox.transform.eulerAngles = new Vector3(90f, 0f, 0f);
         hitbox.SetActive(false);
     }
 
@@ -40,7 +41,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         hitbox.SetActive(true);
         RectTransform rect = hitbox.GetComponent<RectTransform>();
         RectTransform rect2 = canvas.GetComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(1f, spellData.magnitude);
+        rect.sizeDelta = new Vector2(1f, spellData.magnitude + 0.5f);
         Vector3 offset = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
         print(rect2.anchoredPosition3D);
         offset.y = transform.position.y + rect2.anchoredPosition3D.y;
