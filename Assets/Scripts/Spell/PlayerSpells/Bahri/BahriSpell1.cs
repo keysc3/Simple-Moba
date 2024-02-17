@@ -16,7 +16,6 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
 
     new private BahriSpell1Data spellData;
     private List<IUnit> enemiesHit = new List<IUnit>();
-    private GameObject hitbox;
 
     // Start is called before the first frame update.
     protected override void Start(){

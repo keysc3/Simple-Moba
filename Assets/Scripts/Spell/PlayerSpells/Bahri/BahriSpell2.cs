@@ -24,14 +24,22 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         base.Start();
         this.spellData = (BahriSpell2Data) base.spellData;
         IsQuickCast = true;
+        CreateSpellUIObject(spellData.drawSpellImages[0]);
     }
 
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
+        RectTransform rect = spellUIDisplay[0];
+        //Handles.color = Color.cyan;
+        //Handles.DrawWireDisc(transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
+        rect.sizeDelta = new Vector2((spellData.radius + spellData.magnitude)*2f, (spellData.radius + spellData.magnitude)*2f);
+        //Vector3 offset = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
+        //offset.y = transform.position.y + canvas.anchoredPosition3D.y;
+        //Vector3 newOffset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
+        //rect.anchoredPosition3D = newOffset;
+        //canvas.LookAt(offset);
     }
 
     /*
