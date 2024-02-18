@@ -64,6 +64,9 @@ public class Spell : MonoBehaviour, ISpell
         championStats = (ChampionStats) player.unitStats;
         if(spellNum == SpellType.None)
             SpellNum = spellData.defaultSpellNum;
+        foreach(GameObject obj in spellData.drawSpellImages){
+            CreateSpellUIObject(obj);
+        }
     }
 
     protected void CreateSpellUIObject(GameObject create){

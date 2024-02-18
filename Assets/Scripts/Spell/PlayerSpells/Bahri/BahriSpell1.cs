@@ -21,7 +21,6 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell1Data) base.spellData;
-        CreateSpellUIObject(spellData.drawSpellImages[0]);
     }
 
     /*

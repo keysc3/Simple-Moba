@@ -24,7 +24,6 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
         base.Start();
         this.spellData = (BahriSpell2Data) base.spellData;
         IsQuickCast = true;
-        CreateSpellUIObject(spellData.drawSpellImages[0]);
     }
 
     /*

@@ -46,7 +46,6 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         player.score.takedownCallback += Spell_4_Takedown;
         IsQuickCast = true;
         navMeshAgent = GetComponent<NavMeshAgent>();
-        CreateSpellUIObject(spellData.drawSpellImages[0]);
     }
 
     void OnDisable(){
