@@ -18,16 +18,20 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell3Data) base.spellData;
+        CreateSpellUIObject(spellData.drawSpellImages[0]);
     }
 
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
+        Vector3 offset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
+        Vector2 size = new Vector2(1f, spellData.magnitude + 0.5f);
+        DrawSpellUIHitbox(0, offset, size, true);
+        /*Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
         targetPosition = transform.position + (targetPosition * spellData.magnitude);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, targetPosition);
+        Gizmos.DrawLine(transform.position, targetPosition);*/
     }
 
     /*

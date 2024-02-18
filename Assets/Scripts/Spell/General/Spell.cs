@@ -76,7 +76,7 @@ public class Spell : MonoBehaviour, ISpell
         //return UIObject;
     }
 
-    protected void DrawHitboxWithOffset(int objectNum, Vector3 offset, Vector2 size, bool lookAt){
+    protected void DrawSpellUIHitbox(int objectNum, Vector3 offset, Vector2 size, bool lookAt){
         RectTransform rect = spellUIDisplay[objectNum];
         rect.sizeDelta = size;
         rect.anchoredPosition3D = offset;

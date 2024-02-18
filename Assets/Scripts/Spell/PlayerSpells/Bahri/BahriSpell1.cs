@@ -30,7 +30,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     protected override void DrawSpell(){
         Vector3 offset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
         Vector2 size = new Vector2(1f, spellData.magnitude + 0.5f);
-        DrawHitboxWithOffset(0, offset, size, true);
+        DrawSpellUIHitbox(0, offset, size, true);
         /*RectTransform rect = spellUIDisplay[0];
         rect.sizeDelta = new Vector2(1f, spellData.magnitude + 0.5f);
         Vector3 offset = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
