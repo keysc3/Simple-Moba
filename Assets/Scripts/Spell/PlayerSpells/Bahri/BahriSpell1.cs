@@ -28,13 +28,16 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        RectTransform rect = spellUIDisplay[0];
+        Vector3 offset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
+        Vector2 size = new Vector2(1f, spellData.magnitude + 0.5f);
+        DrawHitboxWithOffset(0, offset, size, true);
+        /*RectTransform rect = spellUIDisplay[0];
         rect.sizeDelta = new Vector2(1f, spellData.magnitude + 0.5f);
         Vector3 offset = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
         offset.y = transform.position.y + canvas.anchoredPosition3D.y;
         Vector3 newOffset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
         rect.anchoredPosition3D = newOffset;
-        canvas.LookAt(offset);
+        canvas.LookAt(offset);*/
         //Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
         //targetPosition = transform.position + (targetPosition * spellData.magnitude);
         //Gizmos.color = Color.cyan;

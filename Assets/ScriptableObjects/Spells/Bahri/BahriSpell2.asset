@@ -34,6 +34,8 @@ MonoBehaviour:
   - 30
   - 30
   <spellID>k__BackingField: Bahri2
+  <drawSpellImages>k__BackingField:
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
   <missile>k__BackingField: {fileID: 891824353705522188, guid: cc7968b5190cedd4f929bd72866b000d, type: 3}
   <speedBonus>k__BackingField: {fileID: 11400000, guid: 89530c92161c28e45b6544ecfabb8553, type: 2}
   <charm>k__BackingField: {fileID: 11400000, guid: 5d62630e6c9b2a5469b4c64b5390ab9e, type: 2}

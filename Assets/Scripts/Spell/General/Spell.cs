@@ -76,6 +76,17 @@ public class Spell : MonoBehaviour, ISpell
         //return UIObject;
     }
 
+    protected void DrawHitboxWithOffset(int objectNum, Vector3 offset, Vector2 size, bool lookAt){
+        RectTransform rect = spellUIDisplay[objectNum];
+        rect.sizeDelta = size;
+        rect.anchoredPosition3D = offset;
+        if(lookAt){
+            Vector3 direction = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
+            direction.y = transform.position.y + canvas.anchoredPosition3D.y;
+            canvas.LookAt(direction);
+        }
+    }
+
     /*
     *   DisplayCast - Displays the spell by adding its DrawSpell method to the Debug drawing singleton.
     */
