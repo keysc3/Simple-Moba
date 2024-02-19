@@ -35,7 +35,7 @@ MonoBehaviour:
   - 60
   <spellID>k__BackingField: Bahri3
   <drawSpellImages>k__BackingField:
-  - {fileID: 0}
+  - {fileID: 6390011475474337375, guid: 99230244b459d7c4f8ce2e3b1aa40a0b, type: 3}
   <missile>k__BackingField: {fileID: 7601594001302005403, guid: ee2b9a54a7a9fa742b6e7ea45100c528, type: 3}
   <charmEffect>k__BackingField: {fileID: 11400000, guid: 5d62630e6c9b2a5469b4c64b5390ab9e, type: 2}
   <magnitude>k__BackingField: 8.5

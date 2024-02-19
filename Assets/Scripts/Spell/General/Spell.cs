@@ -80,14 +80,14 @@ public class Spell : MonoBehaviour, ISpell
     }
 
     protected void DrawSpellUIHitbox(int objectNum, Vector3 offset, Vector2 size, bool lookAt){
-        RectTransform rect = spellUIDisplay[objectNum];
-        rect.sizeDelta = size;
-        rect.anchoredPosition3D = offset;
         if(lookAt){
             Vector3 direction = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
             direction.y = transform.position.y + canvas.anchoredPosition3D.y;
             canvas.LookAt(direction);
         }
+        RectTransform rect = spellUIDisplay[objectNum];
+        rect.sizeDelta = size;
+        rect.anchoredPosition3D = offset;
     }
 
     /*

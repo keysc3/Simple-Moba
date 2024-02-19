@@ -34,6 +34,9 @@ MonoBehaviour:
   - 65
   - 65
   <spellID>k__BackingField: Billia1
+  <drawSpellImages>k__BackingField:
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
   <passiveSprite>k__BackingField: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
   <passiveSpeedBonus>k__BackingField: {fileID: 11400000, guid: 6325edf91b28df249848b2818ae6ba23, type: 2}
   <visualPrefab>k__BackingField: {fileID: 104851140867017625, guid: 4038fd7d66fb88443855a06af25cc6bc, type: 3}

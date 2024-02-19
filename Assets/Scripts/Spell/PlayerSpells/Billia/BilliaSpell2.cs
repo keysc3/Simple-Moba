@@ -29,7 +29,31 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
+        float diameter = (spellData.maxMagnitude)*2f;
+        Vector2 size = new Vector2(diameter, diameter);
+        DrawSpellUIHitbox(0, Vector3.zero, size, false);
+        Vector3 myVec = Vector3.zero;
         Vector3 targetDirection = spellController.GetTargetDirection();
+        // Set the target position to be in the direction of the mouse on cast.
+        Vector3 targetPosition = (targetDirection - transform.position);
+        // Set the spell cast position to max range if casted past that value.
+        if(targetPosition.magnitude > spellData.maxMagnitude)
+            myVec.z = spellData.maxMagnitude;
+        // Set the spell cast position to the minimum range if target positions magnitude is less than it.
+        else if(targetPosition.magnitude < spellData.minMagnitude)
+            myVec.z = spellData.minMagnitude;
+        else
+            myVec.z = Mathf.Abs(targetPosition.magnitude);
+        //print(targetPosition);
+        diameter = (spellData.outerRadius)*2f;
+        size = new Vector2(diameter, diameter);
+        DrawSpellUIHitbox(1, myVec, size, false);
+
+        diameter = (spellData.innerRadius)*2f;
+        size = new Vector2(diameter, diameter);
+        DrawSpellUIHitbox(2, myVec, size, true);
+
+        /*Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
         Vector3 targetPosition = (targetDirection - transform.position);
         // Set the spell cast position to max range if casted past that value.
@@ -47,7 +71,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.innerRadius, 1f);
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(transform.position, Vector3.up, spellData.maxMagnitude, 1f);
-    }
+    */}
 
     /*
     *   Cast - Casts the spell.
