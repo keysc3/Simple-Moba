@@ -42,3 +42,4 @@ MonoBehaviour:
   <minSpeed>k__BackingField: 0.4
   <maxSpeed>k__BackingField: 16
   <accel>k__BackingField: 13
+  <orbScale>k__BackingField: 0.75

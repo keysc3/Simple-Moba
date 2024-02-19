@@ -16,4 +16,5 @@ public class BahriSpell1Data : SpellData
     [field: SerializeField] public float minSpeed { get; private set; }
     [field: SerializeField] public float maxSpeed { get; private set; }
     [field: SerializeField] public float accel { get; private set; }
+    [field: SerializeField] public float orbScale{ get; private set; }
 }

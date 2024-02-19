@@ -47,3 +47,4 @@ MonoBehaviour:
   <speed>k__BackingField: 10
   <multiplier>k__BackingField: 0.3
   <bonusSpeedPercent>k__BackingField: 0.4
+  <projectileScale>k__BackingField: 0.25

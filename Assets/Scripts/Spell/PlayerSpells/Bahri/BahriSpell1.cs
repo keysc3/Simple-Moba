@@ -27,8 +27,8 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 offset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
-        Vector2 size = new Vector2(1f, spellData.magnitude + 0.5f);
+        Vector3 offset = new Vector3(0f, 0f, spellData.magnitude/2f + spellData.orbScale/2f);
+        Vector2 size = new Vector2(spellData.orbScale, spellData.magnitude + spellData.orbScale);
         DrawSpellUIHitbox(0, offset, size, true);
         /*RectTransform rect = spellUIDisplay[0];
         rect.sizeDelta = new Vector2(1f, spellData.magnitude + 0.5f);
@@ -75,6 +75,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
+        orb.transform.localScale = Vector3.one * spellData.orbScale;
         BahriSpell1Trigger spell1Trigger = orb.GetComponentInChildren<BahriSpell1Trigger>();
         spell1Trigger.bahriSpell1 = this;
         spell1Trigger.unit = player; 

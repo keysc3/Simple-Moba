@@ -14,4 +14,5 @@ public class BahriSpell3Data : SpellData
     [field: SerializeField] public ScriptableCharm charmEffect { get; private set; }
     [field: SerializeField] public float magnitude { get; private set; }
     [field: SerializeField] public float speed { get; private set; }
+    [field: SerializeField] public float charmScale { get; private set; }
 }

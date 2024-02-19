@@ -247,6 +247,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
             foreach(Transform target in targets){
                 // Create missile and set necessary variables
                 GameObject missile = (GameObject) Instantiate(spellData.missile, transform.position, Quaternion.identity);
+                missile.transform.localScale = Vector3.one * spellData.projectileScale;
                 TargetedProjectile targetedProjectile = missile.GetComponentInChildren<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
                 targetedProjectile.TargetUnit = target.GetComponentInParent<IUnit>();
