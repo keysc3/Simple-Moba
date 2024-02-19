@@ -39,3 +39,4 @@ MonoBehaviour:
   <charges>k__BackingField: 3
   <duration>k__BackingField: 15
   <takedownDuration>k__BackingField: 10
+  <projectileScale>k__BackingField: 0.25

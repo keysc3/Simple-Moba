@@ -46,4 +46,5 @@ MonoBehaviour:
   <seedRotation>k__BackingField: 300
   <seedConeAngle>k__BackingField: 90
   <seedConeRadius>k__BackingField: 3
-  <lobLandHitbox>k__BackingField: 1.2
+  <lobLandScale>k__BackingField: 1.2
+  <seedScale>k__BackingField: 0.75

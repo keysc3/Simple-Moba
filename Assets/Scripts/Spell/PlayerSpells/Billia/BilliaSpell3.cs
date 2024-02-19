@@ -41,12 +41,13 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         else
             myVec.z = Mathf.Abs(targetPosition.magnitude);
         
-        diameter = spellData.visualPrefab.transform.localScale.x*1.2f;
+        diameter = spellData.seedScale*spellData.lobLandScale;
         size = new Vector2(diameter, diameter);
         DrawSpellUIHitbox(1, myVec, size, true);
 
-        size = new Vector2(spellData.visualPrefab.transform.localScale.x, 2f);
-        myVec.z = (myVec.z + (spellData.visualPrefab.transform.localScale.x * 1.2f)/2f + 1f - 0.01f);
+        float length = 2f;
+        size = new Vector2(spellData.seedScale, length);
+        myVec.z = (myVec.z + (spellData.seedScale*spellData.lobLandScale)/2f + length/2f);
         DrawSpellUIHitbox(2, myVec, size, true);
         /*Handles.color = Color.cyan;
         Handles.DrawWireDisc(transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
@@ -109,6 +110,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     private IEnumerator Spell_3_Lob(Vector3 targetPosition, Vector3 targetDirection){
         // Create spell object.
         GameObject seed = (GameObject) Instantiate(spellData.visualPrefab, transform.position, Quaternion.identity);
+        seed.transform.localScale = Vector3.one * spellData.seedScale;
         // Look at roll direction.
         seed.transform.LookAt(seed.transform.position + targetDirection);
         BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponentInChildren<BilliaSpell3Trigger>();
@@ -158,7 +160,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         SphereCollider seedCollider = seed.GetComponentInChildren<SphereCollider>();
         // Check for lob landing hits.
         List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seedCollider.transform.position, 
-        seedCollider.radius * spellData.lobLandHitbox, hitboxMask));
+        (spellData.seedScale/2f) * spellData.lobLandScale, hitboxMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
             foreach(Collider hit in lobHit){
