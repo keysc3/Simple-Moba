@@ -32,9 +32,16 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetDirection = spellController.GetTargetDirection();
-        DrawCast(targetDirection, false);
-        DrawCast(targetDirection, true);
+        if(chargeAmount != 0.0f){
+            if(isFirstCast)
+                DrawCast(true);
+            else
+                DrawCast(false);
+        }
+        else{
+            DrawCast(true);
+            DrawCast(false);
+        }
     }
 
     /*
@@ -43,7 +50,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             isFirstCast = true;
-            chargeAmount = 0.0f;
             StartCoroutine(ChargeUp());
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
@@ -59,15 +65,15 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         navMeshAgent.ResetPath();
         navMeshAgent.isStopped = true;
         KeyCode spellInput = KeyCode.E;
-        chargeAmount = 0.0f;
         while(Input.GetKey(spellInput) && chargeAmount < spellData.holdDuration){
             Vector3 targetDirection = spellController.GetTargetDirection();
-            DrawCast(targetDirection, true);
+            DisplayCast();
             player.MouseOnCast = targetDirection;
             spellController.ChargeUpUI(chargeAmount, spellData.maxChargeDuration, false);
             chargeAmount += Time.deltaTime;
             yield return null;
         }
+        HideCast();
         spellController.ChargeUpUI(spellData.maxChargeDuration, spellData.maxChargeDuration, true);
         // If the key was not released do not cast the spell.
         if(Input.GetKey(spellInput)){
@@ -79,17 +85,23 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         }
     }
 
-    private void DrawCast(Vector3 targetDirection, bool isFirst){
+    private void DrawCast(bool isFirst){
         Color color = Color.cyan;
-        float multi = spellData.hitboxLength;
+        float multi = spellData.hitboxLength/2f;
+        Vector3 size = new Vector2(spellData.hitboxWidth, spellData.hitboxLength);
+        int guiNum = 0;
         if(!isFirst){
-            color = Color.red;
-            multi = spellData.dashMagnitude + spellData.chargedHitboxLength;
+            //color = Color.red;
+            multi = spellData.dashMagnitude/2f + spellData.chargedHitboxLength/2f;
+            size = new Vector2(spellData.chargedHitboxWidth, spellData.chargedHitboxLength + spellData.dashMagnitude);
+            guiNum = 1;
         }
-        Vector3 startingPosition = transform.position;
+        Vector3 offset = new Vector3(0f, 0f, multi);
+        DrawSpellUIHitbox(guiNum, offset, size, true);
+        /*Vector3 startingPosition = transform.position;
         Vector3 targetPos = (targetDirection - transform.position).normalized;
         targetPos = transform.position + (targetPos * multi);
-        Debug.DrawLine(startingPosition, targetPos, color);
+        Debug.DrawLine(startingPosition, targetPos, color);*/
         //Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.hitboxWidth/2), Color.blue);
         //Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.hitboxWidth/2), Color.blue);
     }
@@ -98,11 +110,12 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   SpellCast - Handles casting the spell.
     */
     private IEnumerator SpellCast(){
+        isFirstCast = false;
         Vector3 targetDirection = spellController.GetTargetDirection();
         // Wait out the cast time.
         while(player.IsCasting){
             if(chargeAmount >= spellData.maxChargeDuration)
-                DrawCast(spellController.GetTargetDirection(), false);
+                DisplayCast();
             yield return null;
         }
         player.MouseOnCast = targetDirection;
@@ -115,6 +128,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         StartCoroutine(spellController.Fade(visualHitbox, spellData.firstCastFadeTime));
         // Cast second part of spell if it was charged enough.
         if(chargeAmount >= spellData.maxChargeDuration){
+            HideCast();
             StartCoroutine(spellController.CastTime(spellData.timeBetweenDash, spellData.secondName));
             StartCoroutine(SecondCast());
         }
@@ -145,7 +159,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         Vector3 targetDirection = spellController.GetTargetDirection();
         // Wait out cast time.
         while(player.IsCasting){
-            DrawCast(spellController.GetTargetDirection(), false);
             yield return null;
         }
         player.MouseOnCast = targetDirection + ((targetDirection - transform.position).normalized * (spellData.dashMagnitude + spellData.chargedHitboxLength));
@@ -157,7 +170,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @param targetDirection - Vector3 of the target direction of the spell cast.
     */
     private IEnumerator SecondSpellDash(Vector3 targetDirection){
-        isFirstCast = false;
         playerMover.CurrentTarget = targetDirection;
         // Get the final position after dash is applied.
         Vector3 targetPosition = (targetDirection - transform.position).normalized;
@@ -262,6 +274,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
             cd = cd * (1f - spellData.cdRefundPercent);
         pastHits.Clear();
         OnCd = true;
+        chargeAmount = 0.0f;
         StartCoroutine(spellController.Spell_Cd_Timer(cd));
     }
 

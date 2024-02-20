@@ -29,10 +29,15 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
+        if(casted){
+            Vector3 offset = new Vector3(0f, 0f, spellData.length/2f);
+            Vector2 size = new Vector2(spellData.width, spellData.length);
+            DrawSpellUIHitbox(0, offset, size, true);
+        }
+        /*Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
         targetPosition = transform.position + (targetPosition * spellData.length);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, targetPosition);
+        Gizmos.DrawLine(transform.position, targetPosition);*/
     }
 
     // Start is called before the first frame update

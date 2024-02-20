@@ -80,6 +80,7 @@ public class Spell : MonoBehaviour, ISpell
     }
 
     protected void DrawSpellUIHitbox(int objectNum, Vector3 offset, Vector2 size, bool lookAt){
+        spellUIDisplay[objectNum].gameObject.SetActive(true);
         if(lookAt){
             Vector3 direction = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
             direction.y = transform.position.y + canvas.anchoredPosition3D.y;
@@ -99,9 +100,6 @@ public class Spell : MonoBehaviour, ISpell
                 DrawGizmos.instance.drawMethod2 += DrawSpell;
             else
                 DrawGizmos.instance.drawMethod += DrawSpell;
-            foreach(RectTransform myObj in spellUIDisplay){
-                myObj.gameObject.SetActive(true);
-            }
             IsDisplayed = true;
         }
     }

@@ -34,6 +34,8 @@ MonoBehaviour:
   - 10
   - 10
   <spellID>k__BackingField: Burge1
+  <drawSpellImages>k__BackingField:
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
   <magnitude>k__BackingField: 4
   <jumpTime>k__BackingField: 1
   <hitboxLength>k__BackingField: 2

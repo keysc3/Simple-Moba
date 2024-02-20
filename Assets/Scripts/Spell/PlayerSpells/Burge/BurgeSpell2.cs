@@ -24,7 +24,22 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Handles.color = Color.cyan;
+        float diameter = (spellData.magnitude)*2f;
+        Vector2 size = new Vector2(diameter, diameter);
+        DrawSpellUIHitbox(0, Vector3.zero, size, false);
+
+        Vector3 myVec = Vector3.zero;
+        Vector3 targetDirection = spellController.GetTargetDirection();
+        // Set the target position to be in the direction of the mouse on cast.
+        Vector3 targetPosition = (targetDirection - transform.position);
+        // Set target to lob seed to to max lob distance if casted at a greater distance.
+        if(targetPosition.magnitude > spellData.magnitude)
+            myVec.z = spellData.magnitude;
+        else
+            myVec.z = Mathf.Abs(targetPosition.magnitude);
+        size = Vector2.one * spellData.startingSize;
+        DrawSpellUIHitbox(1, myVec, size, true);
+        /*Handles.color = Color.cyan;
         Handles.DrawWireDisc(transform.position, Vector3.up, spellData.magnitude, 1f);
        // Get the players mouse position on spell cast for spells target direction.
         Vector3 targetDirection = spellController.GetTargetDirection();
@@ -39,7 +54,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
         Handles.DrawWireDisc(targetPosition, Vector3.up, (spellData.startingSize/2f) * spellData.sizeMultiplier, 1f);
         Gizmos.color = Color.cyan;
         Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.startingSize/2f, 1f);
-    }
+    */}
 
     /*
     *   Cast - Casts the spell.
