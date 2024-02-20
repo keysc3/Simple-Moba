@@ -231,7 +231,7 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
-        if(toFade.transform.parent.tag == "SpellHitboxRoot")
+        if(toFade.transform.parent != null && toFade.transform.parent.tag == "SpellHitboxRoot")
             GameObject.Destroy(toFade.transform.parent.gameObject);
         else
             GameObject.Destroy(toFade);
