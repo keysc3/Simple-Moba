@@ -32,16 +32,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     protected override void DrawSpell(){
         float diameter = (spellData.radius + spellData.magnitude)*2f;
         Vector2 size = new Vector2(diameter, diameter);
-        //RectTransform rect = spellUIDisplay[0];
         DrawSpellUIHitbox(0, Vector3.zero, size, false);
-        //Handles.color = Color.cyan;
-        //Handles.DrawWireDisc(transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
-        //rect.sizeDelta = new Vector2((spellData.radius + spellData.magnitude)*2f, (spellData.radius + spellData.magnitude)*2f);
-        //Vector3 offset = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
-        //offset.y = transform.position.y + canvas.anchoredPosition3D.y;
-        //Vector3 newOffset = new Vector3(0f, 0f, spellData.magnitude/2 + 0.25f);
-        //rect.anchoredPosition3D = newOffset;
-        //canvas.LookAt(offset);
     }
 
     /*

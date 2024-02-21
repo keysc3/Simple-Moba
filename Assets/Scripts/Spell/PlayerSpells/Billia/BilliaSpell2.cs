@@ -52,26 +52,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
         diameter = (spellData.innerRadius)*2f;
         size = new Vector2(diameter, diameter);
         DrawSpellUIHitbox(2, myVec, size, true);
-
-        /*Vector3 targetDirection = spellController.GetTargetDirection();
-        // Set the target position to be in the direction of the mouse on cast.
-        Vector3 targetPosition = (targetDirection - transform.position);
-        // Set the spell cast position to max range if casted past that value.
-        if(targetPosition.magnitude > spellData.maxMagnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.maxMagnitude);
-        // Set the spell cast position to the minimum range if target positions magnitude is less than it.
-        else if(targetPosition.magnitude < spellData.minMagnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.minMagnitude);
-        // Set target position to calculated mouse position.
-        else
-            targetPosition = transform.position + targetPosition;
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.outerRadius, 1f);
-        Handles.color = Color.red;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.innerRadius, 1f);
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.maxMagnitude, 1f);
-    */}
+    }
 
     /*
     *   Cast - Casts the spell.

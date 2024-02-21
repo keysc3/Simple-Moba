@@ -31,10 +31,7 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     protected override void DrawSpell(){
         float diameter = (spellData.magnitude)*2f;
         Vector2 size = new Vector2(diameter, diameter);
-        //RectTransform rect = spellUIDisplay[0];
         DrawSpellUIHitbox(0, Vector3.zero, size, false);
-       //Handles.color = Color.cyan;
-        //Handles.DrawWireDisc(transform.position, Vector3.up, spellData.magnitude, 1f);
     }
 
     /*

@@ -52,11 +52,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         diameter = (spellData.innerRadius)*2f;
         size = new Vector2(diameter, diameter);
         DrawSpellUIHitbox(1, Vector3.zero, size, false);
-        /*Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.outerRadius, 1f);
-        Handles.color = Color.red;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.innerRadius, 1f);
-    */}
+    }
 
     /*
     *   Cast - Casts the spell.
@@ -78,7 +74,6 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     */
     private IEnumerator Spell_1_Cast(GameObject visualHitbox){
         // Animate the beginning of the spell.
-        //StartCoroutine(Spell_1_Animation(visualHitbox, spellData.initialAlpha, spellData.finalAlpha));
         while(player.IsCasting){
             yield return null;
         }
@@ -87,7 +82,6 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
         HitboxCheck();
         StartCoroutine(spellController.Fade(visualHitbox.transform.GetChild(1).gameObject, spellData.castTime));
         // Animate the ending of the spell.
-        //StartCoroutine(Spell_1_Animation(visualHitbox, spellData.finalAlpha, spellData.initialAlpha));
     }
 
     /*

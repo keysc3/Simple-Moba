@@ -39,22 +39,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             myVec.z = Mathf.Abs(targetPosition.magnitude);
         size = Vector2.one * spellData.startingSize;
         DrawSpellUIHitbox(1, myVec, size, true);
-        /*Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.magnitude, 1f);
-       // Get the players mouse position on spell cast for spells target direction.
-        Vector3 targetDirection = spellController.GetTargetDirection();
-        // Set the target position to be in the direction of the mouse on cast.
-        Vector3 targetPosition = (targetDirection - transform.position);
-        // Set target to lob seed to max lob distance if casted at a greater distance.
-        if(targetPosition.magnitude > spellData.magnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.magnitude);
-        else
-            targetPosition = transform.position + (targetDirection - transform.position);
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, (spellData.startingSize/2f) * spellData.sizeMultiplier, 1f);
-        Gizmos.color = Color.cyan;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.startingSize/2f, 1f);
-    */}
+       }
 
     /*
     *   Cast - Casts the spell.

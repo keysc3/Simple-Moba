@@ -98,12 +98,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         }
         Vector3 offset = new Vector3(0f, 0f, multi);
         DrawSpellUIHitbox(guiNum, offset, size, true);
-        /*Vector3 startingPosition = transform.position;
-        Vector3 targetPos = (targetDirection - transform.position).normalized;
-        targetPos = transform.position + (targetPos * multi);
-        Debug.DrawLine(startingPosition, targetPos, color);*/
-        //Debug.DrawLine(targetPos, targetPos + (transform.right * spellData.hitboxWidth/2), Color.blue);
-        //Debug.DrawLine(targetPos, targetPos - (transform.right * spellData.hitboxWidth/2), Color.blue);
     }
 
     /*

@@ -59,10 +59,6 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         float diameter = spellData.maxMagnitude*2f;
         Vector2 size = new Vector2(diameter, diameter);
         DrawSpellUIHitbox(0, Vector3.zero, size, false);
-        /*Handles.color = Color.cyan;
-        Vector3 drawPosition = transform.position;
-        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
-        Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.maxMagnitude, 1f);*/
     }
 
     /*

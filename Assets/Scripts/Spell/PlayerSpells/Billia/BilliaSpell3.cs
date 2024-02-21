@@ -49,23 +49,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         size = new Vector2(spellData.seedScale, length);
         myVec.z = (myVec.z + (spellData.seedScale*spellData.lobLandScale)/2f + length/2f);
         DrawSpellUIHitbox(2, myVec, size, true);
-        /*Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
-
-       // Get the players mouse position on spell cast for spells target direction.
-        Vector3 targetDirection = spellController.GetTargetDirection();
-        // Set the target position to be in the direction of the mouse on cast.
-        Vector3 targetPosition = (targetDirection - transform.position);
-        // Set target to lob seed to to max lob distance if casted at a greater distance.
-        if(targetPosition.magnitude > spellData.maxLobMagnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
-        else
-            targetPosition = transform.position + (targetDirection - transform.position);
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.visualPrefab.transform.localScale.x, 1f);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(targetPosition, targetPosition + ((targetPosition - transform.position).normalized * 2f));
-    */}
+    }
 
      /*
     *   Cast - Casts the spell.

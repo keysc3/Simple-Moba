@@ -27,10 +27,6 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
         Vector3 offset = new Vector3(0f, 0f, spellData.magnitude/2 + spellData.charmScale/2f);
         Vector2 size = new Vector2(spellData.charmScale, spellData.magnitude + spellData.charmScale);
         DrawSpellUIHitbox(0, offset, size, true);
-        /*Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
-        targetPosition = transform.position + (targetPosition * spellData.magnitude);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, targetPosition);*/
     }
 
     /*
