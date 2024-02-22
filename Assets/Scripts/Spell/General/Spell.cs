@@ -96,10 +96,7 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void DisplayCast(){
         if(!IsDisplayed){
-            if(spellData.spellID == "Bahri1")
-                DrawGizmos.instance.drawMethod2 += DrawSpell;
-            else
-                DrawGizmos.instance.drawMethod += DrawSpell;
+            DrawGizmos.instance.drawMethod += DrawSpell;
             IsDisplayed = true;
         }
     }
@@ -109,10 +106,7 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void HideCast(){
         if(IsDisplayed){
-            if(spellData.spellID == "Bahri1")
-                DrawGizmos.instance.drawMethod2 -= DrawSpell;
-            else
-                DrawGizmos.instance.drawMethod -= DrawSpell;
+            DrawGizmos.instance.drawMethod -= DrawSpell;
             foreach(RectTransform myObj in spellUIDisplay){
                 myObj.gameObject.SetActive(false);
             }
