@@ -79,7 +79,7 @@ public class Spell : MonoBehaviour, ISpell
         //return UIObject;
     }
 
-    protected void DrawSpellUIHitbox(int objectNum, Vector3 offset, Vector2 size, bool lookAt){
+    protected void DrawSpellUIHitbox(int objectNum, float offset, Vector2 size, bool lookAt){
         spellUIDisplay[objectNum].gameObject.SetActive(true);
         if(lookAt){
             Vector3 direction = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
@@ -88,7 +88,7 @@ public class Spell : MonoBehaviour, ISpell
         }
         RectTransform rect = spellUIDisplay[objectNum];
         rect.sizeDelta = size;
-        rect.anchoredPosition3D = offset;
+        rect.anchoredPosition3D = new Vector3(0f, 0f, offset);
     }
 
     /*

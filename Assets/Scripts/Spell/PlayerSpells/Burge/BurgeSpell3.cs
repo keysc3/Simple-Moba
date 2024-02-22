@@ -87,16 +87,14 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
 
     private void DrawCast(bool isFirst){
         Color color = Color.cyan;
-        float multi = spellData.hitboxLength/2f;
+        float offset = spellData.hitboxLength/2f;
         Vector3 size = new Vector2(spellData.hitboxWidth, spellData.hitboxLength);
         int guiNum = 0;
         if(!isFirst){
-            //color = Color.red;
-            multi = spellData.dashMagnitude/2f + spellData.chargedHitboxLength/2f;
+            offset = spellData.dashMagnitude/2f + spellData.chargedHitboxLength/2f;
             size = new Vector2(spellData.chargedHitboxWidth, spellData.chargedHitboxLength + spellData.dashMagnitude);
             guiNum = 1;
         }
-        Vector3 offset = new Vector3(0f, 0f, multi);
         DrawSpellUIHitbox(guiNum, offset, size, true);
     }
 

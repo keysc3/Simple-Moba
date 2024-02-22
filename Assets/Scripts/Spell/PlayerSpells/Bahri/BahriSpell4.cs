@@ -56,9 +56,7 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        float diameter = spellData.maxMagnitude*2f;
-        Vector2 size = new Vector2(diameter, diameter);
-        DrawSpellUIHitbox(0, Vector3.zero, size, false);
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.maxMagnitude * 2f, false);
     }
 
     /*

@@ -45,13 +45,8 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        float diameter = (spellData.outerRadius)*2f;
-        Vector2 size = new Vector2(diameter, diameter);
-        DrawSpellUIHitbox(0, Vector3.zero, size, false);
-        
-        diameter = (spellData.innerRadius)*2f;
-        size = new Vector2(diameter, diameter);
-        DrawSpellUIHitbox(1, Vector3.zero, size, false);
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.outerRadius * 2f, false);
+        DrawSpellUIHitbox(1, 0f, Vector2.one * spellData.innerRadius * 2f, false);
     }
 
     /*

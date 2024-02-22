@@ -27,28 +27,23 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        float diameter = (spellData.maxLobMagnitude)*2f;
-        Vector2 size = new Vector2(diameter, diameter);
-        DrawSpellUIHitbox(0, Vector3.zero, size, false);
-
-        Vector3 myVec = Vector3.zero;
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.maxLobMagnitude * 2f, false);
+        float offset = 0f;
         Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
         Vector3 targetPosition = (targetDirection - transform.position);
         // Set target to lob seed to to max lob distance if casted at a greater distance.
         if(targetPosition.magnitude > spellData.maxLobMagnitude)
-            myVec.z = spellData.maxLobMagnitude;
+            offset = spellData.maxLobMagnitude;
         else
-            myVec.z = Mathf.Abs(targetPosition.magnitude);
+            offset = Mathf.Abs(targetPosition.magnitude);
         
-        diameter = spellData.seedScale*spellData.lobLandScale;
-        size = new Vector2(diameter, diameter);
-        DrawSpellUIHitbox(1, myVec, size, true);
+        DrawSpellUIHitbox(1, offset, Vector2.one * spellData.seedScale * spellData.lobLandScale, true);
 
         float length = 2f;
-        size = new Vector2(spellData.seedScale, length);
-        myVec.z = (myVec.z + (spellData.seedScale*spellData.lobLandScale)/2f + length/2f);
-        DrawSpellUIHitbox(2, myVec, size, true);
+        Vector2 size = new Vector2(spellData.seedScale, length);
+        offset = (offset + (spellData.seedScale*spellData.lobLandScale)/2f + length/2f);
+        DrawSpellUIHitbox(2, offset, size, true);
     }
 
      /*

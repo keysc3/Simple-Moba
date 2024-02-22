@@ -29,9 +29,7 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        float diameter = (spellData.magnitude)*2f;
-        Vector2 size = new Vector2(diameter, diameter);
-        DrawSpellUIHitbox(0, Vector3.zero, size, false);
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.magnitude * 2f, false);
     }
 
     /*

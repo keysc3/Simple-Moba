@@ -30,9 +30,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     */
     protected override void DrawSpell(){
         if(casted){
-            Vector3 offset = new Vector3(0f, 0f, spellData.length/2f);
             Vector2 size = new Vector2(spellData.width, spellData.length);
-            DrawSpellUIHitbox(0, offset, size, true);
+            DrawSpellUIHitbox(0, spellData.length/2f, size, true);
         }
     }
 
