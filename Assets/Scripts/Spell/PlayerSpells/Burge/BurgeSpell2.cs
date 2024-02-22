@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 /*
 * Purpose: Implements Burge's second spell. Burge throws a spinning dagger at the target location that grows in size over the spells duration.
@@ -20,12 +21,29 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     }
 
     /*
+    *   DrawSpell - Method for drawing the spells magnitudes.
+    */
+    protected override void DrawSpell(){
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.magnitude * 2f, false);
+        float offset = 0f;
+        Vector3 targetDirection = spellController.GetTargetDirection();
+        // Set the target position to be in the direction of the mouse on cast.
+        Vector3 targetPosition = (targetDirection - transform.position);
+        // Set target to lob seed to to max lob distance if casted at a greater distance.
+        if(targetPosition.magnitude > spellData.magnitude)
+            offset = spellData.magnitude;
+        else
+            offset = Mathf.Abs(targetPosition.magnitude);
+        DrawSpellUIHitbox(1, offset, Vector2.one * spellData.startingSize, true);
+       }
+
+    /*
     *   Cast - Casts the spell.
     */
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
-            StartCoroutine(spellController.CastTime());
+            StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
@@ -54,20 +72,31 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
         Dictionary<IUnit, float> lastHits = new Dictionary<IUnit, float>();
         Transform spellTransform = ((GameObject) Instantiate(spellData.prefab, targetPosition, Quaternion.identity)).transform;
         spellTransform.position = new Vector3(targetPosition.x, 0.5f, targetPosition.z);
-        Vector3 endSize = spellTransform.localScale * spellData.sizeMultiplier;
-        Vector3 startingSize = spellTransform.localScale;
+        float endSize = spellData.startingSize * spellData.sizeMultiplier;
         float timer = 0.0f;
         while(timer < spellData.duration){
             // Check for hit
             lastHits = CheckForSpellHits(spellTransform, false, lastHits);
-            spellTransform.localScale = Vector3.Lerp(startingSize, endSize, timer/spellData.duration);
+            SetScale(endSize, spellTransform, timer);
             timer += Time.deltaTime;
             yield return null;
         }
         // Last hit
-        spellTransform.localScale = Vector3.Lerp(startingSize, endSize, 1);
+        SetScale(endSize, spellTransform, spellData.duration);
         CheckForSpellHits(spellTransform, true, lastHits);
         Destroy(spellTransform.gameObject);
+    }
+
+    /*
+        SetScale - Sets the scale values of the hitbox GameObject.
+        @param endSize - float of th final scale.
+        @param spellTransform - The transform of the hitbox.
+        @param timer - float of the time the spell has been active.
+    */
+    private void SetScale(float endSize, Transform spellTransform, float timer){
+        float yScale = spellTransform.localScale.y;
+        float size = Mathf.Lerp(spellData.startingSize, endSize, timer/spellData.duration);
+        spellTransform.localScale = new Vector3(size, yScale, size);
     }
 
     /*

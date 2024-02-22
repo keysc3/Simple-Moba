@@ -34,9 +34,12 @@ MonoBehaviour:
   - 85
   - 95
   <spellID>k__BackingField: Bahri1
+  <drawSpellImages>k__BackingField:
+  - {fileID: 6390011475474337375, guid: 99230244b459d7c4f8ce2e3b1aa40a0b, type: 3}
   <orb>k__BackingField: {fileID: 4134317213431649570, guid: ec61ec87397d7b641b22e45736326951, type: 3}
   <magnitude>k__BackingField: 7
   <speed>k__BackingField: 10
   <minSpeed>k__BackingField: 0.4
   <maxSpeed>k__BackingField: 16
   <accel>k__BackingField: 13
+  <orbScale>k__BackingField: 0.75

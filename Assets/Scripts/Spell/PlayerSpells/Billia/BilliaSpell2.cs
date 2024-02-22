@@ -29,24 +29,22 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.maxMagnitude * 2f, false);
+        float offset = 0f;
         Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
         Vector3 targetPosition = (targetDirection - transform.position);
         // Set the spell cast position to max range if casted past that value.
         if(targetPosition.magnitude > spellData.maxMagnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.maxMagnitude);
+            offset = spellData.maxMagnitude;
         // Set the spell cast position to the minimum range if target positions magnitude is less than it.
         else if(targetPosition.magnitude < spellData.minMagnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.minMagnitude);
-        // Set target position to calculated mouse position.
+            offset = spellData.minMagnitude;
         else
-            targetPosition = transform.position + targetPosition;
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.outerRadius, 1f);
-        Handles.color = Color.red;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.innerRadius, 1f);
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.maxMagnitude, 1f);
+            offset = Mathf.Abs(targetPosition.magnitude);
+
+        DrawSpellUIHitbox(1, offset, Vector2.one * spellData.outerRadius * 2f, false);
+        DrawSpellUIHitbox(2, offset, Vector2.one * spellData.innerRadius * 2f, true);
     }
 
     /*
@@ -87,7 +85,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             Vector3 billiaTargetPosition = targetPosition - (directionToMove * spellData.dashOffset);
             // Show the spells hitbox.
             Spell_2_Visual(targetPosition);
-            StartCoroutine(spellController.CastTime());
+            StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             StartCoroutine(Spell_2_Dash(billiaTargetPosition, targetPosition));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);

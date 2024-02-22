@@ -19,4 +19,5 @@ public class BahriSpell4Data : SpellData
     [field: SerializeField] public int charges { get; private set; }
     [field: SerializeField] public float duration { get; private set; }
     [field: SerializeField] public float takedownDuration { get; private set; }
+    [field: SerializeField] public float projectileScale { get; private set; }
 }

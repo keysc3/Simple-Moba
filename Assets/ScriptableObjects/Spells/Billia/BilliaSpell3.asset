@@ -34,6 +34,10 @@ MonoBehaviour:
   - 70
   - 70
   <spellID>k__BackingField: Billia3
+  <drawSpellImages>k__BackingField:
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
+  - {fileID: 6390011475474337375, guid: 99230244b459d7c4f8ce2e3b1aa40a0b, type: 3}
   <visualPrefab>k__BackingField: {fileID: 1615369582613741815, guid: 8b873509ac3ddf8419af558a96117be6, type: 3}
   <slowEffect>k__BackingField: {fileID: 11400000, guid: 1033d164f757ea5489657bdefbbf368e, type: 2}
   <maxLobMagnitude>k__BackingField: 3.5
@@ -42,4 +46,5 @@ MonoBehaviour:
   <seedRotation>k__BackingField: 300
   <seedConeAngle>k__BackingField: 90
   <seedConeRadius>k__BackingField: 3
-  <lobLandHitbox>k__BackingField: 1.2
+  <lobLandScale>k__BackingField: 1.2
+  <seedScale>k__BackingField: 0.75

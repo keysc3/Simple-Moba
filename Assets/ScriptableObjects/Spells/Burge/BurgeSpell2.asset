@@ -34,9 +34,13 @@ MonoBehaviour:
   - 10
   - 10
   <spellID>k__BackingField: Burge2
+  <drawSpellImages>k__BackingField:
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
   <duration>k__BackingField: 3
   <sizeMultiplier>k__BackingField: 2
   <prefab>k__BackingField: {fileID: 4965935970901747691, guid: ec75181032343924a89a22503b0a9b14, type: 3}
   <magnitude>k__BackingField: 4
   <timeBetweenTicks>k__BackingField: 0.5
   <knockup>k__BackingField: {fileID: 11400000, guid: feefd50284ae2be4fa89fa23e1a14ca9, type: 2}
+  <startingSize>k__BackingField: 1.5

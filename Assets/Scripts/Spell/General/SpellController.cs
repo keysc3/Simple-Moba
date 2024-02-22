@@ -57,13 +57,13 @@ public class SpellController
     *   CastTime - Stops the champion for the duration of the spells cast.
     *   @param castTime - float for the duration to stop the champion for casting.
     */
-    public IEnumerator CastTime(){
+    public IEnumerator CastTime(float castTime, string spellName){
         float timer = 0.0f;
         player.IsCasting = true;
         player.CurrentCastedSpell = spell;
         // While still casting spell stop the player.
-        while(timer < spell.spellData.castTime){
-            CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, spell.spellData.castTime, true);
+        while(timer < castTime){
+            CastBarUpdateCallback?.Invoke(timer, spellName, castTime, true);
             if(!spell.CanMove){
                 if(navMeshAgent != null && navMeshAgent.enabled){
                     if(!navMeshAgent.isStopped)
@@ -73,7 +73,7 @@ public class SpellController
             timer += Time.deltaTime;
             yield return null;
         }
-        CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, spell.spellData.castTime, true);
+        CastBarUpdateCallback?.Invoke(timer, spell.spellData.name, castTime, true);
         player.IsCasting = false;
         player.CurrentCastedSpell = spell;
         if(navMeshAgent != null && navMeshAgent.enabled)
@@ -213,5 +213,27 @@ public class SpellController
         float y = (alpha * p0.y) + (beta * p1.y) + (phi * p2.y);
         float z = (alpha * p0.z) + (beta * p1.z) + (phi * p2.z);
         return new Vector3(x, y, z);
+    }
+
+    /*
+        Fade - Coroutine to fade out the GameObjects material by changing the alpha.
+        @param toFade - GameObject to be altered.
+    */
+    public IEnumerator Fade(GameObject toFade, float fadeDuration){
+        Renderer toFadeRend = toFade.GetComponent<Renderer>();
+        Color color = toFadeRend.material.color;
+        float initialAlpha = color.a;
+        float timer = 0.0f;
+        while(timer < fadeDuration){
+                color.a = Mathf.Lerp(1f, initialAlpha, timer/fadeDuration);
+                toFadeRend.material.color = color;
+                color = toFadeRend.material.color;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        if(toFade.transform.parent != null && toFade.transform.parent.tag == "SpellHitboxRoot")
+            GameObject.Destroy(toFade.transform.parent.gameObject);
+        else
+            GameObject.Destroy(toFade);
     }
 }

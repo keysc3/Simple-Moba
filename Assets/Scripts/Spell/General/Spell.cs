@@ -33,6 +33,8 @@ public class Spell : MonoBehaviour, ISpell
     public SpellController spellController { get; private set; }
     protected Collider myCollider;
     protected LayerMask hitboxMask;
+    protected List<RectTransform> spellUIDisplay = new List<RectTransform>();
+    protected RectTransform canvas; 
 
     public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
     public event SpellCDSetActive SpellCDSetActiveCallback;
@@ -53,6 +55,7 @@ public class Spell : MonoBehaviour, ISpell
         spellController = new SpellController(this, player);
         myCollider = GetComponent<Collider>();
         hitboxMask = LayerMask.GetMask("Hitbox");
+        canvas = transform.Find("DrawSpell").GetComponent<RectTransform>();
     }
 
     // Start is called before the first frame update
@@ -61,7 +64,33 @@ public class Spell : MonoBehaviour, ISpell
         championStats = (ChampionStats) player.unitStats;
         if(spellNum == SpellType.None)
             SpellNum = spellData.defaultSpellNum;
+        foreach(GameObject obj in spellData.drawSpellImages){
+            CreateSpellUIObject(obj);
+        }
     }
+
+    protected void CreateSpellUIObject(GameObject create){
+        GameObject UIObject = (GameObject) Instantiate(create, Vector3.zero, Quaternion.identity);
+        //canvas = transform.Find("DrawSpell");
+        UIObject.transform.SetParent(canvas, false);
+        UIObject.transform.eulerAngles = new Vector3(90f, 0f, 0f);
+        UIObject.SetActive(false);
+        spellUIDisplay.Add(UIObject.GetComponent<RectTransform>());
+        //return UIObject;
+    }
+
+    protected void DrawSpellUIHitbox(int objectNum, float offset, Vector2 size, bool lookAt){
+        spellUIDisplay[objectNum].gameObject.SetActive(true);
+        if(lookAt){
+            Vector3 direction = transform.position + (spellController.GetTargetDirection() - transform.position).normalized;
+            direction.y = transform.position.y + canvas.anchoredPosition3D.y;
+            canvas.LookAt(direction);
+        }
+        RectTransform rect = spellUIDisplay[objectNum];
+        rect.sizeDelta = size;
+        rect.anchoredPosition3D = new Vector3(0f, 0f, offset);
+    }
+
     /*
     *   DisplayCast - Displays the spell by adding its DrawSpell method to the Debug drawing singleton.
     */
@@ -78,6 +107,9 @@ public class Spell : MonoBehaviour, ISpell
     public void HideCast(){
         if(IsDisplayed){
             DrawGizmos.instance.drawMethod -= DrawSpell;
+            foreach(RectTransform myObj in spellUIDisplay){
+                myObj.gameObject.SetActive(false);
+            }
             IsDisplayed = false;
         }
     }

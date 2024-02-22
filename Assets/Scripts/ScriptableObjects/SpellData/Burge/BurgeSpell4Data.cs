@@ -20,5 +20,10 @@ public class BurgeSpell4Data : SpellData
     [field: SerializeField] public Dictionary<string, float> fillPerSpellHit { get; private set; } = new Dictionary<string, float>(){
         {"Burge1", 5f},
         {"Burge2", 5f},
-        {"Burge3", 20f}};
+        {"Burge3", 20f}
+    };
+    [field: SerializeField] public float fadeTime { get; private set; }
+    [field: SerializeField] public GameObject visualHitbox { get; private set; }
+    [field: SerializeField] public string secondName { get; private set; }
+    [field: SerializeField] public float recastCastTime { get; private set; }
 }

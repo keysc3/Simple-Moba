@@ -23,7 +23,7 @@ public class DrawGizmos : MonoBehaviour
     /*
     *   OnDrawGizmos - Draws gizmos for debugging.
     */
-    private void OnDrawGizmos(){
+    private void LateUpdate(){
         drawMethod?.Invoke();
     }
 }

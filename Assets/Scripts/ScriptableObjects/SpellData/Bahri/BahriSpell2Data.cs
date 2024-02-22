@@ -21,4 +21,5 @@ public class BahriSpell2Data : SpellData
     [field: SerializeField] public float speed { get; private set; }
     [field: SerializeField] public float multiplier { get; private set; }
     [field: SerializeField] public float bonusSpeedPercent { get; private set; }
+    [field: SerializeField] public float projectileScale { get; private set; }
 }

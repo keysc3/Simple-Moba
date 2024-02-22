@@ -30,8 +30,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.radius + spellData.magnitude, 1f);
+        DrawSpellUIHitbox(0, 0f, Vector2.one * (spellData.radius + spellData.magnitude) * 2f, false);
     }
 
     /*
@@ -46,6 +45,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
             // Create 3 GameObjects and set their position at a set magnitude from the players center and 120 degrees apart from each other.
             for(int i = 0; i < 3; i++){
                 GameObject missile = (GameObject) Instantiate(spellData.missile, spell_2_parent.transform.position, Quaternion.identity);
+                missile.transform.localScale = Vector3.one * spellData.projectileScale;
                 TargetedProjectile targetedProjectile = missile.GetComponentInChildren<TargetedProjectile>();
                 targetedProjectile.hit = Hit;
                 missile.transform.SetParent(spell_2_parent.transform);

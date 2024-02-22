@@ -27,22 +27,23 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, Vector3.up, spellData.maxLobMagnitude, 1f);
-
-       // Get the players mouse position on spell cast for spells target direction.
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.maxLobMagnitude * 2f, false);
+        float offset = 0f;
         Vector3 targetDirection = spellController.GetTargetDirection();
         // Set the target position to be in the direction of the mouse on cast.
         Vector3 targetPosition = (targetDirection - transform.position);
         // Set target to lob seed to to max lob distance if casted at a greater distance.
         if(targetPosition.magnitude > spellData.maxLobMagnitude)
-            targetPosition = transform.position + (targetPosition.normalized * spellData.maxLobMagnitude);
+            offset = spellData.maxLobMagnitude;
         else
-            targetPosition = transform.position + (targetDirection - transform.position);
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(targetPosition, Vector3.up, spellData.visualPrefab.transform.localScale.x, 1f);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(targetPosition, targetPosition + ((targetPosition - transform.position).normalized * 2f));
+            offset = Mathf.Abs(targetPosition.magnitude);
+        
+        DrawSpellUIHitbox(1, offset, Vector2.one * spellData.seedScale * spellData.lobLandScale, true);
+
+        float length = 2f;
+        Vector2 size = new Vector2(spellData.seedScale, length);
+        offset = (offset + (spellData.seedScale*spellData.lobLandScale)/2f + length/2f);
+        DrawSpellUIHitbox(2, offset, size, true);
     }
 
      /*
@@ -51,7 +52,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     public void Cast(){
         if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
-            StartCoroutine(spellController.CastTime());
+            StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
@@ -88,6 +89,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     private IEnumerator Spell_3_Lob(Vector3 targetPosition, Vector3 targetDirection){
         // Create spell object.
         GameObject seed = (GameObject) Instantiate(spellData.visualPrefab, transform.position, Quaternion.identity);
+        seed.transform.localScale = Vector3.one * spellData.seedScale;
         // Look at roll direction.
         seed.transform.LookAt(seed.transform.position + targetDirection);
         BilliaSpell3Trigger billiaSpell3Trigger = seed.GetComponentInChildren<BilliaSpell3Trigger>();
@@ -137,7 +139,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
         SphereCollider seedCollider = seed.GetComponentInChildren<SphereCollider>();
         // Check for lob landing hits.
         List<Collider> lobHit = new List<Collider>(Physics.OverlapSphere(seedCollider.transform.position, 
-        seedCollider.radius * spellData.lobLandHitbox, hitboxMask));
+        (spellData.seedScale/2f) * spellData.lobLandScale, hitboxMask));
         // If a hit then apply damage in a cone in the roll direction.
         if(lobHit.Count > 0){
             foreach(Collider hit in lobHit){

@@ -18,6 +18,6 @@ public class BilliaSpell3Data : SpellData
     [field: SerializeField] public float seedRotation { get; private set; }
     [field: SerializeField] public float seedConeAngle { get; private set; }
     [field: SerializeField] public float seedConeRadius { get; private set; }
-    [field: SerializeField] public float lobLandHitbox { get; private set; }
-
+    [field: SerializeField] public float lobLandScale { get; private set; }
+    [field: SerializeField] public float seedScale { get; private set; }
 }

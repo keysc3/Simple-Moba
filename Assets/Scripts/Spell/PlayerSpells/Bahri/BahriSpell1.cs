@@ -27,10 +27,8 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Vector3 targetPosition = (spellController.GetTargetDirection() - transform.position).normalized;
-        targetPosition = transform.position + (targetPosition * spellData.magnitude);
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, targetPosition);
+        Vector2 size = new Vector2(spellData.orbScale, spellData.magnitude + spellData.orbScale/2f);
+        DrawSpellUIHitbox(0, spellData.magnitude/2f + spellData.orbScale/4f, size, true);
     }
 
     /*
@@ -45,7 +43,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
             Vector3 targetPosition = (targetDirection - transform.position).normalized;
             targetPosition = transform.position + (targetPosition * spellData.magnitude);
             // Start coroutines to handle the spells cast time and animation.
-            StartCoroutine(spellController.CastTime());
+            StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             StartCoroutine(Spell_1_Move(targetPosition));
             // Use mana and set spell on cooldown to true.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
@@ -65,6 +63,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
+        orb.transform.localScale = Vector3.one * spellData.orbScale;
         BahriSpell1Trigger spell1Trigger = orb.GetComponentInChildren<BahriSpell1Trigger>();
         spell1Trigger.bahriSpell1 = this;
         spell1Trigger.unit = player; 
