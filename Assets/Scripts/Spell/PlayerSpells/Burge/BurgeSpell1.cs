@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEditor;
 
 /*
 * Purpose: Implements Burge's first spell. Burge vaults into the air spinning their weapon and deals damage on cast and every x seconds

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 /*
 * Purpose: Implements Billia's third spell. Billia lobs a seed at a target location which then rolls until colliding with a GameObject.

@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine.UI;
 
 /*
 * Purpose: Implements Bahri'a second spell. Bahri summons a number of projectiles that orbit her and gains a decaying speed boost.

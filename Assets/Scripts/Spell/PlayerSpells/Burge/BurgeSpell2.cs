@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 /*
 * Purpose: Implements Burge's second spell. Burge throws a spinning dagger at the target location that grows in size over the spells duration.

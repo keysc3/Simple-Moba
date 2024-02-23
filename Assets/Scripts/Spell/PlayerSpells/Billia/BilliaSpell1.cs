@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 /*
 * Purpose: Implements Billia's first spell. Billia swings her weapon around her dealing damage in a circle. 
