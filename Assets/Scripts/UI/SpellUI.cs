@@ -39,10 +39,12 @@ public class SpellUI : MonoBehaviour
                 Transform durationSlider = null;
                 Image durationImage = null;
                 SpellLevelUpButton spellLevelUpButton = null;
+                GameObject noManaTransform = null;
                 if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2}).Contains(spellType)){
                     durationSlider = transform.Find(spell + "_Container/SpellContainer/Outline/Slider");
                     durationImage = durationSlider.transform.Find("Fill").GetComponent<Image>();
                     spellLevelUpButton = transform.Find(spell + "_Container/LevelUp/Button").GetComponent<SpellLevelUpButton>();
+                    noManaTransform = transform.Find(spell + "_Container/SpellContainer/Spell/NoMana").gameObject;
                 }
                 Hashtable hashy = new Hashtable();
                 hashy.Add(SpellComponent.CDTransform, spellCDTransform);
@@ -54,6 +56,7 @@ public class SpellUI : MonoBehaviour
                 hashy.Add(SpellComponent.SpellButton, spellCDTransform.parent.Find("Button").GetComponent<SpellButton>());
                 hashy.Add(SpellComponent.SpellImage, spellCDTransform.parent.Find("Icon").GetComponent<Image>());
                 hashy.Add(SpellComponent.SpellLevelUpButton, spellLevelUpButton);
+                hashy.Add(SpellComponent.NoMana, noManaTransform);
                 spellComps.Add(spellType, hashy);
             }
         }
@@ -67,7 +70,7 @@ public class SpellUI : MonoBehaviour
         Spell[] objSpells = GetComponentsInParent<Spell>();
         foreach(Spell spell in objSpells){
             SpellCallbacks(spell);
-        } 
+        }
     }
 
     public void SpellCallbacks(Spell spell){
@@ -76,6 +79,29 @@ public class SpellUI : MonoBehaviour
         spell.SpellSliderUpdateCallback += UpdateActiveSpellSlider;
         spell.SetComponentActiveCallback += SetComponentActive;
         spell.SetSpriteCallback += SetSprite;
+    }
+
+    public void LateUpdate(){
+        ChampionStats championStats = (ChampionStats) GetComponentInParent<IPlayer>().unitStats; 
+        Spell[] objSpells = GetComponentsInParent<Spell>();
+        foreach(Spell spell in objSpells){
+            if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2}).Contains(spell.SpellNum)){
+                if(spell.SpellLevel > -1){
+                    GameObject gObject = (GameObject) spellComps[spell.SpellNum][SpellComponent.NoMana];
+                    Transform tForm = (Transform) spellComps[spell.SpellNum][SpellComponent.CDCover];
+                    bool tFormActive = tForm.gameObject.activeSelf;
+                    bool isActive = gObject.activeSelf;
+                    if(!tFormActive && !spell.OnCd && championStats.CurrentMana < spell.spellData.baseMana[spell.SpellLevel]){
+                        if(!isActive)
+                            gObject.SetActive(true);
+                    }
+                    else{
+                        if(isActive)
+                            gObject.SetActive(false);
+                    }
+                }
+            }
+        } 
     }
 
     /*

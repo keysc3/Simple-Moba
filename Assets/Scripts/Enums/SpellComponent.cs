@@ -12,5 +12,6 @@ public enum SpellComponent
     DurationImage,
     SpellButton,
     SpellLevelUpButton,
-    SpellImage
+    SpellImage,
+    NoMana,
 }
