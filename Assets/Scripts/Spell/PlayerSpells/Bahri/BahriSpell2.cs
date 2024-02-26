@@ -34,8 +34,8 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");
             activeSpellObjects.Add(spell_2_parent);
@@ -57,7 +57,9 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
             StartCoroutine(Spell_2_Speed());
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*

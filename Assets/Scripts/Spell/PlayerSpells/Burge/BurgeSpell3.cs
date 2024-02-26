@@ -47,13 +47,16 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+            OnCd = true;
             isFirstCast = true;
             StartCoroutine(ChargeUp());
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
+            return true;
         }
+        return false;
     }
 
     /*
@@ -265,7 +268,6 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         if(!casted)
             cd = cd * (1f - spellData.cdRefundPercent);
         pastHits.Clear();
-        OnCd = true;
         chargeAmount = 0.0f;
         StartCoroutine(spellController.Spell_Cd_Timer(cd));
     }

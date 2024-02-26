@@ -49,9 +49,9 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
+    public bool Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
@@ -89,7 +89,9 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*

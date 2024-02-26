@@ -39,8 +39,8 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
             StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             // Get the players mouse position on spell cast for spells target direction.
@@ -58,7 +58,9 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
             StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+            return true;
         }
+        return false;
     }
 
     /*

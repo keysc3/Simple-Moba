@@ -51,16 +51,18 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
+    public bool Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
             StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
-        }        
+            return true;
+        }
+        return false;        
     }
 
     /*

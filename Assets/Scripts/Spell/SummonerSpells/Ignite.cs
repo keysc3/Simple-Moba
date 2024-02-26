@@ -60,9 +60,11 @@ public class Ignite : Spell, IHasTargetedCast
     *   Cast - Casts the spell.
     */
     public void Cast(IUnit unit){
-        unit.statusEffects.AddEffect(spellData.dot.InitializeEffect(CalculateTotalDamage(), 0, player, unit));
-        OnCd = true;
-        StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[0]));
+        if(!OnCd){
+            unit.statusEffects.AddEffect(spellData.dot.InitializeEffect(CalculateTotalDamage(), 0, player, unit));
+            OnCd = true;
+            StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[0]));
+        }
     }
 
     /*

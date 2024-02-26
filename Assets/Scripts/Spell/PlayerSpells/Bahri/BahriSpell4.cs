@@ -60,20 +60,22 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
+    public bool Cast(){
         if(!player.IsCasting){
             if(!Spell4Casting){
-                if(championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+                if(!OnCd && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
                     StartCoroutine(Spell_4_LifeCycle());
+                    OnCd = true;
                     // Use mana and set spell on cooldown.
                     championStats.UseMana(spellData.baseMana[SpellLevel]);
+                    return true;
                 }
             }
             else{
-                if(Spell4Casting)
-                    Recast();
+                return Recast();
             }
         }
+        return false;
     }
 
     /*
@@ -99,12 +101,14 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
     /*
         Recast - Handles the actions of the spells recast.
     */
-    private void Recast(){
+    private bool Recast(){
         // If the player re-casts, isn't casting, has spell charges left, is re-casting at least 1s since last cast, and isn't dead.
-        if(Spell_4_ChargesLeft > 0){
+        if(Spell_4_ChargesLeft > 0 && canRecast){
             Spell_4_Move();
             Spell_4_ChargesLeft--;
+            return true;
         }
+        return false;
     }
     /*
     *   Spell_4_LifeCycle - Handles the fourth spells initialization and life cycle.
@@ -125,7 +129,6 @@ public class BahriSpell4 : Spell, IHasCast, IHasHit
         }
         // Reset charges and start spell cooldown timer.
         Spell4Casting = false;
-        OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 

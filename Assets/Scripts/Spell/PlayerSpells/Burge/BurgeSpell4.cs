@@ -57,10 +57,11 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
+    public bool Cast(){
         if(!player.IsCasting){
             if(!casted){
-                if(championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
+                if(!OnCd && championStats.CurrentMana >= spellData.baseMana[SpellLevel] && canCast){
+                    OnCd = true;
                     casted = true;
                     canCast = false;
                     player.MouseOnCast = transform.position + transform.forward;
@@ -69,12 +70,15 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
                     // Use mana.
                     championStats.UseMana(spellData.baseMana[SpellLevel]);
                     IsQuickCast = false;
+                    return true;
                 }
             }
             else{
                 Recast();
+                return true;
             }
-        }   
+        }
+        return false;   
     }
 
     /*
@@ -130,7 +134,6 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
         if(casted)
             SpellFinished();
         UpdateSpellSprite();
-        OnCd = true;
         StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
     }
 
@@ -208,9 +211,9 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     *   @param spellHit - ISpell the hit is from.
     */
     public void BasicSpellHit(IUnit hitUnit, ISpell spellHit){
-        if(SpellLevel >= 0 && !OnCd){
+        if(SpellLevel >= 0){
             if(!casted){
-                if(currentFill < 100f){
+                if(!OnCd && currentFill < 100f){
                     float toFill = spellData.fillPerSpellHit[spellHit.spellData.spellID];
                     currentFill = Mathf.Clamp(toFill + currentFill, 0f, 100f);
                     if(fillImage != null)

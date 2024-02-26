@@ -48,8 +48,8 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
      /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
             StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             // Get the players mouse position on spell cast for spells target direction.
@@ -66,7 +66,9 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*

@@ -30,8 +30,8 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
@@ -44,7 +44,9 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
             // Use mana and set the spell to be on cooldown.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*
