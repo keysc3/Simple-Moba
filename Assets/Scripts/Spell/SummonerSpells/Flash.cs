@@ -33,10 +33,7 @@ public class Flash : Spell, IHasCast
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
     protected override void DrawSpell(){
-        Handles.color = Color.cyan;
-        Vector3 drawPosition = transform.position;
-        drawPosition.y -= (myCollider.bounds.size.y/2) + 0.01f;
-        Handles.DrawWireDisc(drawPosition, Vector3.up, spellData.maxMagnitude, 1f);
+        DrawSpellUIHitbox(0, 0f, Vector2.one * spellData.maxMagnitude * 2f, false);
     }
 
     /*
