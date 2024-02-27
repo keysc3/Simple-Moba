@@ -41,14 +41,19 @@ public class SpellInputController
                 }
                 // Cast the spell since it is cast on press.
                 else{
-                    ((IHasCast) spellPressed).Cast();
+                    if(!((IHasCast) spellPressed).Cast())
+                        CantCastMessage(spellPressed);
                     UnreadySpell();
                 }
             }
         }
         else{
-            Debug.Log("Can't cast " + spellPressed + " yet!");
+            CantCastMessage(spellPressed);
         }
+    }
+
+    private void CantCastMessage(ISpell spellPressed){
+        Debug.Log("Can't cast " + spellPressed + " yet!");
     }
 
     /*
@@ -73,7 +78,8 @@ public class SpellInputController
             }
             // Cast spell.
             else if(spellInput.LastSpellPressed is IHasCast){
-                ((IHasCast) spellInput.LastSpellPressed).Cast();
+                if(!((IHasCast) spellInput.LastSpellPressed).Cast())
+                    CantCastMessage(spellInput.LastSpellPressed);
             }
             // Unready spell.
             UnreadySpell();
