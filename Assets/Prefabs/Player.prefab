@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1414811069845533925}
   - component: {fileID: 1757034778327452666}
   - component: {fileID: 434764027549492833}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 6112381884396693917}
   - component: {fileID: 4217062025378389319}
   - component: {fileID: 1396073048743096829}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: DrawSpell
   m_TagString: Untagged
   m_Icon: {fileID: 0}

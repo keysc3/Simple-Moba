@@ -63,7 +63,7 @@ public class ActiveChampion : MonoBehaviour
                 champions[i].GetComponent<PlayerControllerBehaviour>().enabled = true;
                 champions[i].GetComponent<SpellInputBehaviour>().enabled = true;
                 champions[i].tag = "Player";
-                champions[i].layer = LayerMask.NameToLayer("Default");
+                champions[i].layer = LayerMask.NameToLayer("Player");
                 SetChampionUIActive(true, players[i].playerUI);
                 cameraMovement.targetObject = champions[i].transform;
             }
