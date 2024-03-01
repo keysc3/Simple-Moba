@@ -8,6 +8,7 @@ using System;
 public class SpellUI : MonoBehaviour
 {
     private Dictionary<SpellType, Hashtable> spellComps = new Dictionary<SpellType, Hashtable>();
+    private Dictionary<SpellType, SpellData> spellDataDict = new Dictionary<SpellType, SpellData>();
     private bool prevEnabled = false;
     
     // Called when the object becomes enabled and active.
@@ -55,6 +56,11 @@ public class SpellUI : MonoBehaviour
                 hashy.Add(SpellComponent.DurationImage, durationImage);
                 hashy.Add(SpellComponent.SpellButton, spellCDTransform.parent.Find("Button").GetComponent<SpellButton>());
                 hashy.Add(SpellComponent.SpellImage, spellCDTransform.parent.Find("Icon").GetComponent<Image>());
+                TMP_Text text = null;
+                Transform text2 = spellCDTransform.parent.Find("ManaCost");
+                if(text2 != null)
+                    text = text2.GetComponent<TMP_Text>();
+                hashy.Add(SpellComponent.ManaCost, text);
                 hashy.Add(SpellComponent.SpellLevelUpButton, spellLevelUpButton);
                 hashy.Add(SpellComponent.NoMana, noManaTransform);
                 spellComps.Add(spellType, hashy);
@@ -66,9 +72,13 @@ public class SpellUI : MonoBehaviour
     *   SetupCallbacks - Setup necessary callbacks.
     */
     private void SetupCallbacks(){
-       // Setup callbacks.
+        // Setup callbacks.
+        LevelManager levelManager = GetComponentInParent<IPlayer>().levelManager;
+        levelManager.SpellLevelUpCallback += SetManaCost;
         Spell[] objSpells = GetComponentsInParent<Spell>();
         foreach(Spell spell in objSpells){
+            if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2, SpellType.None}).Contains(spell.SpellNum))
+                spellDataDict.Add(spell.SpellNum, spell.spellData);
             SpellCallbacks(spell);
         }
     }
@@ -198,5 +208,18 @@ public class SpellUI : MonoBehaviour
     */
     public void SetSprite(SpellType spellType, SpellComponent component, Sprite sprite){
         ((Image) spellComps[spellType][component]).sprite = sprite;
+    }
+
+    /*
+    *   SetManaCost - Sets the UI to a mana cost given a spells level.
+    *   @param spellType - SpellType enum of what spell is being changed.
+    *   @param spellLevel - int of the spell level.
+    */
+    public void SetManaCost(SpellType spellType, int spellLevel){
+        TMP_Text text = (TMP_Text) spellComps[spellType][SpellComponent.ManaCost];
+        float newCost = spellDataDict[spellType].baseMana[spellLevel - 1];
+        if(text != null){
+            text.text = newCost.ToString();
+        }
     }
 }

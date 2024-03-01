@@ -14,4 +14,5 @@ public enum SpellComponent
     SpellLevelUpButton,
     SpellImage,
     NoMana,
+    ManaCost,
 }
