@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e8f7ddfc33026b4e840c50cf0e069f8, type: 3}
+  m_Name: Burge
+  m_EditorClassIdentifier: 
+  <name>k__BackingField: Billia
+  <icon>k__BackingField: {fileID: 21300000, guid: 98245bfc88e04134cb766799b4320cb4, type: 3}
+  <baseHealth>k__BackingField: 605
+  <magicDamage>k__BackingField: 18
+  <physicalDamage>k__BackingField: 61
+  <speed>k__BackingField: 3.3
+  <HP5>k__BackingField: 2.5
+  <armor>k__BackingField: 22
+  <magicResist>k__BackingField: 32
+  <rangeType>k__BackingField: melee
+  <autoRange>k__BackingField: 2
+  <autoWindUp>k__BackingField: 0.14
+  <attackSpeed>k__BackingField: 0.63
+  <attackProjectileSpeed>k__BackingField: 0
+  <passive_sprite>k__BackingField: {fileID: 21300000, guid: cb94e6fd164977d419200f3b8fee425c, type: 3}
+  <spell_1_sprite>k__BackingField: {fileID: 21300000, guid: a575cdccf5aa38c4b8118aaf1cd601c2, type: 3}
+  <spell_2_sprite>k__BackingField: {fileID: 21300000, guid: 9ba580c375543b040a6837e76f8ac46d, type: 3}
+  <spell_3_sprite>k__BackingField: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
+  <spell_4_sprite>k__BackingField: {fileID: 21300000, guid: 54167090e86d968488c0514649d2325e, type: 3}
+  <baseMana>k__BackingField: 410
+  <MP5>k__BackingField: 11.5
+  <physicalDamageGrowth>k__BackingField: 3.1
+  <healthGrowth>k__BackingField: 105
+  <manaGrowth>k__BackingField: 50
+  <HP5Growth>k__BackingField: 0.55
+  <MP5Growth>k__BackingField: 0.95
+  <armorGrowth>k__BackingField: 5.2
+  <magicResistGrowth>k__BackingField: 1.55
+  <attackSpeedGrowth>k__BackingField: 2.7
+  <spell1BaseDamage>k__BackingField:
+  - 35
+  - 45
+  - 55
+  - 65
+  - 75
+  <spell1BaseCd>k__BackingField:
+  - 6
+  - 5.5
+  - 5
+  - 4.5
+  - 4
+  <spell1BaseMana>k__BackingField:
+  - 65
+  - 65
+  - 65
+  - 65
+  - 65
+  <spell2BaseDamage>k__BackingField:
+  - 80
+  - 100
+  - 120
+  - 140
+  - 160
+  <spell2BaseCd>k__BackingField:
+  - 14
+  - 13
+  - 12
+  - 11
+  - 10
+  <spell2BaseMana>k__BackingField:
+  - 50
+  - 50
+  - 50
+  - 50
+  - 50
+  <spell3BaseDamage>k__BackingField:
+  - 70
+  - 95
+  - 120
+  - 145
+  - 170
+  <spell3BaseCd>k__BackingField:
+  - 14
+  - 14
+  - 14
+  - 14
+  - 14
+  <spell3BaseMana>k__BackingField:
+  - 70
+  - 70
+  - 70
+  - 70
+  - 70
+  <spell4BaseDamage>k__BackingField:
+  - 100
+  - 150
+  - 200
+  <spell4BaseCd>k__BackingField:
+  - 150
+  - 130
+  - 110
+  <spell4BaseMana>k__BackingField:
+  - 50
+  - 50
+  - 50

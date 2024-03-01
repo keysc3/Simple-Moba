@@ -77,8 +77,12 @@ public class SpellUI : MonoBehaviour
         levelManager.SpellLevelUpCallback += SetManaCost;
         Spell[] objSpells = GetComponentsInParent<Spell>();
         foreach(Spell spell in objSpells){
-            if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2, SpellType.None}).Contains(spell.SpellNum))
-                spellDataDict.Add(spell.SpellNum, spell.spellData);
+            if(!(new List<SpellType>(){SpellType.Passive, SpellType.SummonerSpell1, SpellType.SummonerSpell2}).Contains(spell.SpellNum)){
+                if(spell.SpellNum == SpellType.None)
+                    spellDataDict.Add(spell.spellData.defaultSpellNum, spell.spellData);
+                else
+                    spellDataDict.Add(spell.SpellNum, spell.spellData);
+            }
             SpellCallbacks(spell);
         }
     }
