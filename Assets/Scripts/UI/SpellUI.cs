@@ -87,6 +87,10 @@ public class SpellUI : MonoBehaviour
         }
     }
 
+    /*
+    *   SpellCallbacks - Sets up the necessary callbacks for a spells UI.
+    *   @param spell - Spell to set callbacks for.
+    */
     public void SpellCallbacks(Spell spell){
         spell.spellController.SpellCDUpdateCallback += SpellCDTimerUpdate;
         spell.SpellCDSetActiveCallback += SpellCDChildrenSetActive;

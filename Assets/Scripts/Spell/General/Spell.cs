@@ -47,6 +47,9 @@ public class Spell : MonoBehaviour, ISpell
     public delegate void SetSprite(SpellType spellType, SpellComponent component, Sprite sprite);
     public event SetSprite SetSpriteCallback;
 
+    public delegate void DisplayMessageUpdate(string message);
+    public event DisplayMessageUpdate DisplayMessageCallback;
+
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
@@ -154,5 +157,9 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void RaiseSetSpriteEvent(SpellType spellType, SpellComponent component, Sprite sprite){
         SetSpriteCallback?.Invoke(spellType, component, sprite);
+    }
+
+    public void RaiseDisplayMessageEvent(string message){
+        DisplayMessageCallback?.Invoke(message);
     }
 }

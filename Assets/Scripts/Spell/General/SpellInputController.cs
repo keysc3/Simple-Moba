@@ -53,7 +53,8 @@ public class SpellInputController
     }
 
     private void CantCastMessage(ISpell spellPressed){
-        Debug.Log("Can't cast " + spellPressed + " yet!");
+        (spellPressed as Spell).RaiseDisplayMessageEvent("Can't cast " + spellPressed + " yet!");
+        //Debug.Log("Can't cast " + spellPressed + " yet!");
     }
 
     /*
