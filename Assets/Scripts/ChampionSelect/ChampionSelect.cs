@@ -18,6 +18,8 @@ public class ChampionSelect : MonoBehaviour
     [SerializeField] private List<SpellData> sumSpells;
     [SerializeField] private GameObject championButtonPrefab;
     [SerializeField] private GameObject summonerSpellButtonPrefab;
+    private List<int> selectedSpells = new List<int>(){0, 1};
+    private Transform lastClicked;
     private float width;
     private Vector2 currentPos = Vector2.zero;
 
@@ -70,12 +72,17 @@ public class ChampionSelect : MonoBehaviour
     public void SummonerSpellClick(Transform button){
         Transform select = transform.Find("SummonerSpells/SummonerSpellSelect");
         bool isActive = select.gameObject.activeSelf;
-        select.gameObject.SetActive(!isActive);
-        RectTransform buttonRT = button.GetComponent<RectTransform>();
-        RectTransform selectRT = select.GetComponent<RectTransform>();
-        selectRT.anchoredPosition = buttonRT.anchoredPosition + new Vector2(0f, selectRT.sizeDelta.y/2f + (buttonRT.sizeDelta.y/2f) + 2f);
+        if(lastClicked == button){
+            select.gameObject.SetActive(!isActive);
+        }
+        else{
+            select.gameObject.SetActive(true);
+            RectTransform buttonRT = button.GetComponent<RectTransform>();
+            RectTransform selectRT = select.GetComponent<RectTransform>();
+            selectRT.anchoredPosition = buttonRT.anchoredPosition + new Vector2(0f, selectRT.sizeDelta.y/2f + (buttonRT.sizeDelta.y/2f) + 2f);
+        }
+        lastClicked = button;
     }
-
     private void SummonerSpellButtonSetup(Button button, int spellIndex){
         button.GetComponent<Image>().sprite = sumSpells[spellIndex].sprite;
         button.GetComponent<Button>().onClick.AddListener(() => SummonerSpellClick(button.transform));
