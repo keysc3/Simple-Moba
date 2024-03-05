@@ -22,24 +22,29 @@ public class ChampionSelect : MonoBehaviour
     private Transform lastClicked;
     private float width;
     private Vector2 currentPos = Vector2.zero;
+    private GameObject select;
+    private Transform summonerSpells;
 
     // Called when the script instance is being loaded.
     void Awake(){
         // Sort the champions alphabetically.
         champions.Sort(CompareByName);
         width = championButtonPrefab.GetComponent<RectTransform>().rect.width;
+        select = transform.Find("SummonerSpells/SummonerSpellSelect").gameObject;
+        summonerSpells = transform.Find("SummonerSpells");
     }
 
     // Start is called before the first frame update
     void Start()
     {
         ChampionButtonSetup();
-        SummonerSpellButtonSetup(transform.Find("SummonerSpells").GetChild(0).GetComponent<Button>(), 0);
-        SummonerSpellButtonSetup(transform.Find("SummonerSpells").GetChild(1).GetComponent<Button>(), 1);
-        SummonerSpellPanelSetup(transform.Find("SummonerSpells/SummonerSpellSelect"));
+        for(int i = 0; i < selectedSpells.Count; i++){
+            SummonerSpellButtonSetup(summonerSpells.GetChild(i).GetComponent<Button>(), i);
+        }
+        SummonerSpellPanelSetup();
     }
 
-    private void SummonerSpellPanelSetup(Transform parent){
+    private void SummonerSpellPanelSetup(){
         float spacing = 2f;
         int size = sumSpells.Count;
         float widthPer = 40f;
@@ -53,7 +58,7 @@ public class ChampionSelect : MonoBehaviour
                 position.x = position.x + widthPer + spacing;
             // Create and setup a new champion button.
             GameObject button = (GameObject) Instantiate(summonerSpellButtonPrefab, Vector2.zero, Quaternion.identity);
-            button.transform.SetParent(parent);
+            button.transform.SetParent(select.transform);
             RectTransform rt = button.GetComponent<RectTransform>();
             rt.anchorMin = new Vector2(0.0f, 1.0f);
             rt.anchorMax = new Vector2(0.0f, 1.0f);
@@ -62,15 +67,35 @@ public class ChampionSelect : MonoBehaviour
             button.name = sumSpells[i].name;
             button.GetComponent<Image>().sprite = sumSpells[i].sprite;
             // Add the on click for the button.
-            //button.GetComponent<Button>().onClick.AddListener(() => ChampClick(button.transform));
+            button.GetComponent<Button>().onClick.AddListener(() => SelectSummonerSpell(button.transform));
         }
-        parent.GetComponent<RectTransform>().sizeDelta = new Vector2((spacing * 3f) + (widthPer * 2f), (-position.y) + spacing + widthPer/2f);
-        parent.gameObject.SetActive(false);
+        select.GetComponent<RectTransform>().sizeDelta = new Vector2((spacing * 3f) + (widthPer * 2f), (-position.y) + spacing + widthPer/2f);
+        select.gameObject.SetActive(false);
 
     }
 
+    private void SelectSummonerSpell(Transform button){
+        int clickedCurrent = selectedSpells[lastClicked.GetSiblingIndex()];
+        int clickedIndex = button.GetSiblingIndex();
+        if(clickedCurrent != clickedIndex){
+            int check = 0;
+            if(lastClicked.GetSiblingIndex() == check)
+                check = 1;
+            if(selectedSpells[check] == clickedIndex){
+              selectedSpells.Reverse();
+              for(int i = 0; i < selectedSpells.Count; i++){
+                summonerSpells.GetChild(i).GetComponent<Image>().sprite = sumSpells[selectedSpells[i]].sprite;
+              }
+            }
+            else{
+                selectedSpells[lastClicked.GetSiblingIndex()] = button.GetSiblingIndex();
+                lastClicked.GetComponent<Image>().sprite = sumSpells[button.GetSiblingIndex()].sprite;
+            }
+        }
+        select.gameObject.SetActive(false);
+    }
+
     public void SummonerSpellClick(Transform button){
-        Transform select = transform.Find("SummonerSpells/SummonerSpellSelect");
         bool isActive = select.gameObject.activeSelf;
         if(lastClicked == button){
             select.gameObject.SetActive(!isActive);
@@ -83,6 +108,7 @@ public class ChampionSelect : MonoBehaviour
         }
         lastClicked = button;
     }
+
     private void SummonerSpellButtonSetup(Button button, int spellIndex){
         button.GetComponent<Image>().sprite = sumSpells[spellIndex].sprite;
         button.GetComponent<Button>().onClick.AddListener(() => SummonerSpellClick(button.transform));
