@@ -59,7 +59,7 @@ public class ChampionSelect : MonoBehaviour
     */
     public void StartClick(){
         if(GameController.instance.currentChampion != null)
-            SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
+            SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
     /*
