@@ -17,6 +17,9 @@ public class PlayerSpells : MonoBehaviour
     public delegate void SpellAdded(ISpell newSpell, LevelManager levelManager);
     public event SpellAdded SpellAddedCallback;
 
+    public delegate void SpellsInitialized();
+    public event SpellsInitialized SpellsInitializedCallback;
+
     // Called when the script instance is being loaded.
     private void Awake(){
         player = GetComponent<IPlayer>();
@@ -39,6 +42,7 @@ public class PlayerSpells : MonoBehaviour
             if(spellInterface is IHasCallback)
                 ((IHasCallback) spellInterface).SetupCallbacks(spells);
         }
+        SpellsInitializedCallback?.Invoke();
     }
 
     /*

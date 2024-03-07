@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     public GameObject currentChampion { get; private set; }
     public float collisionPlane { get; private set; } = 0.5f;
     [SerializeField] private List<GameObject> champions;
+    public List<(System.Type, SpellType, SpellData)> myList = new List<(System.Type, SpellType, SpellData)>();
 
     // Called when the script instance is being loaded.
     void Awake(){
