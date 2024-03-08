@@ -139,7 +139,7 @@ public class Player : MonoBehaviour, IPlayer
     *   UpdateScores - Update the scores of the every unit involved in a kill.
     *   @param damager - IUnit of the killing player.
     */
-    private void UpdateScores(IUnit damager){
+    protected void UpdateScores(IUnit damager){
         if(score != null)
             score.Death();
         if(damager is IPlayer){

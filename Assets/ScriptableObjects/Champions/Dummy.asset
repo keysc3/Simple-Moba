@@ -17,7 +17,7 @@ MonoBehaviour:
   <baseHealth>k__BackingField: 1000
   <magicDamage>k__BackingField: 0
   <physicalDamage>k__BackingField: 0
-  <speed>k__BackingField: 0
+  <speed>k__BackingField: 2
   <HP5>k__BackingField: 0
   <armor>k__BackingField: 0
   <magicResist>k__BackingField: 0
