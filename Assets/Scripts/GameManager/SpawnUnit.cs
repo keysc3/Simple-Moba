@@ -8,11 +8,14 @@ public class SpawnUnit : MonoBehaviour
     public GameObject spawnMenu;
     public List<GameObject> prefabs = new List<GameObject>();
     private LayerMask groundMask;
+    private LayerMask enemyMask;
+    private bool canMove = false;
 
     // Start is called before the first frame update
     void Start()
     {
         groundMask = LayerMask.GetMask("Ground");
+        enemyMask = LayerMask.GetMask("Enemy");
     }
 
     // Update is called once per frame
@@ -35,6 +38,7 @@ public class SpawnUnit : MonoBehaviour
 
     private IEnumerator UnitPlacement(GameObject spawn){
         bool breakBool = false;
+        Stat stat = spawn.GetComponent<IUnit>().unitStats.maxHealth;
         while(!breakBool){
             print("Place!");
             if(Input.GetMouseButtonDown(0)){
@@ -45,12 +49,20 @@ public class SpawnUnit : MonoBehaviour
                     print("Hit ground");
                     Vector3 position = FindBestPosition(hit.point);
                     position.y = spawn.transform.position.y;
-                    Instantiate(spawn, position, Quaternion.identity);
-                    breakBool = true;
+                    if(stat == null){
+                        Instantiate(spawn, position, Quaternion.identity);
+                        breakBool = true;
+                    }
+                    else{
+                        if(canMove){
+                            spawn.transform.position = position;
+                            breakBool = true;
+                        }
+                    }
                 }
             }
             else if(Input.GetKeyDown(KeyCode.Escape)){
-                print("Cancel unit placement");
+                print("Cancel unit placement.");
                 breakBool = true;
             }
             yield return null;
@@ -66,6 +78,65 @@ public class SpawnUnit : MonoBehaviour
             point = meshHit.position;
         }
         return point;
+    }
+
+    public void DespawnUnitClick(){
+        spawnMenu.SetActive(false);
+        StartCoroutine(DespawnUnit());
+    }
+
+    private IEnumerator DespawnUnit(){
+        bool breakBool = false;
+        while(!breakBool){
+            print("Click unit!");
+            if(Input.GetMouseButtonDown(0)){
+                // Ray cast from mouse position.
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if(Physics.Raycast(ray, out hit, Mathf.Infinity, enemyMask)){
+                    print("Hit unit!");
+                    Destroy(hit.transform.gameObject);
+                    breakBool = true;
+                }
+            }
+            else if(Input.GetKeyDown(KeyCode.Escape)){
+                print("Cancel despawn unit.");
+                breakBool = true;
+            }
+            yield return null;
+        }
+        spawnMenu.SetActive(true);
+    }
+
+    public void MoveUnitClick(){
+        spawnMenu.SetActive(false);
+        StartCoroutine(MoveUnit());
+    }
+
+    private IEnumerator MoveUnit(){
+        bool breakBool = false;
+        while(!breakBool){
+            print("Click unit!");
+            if(Input.GetMouseButtonDown(0)){
+                // Ray cast from mouse position.
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if(Physics.Raycast(ray, out hit, Mathf.Infinity, enemyMask)){
+                    print("Hit unit!");
+                    canMove = false;
+                    StartCoroutine(UnitPlacement(hit.transform.gameObject));
+                    canMove = true;
+                    spawnMenu.SetActive(false);
+                    yield break;
+                }
+            }
+            else if(Input.GetKeyDown(KeyCode.Escape)){
+                print("Cancel unit selection.");
+                breakBool = true;
+            }
+            yield return null;
+        }
+        spawnMenu.SetActive(true);
     }
 }
 
