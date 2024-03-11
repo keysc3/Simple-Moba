@@ -26,8 +26,10 @@ public class PlayerController
             if(hitUnit.GameObject.tag == "Enemy" && !hitUnit.IsDead){
                 playerMover.TargetedEnemy = hitUnit;
                 return;
-            }
+            }     
         }
+        if(GroundClickEffect.instance != null)
+            GroundClickEffect.instance.CreateGroundClick(hitVec);
         playerMover.TargetedEnemy = null;
         playerMover.Destination = hitVec;
     }
