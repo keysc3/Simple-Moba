@@ -10,12 +10,26 @@ public class SpawnUnit : MonoBehaviour
     private LayerMask groundMask;
     private LayerMask enemyMask;
     private bool canMove = false;
+    public List<SpellData> spellData = new List<SpellData>();
+    public List<System.Type> spells = new List<System.Type>(){typeof(Flash), typeof(Ghost),  typeof(Ignite)};
+    public SpellType spellNum;
 
     // Start is called before the first frame update
     void Start()
     {
         groundMask = LayerMask.GetMask("Ground");
         enemyMask = LayerMask.GetMask("Enemy");
+    }
+
+    /*
+    *   OnValueChanged - Triggered when the drop down value is changed.
+    *   @param dropDown - TMP_Dropdown object being changed.
+    */
+    public void SummonerSpellChange(){
+        GameObject activePlayer = ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp];
+        PlayerSpells playerSpells = activePlayer.GetComponent<PlayerSpells>();
+        print(playerSpells.spells[spellNum].spellData.name);   
+        //playerSpells.AddNewSpell(spells[dropDown.value], spellNum, spellData[dropDown.value]);
     }
 
     // Update is called once per frame
