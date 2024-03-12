@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ChangeSpellUI : MonoBehaviour
+public class ChangeSummonerDebug : MonoBehaviour
 {
     public List<SpellData> spellData = new List<SpellData>();
     public List<System.Type> spells = new List<System.Type>(){typeof(Flash), typeof(Ghost), typeof(Ignite)};

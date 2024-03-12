@@ -5,14 +5,11 @@ using UnityEngine.AI;
 
 public class SpawnUnit : MonoBehaviour
 {
-    public GameObject spawnMenu;
+    public GameObject debugMenu;
     public List<GameObject> prefabs = new List<GameObject>();
     private LayerMask groundMask;
     private LayerMask enemyMask;
     private bool canMove = false;
-    public List<SpellData> spellData = new List<SpellData>();
-    public List<System.Type> spells = new List<System.Type>(){typeof(Flash), typeof(Ghost),  typeof(Ignite)};
-    public SpellType spellNum;
 
     // Start is called before the first frame update
     void Start()
@@ -21,32 +18,21 @@ public class SpawnUnit : MonoBehaviour
         enemyMask = LayerMask.GetMask("Enemy");
     }
 
-    /*
-    *   OnValueChanged - Triggered when the drop down value is changed.
-    *   @param dropDown - TMP_Dropdown object being changed.
-    */
-    public void SummonerSpellChange(){
-        GameObject activePlayer = ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp];
-        PlayerSpells playerSpells = activePlayer.GetComponent<PlayerSpells>();
-        print(playerSpells.spells[spellNum].spellData.name);   
-        //playerSpells.AddNewSpell(spells[dropDown.value], spellNum, spellData[dropDown.value]);
-    }
-
     // Update is called once per frame
     void Update()
     {
         if(Input.GetKey(KeyCode.LeftShift)){
             if(Input.GetKeyDown(KeyCode.M)){
-                if(spawnMenu.activeSelf)
-                    spawnMenu.SetActive(false);
+                if(debugMenu.activeSelf)
+                    debugMenu.SetActive(false);
                 else
-                    spawnMenu.SetActive(true);
+                    debugMenu.SetActive(true);
             }  
         }
     }
 
     public void UnitButtonClick(int prefabIndex){
-        spawnMenu.SetActive(false);
+        debugMenu.SetActive(false);
         StartCoroutine(UnitPlacement(prefabs[prefabIndex]));
     }
 
@@ -81,7 +67,7 @@ public class SpawnUnit : MonoBehaviour
             }
             yield return null;
         }
-        spawnMenu.SetActive(true);
+        debugMenu.SetActive(true);
     }
 
     private Vector3 FindBestPosition(Vector3 point){
@@ -95,7 +81,7 @@ public class SpawnUnit : MonoBehaviour
     }
 
     public void DespawnUnitClick(){
-        spawnMenu.SetActive(false);
+        debugMenu.SetActive(false);
         StartCoroutine(DespawnUnit());
     }
 
@@ -119,11 +105,11 @@ public class SpawnUnit : MonoBehaviour
             }
             yield return null;
         }
-        spawnMenu.SetActive(true);
+        debugMenu.SetActive(true);
     }
 
     public void MoveUnitClick(){
-        spawnMenu.SetActive(false);
+        debugMenu.SetActive(false);
         StartCoroutine(MoveUnit());
     }
 
@@ -140,7 +126,7 @@ public class SpawnUnit : MonoBehaviour
                     canMove = false;
                     StartCoroutine(UnitPlacement(hit.transform.gameObject));
                     canMove = true;
-                    spawnMenu.SetActive(false);
+                    debugMenu.SetActive(false);
                     yield break;
                 }
             }
@@ -150,7 +136,7 @@ public class SpawnUnit : MonoBehaviour
             }
             yield return null;
         }
-        spawnMenu.SetActive(true);
+        debugMenu.SetActive(true);
     }
 }
 

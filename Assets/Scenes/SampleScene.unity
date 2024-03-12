@@ -240,7 +240,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 205485682}
-        m_TargetAssemblyTypeName: ChangeSpellUI, Scripts
+        m_TargetAssemblyTypeName: ChangeSummonerDebug, Scripts
         m_MethodName: SummonerSpellChange
         m_Mode: 1
         m_Arguments:
@@ -418,12 +418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093f460740d76a644a925247f55be89f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnMenu: {fileID: 1112655097}
+  debugMenu: {fileID: 1112655097}
   prefabs:
   - {fileID: 1195564749701517190, guid: e33ed474113945d44966901b16fc892f, type: 3}
   - {fileID: 6437213700615845398, guid: bcd891d2f3d121d42904974c7509940a, type: 3}
-  spellData: []
-  spellNum: 0
 --- !u!1 &309008112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1601,7 +1599,6 @@ GameObject:
   - component: {fileID: 1112655100}
   - component: {fileID: 1112655099}
   - component: {fileID: 1112655098}
-  - component: {fileID: 1112655102}
   m_Layer: 5
   m_Name: SpawnMenu
   m_TagString: Untagged
@@ -1697,22 +1694,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1112655102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112655097}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 093f460740d76a644a925247f55be89f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnMenu: {fileID: 0}
-  prefabs: []
-  spellData: []
-  spellNum: 0
 --- !u!1 &1198446614
 GameObject:
   m_ObjectHideFlags: 0
@@ -2671,7 +2652,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1718142955}
-        m_TargetAssemblyTypeName: ChangeSpellUI, Scripts
+        m_TargetAssemblyTypeName: ChangeSummonerDebug, Scripts
         m_MethodName: SummonerSpellChange
         m_Mode: 1
         m_Arguments:
