@@ -5,12 +5,13 @@ using UnityEngine.AI;
 
 public class SpawnUnit : MonoBehaviour
 {
-    public GameObject debugMenu;
+    public GameObject panel;
     public List<GameObject> prefabs = new List<GameObject>();
     private LayerMask groundMask;
     private LayerMask enemyMask;
     private bool canMove = false;
 
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -23,17 +24,19 @@ public class SpawnUnit : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.LeftShift)){
             if(Input.GetKeyDown(KeyCode.M)){
-                if(debugMenu.activeSelf)
-                    debugMenu.SetActive(false);
+                if(panel.activeSelf)
+                    panel.SetActive(false);
                 else
-                    debugMenu.SetActive(true);
+                    panel.SetActive(true);
             }  
         }
+        if(Input.GetKeyDown(KeyCode.Escape) && panel.activeSelf)
+            panel.SetActive(false);
     }
 
     public void UnitButtonClick(int prefabIndex){
-        debugMenu.SetActive(false);
         StartCoroutine(UnitPlacement(prefabs[prefabIndex]));
+        panel.SetActive(false);
     }
 
     private IEnumerator UnitPlacement(GameObject spawn){
@@ -67,7 +70,7 @@ public class SpawnUnit : MonoBehaviour
             }
             yield return null;
         }
-        debugMenu.SetActive(true);
+        panel.SetActive(true);
     }
 
     private Vector3 FindBestPosition(Vector3 point){
@@ -81,8 +84,8 @@ public class SpawnUnit : MonoBehaviour
     }
 
     public void DespawnUnitClick(){
-        debugMenu.SetActive(false);
         StartCoroutine(DespawnUnit());
+        panel.SetActive(false);
     }
 
     private IEnumerator DespawnUnit(){
@@ -105,12 +108,12 @@ public class SpawnUnit : MonoBehaviour
             }
             yield return null;
         }
-        debugMenu.SetActive(true);
+        panel.SetActive(true);
     }
 
     public void MoveUnitClick(){
-        debugMenu.SetActive(false);
         StartCoroutine(MoveUnit());
+        panel.SetActive(false);
     }
 
     private IEnumerator MoveUnit(){
@@ -126,7 +129,6 @@ public class SpawnUnit : MonoBehaviour
                     canMove = false;
                     StartCoroutine(UnitPlacement(hit.transform.gameObject));
                     canMove = true;
-                    debugMenu.SetActive(false);
                     yield break;
                 }
             }
@@ -136,7 +138,7 @@ public class SpawnUnit : MonoBehaviour
             }
             yield return null;
         }
-        debugMenu.SetActive(true);
+        panel.SetActive(true);
     }
 }
 

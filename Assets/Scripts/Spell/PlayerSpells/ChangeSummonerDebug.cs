@@ -16,7 +16,10 @@ public class ChangeSummonerDebug : MonoBehaviour
     {
         text = GetComponentInChildren<TMP_Text>();
         playerSpells = ActiveChampion.instance.champions[ActiveChampion.instance.ActiveChamp].GetComponent<PlayerSpells>();
-        playerSpells.SpellsInitializedCallback += SetButtonText;
+        if(playerSpells.spells.ContainsKey(spellNum))
+            SetButtonText();
+        else
+            playerSpells.SpellsInitializedCallback += SetButtonText;
     }
 
     /*
