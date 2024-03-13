@@ -35,7 +35,7 @@ public class ActiveChampion : MonoBehaviour
     private void Start()
     {
         cameraMovement = Camera.main.GetComponent<CameraMovement>();
-        SetActiveChamp(); 
+        SetActiveChamp(0); 
     }
 
     // Update is called once per frame
@@ -50,9 +50,9 @@ public class ActiveChampion : MonoBehaviour
     /*
     *   SetActiveChamp - Enables the active champs controls and disables every others.
     */
-    public void SetActiveChamp(){
+    public void SetActiveChamp(int newActive){
         for(int i = 0; i < champions.Count; i++){
-            if(i != activeChamp){
+            if(i != newActive){
                 champions[i].GetComponent<PlayerControllerBehaviour>().enabled = false;
                 champions[i].GetComponent<SpellInputBehaviour>().enabled = false;
                 champions[i].tag = "Enemy"; 
@@ -68,7 +68,13 @@ public class ActiveChampion : MonoBehaviour
                 cameraMovement.targetObject = champions[i].transform;
             }
         }
-        DrawGizmos.instance.drawMethod = null;
+        //ISpell[] objSpells = champions[activeChamp].GetComponents<ISpell>();
+        if(champions.Count > 0){
+            foreach(ISpell spell in champions[activeChamp].GetComponents<ISpell>()){
+                spell.HideCast();
+            }
+        }
+        ActiveChamp = newActive;
     }
 
     /*
@@ -76,31 +82,32 @@ public class ActiveChampion : MonoBehaviour
     */
     private IEnumerator PickActiveChamp(){
         Debug.Log("Select active champion.");
+        int newActive = ActiveChamp;
         while(true){
             if(Input.GetKeyDown(KeyCode.C)){
-                ActiveChamp = 0;
+                newActive = 0;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.V)){
-                ActiveChamp = 1;
+                newActive = 1;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.B)){
-                ActiveChamp = 2;
+                newActive = 2;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.N)){
-                ActiveChamp = 3;
+                newActive = 3;
                 break;
             }
             else if(Input.GetKeyDown(KeyCode.M)){
-                ActiveChamp = 4;
+                newActive = 4;
                 break;
             }
             yield return null;
         }
-        Debug.Log(champions[activeChamp].name + " was chosen.");
-        SetActiveChamp();
+        Debug.Log(champions[newActive].name + " was chosen.");
+        SetActiveChamp(newActive);
     }
 
     /*

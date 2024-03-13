@@ -20,8 +20,8 @@ public class GameSetup : MonoBehaviour
             GameObject myChamp = (GameObject) Instantiate(GameController.instance.currentChampion, spawnPos, Quaternion.identity);     
             ActiveChampion.instance.champions.Add(myChamp);
             ActiveChampion.instance.players.Add(myChamp.GetComponent<IPlayer>());
-            ActiveChampion.instance.ActiveChamp = ActiveChampion.instance.champions.Count-1;
-            ActiveChampion.instance.SetActiveChamp();
+            //ActiveChampion.instance.ActiveChamp = ActiveChampion.instance.champions.Count-1;
+            ActiveChampion.instance.SetActiveChamp(ActiveChampion.instance.champions.Count-1);
             PlayerSpells playerSpells = myChamp.GetComponent<PlayerSpells>();
             playerSpells.SpellsInitializedCallback += AddSelectedSummonerSpells;
         }
