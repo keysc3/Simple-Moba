@@ -15,7 +15,6 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
 
     new private BilliaSpell2Data spellData;
     private NavMeshAgent navMeshAgent;
-    private string radius;
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -162,16 +161,14 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
             Vector3 colliderHitCenter = collider.transform.position;
             float distToHitboxCenter = (colliderHitCenter - hitboxCenter).magnitude;
             if(distToHitboxCenter < spellData.outerRadius){
+                string radius = "outer";
                 Vector3 closestPoint = collider.ClosestPoint(hitboxCenter);
                 closestPoint.y = collider.transform.position.y;
                 distToHitboxCenter = (closestPoint - hitboxCenter).magnitude;
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < spellData.innerRadius)
                     radius = "inner";
-                // Unit hit by outer portion.
-                else
-                    radius = "outer";
-                Hit(enemyUnit);
+                Hit(enemyUnit, radius);
             }
         }
     }
@@ -183,11 +180,11 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
-            ((IDamageable) unit).TakeDamage(TotalDamage(unit), DamageType.Magic, player, false);   
+            ((IDamageable) unit).TakeDamage(TotalDamage(unit, (string) args[0]), DamageType.Magic, player, false);   
         }
     }
 
-    private float TotalDamage(IUnit unit){
+    private float TotalDamage(IUnit unit, string radius){
         float damage;
         if(unit is IMinion)
             damage = spellData.minionDamage[SpellLevel] + (0.175f * player.unitStats.magicDamage.GetValue());
