@@ -68,31 +68,10 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
         orb.transform.localScale = Vector3.one * spellData.orbScale;
-        //BahriSpell1Trigger spell1Trigger = orb.GetComponentInChildren<BahriSpell1Trigger>();
-        //spell1Trigger.bahriSpell1 = this;
-        //spell1Trigger.unit = player; 
-        // Set initial return values.
-        //returning = false;
         float returnSpeed = spellData.minSpeed;
         // While the spell is active.
         while(orb){
-            Vector3 check = orb.transform.position;
-            check.y = GameController.instance.collisionPlane;
-            Collider[] hitColliders = Physics.OverlapSphere(check, spellData.orbScale/2f, hitboxMask);
-            foreach(Collider hitCollider in hitColliders){
-                IUnit hitUnit = hitCollider.gameObject.GetComponentInParent<IUnit>();
-                if(hitUnit == null)
-                    continue;
-                print(hitCollider.transform.parent.name);
-                // Call collision handler if enemy is hit.
-                if(hitCollider.transform.parent.tag == "Enemy" && hitUnit != player){
-                    print(hitCollider.transform.parent.name);
-                    if(!enemiesHit.Contains(hitUnit) && hitUnit is IDamageable){
-                        Hit(hitUnit, isReturning);
-                        enemiesHit.Add(hitUnit);
-                    }
-                }
-            }
+            CheckForHit(orb.transform.position, enemiesHit, isReturning);
             // If the spell hasn't started returning.
             if(!isReturning){
                 // If target location has not been reached then move the orb towards the target location.
@@ -106,8 +85,8 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
                 }
             }
             else{
-                //  Destroy GameObject if it has returned to Bahri.
-                CheckContained(check, orb);
+                // Destroy GameObject if it has returned to Bahri.
+                CheckForReturn(orb);
                 // The orb is returning, move it towards the player.
                 orb.transform.position = Vector3.MoveTowards(orb.transform.position, transform.position, returnSpeed * Time.deltaTime);
                 // Speed up the orb as it returns until the max speed is reached.
@@ -120,24 +99,45 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
     }
 
     /*
-    *   CheckContained - Checks if the orb is contained within Bahri.
+    *   CheckForHit - Check for a hit from the orb.
+    *   @param orbPosition - Vector3 of the orbs position.
+    *   @param enemiesList - List of IUnit's that have been hit already.
+    *   @param isReturning - bool for if the orb is returning or not.
     */
-    private void CheckContained(Vector3 check, GameObject orb){
+    private void CheckForHit(Vector3 orbPosition, List<IUnit> enemiesHit, bool isReturning){
+        orbPosition.y = GameController.instance.collisionPlane;
+        Collider[] hitColliders = Physics.OverlapSphere(orbPosition, spellData.orbScale/2f, hitboxMask);
+        foreach(Collider hitCollider in hitColliders){
+            IUnit hitUnit = hitCollider.gameObject.GetComponentInParent<IUnit>();
+            if(hitUnit == null)
+                continue;
+            // Call collision handler if enemy is hit.
+            if(hitCollider.transform.parent.tag == "Enemy" && hitUnit != player){
+                if(!enemiesHit.Contains(hitUnit) && hitUnit is IDamageable){
+                    Hit(hitUnit, isReturning);
+                    enemiesHit.Add(hitUnit);
+                }
+            }
+        }
+    }
+
+    /*
+    *   CheckForReturn - Checks if the orb has returned to Bahri.
+    *   @param orb - GameObject of the ability.
+    */
+    private void CheckForReturn(GameObject orb){
+        Vector3 check = orb.transform.position;
         check.y = 0f;
         Vector3 pos = transform.position;
         pos.y = 0f;
         if((check - pos).magnitude < ((CapsuleCollider) myCollider).radius)
             Destroy(orb);
-        /*Vector3 min = orbCollider.bounds.min;
-        Vector3 max = orbCollider.bounds.max;
-        if(bahriBounds.Contains(new Vector3(min.x, bahriBounds.center.y, min.z)) && bahriBounds.Contains(new Vector3(max.x, bahriBounds.center.y, max.z))){
-            Destroy(transform.parent.gameObject);
-        }*/
     }
     
     /*
     *   Hit - Deals first spells damage to the enemy hit. Magic damage on first part then true damage on return.
     *   @param unit - IUnit of the enemy hit.
+    *   @param args - Additional arguments.
     */
     public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
