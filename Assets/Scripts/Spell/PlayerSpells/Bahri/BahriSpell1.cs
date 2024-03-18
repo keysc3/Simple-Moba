@@ -28,7 +28,6 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
     // Update is called once per frame
     private void Update()
     {
-        print(hitboxMask);
         // Store current bounds. If unit died set bounds once.
         if(!player.IsDead){
             bahriBounds = player.hitbox.bounds;
@@ -103,6 +102,7 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
                 IUnit hitUnit = hitCollider.gameObject.GetComponentInParent<IUnit>();
                 if(hitUnit == null)
                     continue;
+                print(hitCollider.transform.parent.name);
                 // Call collision handler if enemy is hit.
                 if(hitCollider.transform.parent.tag == "Enemy" && hitUnit != player){
                     print(hitCollider.transform.parent.name);
@@ -110,10 +110,6 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
                         Hit(hitUnit, isReturning);
                         enemiesHit.Add(hitUnit);
                     }
-                }
-                //  Destroy GameObject if it has returned to Bahri.
-                if(hitUnit == player && isReturning){
-                    CheckContained(check, orb);
                 }
             }
             // If the spell hasn't started returning.
@@ -129,6 +125,8 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
                 }
             }
             else{
+                //  Destroy GameObject if it has returned to Bahri.
+                CheckContained(check, orb);
                 // The orb is returning, move it towards the player.
                 orb.transform.position = Vector3.MoveTowards(orb.transform.position, transform.position, returnSpeed * Time.deltaTime);
                 // Speed up the orb as it returns until the max speed is reached.
@@ -140,15 +138,14 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
         }
     }
 
-    //TODO: HANDLE FIXING CHECK CONTAINED AND TIGGER UPDATE.
-     /*
+    /*
     *   CheckContained - Checks if the orb is contained within Bahri.
     */
     private void CheckContained(Vector3 check, GameObject orb){
         check.y = 0f;
         Vector3 pos = transform.position;
         pos.y = 0f;
-        if((check - pos).magnitude > ((CapsuleCollider) myCollider).radius)
+        if((check - pos).magnitude < ((CapsuleCollider) myCollider).radius)
             Destroy(orb);
         /*Vector3 min = orbCollider.bounds.min;
         Vector3 max = orbCollider.bounds.max;
