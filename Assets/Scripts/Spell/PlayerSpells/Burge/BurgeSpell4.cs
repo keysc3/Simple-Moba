@@ -241,7 +241,7 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     *   Hit - Deals fourth spells damage to the enemy hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit hit){
+    public void Hit(IUnit hit, params object[] args){
         Debug.Log("Imagine getting hit :skull:");
         if(hit is IDamageable){
             ((IDamageable) hit).TakeDamage(TotalDamage(hit), DamageType.Magic, player, false);   

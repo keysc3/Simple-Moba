@@ -180,7 +180,7 @@ public class BilliaSpell2 : Spell, IHasHit, IHasCast
     *   Hit - Deals second spells damage to the enemy hit. Magic damage with inner hit dealing increased magic damage.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             ((IDamageable) unit).TakeDamage(TotalDamage(unit), DamageType.Magic, player, false);   

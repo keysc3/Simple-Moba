@@ -276,7 +276,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   Hit - Deals third spells damage to the enemy hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit hit){
+    public void Hit(IUnit hit, params object[] args){
         spellHitCallback?.Invoke(hit, this);
         if(hit is IDamageable){
             float dmg = TotalDamage();

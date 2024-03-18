@@ -191,7 +191,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     *   Hit - Deals third spells damage to the enemy hit. Magic damage with a slow on hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             unit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(SpellLevel, player, unit));

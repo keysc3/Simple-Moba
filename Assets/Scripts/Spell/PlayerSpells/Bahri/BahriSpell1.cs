@@ -9,10 +9,10 @@ using UnityEngine;
 *
 * @author: Colin Keys
 */
-public class BahriSpell1 : Spell, IHasCast, IHasHitTest
+public class BahriSpell1 : Spell, IHasCast, IHasHit
 {
     public bool returning { get; set; } = false;
-    public SpellHitCallbackTest spellHitCallback { get; set; }
+    public SpellHitCallback spellHitCallback { get; set; }
 
     new private BahriSpell1Data spellData;
 

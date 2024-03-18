@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /*
 * Purpose: Implements an interface for a spell that has a hit
 *
@@ -12,5 +13,5 @@ public interface IHasHit
 {
     SpellHitCallback spellHitCallback { get; set; }
 
-    void Hit(IUnit unit);
+    void Hit(IUnit unit, params object[] args);
 }

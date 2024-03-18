@@ -138,7 +138,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     *   Hit - Deals second spells damage to the enemy hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             float damageValue = spellData.baseDamage[SpellLevel];// + (0.2f * championStats.physicalDamage.GetValue());

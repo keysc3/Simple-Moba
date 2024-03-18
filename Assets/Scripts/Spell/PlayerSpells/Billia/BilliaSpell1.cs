@@ -227,7 +227,7 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     *   Hit - Deals first spells damage to the enemy hit. Magic damage with additional true damage on outer hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             IDamageable damageMethod = (IDamageable) unit;

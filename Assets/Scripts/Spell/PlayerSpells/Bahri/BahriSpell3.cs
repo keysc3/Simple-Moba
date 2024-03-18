@@ -83,7 +83,7 @@ public class BahriSpell3 : Spell, IHasCast, IHasHit
     *   Hit - Deals third spells damage to the enemy hit. Applies a charm effect on target hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             // Add the charm effect to the hit GameObject.
