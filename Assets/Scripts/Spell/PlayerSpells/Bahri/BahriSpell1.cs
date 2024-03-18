@@ -15,31 +15,12 @@ public class BahriSpell1 : Spell, IHasCast, IHasHitTest
     public SpellHitCallbackTest spellHitCallback { get; set; }
 
     new private BahriSpell1Data spellData;
-    private List<IUnit> enemiesHit = new List<IUnit>();
-    private Bounds bahriBounds;
-    private bool deathBoundsSet = false;
+
 
     // Start is called before the first frame update.
     protected override void Start(){
         base.Start();
         this.spellData = (BahriSpell1Data) base.spellData;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        // Store current bounds. If unit died set bounds once.
-        if(!player.IsDead){
-            bahriBounds = player.hitbox.bounds;
-        }
-        else{
-            if(!deathBoundsSet){
-                player.hitbox.enabled = true;
-                bahriBounds = player.hitbox.bounds;
-                player.hitbox.enabled = false;
-                deathBoundsSet = true;
-            }
-        }
     }
 
     /*
