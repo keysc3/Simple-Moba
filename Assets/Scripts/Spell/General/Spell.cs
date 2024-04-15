@@ -33,7 +33,8 @@ public class Spell : MonoBehaviour, ISpell
     protected Collider myCollider;
     protected LayerMask hitboxMask;
     protected List<RectTransform> spellUIDisplay = new List<RectTransform>();
-    protected RectTransform canvas; 
+    protected RectTransform canvas;
+    protected Animator anim; 
 
     public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
     public event SpellCDSetActive SpellCDSetActiveCallback;
@@ -58,6 +59,7 @@ public class Spell : MonoBehaviour, ISpell
         myCollider = GetComponent<Collider>();
         hitboxMask = LayerMask.GetMask("Hitbox");
         canvas = transform.Find("DrawSpell").GetComponent<RectTransform>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Start is called before the first frame update
@@ -114,6 +116,11 @@ public class Spell : MonoBehaviour, ISpell
             }
             IsDisplayed = false;
         }
+    }
+
+    protected void PlaySpellAnimation(string state, float animTime, int index){
+        anim.SetFloat("castTime", spellData.spellAnim[index].length/animTime);
+        anim.Play(state);
     }
 
     /*

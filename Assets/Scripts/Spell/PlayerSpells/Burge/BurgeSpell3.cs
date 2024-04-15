@@ -63,6 +63,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   ChargeUp - Handles the spells charge up while holding down its input key.
     */
     private IEnumerator ChargeUp(){
+        PlaySpellAnimation("Spell3", 0.1f, 0);
         player.IsCasting = true;
         player.CurrentCastedSpell = this;
         navMeshAgent.ResetPath();
@@ -80,6 +81,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
         spellController.ChargeUpUI(spellData.maxChargeDuration, spellData.maxChargeDuration, true);
         // If the key was not released do not cast the spell.
         if(Input.GetKey(spellInput)){
+            anim.SetTrigger("spell3Cancel");
             PutOnCd(false);
         }
         else{
@@ -107,10 +109,19 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private IEnumerator SpellCast(){
         isFirstCast = false;
         Vector3 targetDirection = spellController.GetTargetDirection();
+        float timer = 0.0f;
+        bool triggered = false;
         // Wait out the cast time.
+        float stabTime = 0.1f;
         while(player.IsCasting){
+            if(!triggered && timer >= (spellData.castTime - stabTime)){
+                anim.SetFloat("castTime", spellData.spellAnim[1].length/stabTime);
+                anim.SetTrigger("spell3Cast");
+                triggered = true;
+            }
             if(chargeAmount >= spellData.maxChargeDuration)
                 DisplayCast();
+            timer += Time.deltaTime;
             yield return null;
         }
         player.MouseOnCast = targetDirection;
@@ -152,6 +163,8 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     private IEnumerator SecondCast(){
         // Get second cast position.
         Vector3 targetDirection = spellController.GetTargetDirection();
+        anim.SetFloat("castTime", spellData.spellAnim[2].length/spellData.dashTime);
+        anim.SetTrigger("spell3Dash");
         // Wait out cast time.
         while(player.IsCasting){
             yield return null;
@@ -165,6 +178,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @param targetDirection - Vector3 of the target direction of the spell cast.
     */
     private IEnumerator SecondSpellDash(Vector3 targetDirection){
+
         playerMover.CurrentTarget = targetDirection;
         // Get the final position after dash is applied.
         Vector3 targetPosition = (targetDirection - transform.position).normalized;
@@ -259,6 +273,7 @@ public class BurgeSpell3 : Spell, IHasCast, IHasHit
     *   @param casted - bool for if the spell has been casted.
     */
     private void PutOnCd(bool casted){
+        anim.SetTrigger("spell3Cancel");
         // Set fields back to non-casting state.
         player.IsCasting = false;
         navMeshAgent.ResetPath();

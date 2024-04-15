@@ -57,6 +57,7 @@ public class Player : MonoBehaviour, IPlayer
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
+    protected Animator anim;
 
     // Called when the script instance is being loaded.
     private void Awake(){
@@ -78,6 +79,7 @@ public class Player : MonoBehaviour, IPlayer
         playerSpells = GetComponent<PlayerSpells>();
         rend = GetComponent<Renderer>();
         alive = rend.material;
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Start is called before the first frame update
@@ -100,6 +102,11 @@ public class Player : MonoBehaviour, IPlayer
             if(Input.GetKeyDown(KeyCode.T))
                 Death();
         }
+        bool isWalking = (navMeshAgent.velocity.magnitude == 0f ) ? false : true;
+        if(anim != null)
+            if(anim.GetBool("isWalking") != isWalking)
+                anim.SetBool("isWalking", isWalking);
+
     }
 
     // Called after all Update functions have been called.
