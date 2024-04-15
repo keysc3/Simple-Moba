@@ -112,6 +112,8 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     *   @param duration - float of the spells duration.
     */
     private IEnumerator SpellDuration(float duration){
+        anim.SetFloat("castTime", spellData.spellAnim[0].length/(spellData.castTime + 0.1f));
+        anim.Play("Spell4");
         while(player.IsCasting)
             yield return null;
         UpdateSpellSprite();
@@ -155,6 +157,9 @@ public class BurgeSpell4 : Spell, IHasHit, IHasCast, IHasCallback
     */
     private IEnumerator SecondCastHitbox(Vector3 position){
         GameObject visualHitbox = CreateCastVisual(position);
+        anim.SetFloat("castTime", spellData.spellAnim[1].length/(spellData.castTime - 0.05f));
+        anim.SetFloat("spell4_stomp", spellData.spellAnim[2].length/0.05f);
+        anim.Play("Spell4_p2");
         while(player.IsCasting){
             yield return null;
         }

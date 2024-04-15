@@ -37,7 +37,8 @@ MonoBehaviour:
   <drawSpellImages>k__BackingField:
   - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
   - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
-  <spellAnim>k__BackingField: {fileID: 4917742909023264166, guid: bdd49a5fc5090634e99d2b8444f15892, type: 3}
+  <spellAnim>k__BackingField:
+  - {fileID: 4917742909023264166, guid: bdd49a5fc5090634e99d2b8444f15892, type: 3}
   <duration>k__BackingField: 3
   <sizeMultiplier>k__BackingField: 2
   <prefab>k__BackingField: {fileID: 4965935970901747691, guid: ec75181032343924a89a22503b0a9b14, type: 3}

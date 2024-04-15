@@ -22,13 +22,13 @@ MonoBehaviour:
   - 1
   - 1
   <baseCd>k__BackingField:
-  - 100
+  - 10
   - 10
   - 10
   - 10
   - 10
   <baseMana>k__BackingField:
-  - 100
+  - 10
   - 5
   - 5
   - 5
@@ -36,7 +36,8 @@ MonoBehaviour:
   <spellID>k__BackingField: Burge4
   <drawSpellImages>k__BackingField:
   - {fileID: 6390011475474337375, guid: 99230244b459d7c4f8ce2e3b1aa40a0b, type: 3}
-  <spellAnim>k__BackingField: {fileID: 8889602794570059198, guid: a8d2df8e18053f34099f7d13e7244a01, type: 3}
+  <spellAnim>k__BackingField:
+  - {fileID: 8889602794570059198, guid: a8d2df8e18053f34099f7d13e7244a01, type: 3}
   <width>k__BackingField: 2
   <length>k__BackingField: 8
   <maxCastedHits>k__BackingField: 10
