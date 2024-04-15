@@ -68,6 +68,8 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     *   @param targetPosition - Vector3 of the spells cast position.
     */
     public IEnumerator Spell_2_Cast(Vector3 targetPosition){
+        anim.SetFloat("castTime", spellData.spellAnim[0].length/(spellData.castTime + 0.15f));
+        anim.Play("Spell2");
         while(player.IsCasting)
             yield return null;
         Dictionary<IUnit, float> lastHits = new Dictionary<IUnit, float>();
