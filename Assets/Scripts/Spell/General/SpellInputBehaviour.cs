@@ -79,7 +79,6 @@ public class SpellInputBehaviour : MonoBehaviour, ISpellInput
         }
         // Summoner Spell 2
         if(Input.GetKeyDown(KeyCode.F)){
-            Debug.Log("input received.");
             spellInputController.SpellButtonPressed(KeyCode.F, playerSpells.spells[SpellType.SummonerSpell2]);
         }
         // Left click

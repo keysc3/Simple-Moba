@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0a7e08a2119df42ba3b09de5f34874, type: 3}
   m_Name: BurgeSpell2
   m_EditorClassIdentifier: 
-  <sprite>k__BackingField: {fileID: 21300000, guid: f171c95bab5c84349906641ebf3563a8, type: 3}
+  <sprite>k__BackingField: {fileID: 21300000, guid: adfa0839fd877e242ac8ecddba21e908, type: 3}
   <defaultSpellNum>k__BackingField: 3
   <castTime>k__BackingField: 0.25
   <baseDamage>k__BackingField:
@@ -37,6 +37,8 @@ MonoBehaviour:
   <drawSpellImages>k__BackingField:
   - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
   - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
+  <spellAnim>k__BackingField:
+  - {fileID: 4917742909023264166, guid: bdd49a5fc5090634e99d2b8444f15892, type: 3}
   <duration>k__BackingField: 3
   <sizeMultiplier>k__BackingField: 2
   <prefab>k__BackingField: {fileID: 4965935970901747691, guid: ec75181032343924a89a22503b0a9b14, type: 3}

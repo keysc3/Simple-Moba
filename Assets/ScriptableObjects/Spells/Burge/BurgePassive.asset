@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc08b9fac3585ec489376148fe43406a, type: 3}
   m_Name: BurgePassive
   m_EditorClassIdentifier: 
-  <sprite>k__BackingField: {fileID: 21300000, guid: dcd0655e17ffe824ca6693a54297152f, type: 3}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 426de15506f9fb44ca326454f5f937d1, type: 3}
   <defaultSpellNum>k__BackingField: 1
   <castTime>k__BackingField: 0
   <baseDamage>k__BackingField: []
   <baseCd>k__BackingField: []
   <baseMana>k__BackingField: []
   <spellID>k__BackingField: BurgePassive
+  <drawSpellImages>k__BackingField: []
   <passiveEffect>k__BackingField: {fileID: 11400000, guid: 295a409e0df3d0646a9c660949430fc0, type: 2}
   <timeAfterProc>k__BackingField: 10

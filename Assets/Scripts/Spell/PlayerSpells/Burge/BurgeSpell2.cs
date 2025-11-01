@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 /*
 * Purpose: Implements Burge's second spell. Burge throws a spinning dagger at the target location that grows in size over the spells duration.
@@ -40,8 +39,8 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
             StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             // Get the players mouse position on spell cast for spells target direction.
@@ -59,7 +58,9 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
             StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
+            return true;
         }
+        return false;
     }
 
     /*
@@ -67,6 +68,8 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     *   @param targetPosition - Vector3 of the spells cast position.
     */
     public IEnumerator Spell_2_Cast(Vector3 targetPosition){
+        anim.SetFloat("castTime", spellData.spellAnim[0].length/(spellData.castTime + 0.15f));
+        anim.Play("Spell2");
         while(player.IsCasting)
             yield return null;
         Dictionary<IUnit, float> lastHits = new Dictionary<IUnit, float>();
@@ -137,7 +140,7 @@ public class BurgeSpell2 : Spell, IHasCast, IHasHit
     *   Hit - Deals second spells damage to the enemy hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             float damageValue = spellData.baseDamage[SpellLevel];// + (0.2f * championStats.physicalDamage.GetValue());

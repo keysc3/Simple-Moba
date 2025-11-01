@@ -26,7 +26,7 @@ public class SpellInputController
     */
     public void SpellButtonPressed(KeyCode buttonPressed, ISpell spellPressed){
         // Only attempt to cast if learned.
-        if((spellPressed.IsSummonerSpell || spellInput.SpellLevels[spellPressed.SpellNum] > 0) && !spellPressed.OnCd){
+        if((spellPressed.IsSummonerSpell || spellInput.SpellLevels[spellPressed.SpellNum] > 0)){
             // Hide cast if a spell was readied and new button pressed is different than last.
             if(spellInput.LastSpellPressed != null && spellInput.LastButtonPressed != buttonPressed)
                 spellInput.LastSpellPressed.HideCast();
@@ -41,14 +41,20 @@ public class SpellInputController
                 }
                 // Cast the spell since it is cast on press.
                 else{
-                    ((IHasCast) spellPressed).Cast();
+                    if(!((IHasCast) spellPressed).Cast())
+                        CantCastMessage(spellPressed);
                     UnreadySpell();
                 }
             }
         }
         else{
-            Debug.Log("Can't cast " + spellPressed + " yet!");
+            CantCastMessage(spellPressed);
         }
+    }
+
+    private void CantCastMessage(ISpell spellPressed){
+        (spellPressed as Spell).RaiseDisplayMessageEvent("Can't cast " + spellPressed + " yet!");
+        //Debug.Log("Can't cast " + spellPressed + " yet!");
     }
 
     /*
@@ -73,7 +79,8 @@ public class SpellInputController
             }
             // Cast spell.
             else if(spellInput.LastSpellPressed is IHasCast){
-                ((IHasCast) spellInput.LastSpellPressed).Cast();
+                if(!((IHasCast) spellInput.LastSpellPressed).Cast())
+                    CantCastMessage(spellInput.LastSpellPressed);
             }
             // Unready spell.
             UnreadySpell();

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e8f7ddfc33026b4e840c50cf0e069f8, type: 3}
+  m_Name: Dummy
+  m_EditorClassIdentifier: 
+  <name>k__BackingField: Dummy
+  <icon>k__BackingField: {fileID: 0}
+  <baseHealth>k__BackingField: 1000
+  <magicDamage>k__BackingField: 0
+  <physicalDamage>k__BackingField: 0
+  <speed>k__BackingField: 2
+  <HP5>k__BackingField: 0
+  <armor>k__BackingField: 0
+  <magicResist>k__BackingField: 0
+  <rangeType>k__BackingField: 
+  <autoRange>k__BackingField: 0
+  <autoWindUp>k__BackingField: 0
+  <attackSpeed>k__BackingField: 0
+  <attackProjectileSpeed>k__BackingField: 0
+  <baseMana>k__BackingField: 0
+  <MP5>k__BackingField: 0
+  <physicalDamageGrowth>k__BackingField: 0
+  <healthGrowth>k__BackingField: 0
+  <manaGrowth>k__BackingField: 0
+  <HP5Growth>k__BackingField: 0
+  <MP5Growth>k__BackingField: 0
+  <armorGrowth>k__BackingField: 0
+  <magicResistGrowth>k__BackingField: 0
+  <attackSpeedGrowth>k__BackingField: 0

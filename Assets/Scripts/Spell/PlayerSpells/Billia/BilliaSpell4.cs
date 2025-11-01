@@ -29,10 +29,10 @@ public class BilliaSpell4 : Spell, IHasCast
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
+    public bool Cast(){
         // Only allow cast if a champion has passive on them.
         if(canUseSpell){
-            if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+            if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
                 // Start cast time then cast the spell.
                 OnCd = true;
                 StartCoroutine(spellController.Spell_Cd_Timer(spellData.baseCd[SpellLevel]));
@@ -40,8 +40,10 @@ public class BilliaSpell4 : Spell, IHasCast
                 StartCoroutine(Spell_4_Cast(GetChampionsWithPassive()));
                 // Use mana.
                 championStats.UseMana(spellData.baseMana[SpellLevel]);
+                return true;
             }
         }
+        return false;
     }
 
     /*

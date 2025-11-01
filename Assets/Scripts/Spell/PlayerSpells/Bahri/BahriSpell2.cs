@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine.UI;
 
 /*
 * Purpose: Implements Bahri'a second spell. Bahri summons a number of projectiles that orbit her and gains a decaying speed boost.
@@ -36,8 +34,8 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Create a parent for the spells GameObjects.
             GameObject spell_2_parent = new GameObject("Spell_2_Parent");
             activeSpellObjects.Add(spell_2_parent);
@@ -59,7 +57,9 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
             StartCoroutine(Spell_2_Speed());
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*
@@ -186,7 +186,7 @@ public class BahriSpell2 : Spell, IDeathCleanUp, IHasCast, IHasHit
     *   Hit - Deals second spells damage to the enemy hit. Reduced damage on missiles that hit the same target more than once.
     *   @param unit - IUnit of the unit hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             float finalDamage = spellData.baseDamage[SpellLevel] + (0.3f * championStats.magicDamage.GetValue());

@@ -57,12 +57,15 @@ public class Player : MonoBehaviour, IPlayer
 
     // TODO: handle respawn position somewhere else.
     private Vector3 respawnPosition = new Vector3(0f, 1.6f, -3.0f);
+    protected Animator anim;
 
     // Called when the script instance is being loaded.
     private void Awake(){
         unitStats = new ChampionStats((ScriptableChampion) sUnit);
-        playerUI = CreateNewPlayerUI();
-        playerBar = CreateNewPlayerBar();
+        if(playerUIPrefab != null)
+            playerUI = CreateNewPlayerUI();
+        if(playerBarPrefab != null)
+            playerBar = CreateNewPlayerBar();
         isDead = false;
         statusEffects = new StatusEffects();
         damageTracker = new DamageTracker();
@@ -76,6 +79,7 @@ public class Player : MonoBehaviour, IPlayer
         playerSpells = GetComponent<PlayerSpells>();
         rend = GetComponent<Renderer>();
         alive = rend.material;
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Start is called before the first frame update
@@ -85,7 +89,7 @@ public class Player : MonoBehaviour, IPlayer
     }
 
     // Update is called once per frame
-    private void Update()
+    protected virtual void Update()
     {
         damageTracker.CheckForReset(Time.time);
         statusEffects.UpdateEffects(Time.deltaTime);
@@ -98,6 +102,11 @@ public class Player : MonoBehaviour, IPlayer
             if(Input.GetKeyDown(KeyCode.T))
                 Death();
         }
+        bool isWalking = (navMeshAgent.velocity.magnitude == 0f ) ? false : true;
+        if(anim != null)
+            if(anim.GetBool("isWalking") != isWalking)
+                anim.SetBool("isWalking", isWalking);
+
     }
 
     // Called after all Update functions have been called.
@@ -113,7 +122,7 @@ public class Player : MonoBehaviour, IPlayer
     *   @param damager - IUnit of the damage source.
     *   @param isDot - bool if the damage was from a dot.
     */
-    public void TakeDamage(float incomingDamage, DamageType damageType, IUnit damager, bool isDot){
+    public virtual void TakeDamage(float incomingDamage, DamageType damageType, IUnit damager, bool isDot){
         if(!isDead){
             float damageToTake = DamageCalculator.CalculateDamage(incomingDamage, damageType, damager.unitStats, unitStats);
             unitStats.CurrentHealth = unitStats.CurrentHealth - damageToTake;
@@ -137,7 +146,7 @@ public class Player : MonoBehaviour, IPlayer
     *   UpdateScores - Update the scores of the every unit involved in a kill.
     *   @param damager - IUnit of the killing player.
     */
-    private void UpdateScores(IUnit damager){
+    protected void UpdateScores(IUnit damager){
         if(score != null)
             score.Death();
         if(damager is IPlayer){

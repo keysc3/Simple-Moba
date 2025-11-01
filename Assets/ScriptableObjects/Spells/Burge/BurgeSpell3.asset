@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c5fcbf8c483874a80b531abca2ce6b, type: 3}
   m_Name: BurgeSpell3
   m_EditorClassIdentifier: 
-  <sprite>k__BackingField: {fileID: 21300000, guid: 2e815e22a65c2324eb06786e317cf8c0, type: 3}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 34e87d01782862b4b97717131a15b9ba, type: 3}
   <defaultSpellNum>k__BackingField: 4
   <castTime>k__BackingField: 0.25
   <baseDamage>k__BackingField:
@@ -28,7 +28,7 @@ MonoBehaviour:
   - 3
   - 3
   <baseMana>k__BackingField:
-  - 10
+  - 200
   - 10
   - 10
   - 10
@@ -37,6 +37,10 @@ MonoBehaviour:
   <drawSpellImages>k__BackingField:
   - {fileID: 6390011475474337375, guid: 99230244b459d7c4f8ce2e3b1aa40a0b, type: 3}
   - {fileID: 6390011475474337375, guid: 99230244b459d7c4f8ce2e3b1aa40a0b, type: 3}
+  <spellAnim>k__BackingField:
+  - {fileID: -785843706642463608, guid: 3edbaa2e089309a449024d5aa473124a, type: 3}
+  - {fileID: -4781215231662380640, guid: 3edbaa2e089309a449024d5aa473124a, type: 3}
+  - {fileID: 4138560011026988133, guid: 3edbaa2e089309a449024d5aa473124a, type: 3}
   <hitboxLength>k__BackingField: 2
   <hitboxWidth>k__BackingField: 1
   <chargedHitboxLength>k__BackingField: 1
@@ -46,7 +50,7 @@ MonoBehaviour:
   <cdRefundPercent>k__BackingField: 0.5
   <timeBetweenDash>k__BackingField: 0.25
   <dashMagnitude>k__BackingField: 5
-  <dashTime>k__BackingField: 0.25
+  <dashTime>k__BackingField: 0.15
   <visualHitbox>k__BackingField: {fileID: 2269633781424815707, guid: 6116a2e4a08d8f24fb0c96fc909dd8a0, type: 3}
   <secondCastVisual>k__BackingField: {fileID: 731987182873078092, guid: c259360ff7aad8c4aadeb6dd2ad2d103, type: 3}
   <firstCastFadeTime>k__BackingField: 0.25

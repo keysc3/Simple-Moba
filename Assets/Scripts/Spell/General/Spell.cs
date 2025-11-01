@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 /*
@@ -34,7 +33,8 @@ public class Spell : MonoBehaviour, ISpell
     protected Collider myCollider;
     protected LayerMask hitboxMask;
     protected List<RectTransform> spellUIDisplay = new List<RectTransform>();
-    protected RectTransform canvas; 
+    protected RectTransform canvas;
+    protected Animator anim; 
 
     public delegate void SpellCDSetActive(SpellType spellType, bool isActive);
     public event SpellCDSetActive SpellCDSetActiveCallback;
@@ -48,6 +48,9 @@ public class Spell : MonoBehaviour, ISpell
     public delegate void SetSprite(SpellType spellType, SpellComponent component, Sprite sprite);
     public event SetSprite SetSpriteCallback;
 
+    public delegate void DisplayMessageUpdate(string message);
+    public event DisplayMessageUpdate DisplayMessageCallback;
+
     // Called when the script instance is being loaded.
     protected virtual void Awake(){
         player = GetComponent<IPlayer>();
@@ -56,6 +59,7 @@ public class Spell : MonoBehaviour, ISpell
         myCollider = GetComponent<Collider>();
         hitboxMask = LayerMask.GetMask("Hitbox");
         canvas = transform.Find("DrawSpell").GetComponent<RectTransform>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Start is called before the first frame update
@@ -114,6 +118,11 @@ public class Spell : MonoBehaviour, ISpell
         }
     }
 
+    protected void PlaySpellAnimation(string state, float animTime, int index){
+        anim.SetFloat("castTime", spellData.spellAnim[index].length/animTime);
+        anim.Play(state);
+    }
+
     /*
     *   DrawSpell - Method for drawing the spells magnitudes.
     */
@@ -155,5 +164,9 @@ public class Spell : MonoBehaviour, ISpell
     */
     public void RaiseSetSpriteEvent(SpellType spellType, SpellComponent component, Sprite sprite){
         SetSpriteCallback?.Invoke(spellType, component, sprite);
+    }
+
+    public void RaiseDisplayMessageEvent(string message){
+        DisplayMessageCallback?.Invoke(message);
     }
 }

@@ -11,11 +11,11 @@ using UnityEngine;
 */
 public class BahriSpell1 : Spell, IHasCast, IHasHit
 {
-    public bool returning { get; private set; } = false;
+    public bool returning { get; set; } = false;
     public SpellHitCallback spellHitCallback { get; set; }
 
     new private BahriSpell1Data spellData;
-    private List<IUnit> enemiesHit = new List<IUnit>();
+
 
     // Start is called before the first frame update.
     protected override void Start(){
@@ -34,8 +34,8 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
@@ -48,7 +48,9 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
             // Use mana and set spell on cooldown to true.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*
@@ -56,6 +58,8 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
     *   @param targetPosition - Vector3 representing the orbs return point.
     */
     private IEnumerator Spell_1_Move(Vector3 targetPosition){
+        List<IUnit> enemiesHit = new List<IUnit>();
+        bool isReturning = false;
         // Wait for the spells cast time.
         while(player.IsCasting)
             yield return null;
@@ -64,27 +68,25 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
         // Create the spells object and set necessary values.
         GameObject orb = (GameObject) Instantiate(spellData.orb, transform.position, Quaternion.identity);
         orb.transform.localScale = Vector3.one * spellData.orbScale;
-        BahriSpell1Trigger spell1Trigger = orb.GetComponentInChildren<BahriSpell1Trigger>();
-        spell1Trigger.bahriSpell1 = this;
-        spell1Trigger.unit = player; 
-        // Set initial return values.
-        returning = false;
         float returnSpeed = spellData.minSpeed;
         // While the spell is active.
         while(orb){
+            CheckForHit(orb.transform.position, enemiesHit, isReturning);
             // If the spell hasn't started returning.
-            if(!returning){
+            if(!isReturning){
                 // If target location has not been reached then move the orb towards the target location.
                 if(orb.transform.position != targetPosition){
                     orb.transform.position = Vector3.MoveTowards(orb.transform.position, targetPosition, spellData.speed * Time.deltaTime);
                 }
                 else{
                     // Set return bools.
-                    returning = true;
+                    isReturning = true;
                     enemiesHit.Clear();
                 }
             }
             else{
+                // Destroy GameObject if it has returned to Bahri.
+                CheckForReturn(orb);
                 // The orb is returning, move it towards the player.
                 orb.transform.position = Vector3.MoveTowards(orb.transform.position, transform.position, returnSpeed * Time.deltaTime);
                 // Speed up the orb as it returns until the max speed is reached.
@@ -94,28 +96,58 @@ public class BahriSpell1 : Spell, IHasCast, IHasHit
             }
             yield return null;
         }
-        enemiesHit.Clear();
     }
 
     /*
+    *   CheckForHit - Check for a hit from the orb.
+    *   @param orbPosition - Vector3 of the orbs position.
+    *   @param enemiesList - List of IUnit's that have been hit already.
+    *   @param isReturning - bool for if the orb is returning or not.
+    */
+    private void CheckForHit(Vector3 orbPosition, List<IUnit> enemiesHit, bool isReturning){
+        orbPosition.y = GameController.instance.collisionPlane;
+        Collider[] hitColliders = Physics.OverlapSphere(orbPosition, spellData.orbScale/2f, hitboxMask);
+        foreach(Collider hitCollider in hitColliders){
+            IUnit hitUnit = hitCollider.gameObject.GetComponentInParent<IUnit>();
+            if(hitUnit == null)
+                continue;
+            // Call collision handler if enemy is hit.
+            if(hitCollider.transform.parent.tag == "Enemy" && hitUnit != player){
+                if(!enemiesHit.Contains(hitUnit) && hitUnit is IDamageable){
+                    Hit(hitUnit, isReturning);
+                    enemiesHit.Add(hitUnit);
+                }
+            }
+        }
+    }
+
+    /*
+    *   CheckForReturn - Checks if the orb has returned to Bahri.
+    *   @param orb - GameObject of the ability.
+    */
+    private void CheckForReturn(GameObject orb){
+        Vector3 check = orb.transform.position;
+        check.y = 0f;
+        Vector3 pos = transform.position;
+        pos.y = 0f;
+        if((check - pos).magnitude < ((CapsuleCollider) myCollider).radius)
+            Destroy(orb);
+    }
+    
+    /*
     *   Hit - Deals first spells damage to the enemy hit. Magic damage on first part then true damage on return.
     *   @param unit - IUnit of the enemy hit.
+    *   @param args - Additional arguments.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
-        if(unit is IDamageable){
-            // Only want to hit an enemy once per way.
-            if(!enemiesHit.Contains(unit)){
-                float damageValue = spellData.baseDamage[SpellLevel] + (0.45f * championStats.magicDamage.GetValue());
-                // Magic damage on first part then true damage on return.
-                if(!returning){
-                    ((IDamageable) unit).TakeDamage(damageValue, DamageType.Magic, player, false);
-                }
-                else{
-                    ((IDamageable) unit).TakeDamage(damageValue, DamageType.True, player, false);
-                }
-                enemiesHit.Add(unit);
-            }
+        float damageValue = spellData.baseDamage[SpellLevel] + (0.45f * championStats.magicDamage.GetValue());
+        // Magic damage on first part then true damage on return.
+        if(!(bool) args[0]){
+            ((IDamageable) unit).TakeDamage(damageValue, DamageType.Magic, player, false);
+        }
+        else{
+            ((IDamageable) unit).TakeDamage(damageValue, DamageType.True, player, false);
         }
     }
 }

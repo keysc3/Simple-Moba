@@ -19,7 +19,7 @@ public class TargetedProjectile : MonoBehaviour
     }
     private bool targetSet = false;
 
-    public delegate void HitMethod(IUnit hit);
+    public delegate void HitMethod(IUnit hit, params object[] args);
     public HitMethod hit;
 
     // Update is called once per frame

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEditor;
 
 /*
 * Purpose: Implements Burge's first spell. Burge vaults into the air spinning their weapon and deals damage on cast and every x seconds
@@ -35,8 +34,8 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Get the players mouse position on spell cast for spells target direction.
             Vector3 targetDirection = spellController.GetTargetDirection();
             player.MouseOnCast = targetDirection;
@@ -49,7 +48,9 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
             // Use mana and set spell on cooldown to true.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*
@@ -142,7 +143,7 @@ public class BurgeSpell1 : Spell, IHasHit, IHasCast
     *   Hit - Deals first spells damage to the enemy hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             float damageValue = spellData.baseDamage[SpellLevel] + (0.2f * championStats.physicalDamage.GetValue());

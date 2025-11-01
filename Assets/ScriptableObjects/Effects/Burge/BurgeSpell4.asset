@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BurgeSpell4
   m_EditorClassIdentifier: 
   <duration>k__BackingField:
-  - 0
+  - 8
   isStackable: 0
   <ccValue>k__BackingField: 0
   <isBuff>k__BackingField: 1
-  <sprite>k__BackingField: {fileID: 21300000, guid: dbb3011c722f0db4491aa2745e535b1e, type: 3}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 1751de4d4ab071f47ac31177699b210c, type: 3}
   <stacks>k__BackingField: 0

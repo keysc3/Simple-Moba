@@ -6,4 +6,8 @@ using UnityEngine;
 public class GhostData : SpellData
 {
     [field: SerializeField] public ScriptableSpeedBonus speedBonus { get; private set; }
+    
+    protected void OnEnable(){
+        type = typeof(Ghost);
+    }
 }

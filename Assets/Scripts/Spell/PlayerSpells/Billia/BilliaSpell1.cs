@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 /*
 * Purpose: Implements Billia's first spell. Billia swings her weapon around her dealing damage in a circle. 
@@ -19,7 +18,6 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     new private BilliaSpell1Data spellData;
     private List<Effect> passiveEffectTracker = new List<Effect>();
     private int passiveStacks;
-    private string radius;
     private List<ISpell> passiveStackSpells = new List<ISpell>();
 
     protected override void Start(){
@@ -52,16 +50,18 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
+    public bool Cast(){
         // If the spell is off cd, Billia is not casting, and has enough mana.
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
             StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             StartCoroutine(Spell_1_Cast(Spell_1_Visual()));
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
-        }        
+            return true;
+        }
+        return false;        
     }
 
     /*
@@ -92,13 +92,11 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
             Vector3 colliderHitCenter = collider.transform.position;
             float distToHitboxCenter = (colliderHitCenter - player.hitbox.transform.position).magnitude;
             if(distToHitboxCenter < spellData.outerRadius){
+                string radius = "outer";
                 // Check if the unit was hit by the specified spells inner damage.
                 if(distToHitboxCenter < spellData.innerRadius)
                     radius = "inner";
-                // Unit hit by outer portion.
-                else
-                    radius = "outer";
-                Hit(enemyUnit);
+                Hit(enemyUnit, radius);
             }
         }
     }
@@ -226,18 +224,15 @@ public class BilliaSpell1 : Spell, IHasHit, IHasCast, IHasCallback
     *   Hit - Deals first spells damage to the enemy hit. Magic damage with additional true damage on outer hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             IDamageable damageMethod = (IDamageable) unit;
             Spell_1_PassiveProc(unit, this);
             float magicDamage = championStats.magicDamage.GetValue();
-            if(radius == "inner")
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), DamageType.Magic, player, false);   
-            else{
-                damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), DamageType.Magic, player, false);
+            damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), DamageType.Magic, player, false);   
+            if((string) args[0] == "outer")
                 damageMethod.TakeDamage(spellData.baseDamage[SpellLevel] + (magicDamage * 0.4f), DamageType.True, player, false);
-            }
         }
     }
 

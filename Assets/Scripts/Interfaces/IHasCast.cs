@@ -9,5 +9,5 @@ using UnityEngine;
 */
 public interface IHasCast
 {
-    void Cast();
+    bool Cast();
 }

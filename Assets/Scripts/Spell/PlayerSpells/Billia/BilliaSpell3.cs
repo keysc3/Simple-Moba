@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 /*
 * Purpose: Implements Billia's third spell. Billia lobs a seed at a target location which then rolls until colliding with a GameObject.
@@ -49,8 +48,8 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
      /*
     *   Cast - Casts the spell.
     */
-    public void Cast(){
-        if(!player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
+    public bool Cast(){
+        if(!OnCd && !player.IsCasting && championStats.CurrentMana >= spellData.baseMana[SpellLevel]){
             // Start cast time then cast the spell.
             StartCoroutine(spellController.CastTime(spellData.castTime, spellData.name));
             // Get the players mouse position on spell cast for spells target direction.
@@ -67,7 +66,9 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
             // Use mana.
             championStats.UseMana(spellData.baseMana[SpellLevel]);
             OnCd = true;
+            return true;
         }
+        return false;
     }
 
     /*
@@ -190,7 +191,7 @@ public class BilliaSpell3 : Spell, IHasHit, IHasCast
     *   Hit - Deals third spells damage to the enemy hit. Magic damage with a slow on hit.
     *   @param unit - IUnit of the enemy hit.
     */
-    public void Hit(IUnit unit){
+    public void Hit(IUnit unit, params object[] args){
         spellHitCallback?.Invoke(unit, this);
         if(unit is IDamageable){
             unit.statusEffects.AddEffect(spellData.slowEffect.InitializeEffect(SpellLevel, player, unit));

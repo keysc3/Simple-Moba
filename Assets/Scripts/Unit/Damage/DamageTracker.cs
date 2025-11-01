@@ -20,7 +20,7 @@ public class DamageTracker
     public void CheckForReset(float currentTime){
         if(damageReceived.Count > 0){
             // No damage received for 15s, remove all damage tracking.
-            if(currentTime - damageReceived[damageReceived.Count-1].time >= resetTime)
+            if(TimeSinceLastDamage(currentTime) >= resetTime)
                 ResetDamageTracker();
         }
     }
@@ -58,5 +58,12 @@ public class DamageTracker
     */
     public void ResetDamageTracker(){
         damageReceived.Clear();
+    }
+
+    public float TimeSinceLastDamage(float currentTime){
+        if(damageReceived.Count > 0){
+            return currentTime - damageReceived[damageReceived.Count-1].time;
+        }
+        return 0f;
     }
 }

@@ -19,5 +19,8 @@ MonoBehaviour:
   <baseCd>k__BackingField:
   - 3
   <baseMana>k__BackingField: []
+  <spellID>k__BackingField: 
+  <drawSpellImages>k__BackingField:
+  - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
   <maxMagnitude>k__BackingField: 3
   <dot>k__BackingField: {fileID: 11400000, guid: 6118abc4a41e652489c590770ddd7e89, type: 2}
