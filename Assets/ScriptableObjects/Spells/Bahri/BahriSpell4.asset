@@ -30,9 +30,10 @@ MonoBehaviour:
   <spellID>k__BackingField: Bahri4
   <drawSpellImages>k__BackingField:
   - {fileID: 6390011475474337375, guid: 1c577841ad5d16d41a5241fd85397301, type: 3}
+  <spellAnim>k__BackingField: []
   <missile>k__BackingField: {fileID: 4104164192978557716, guid: 5909fbcca2eafc04091aee235196a0e5, type: 3}
   <spell4>k__BackingField: {fileID: 11400000, guid: 4736469b3c8781d4f88ddd2de1be352b, type: 2}
-  <maxMagnitude>k__BackingField: 3.5
+  <maxMagnitude>k__BackingField: 4
   <speed>k__BackingField: 8
   <missileSpeed>k__BackingField: 10
   <radius>k__BackingField: 6.5

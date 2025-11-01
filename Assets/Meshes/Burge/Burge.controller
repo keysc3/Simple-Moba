@@ -443,7 +443,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -3962944572622689791, guid: a8d2df8e18053f34099f7d13e7244a01, type: 3}
+  m_Motion: {fileID: -4054388646909955176, guid: a8d2df8e18053f34099f7d13e7244a01, type: 3}
   m_Tag: 
   m_SpeedParameter: spell4_stomp
   m_MirrorParameter: 
